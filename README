@@ -1,0 +1,13 @@
+The main goal of this project is provide a port of Unrar library to iOS platform.
+
+Currently we have two projects:
+
+* Unrar4iOS
+
+This project makes easy to build the unrar library as iOS static library.
+
+* UnrarExample
+
+This project give to us an example about how to use unrar in a iOS application.
+
+Feel free to contribute with enhancements.
