@@ -16,8 +16,6 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D7ACF80DDB3853001CB0EB /* UnrarExampleViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* UnrarExampleViewController.mm */; };
 		480F6005128A0C0B00A9B478 /* Venom - Licença para Matar #01.cbr in Resources */ = {isa = PBXBuildFile; fileRef = 480F6002128A0C0B00A9B478 /* Venom - Licença para Matar #01.cbr */; };
-		480F6006128A0C0B00A9B478 /* Venom - Liçenca para Matar #02.cbr in Resources */ = {isa = PBXBuildFile; fileRef = 480F6003128A0C0B00A9B478 /* Venom - Liçenca para Matar #02.cbr */; };
-		480F6007128A0C0B00A9B478 /* Venom - Licença para Matar #03.cbr in Resources */ = {isa = PBXBuildFile; fileRef = 480F6004128A0C0B00A9B478 /* Venom - Licença para Matar #03.cbr */; };
 		489BD5211288E22500D97DE0 /* libUnrar4iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 489BD5201288E22500D97DE0 /* libUnrar4iOS.a */; };
 /* End PBXBuildFile section */
 
@@ -35,8 +33,6 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* UnrarExample_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarExample_Prefix.pch; sourceTree = "<group>"; };
 		480F6002128A0C0B00A9B478 /* Venom - Licença para Matar #01.cbr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Venom - Licença para Matar #01.cbr"; sourceTree = "<group>"; };
-		480F6003128A0C0B00A9B478 /* Venom - Liçenca para Matar #02.cbr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Venom - Liçenca para Matar #02.cbr"; sourceTree = "<group>"; };
-		480F6004128A0C0B00A9B478 /* Venom - Licença para Matar #03.cbr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Venom - Licença para Matar #03.cbr"; sourceTree = "<group>"; };
 		489BD4EF1288E12800D97DE0 /* dll.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = dll.hpp; sourceTree = "<group>"; };
 		489BD5201288E22500D97DE0 /* libUnrar4iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUnrar4iOS.a; path = Frameworks/libUnrar4iOS.a; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* UnrarExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "UnrarExample-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
@@ -102,8 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				480F6002128A0C0B00A9B478 /* Venom - Licença para Matar #01.cbr */,
-				480F6003128A0C0B00A9B478 /* Venom - Liçenca para Matar #02.cbr */,
-				480F6004128A0C0B00A9B478 /* Venom - Licença para Matar #03.cbr */,
 				2899E5210DE3E06400AC0155 /* UnrarExampleViewController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* UnrarExample-Info.plist */,
@@ -183,8 +177,6 @@
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				2899E5220DE3E06400AC0155 /* UnrarExampleViewController.xib in Resources */,
 				480F6005128A0C0B00A9B478 /* Venom - Licença para Matar #01.cbr in Resources */,
-				480F6006128A0C0B00A9B478 /* Venom - Liçenca para Matar #02.cbr in Resources */,
-				480F6007128A0C0B00A9B478 /* Venom - Licença para Matar #03.cbr in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
