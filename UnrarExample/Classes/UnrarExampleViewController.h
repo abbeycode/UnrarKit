@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface UnrarExampleViewController : UIViewController {
-
+    
+	IBOutlet UIButton *decompressButton;
 }
+
+- (IBAction)decompress:(id)sender;
 
 @end
 
