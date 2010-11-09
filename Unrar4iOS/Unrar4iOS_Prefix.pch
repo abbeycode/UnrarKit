@@ -2,4 +2,3 @@
 // Prefix header for all source files of the 'CocoaTouchStaticLibrary' target in the 'CocoaTouchStaticLibrary' project.
 //
 
-#import "rar.hpp"

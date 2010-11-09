@@ -7,15 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		48F210ED1288B38C002745F2 /* arccmt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2106E1288B38C002745F2 /* arccmt.cpp */; };
+		480F5FC6128A069300A9B478 /* volume.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210EA1288B38C002745F2 /* volume.hpp */; };
+		480F5FC7128A06A600A9B478 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E91288B38C002745F2 /* volume.cpp */; };
 		48F210EE1288B38C002745F2 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2106F1288B38C002745F2 /* archive.cpp */; };
 		48F210EF1288B38C002745F2 /* archive.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210701288B38C002745F2 /* archive.hpp */; };
 		48F210F01288B38C002745F2 /* arcread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210711288B38C002745F2 /* arcread.cpp */; };
 		48F210F11288B38C002745F2 /* array.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210721288B38C002745F2 /* array.hpp */; };
 		48F210F31288B38C002745F2 /* cmddata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210741288B38C002745F2 /* cmddata.cpp */; };
 		48F210F41288B38C002745F2 /* cmddata.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210751288B38C002745F2 /* cmddata.hpp */; };
-		48F210F51288B38C002745F2 /* coder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210761288B38C002745F2 /* coder.cpp */; };
-		48F210F61288B38C002745F2 /* coder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210771288B38C002745F2 /* coder.hpp */; };
 		48F210F71288B38C002745F2 /* compress.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210781288B38C002745F2 /* compress.hpp */; };
 		48F210F81288B38C002745F2 /* consio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210791288B38C002745F2 /* consio.cpp */; };
 		48F210F91288B38C002745F2 /* consio.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F2107A1288B38C002745F2 /* consio.hpp */; };
@@ -57,8 +56,6 @@
 		48F2111D1288B38C002745F2 /* log.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210A11288B38C002745F2 /* log.hpp */; };
 		48F2111E1288B38C002745F2 /* match.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210A71288B38C002745F2 /* match.cpp */; };
 		48F2111F1288B38C002745F2 /* match.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210A81288B38C002745F2 /* match.hpp */; };
-		48F211201288B38C002745F2 /* model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210A91288B38C002745F2 /* model.cpp */; };
-		48F211211288B38C002745F2 /* model.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210AA1288B38C002745F2 /* model.hpp */; };
 		48F211221288B38C002745F2 /* options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210AC1288B38C002745F2 /* options.cpp */; };
 		48F211231288B38C002745F2 /* options.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210AD1288B38C002745F2 /* options.hpp */; };
 		48F211241288B38C002745F2 /* os.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210AE1288B38C002745F2 /* os.hpp */; };
@@ -69,11 +66,9 @@
 		48F2112A1288B38C002745F2 /* rardefs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210B41288B38C002745F2 /* rardefs.hpp */; };
 		48F2112B1288B38C002745F2 /* rarlang.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210B51288B38C002745F2 /* rarlang.hpp */; };
 		48F2112C1288B38C002745F2 /* raros.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210B61288B38C002745F2 /* raros.hpp */; };
-		48F2112D1288B38C002745F2 /* rarpch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210B71288B38C002745F2 /* rarpch.cpp */; };
 		48F2112E1288B38C002745F2 /* rartypes.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210B81288B38C002745F2 /* rartypes.hpp */; };
 		48F2112F1288B38C002745F2 /* rarvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210B91288B38C002745F2 /* rarvm.cpp */; };
 		48F211301288B38C002745F2 /* rarvm.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210BA1288B38C002745F2 /* rarvm.hpp */; };
-		48F211311288B38C002745F2 /* rarvmtbl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210BB1288B38C002745F2 /* rarvmtbl.cpp */; };
 		48F211321288B38C002745F2 /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210BC1288B38C002745F2 /* rawread.cpp */; };
 		48F211331288B38C002745F2 /* rawread.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210BD1288B38C002745F2 /* rawread.hpp */; };
 		48F211341288B38C002745F2 /* rdwrfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210BE1288B38C002745F2 /* rdwrfn.cpp */; };
@@ -81,7 +76,6 @@
 		48F211361288B38C002745F2 /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210C21288B38C002745F2 /* recvol.cpp */; };
 		48F211371288B38C002745F2 /* recvol.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210C31288B38C002745F2 /* recvol.hpp */; };
 		48F211381288B38C002745F2 /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210C41288B38C002745F2 /* resource.cpp */; };
-		48F211391288B38C002745F2 /* resource.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210C51288B38C002745F2 /* resource.hpp */; };
 		48F2113A1288B38C002745F2 /* rijndael.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210C61288B38C002745F2 /* rijndael.cpp */; };
 		48F2113B1288B38C002745F2 /* rijndael.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210C71288B38C002745F2 /* rijndael.hpp */; };
 		48F2113C1288B38C002745F2 /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210C81288B38C002745F2 /* rs.cpp */; };
@@ -98,8 +92,6 @@
 		48F211471288B38C002745F2 /* strfn.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210D31288B38C002745F2 /* strfn.hpp */; };
 		48F211481288B38C002745F2 /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210D41288B38C002745F2 /* strlist.cpp */; };
 		48F211491288B38C002745F2 /* strlist.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210D51288B38C002745F2 /* strlist.hpp */; };
-		48F2114A1288B38C002745F2 /* suballoc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210D61288B38C002745F2 /* suballoc.cpp */; };
-		48F2114B1288B38C002745F2 /* suballoc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210D71288B38C002745F2 /* suballoc.hpp */; };
 		48F2114C1288B38C002745F2 /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210D81288B38C002745F2 /* system.cpp */; };
 		48F2114D1288B38C002745F2 /* system.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210D91288B38C002745F2 /* system.hpp */; };
 		48F2114E1288B38C002745F2 /* timefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210DA1288B38C002745F2 /* timefn.cpp */; };
@@ -110,12 +102,7 @@
 		48F211531288B38C002745F2 /* unicode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210DF1288B38C002745F2 /* unicode.hpp */; };
 		48F211551288B38C002745F2 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E11288B38C002745F2 /* unpack.cpp */; };
 		48F211561288B38C002745F2 /* unpack.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210E21288B38C002745F2 /* unpack.hpp */; };
-		48F211571288B38C002745F2 /* unpack15.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E31288B38C002745F2 /* unpack15.cpp */; };
-		48F211581288B38C002745F2 /* unpack20.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E41288B38C002745F2 /* unpack20.cpp */; };
-		48F211591288B38C002745F2 /* uowners.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E71288B38C002745F2 /* uowners.cpp */; };
 		48F2115A1288B38C002745F2 /* version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210E81288B38C002745F2 /* version.hpp */; };
-		48F2115B1288B38C002745F2 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E91288B38C002745F2 /* volume.cpp */; };
-		48F2115C1288B38C002745F2 /* volume.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210EA1288B38C002745F2 /* volume.hpp */; };
 		AA747D9F0F9514B9006C5449 /* Unrar4iOS_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* Unrar4iOS_Prefix.pch */; };
 /* End PBXBuildFile section */
 
@@ -449,7 +436,6 @@
 				48F210EF1288B38C002745F2 /* archive.hpp in Headers */,
 				48F210F11288B38C002745F2 /* array.hpp in Headers */,
 				48F210F41288B38C002745F2 /* cmddata.hpp in Headers */,
-				48F210F61288B38C002745F2 /* coder.hpp in Headers */,
 				48F210F71288B38C002745F2 /* compress.hpp in Headers */,
 				48F210F91288B38C002745F2 /* consio.hpp in Headers */,
 				48F210FB1288B38C002745F2 /* crc.hpp in Headers */,
@@ -472,7 +458,6 @@
 				48F2111B1288B38C002745F2 /* loclang.hpp in Headers */,
 				48F2111D1288B38C002745F2 /* log.hpp in Headers */,
 				48F2111F1288B38C002745F2 /* match.hpp in Headers */,
-				48F211211288B38C002745F2 /* model.hpp in Headers */,
 				48F211231288B38C002745F2 /* options.hpp in Headers */,
 				48F211241288B38C002745F2 /* os.hpp in Headers */,
 				48F211271288B38C002745F2 /* pathfn.hpp in Headers */,
@@ -485,7 +470,6 @@
 				48F211331288B38C002745F2 /* rawread.hpp in Headers */,
 				48F211351288B38C002745F2 /* rdwrfn.hpp in Headers */,
 				48F211371288B38C002745F2 /* recvol.hpp in Headers */,
-				48F211391288B38C002745F2 /* resource.hpp in Headers */,
 				48F2113B1288B38C002745F2 /* rijndael.hpp in Headers */,
 				48F2113D1288B38C002745F2 /* rs.hpp in Headers */,
 				48F2113F1288B38C002745F2 /* savepos.hpp in Headers */,
@@ -494,14 +478,13 @@
 				48F211451288B38C002745F2 /* smallfn.hpp in Headers */,
 				48F211471288B38C002745F2 /* strfn.hpp in Headers */,
 				48F211491288B38C002745F2 /* strlist.hpp in Headers */,
-				48F2114B1288B38C002745F2 /* suballoc.hpp in Headers */,
 				48F2114D1288B38C002745F2 /* system.hpp in Headers */,
 				48F2114F1288B38C002745F2 /* timefn.hpp in Headers */,
 				48F211511288B38C002745F2 /* ulinks.hpp in Headers */,
 				48F211531288B38C002745F2 /* unicode.hpp in Headers */,
 				48F211561288B38C002745F2 /* unpack.hpp in Headers */,
+				480F5FC6128A069300A9B478 /* volume.hpp in Headers */,
 				48F2115A1288B38C002745F2 /* version.hpp in Headers */,
-				48F2115C1288B38C002745F2 /* volume.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -555,11 +538,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48F210ED1288B38C002745F2 /* arccmt.cpp in Sources */,
+				480F5FC7128A06A600A9B478 /* volume.cpp in Sources */,
 				48F210EE1288B38C002745F2 /* archive.cpp in Sources */,
 				48F210F01288B38C002745F2 /* arcread.cpp in Sources */,
 				48F210F31288B38C002745F2 /* cmddata.cpp in Sources */,
-				48F210F51288B38C002745F2 /* coder.cpp in Sources */,
 				48F210F81288B38C002745F2 /* consio.cpp in Sources */,
 				48F210FA1288B38C002745F2 /* crc.cpp in Sources */,
 				48F210FC1288B38C002745F2 /* crypt.cpp in Sources */,
@@ -579,13 +561,10 @@
 				48F211191288B38C002745F2 /* list.cpp in Sources */,
 				48F2111C1288B38C002745F2 /* log.cpp in Sources */,
 				48F2111E1288B38C002745F2 /* match.cpp in Sources */,
-				48F211201288B38C002745F2 /* model.cpp in Sources */,
 				48F211221288B38C002745F2 /* options.cpp in Sources */,
 				48F211261288B38C002745F2 /* pathfn.cpp in Sources */,
 				48F211281288B38C002745F2 /* rar.cpp in Sources */,
-				48F2112D1288B38C002745F2 /* rarpch.cpp in Sources */,
 				48F2112F1288B38C002745F2 /* rarvm.cpp in Sources */,
-				48F211311288B38C002745F2 /* rarvmtbl.cpp in Sources */,
 				48F211321288B38C002745F2 /* rawread.cpp in Sources */,
 				48F211341288B38C002745F2 /* rdwrfn.cpp in Sources */,
 				48F211361288B38C002745F2 /* recvol.cpp in Sources */,
@@ -598,16 +577,11 @@
 				48F211441288B38C002745F2 /* smallfn.cpp in Sources */,
 				48F211461288B38C002745F2 /* strfn.cpp in Sources */,
 				48F211481288B38C002745F2 /* strlist.cpp in Sources */,
-				48F2114A1288B38C002745F2 /* suballoc.cpp in Sources */,
 				48F2114C1288B38C002745F2 /* system.cpp in Sources */,
 				48F2114E1288B38C002745F2 /* timefn.cpp in Sources */,
 				48F211501288B38C002745F2 /* ulinks.cpp in Sources */,
 				48F211521288B38C002745F2 /* unicode.cpp in Sources */,
 				48F211551288B38C002745F2 /* unpack.cpp in Sources */,
-				48F211571288B38C002745F2 /* unpack15.cpp in Sources */,
-				48F211581288B38C002745F2 /* unpack20.cpp in Sources */,
-				48F211591288B38C002745F2 /* uowners.cpp in Sources */,
-				48F2115B1288B38C002745F2 /* volume.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
