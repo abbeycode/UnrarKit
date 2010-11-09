@@ -54,8 +54,12 @@
 	rarFile = [self openRar:&flags header:&header mode:RAR_OM_LIST];
 	
 	while ((RHCode = RARReadHeaderEx(rarFile, &header)) == 0) {
-		//page = wxString(header.FileNameW);
-		//page = wxString(header.FileName);
+		NSString *filename = [NSString stringWithCString:header.FileName];
+		NSLog(@"File: %@", filename);
+		
+		if ((PFCode = RARProcessFile(rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+			[self closeRar:rarFile flags:&flags];
+		}		
 	}
 	
 	[self closeRar:rarFile flags:&flags];    
@@ -63,10 +67,12 @@
 
 - (HANDLE) openRar:(RAROpenArchiveDataEx *)flags header:(RARHeaderDataEx *)aHeader mode:(UInt8) aMode {
 	
+	NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Venom - Licença para Matar #01" ofType:@"cbr"]; 
+	
 	HANDLE rarFile;
 	
 	memset(flags, 0, sizeof(*flags));
-	const char *filenameData = "";
+	const char *filenameData = (const char *) [filePath UTF8String];
 	flags->ArcName = new char[strlen(filenameData) + 1];
 	strcpy(flags->ArcName, filenameData);
 	flags->CmtBuf = NULL;
@@ -86,7 +92,7 @@
 	if (rarFile)
 		RARCloseArchive(rarFile);
 	
-	delete[] aFlags->ArcNameW;
+	delete[] aFlags->ArcName;
 }
 
 - (void)didReceiveMemoryWarning {
