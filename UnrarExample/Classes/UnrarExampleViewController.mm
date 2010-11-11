@@ -48,12 +48,17 @@
 	NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Venom - Licença para Matar #01" ofType:@"cbr"]; 
 
 	Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
-	[unrar UnrarOpenFile:filePath mode:RAR_OM_LIST];
-	NSArray *files = [unrar UnrarListFiles];
-	for (NSString *filename in files) {
-		NSLog(@"File: %@", filename);
+	BOOL ok = [unrar UnrarOpenFile:filePath mode:RAR_OM_LIST];
+	if (ok) {
+		NSArray *files = [unrar UnrarListFiles];
+		for (NSString *filename in files) {
+			NSLog(@"File: %@", filename);
+		}
+		[unrar UnrarCloseFile];
 	}
-	[unrar UnrarCloseFile];
+	else
+		[unrar UnrarCloseFile];
+		
 	[unrar release];
 }
 
