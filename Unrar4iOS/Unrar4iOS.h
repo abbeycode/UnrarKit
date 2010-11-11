@@ -12,7 +12,16 @@
 
 @interface Unrar4iOS : NSObject {
 
-	HANDLE rarFile;
+	HANDLE _rarFile;
+	struct RARHeaderDataEx *header;
+	struct RAROpenArchiveDataEx *flags;
+	
 }
+
+-(BOOL) UnrarOpenFile:(NSString*) rarFile mode:(NSInteger)mode;
+-(BOOL) UnrarOpenFile:(NSString*) rarFile password:(NSString*) password;
+-(NSArray *) UnrarListFiles;
+-(BOOL) UnrarFileTo:(NSString*) path overWrite:(BOOL) overwrite;
+-(BOOL) UnrarCloseFile;
 
 @end
