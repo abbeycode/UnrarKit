@@ -16,7 +16,7 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D7ACF80DDB3853001CB0EB /* UnrarExampleViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* UnrarExampleViewController.mm */; };
 		480F6005128A0C0B00A9B478 /* Venom - Licença para Matar #01.cbr in Resources */ = {isa = PBXBuildFile; fileRef = 480F6002128A0C0B00A9B478 /* Venom - Licença para Matar #01.cbr */; };
-		489BD5211288E22500D97DE0 /* libUnrar4iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 489BD5201288E22500D97DE0 /* libUnrar4iOS.a */; };
+		487556F4128B85E700080B71 /* Unrar4iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 487556F3128B85E700080B71 /* Unrar4iOS.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,8 +33,7 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* UnrarExample_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarExample_Prefix.pch; sourceTree = "<group>"; };
 		480F6002128A0C0B00A9B478 /* Venom - Licença para Matar #01.cbr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Venom - Licença para Matar #01.cbr"; sourceTree = "<group>"; };
-		489BD4EF1288E12800D97DE0 /* dll.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = dll.hpp; sourceTree = "<group>"; };
-		489BD5201288E22500D97DE0 /* libUnrar4iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUnrar4iOS.a; path = Frameworks/libUnrar4iOS.a; sourceTree = "<group>"; };
+		487556F3128B85E700080B71 /* Unrar4iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Unrar4iOS.framework; path = Frameworks/Unrar4iOS.framework; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* UnrarExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "UnrarExample-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -46,7 +45,7 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
-				489BD5211288E22500D97DE0 /* libUnrar4iOS.a in Frameworks */,
+				487556F4128B85E700080B71 /* Unrar4iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,7 +86,6 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				489BD4101288DB0E00D97DE0 /* Unrar4iOS */,
 				32CA4F630368D1EE00C91783 /* UnrarExample_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
@@ -108,21 +106,12 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				487556F3128B85E700080B71 /* Unrar4iOS.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
-				489BD5201288E22500D97DE0 /* libUnrar4iOS.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		489BD4101288DB0E00D97DE0 /* Unrar4iOS */ = {
-			isa = PBXGroup;
-			children = (
-				489BD4EF1288E12800D97DE0 /* dll.hpp */,
-			);
-			name = Unrar4iOS;
-			path = Classes/Unrar4iOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -201,6 +190,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -219,6 +212,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = UnrarExample_Prefix.pch;
 				INFOPLIST_FILE = "UnrarExample-Info.plist";

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Unrar4iOS/Unrar4iOS.h>
 
 @interface UnrarExampleViewController : UIViewController {
     
