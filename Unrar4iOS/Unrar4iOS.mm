@@ -10,7 +10,7 @@
 
 @implementation Unrar4iOS
 
--(BOOL) UnrarOpenFile:(NSString*)rarFile mode:(NSInteger)mode{
+-(BOOL) unrarOpenFile:(NSString*)rarFile mode:(NSInteger)mode{
 	
 	header = new RARHeaderDataEx;
 	flags  = new RAROpenArchiveDataEx;
@@ -30,12 +30,12 @@
 	return YES;
 }
 
--(BOOL) UnrarOpenFile:(NSString*)rarFile password:(NSString*)password {
+-(BOOL) unrarOpenFile:(NSString*)rarFile password:(NSString*)password {
 	
 	return NO;
 }
 
--(NSArray *) UnrarListFiles {
+-(NSArray *) unrarListFiles {
 	int RHCode = 0, PFCode = 0;
 
 	NSMutableArray *files = [NSMutableArray array];
@@ -50,12 +50,12 @@
 	return files;
 }
 
--(BOOL) UnrarFileTo:(NSString*)path overWrite:(BOOL)overwrite {
+-(BOOL) unrarFileTo:(NSString*)path overWrite:(BOOL)overwrite {
 	
 	return NO;
 }
 
--(BOOL) UnrarCloseFile {
+-(BOOL) unrarCloseFile {
 	if (_rarFile)
 		RARCloseArchive(_rarFile);
 	
