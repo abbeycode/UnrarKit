@@ -18,10 +18,10 @@
 	
 }
 
--(BOOL) UnrarOpenFile:(NSString*) rarFile mode:(NSInteger)mode;
--(BOOL) UnrarOpenFile:(NSString*) rarFile password:(NSString*) password;
--(NSArray *) UnrarListFiles;
--(BOOL) UnrarFileTo:(NSString*) path overWrite:(BOOL) overwrite;
--(BOOL) UnrarCloseFile;
+-(BOOL) unrarOpenFile:(NSString*) rarFile mode:(NSInteger) mode;
+-(BOOL) unrarOpenFile:(NSString*) rarFile password:(NSString*) password;
+-(NSArray *) unrarListFiles;
+-(BOOL) unrarFileTo:(NSString*) path overWrite:(BOOL) overwrite;
+-(BOOL) unrarCloseFile;
 
 @end
