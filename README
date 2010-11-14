@@ -11,3 +11,18 @@ This project makes easy to build the unrar library as iOS static library.
 This project give to us an example about how to use unrar in a iOS application.
 
 Feel free to contribute with enhancements.
+
+
+Installation:
+
+Please open Unrar4iOS on XCode and build it, the framework package will be generated on build folder of project, copy it to a folder of your project  and add as existing framework to your project.
+
+
+Notes:
+
+Since this Unrar4iOS is cpp based library you will need to change the extension of classes that uses Unrar4iOS to .mm it will allow us to include  libstdc++ on linking stage, otherwise you will need to add libstdc++ as linker flags in you application.
+
+
+Credits:
+
+Vicent Scott (vkan388@gmail.com)
