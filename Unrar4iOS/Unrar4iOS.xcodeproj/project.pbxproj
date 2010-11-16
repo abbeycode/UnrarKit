@@ -54,7 +54,6 @@
 		48F211191288B38C002745F2 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2109D1288B38C002745F2 /* list.cpp */; };
 		48F2111A1288B38C002745F2 /* list.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F2109E1288B38C002745F2 /* list.hpp */; };
 		48F2111B1288B38C002745F2 /* loclang.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F2109F1288B38C002745F2 /* loclang.hpp */; };
-		48F2111C1288B38C002745F2 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210A01288B38C002745F2 /* log.cpp */; };
 		48F2111D1288B38C002745F2 /* log.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210A11288B38C002745F2 /* log.hpp */; };
 		48F2111E1288B38C002745F2 /* match.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210A71288B38C002745F2 /* match.cpp */; };
 		48F2111F1288B38C002745F2 /* match.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210A81288B38C002745F2 /* match.hpp */; };
@@ -585,7 +584,6 @@
 				48F211141288B38C002745F2 /* global.cpp in Sources */,
 				48F211171288B38C002745F2 /* isnt.cpp in Sources */,
 				48F211191288B38C002745F2 /* list.cpp in Sources */,
-				48F2111C1288B38C002745F2 /* log.cpp in Sources */,
 				48F2111E1288B38C002745F2 /* match.cpp in Sources */,
 				48F211221288B38C002745F2 /* options.cpp in Sources */,
 				48F211261288B38C002745F2 /* pathfn.cpp in Sources */,
