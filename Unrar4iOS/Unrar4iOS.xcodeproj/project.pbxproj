@@ -554,7 +554,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "# name and build location\nFRAMEWORK_NAME=${PROJECT_NAME}  \nFRAMEWORK_BUILD_PATH=\"${PROJECT_DIR}/build/Framework\"  \n \n# these never change\nFRAMEWORK_VERSION=A  \nFRAMEWORK_CURRENT_VERSION=1  \nFRAMEWORK_COMPATIBILITY_VERSION=1  \n \n# Clean any existing framework that might be there  \nif [ -d \"$FRAMEWORK_BUILD_PATH\" ]   \nthen\n\techo \"Framework: Cleaning framework...\"  \n\trm -rf \"$FRAMEWORK_BUILD_PATH\"  \nfi\n \n# Build the canonical Framework bundle directory structure  \necho \"Framework: Setting up directories...\"  \nFRAMEWORK_DIR=$FRAMEWORK_BUILD_PATH/$FRAMEWORK_NAME.framework  \nmkdir -p $FRAMEWORK_DIR  \nmkdir -p $FRAMEWORK_DIR/Versions  \nmkdir -p $FRAMEWORK_DIR/Versions/$FRAMEWORK_VERSION\nmkdir -p $FRAMEWORK_DIR/Versions/$FRAMEWORK_VERSION/Resources\nmkdir -p $FRAMEWORK_DIR/Versions/$FRAMEWORK_VERSION/Headers\n \necho \"Framework: Creating symlinks...\"  \nln -s $FRAMEWORK_VERSION $FRAMEWORK_DIR/Versions/Current\nln -s Versions/Current/Headers $FRAMEWORK_DIR/Headers\nln -s Versions/Current/Resources $FRAMEWORK_DIR/Resources\nln -s Versions/Current/$FRAMEWORK_NAME $FRAMEWORK_DIR/$FRAMEWORK_NAME \n \n# combine lib files for various platforms into one\necho \"Framework: Creating library...\"  \nlipo -create \"${PROJECT_DIR}/build/${BUILD_STYLE}-iphoneos/lib${PROJECT_NAME}.a\" \"${PROJECT_DIR}/build/${BUILD_STYLE}-iphonesimulator/lib${PROJECT_NAME}.a\" -o \"$FRAMEWORK_DIR/Versions/Current/$FRAMEWORK_NAME\"\n \necho \"Framework: Copying assets into current version...\"\ncp ${SRCROOT}/unrar/*.hpp $FRAMEWORK_DIR/Headers/\ncp ${SRCROOT}/*.h $FRAMEWORK_DIR/Headers/\n \n#replace placeholder in plist with project name\ncat \"${SRCROOT}/Framework.plist\" | sed 's/${PROJECT_NAME}/'\"${PROJECT_NAME}\"'/' > $FRAMEWORK_DIR/Resources/Info.plist";
+			shellScript = "# name and build location\nFRAMEWORK_NAME=${PROJECT_NAME}  \nFRAMEWORK_BUILD_PATH=\"${PROJECT_DIR}/build/Framework\"  \n \n# these never change\nFRAMEWORK_VERSION=A  \nFRAMEWORK_CURRENT_VERSION=1  \nFRAMEWORK_COMPATIBILITY_VERSION=1  \n \n# Clean any existing framework that might be there  \nif [ -d \"$FRAMEWORK_BUILD_PATH\" ]   \nthen\n\techo \"Framework: Cleaning framework...\"  \n\trm -rf \"$FRAMEWORK_BUILD_PATH\"  \nfi\n \n# Build the canonical Framework bundle directory structure  \necho \"Framework: Setting up directories...\"  \nFRAMEWORK_DIR=$FRAMEWORK_BUILD_PATH/$FRAMEWORK_NAME.framework  \nmkdir -p $FRAMEWORK_DIR  \nmkdir -p $FRAMEWORK_DIR/Versions  \nmkdir -p $FRAMEWORK_DIR/Versions/$FRAMEWORK_VERSION\nmkdir -p $FRAMEWORK_DIR/Versions/$FRAMEWORK_VERSION/Resources\nmkdir -p $FRAMEWORK_DIR/Versions/$FRAMEWORK_VERSION/Headers\n \necho \"Framework: Creating symlinks...\"  \nln -s $FRAMEWORK_VERSION $FRAMEWORK_DIR/Versions/Current\nln -s Versions/Current/Headers $FRAMEWORK_DIR/Headers\nln -s Versions/Current/Resources $FRAMEWORK_DIR/Resources\nln -s Versions/Current/$FRAMEWORK_NAME $FRAMEWORK_DIR/$FRAMEWORK_NAME \n \n# combine lib files for various platforms into one\necho \"Framework: Creating library...\"  \nlipo -create \"${SYMROOT}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${SYMROOT}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\" -o \"$FRAMEWORK_DIR/Versions/Current/$FRAMEWORK_NAME\"\n \necho \"Framework: Copying assets into current version...\"\ncp ${SRCROOT}/unrar/*.hpp $FRAMEWORK_DIR/Headers/\ncp ${SRCROOT}/*.h $FRAMEWORK_DIR/Headers/\n \n#replace placeholder in plist with project name\ncat \"${SRCROOT}/Framework.plist\" | sed 's/${PROJECT_NAME}/'\"${PROJECT_NAME}\"'/' > $FRAMEWORK_DIR/Resources/Info.plist";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -617,7 +617,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_BIT)",
+					armv6,
+					i386,
+				);
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/Unrar4iOS.dst;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -635,7 +639,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_BIT)",
+					armv6,
+					i386,
+				);
 				DSTROOT = /tmp/Unrar4iOS.dst;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -648,7 +656,11 @@
 		1DEB922308733DC00010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_BIT)",
+					armv6,
+					i386,
+				);
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -668,7 +680,11 @@
 		1DEB922408733DC00010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					"$(ARCHS_STANDARD_32_BIT)",
+					armv6,
+					i386,
+				);
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
