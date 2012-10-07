@@ -7,6 +7,7 @@
 //
 
 #import "UnrarExampleViewController.h"
+#import <Unrar4IOS/RARExtractException.h>
 
 @implementation UnrarExampleViewController
 
@@ -49,7 +50,7 @@
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"protected" ofType:@"cbr"]; 
 
 	Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
-	BOOL ok = [unrar unrarOpenFile:filePath withPassword:@"123456"];
+	BOOL ok = [unrar unrarOpenFile:filePath];
 	if (ok) {
 		NSArray *files = [unrar unrarListFiles];
 		for (NSString *filename in files) {
@@ -57,11 +58,20 @@
 		}
 		
 		// Extract a stream
-		NSData *data = [unrar extractStream:[files objectAtIndex:0]];
-		if (data != nil) {
-			UIImage *image = [UIImage imageWithData:data];
-			imageView.image = image;
-		}
+        try {
+            NSData *data = [unrar extractStream:[files objectAtIndex:0]];
+            if (data != nil) {
+                UIImage *image = [UIImage imageWithData:data];
+                imageView.image = image;
+            }
+        }
+        catch(RARExtractException *error) {
+            
+            if(error.status == RARArchiveProtected) {
+                
+                NSLog(@"Password protected archive!");
+            }
+        }
 						
 		[unrar unrarCloseFile];
 	}
