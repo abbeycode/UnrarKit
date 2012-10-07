@@ -16,11 +16,14 @@
 	struct	 RARHeaderDataEx *header;
 	struct	 RAROpenArchiveDataEx *flags;
 	NSString *filename;
+	NSString *password;
 }
 
 @property(nonatomic, retain) NSString* filename;
+@property(nonatomic, retain) NSString* password;
 
 -(BOOL) unrarOpenFile:(NSString*) rarFile;
+-(BOOL) unrarOpenFile:(NSString*) rarFile withPassword:(NSString*) aPassword;
 -(NSArray *) unrarListFiles;
 -(BOOL) unrarFileTo:(NSString*) path overWrite:(BOOL) overwrite;
 -(NSData *) extractStream:(NSString *)aFile;

@@ -45,10 +45,11 @@
 */
 
 - (IBAction)decompress:(id)sender {
-	NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Venom - Licença para Matar #01" ofType:@"cbr"]; 
+	//NSString *filePath = [[NSBundle mainBundle] pathForResource:@"not_protected" ofType:@"cbr"]; 
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"protected" ofType:@"cbr"]; 
 
 	Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
-	BOOL ok = [unrar unrarOpenFile:filePath];
+	BOOL ok = [unrar unrarOpenFile:filePath withPassword:@"123456"];
 	if (ok) {
 		NSArray *files = [unrar unrarListFiles];
 		for (NSString *filename in files) {
