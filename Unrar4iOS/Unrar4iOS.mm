@@ -7,6 +7,7 @@
 //
 
 #import "Unrar4iOS.h"
+#import "RARExtractException.h"
 
 @interface Unrar4iOS(PrivateMethods)
 -(BOOL)_unrarOpenFile:(NSString*)rarFile inMode:(NSInteger)mode;
@@ -145,10 +146,15 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 	RARSetCallback(_rarFile, CallbackProc, (long) &callBackBuffer);
 	
 	PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
-	
-	[self _unrarCloseFile];
-	
-	return [NSData dataWithBytes:buffer length:length];
+
+    [self _unrarCloseFile];
+    if(PFCode == ERAR_MISSING_PASSWORD) {
+        RARExtractException *exception = [RARExtractException exceptionWithStatus:RARArchiveProtected];
+        @throw exception;           
+        return nil;
+    }
+
+    return [NSData dataWithBytes:buffer length:length];
 }
 
 -(BOOL) _unrarCloseFile {

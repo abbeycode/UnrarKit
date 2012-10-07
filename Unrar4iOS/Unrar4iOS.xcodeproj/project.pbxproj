@@ -11,6 +11,8 @@
 		480F5FC7128A06A600A9B478 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E91288B38C002745F2 /* volume.cpp */; };
 		489CFA10128B5169005DCC2A /* Unrar4iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 489CFA0E128B5169005DCC2A /* Unrar4iOS.h */; };
 		489CFA11128B5169005DCC2A /* Unrar4iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* Unrar4iOS.mm */; };
+		48BB62EE1621C83D00B424E2 /* RARExtractException.h in Headers */ = {isa = PBXBuildFile; fileRef = 48BB62EC1621C83D00B424E2 /* RARExtractException.h */; };
+		48BB62EF1621C83D00B424E2 /* RARExtractException.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BB62ED1621C83D00B424E2 /* RARExtractException.m */; };
 		48F210EE1288B38C002745F2 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2106F1288B38C002745F2 /* archive.cpp */; };
 		48F210EF1288B38C002745F2 /* archive.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210701288B38C002745F2 /* archive.hpp */; };
 		48F210F01288B38C002745F2 /* arcread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210711288B38C002745F2 /* arcread.cpp */; };
@@ -111,6 +113,8 @@
 		489CF9F1128B4D8E005DCC2A /* Framework.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Framework.plist; sourceTree = "<group>"; };
 		489CFA0E128B5169005DCC2A /* Unrar4iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Unrar4iOS.h; sourceTree = "<group>"; };
 		489CFA0F128B5169005DCC2A /* Unrar4iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Unrar4iOS.mm; sourceTree = "<group>"; };
+		48BB62EC1621C83D00B424E2 /* RARExtractException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RARExtractException.h; sourceTree = "<group>"; };
+		48BB62ED1621C83D00B424E2 /* RARExtractException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RARExtractException.m; sourceTree = "<group>"; };
 		48F2106E1288B38C002745F2 /* arccmt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = arccmt.cpp; sourceTree = "<group>"; };
 		48F2106F1288B38C002745F2 /* archive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = archive.cpp; sourceTree = "<group>"; };
 		48F210701288B38C002745F2 /* archive.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = archive.hpp; sourceTree = "<group>"; };
@@ -286,6 +290,8 @@
 				48F2106D1288B38C002745F2 /* unrar */,
 				489CFA0E128B5169005DCC2A /* Unrar4iOS.h */,
 				489CFA0F128B5169005DCC2A /* Unrar4iOS.mm */,
+				48BB62EC1621C83D00B424E2 /* RARExtractException.h */,
+				48BB62ED1621C83D00B424E2 /* RARExtractException.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -493,6 +499,7 @@
 				480F5FC6128A069300A9B478 /* volume.hpp in Headers */,
 				48F2115A1288B38C002745F2 /* version.hpp in Headers */,
 				489CFA10128B5169005DCC2A /* Unrar4iOS.h in Headers */,
+				48BB62EE1621C83D00B424E2 /* RARExtractException.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,6 +614,7 @@
 				48F211521288B38C002745F2 /* unicode.cpp in Sources */,
 				48F211551288B38C002745F2 /* unpack.cpp in Sources */,
 				489CFA11128B5169005DCC2A /* Unrar4iOS.mm in Sources */,
+				48BB62EF1621C83D00B424E2 /* RARExtractException.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
