@@ -153,7 +153,17 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         @throw exception;           
         return nil;
     }
-
+    if(PFCode == ERAR_BAD_ARCHIVE) {
+        RARExtractException *exception = [RARExtractException exceptionWithStatus:RARArchiveInvalid];
+        @throw exception;           
+        return nil;
+    }
+    if(PFCode == ERAR_UNKNOWN_FORMAT) {
+        RARExtractException *exception = [RARExtractException exceptionWithStatus:RARArchiveBadFormat];
+        @throw exception;           
+        return nil;
+    }
+    
     return [NSData dataWithBytes:buffer length:length];
 }
 
