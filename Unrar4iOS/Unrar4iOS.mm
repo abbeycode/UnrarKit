@@ -84,7 +84,8 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 -(NSArray *) unrarListFiles {
 	int RHCode = 0, PFCode = 0;
 
-	[self _unrarOpenFile:filename inMode:RAR_OM_LIST withPassword:password];
+	if ([self _unrarOpenFile:filename inMode:RAR_OM_LIST_INCSPLIT withPassword:password] == NO)
+        return nil;
 	
 	NSMutableArray *files = [NSMutableArray array];
 	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
@@ -126,7 +127,8 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 
 	int RHCode = 0, PFCode = 0;
 	
-	[self _unrarOpenFile:filename inMode:RAR_OM_EXTRACT withPassword:password];
+	if ([self _unrarOpenFile:filename inMode:RAR_OM_EXTRACT withPassword:password] == NO)
+        return nil;
 	
 	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
 		NSString *_filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
