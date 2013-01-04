@@ -108,8 +108,22 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 }
 
 -(BOOL) unrarFileTo:(NSString*)path overWrite:(BOOL)overwrite {
-	
-	return NO;
+    int RHCode = 0, PFCode = 0;
+    
+    if ([self _unrarOpenFile:filename inMode:RAR_OM_EXTRACT] == NO)
+        return NO;
+    
+	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+        
+        if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *)[path UTF8String], NULL)) != 0) {
+            [self _unrarCloseFile];
+            return NO;
+        }
+        
+    }
+    
+    [self _unrarCloseFile];
+    return YES;
 }
 
 -(NSData *) extractStream:(NSString *)aFile {
