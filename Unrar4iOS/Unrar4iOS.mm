@@ -11,7 +11,6 @@
 
 @interface Unrar4iOS(PrivateMethods)
 -(BOOL)_unrarOpenFile:(NSString*)rarFile inMode:(NSInteger)mode;
--(BOOL)_unrarOpenFile:(NSString*)rarFile withpassword:(NSString*)password;
 -(BOOL)_unrarOpenFile:(NSString*)rarFile inMode:(NSInteger)mode withPassword:(NSString*)password;
 -(BOOL)_unrarCloseFile;
 @end
@@ -54,11 +53,6 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 -(BOOL) _unrarOpenFile:(NSString*)rarFile inMode:(NSInteger)mode{
 	
     return [self _unrarOpenFile:rarFile inMode:mode withPassword:nil];
-}
-
--(BOOL) _unrarOpenFile:(NSString*)rarFile withPassword:(NSString*)aPassword {
-	
-    return [self _unrarOpenFile:rarFile inMode:RAR_OM_LIST withPassword:aPassword];
 }
 
 - (BOOL)_unrarOpenFile:(NSString *)rarFile inMode:(NSInteger)mode withPassword:(NSString *)aPassword {
