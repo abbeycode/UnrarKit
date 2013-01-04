@@ -122,14 +122,12 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 }
 
 -(NSData *) extractStream:(NSString *)aFile {
-	
-	size_t length = 0;
-
 	int RHCode = 0, PFCode = 0;
 	
 	if ([self _unrarOpenFile:filename inMode:RAR_OM_EXTRACT withPassword:password] == NO)
         return nil;
 	
+	size_t length = 0;
 	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
 		NSString *_filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
 				
@@ -150,7 +148,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 		return nil;
 	}
 	
-	UInt8 *buffer = new UInt8[length];
+	UInt8 *buffer = (UInt8 *)malloc(length * sizeof(UInt8));
 	UInt8 *callBackBuffer = buffer;
 	
 	RARSetCallback(_rarFile, CallbackProc, (long) &callBackBuffer);
@@ -174,7 +172,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         return nil;
     }
     
-    return [NSData dataWithBytes:buffer length:length];
+    return [NSData dataWithBytesNoCopy:buffer length:length freeWhenDone:YES];
 }
 
 -(BOOL) _unrarCloseFile {
