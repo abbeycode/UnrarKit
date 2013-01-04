@@ -649,6 +649,13 @@
 				GCC_THUMB_SUPPORT = NO;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Unrar4iOS;
+				WARNING_CFLAGS = (
+					"-Wno-dangling-else",
+					"-Wno-parentheses",
+					"-Wno-return-type",
+					"-Wno-unused-variable",
+					"-Wno-switch",
+				);
 			};
 			name = Debug;
 		};
@@ -668,6 +675,13 @@
 				GCC_THUMB_SUPPORT = NO;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Unrar4iOS;
+				WARNING_CFLAGS = (
+					"-Wno-dangling-else",
+					"-Wno-parentheses",
+					"-Wno-return-type",
+					"-Wno-unused-variable",
+					"-Wno-switch",
+				);
 			};
 			name = Release;
 		};
