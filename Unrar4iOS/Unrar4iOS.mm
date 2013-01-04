@@ -58,27 +58,27 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 - (BOOL)_unrarOpenFile:(NSString *)rarFile inMode:(NSInteger)mode withPassword:(NSString *)aPassword {
     
 	header = new RARHeaderDataEx;
-	flags  = new RAROpenArchiveDataEx;
+    bzero(header, sizeof(RARHeaderDataEx));
+	flags = new RAROpenArchiveDataEx;
+    bzero(flags, sizeof(RAROpenArchiveDataEx));
 	
 	const char *filenameData = (const char *) [rarFile UTF8String];
 	flags->ArcName = new char[strlen(filenameData) + 1];
 	strcpy(flags->ArcName, filenameData);
-	flags->ArcNameW = NULL;
-	flags->CmtBuf = NULL;
 	flags->OpenMode = mode;
 	
 	_rarFile = RAROpenArchiveEx(flags);
-	if (flags->OpenResult != 0) 
+	if (_rarFile == 0 || flags->OpenResult != 0) {
+        [self _unrarCloseFile];
 		return NO;
+    }
 	
-	header->CmtBuf = NULL;	
-    
     if(aPassword != nil) {
         char *_password = (char *) [aPassword UTF8String];
         RARSetPassword(_rarFile, _password);
     }
     
-	return YES;    
+	return YES;
 }
 
 -(NSArray *) unrarListFiles {
@@ -180,15 +180,18 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 -(BOOL) _unrarCloseFile {
 	if (_rarFile)
 		RARCloseArchive(_rarFile);
-	
-	delete flags;
+    _rarFile = 0;
+    
+    if (flags)
+        delete flags->ArcName;
+	delete flags, flags = 0;
+    delete header, header = 0;
 	return YES;
 }
 
 -(BOOL) unrarCloseFile {
 	return YES;
 }
-
 
 -(void) dealloc {
 	[filename release];
