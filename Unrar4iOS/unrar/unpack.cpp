@@ -12,7 +12,6 @@ Unpack::Unpack(ComprDataIO *DataIO)
 {
   UnpIO=DataIO;
   Window=NULL;
-  ExternalWindow=false;
   Suspended=false;
   UnpAllBuf=false;
   UnpSomeRead=false;
@@ -21,27 +20,24 @@ Unpack::Unpack(ComprDataIO *DataIO)
 
 Unpack::~Unpack()
 {
-  if (Window!=NULL && !ExternalWindow)
-    delete[] Window;
+  delete[] Window;
   InitFilters();
 }
 
 
-void Unpack::Init(byte *Window)
+void Unpack::Init()
 {
-  if (Window==NULL)
-  {
-    Unpack::Window=new byte[MAXWINSIZE];
+  Window=new byte[MAXWINSIZE];
+
 #ifndef ALLOW_EXCEPTIONS
-    if (Unpack::Window==NULL)
-      ErrHandler.MemoryError();
+  if (Window==NULL)
+    ErrHandler.MemoryError();
 #endif
-  }
-  else
-  {
-    Unpack::Window=Window;
-    ExternalWindow=true;
-  }
+
+  // Clean the window to generate the same output when unpacking corrupt
+  // RAR files, which may access to unused areas of sliding dictionary.
+  memset(Window,0,MAXWINSIZE);
+
   UnpInitData(false);
 
 #ifndef SFX_MODULE
@@ -82,84 +78,94 @@ inline void Unpack::InsertOldDist(unsigned int Distance)
 }
 
 
-inline void Unpack::InsertLastMatch(unsigned int Length,unsigned int Distance)
+_forceinline void Unpack::CopyString(uint Length,uint Distance)
 {
-  LastDist=Distance;
-  LastLength=Length;
-}
-
-
-void Unpack::CopyString(unsigned int Length,unsigned int Distance)
-{
-  unsigned int DestPtr=UnpPtr-Distance;
-  if (DestPtr<MAXWINSIZE-260 && UnpPtr<MAXWINSIZE-260)
+  uint SrcPtr=UnpPtr-Distance;
+  if (SrcPtr<MAXWINSIZE-MAX_LZ_MATCH && UnpPtr<MAXWINSIZE-MAX_LZ_MATCH)
   {
-    Window[UnpPtr++]=Window[DestPtr++];
-    while (--Length>0)
-      Window[UnpPtr++]=Window[DestPtr++];
+    // If we are not close to end of window, we do not need to waste time
+    // to "& MAXWINMASK" pointer protection.
+
+    byte *Src=Window+SrcPtr;
+    byte *Dest=Window+UnpPtr;
+    UnpPtr+=Length;
+
+    while (Length>=8)
+    {
+      // Unroll the loop for 8 byte and longer strings.
+      Dest[0]=Src[0];
+      Dest[1]=Src[1];
+      Dest[2]=Src[2];
+      Dest[3]=Src[3];
+      Dest[4]=Src[4];
+      Dest[5]=Src[5];
+      Dest[6]=Src[6];
+      Dest[7]=Src[7];
+      Src+=8;
+      Dest+=8;
+      Length-=8;
+    }
+
+    // Unroll the loop for 0 - 7 bytes left. Note that we use nested "if"s.
+    if (Length>0) { Dest[0]=Src[0];
+    if (Length>1) { Dest[1]=Src[1];
+    if (Length>2) { Dest[2]=Src[2];
+    if (Length>3) { Dest[3]=Src[3];
+    if (Length>4) { Dest[4]=Src[4];
+    if (Length>5) { Dest[5]=Src[5];
+    if (Length>6) { Dest[6]=Src[6]; } } } } } } } // Close all nested "if"s.
   }
   else
-    while (Length--)
+    while (Length--) // Slow copying with all possible precautions.
     {
-      Window[UnpPtr]=Window[DestPtr++ & MAXWINMASK];
+      Window[UnpPtr]=Window[SrcPtr++ & MAXWINMASK];
       UnpPtr=(UnpPtr+1) & MAXWINMASK;
     }
 }
 
 
-int Unpack::DecodeNumber(struct Decode *Dec)
+_forceinline uint Unpack::DecodeNumber(DecodeTable *Dec)
 {
-  unsigned int Bits;
-  unsigned int BitField=getbits() & 0xfffe;
-  if (BitField<Dec->DecodeLen[8])
-    if (BitField<Dec->DecodeLen[4])
-      if (BitField<Dec->DecodeLen[2])
-        if (BitField<Dec->DecodeLen[1])
-          Bits=1;
-        else
-          Bits=2;
-      else
-        if (BitField<Dec->DecodeLen[3])
-          Bits=3;
-        else
-          Bits=4;
-    else
-      if (BitField<Dec->DecodeLen[6])
-        if (BitField<Dec->DecodeLen[5])
-          Bits=5;
-        else
-          Bits=6;
-      else
-        if (BitField<Dec->DecodeLen[7])
-          Bits=7;
-        else
-          Bits=8;
-  else
-    if (BitField<Dec->DecodeLen[12])
-      if (BitField<Dec->DecodeLen[10])
-        if (BitField<Dec->DecodeLen[9])
-          Bits=9;
-        else
-          Bits=10;
-      else
-        if (BitField<Dec->DecodeLen[11])
-          Bits=11;
-        else
-          Bits=12;
-    else
-      if (BitField<Dec->DecodeLen[14])
-        if (BitField<Dec->DecodeLen[13])
-          Bits=13;
-        else
-          Bits=14;
-      else
-        Bits=15;
+  // Left aligned 15 bit length raw bit field.
+  uint BitField=getbits() & 0xfffe;
+
+  if (BitField<Dec->DecodeLen[Dec->QuickBits])
+  {
+    uint Code=BitField>>(16-Dec->QuickBits);
+    addbits(Dec->QuickLen[Code]);
+    return Dec->QuickNum[Code];
+  }
+
+  // Detect the real bit length for current code.
+  uint Bits=15;
+  for (uint I=Dec->QuickBits+1;I<15;I++)
+    if (BitField<Dec->DecodeLen[I])
+    {
+      Bits=I;
+      break;
+    }
 
   addbits(Bits);
-  unsigned int N=Dec->DecodePos[Bits]+((BitField-Dec->DecodeLen[Bits-1])>>(16-Bits));
-  if (N>=Dec->MaxNum)
-    N=0;
-  return(Dec->DecodeNum[N]);
+  
+  // Calculate the distance from the start code for current bit length.
+  uint Dist=BitField-Dec->DecodeLen[Bits-1];
+
+  // Start codes are left aligned, but we need the normal right aligned
+  // number. So we shift the distance to the right.
+  Dist>>=(16-Bits);
+
+  // Now we can calculate the position in the code list. It is the sum
+  // of first position for current bit length and right aligned distance
+  // between our bit field and start code for current bit length.
+  uint Pos=Dec->DecodePos[Bits]+Dist;
+
+  // Out of bounds safety check required for damaged archives.
+  if (Pos>=Dec->MaxNum)
+    Pos=0;
+
+  // Convert the position in the code list to position in alphabet
+  // and return it.
+  return(Dec->DecodeNum[Pos]);
 }
 
 
@@ -192,7 +198,7 @@ void Unpack::Unpack29(bool Solid)
   if (DDecode[1]==0)
   {
     int Dist=0,BitLength=0,Slot=0;
-    for (int I=0;I<sizeof(DBitLengthCounts)/sizeof(DBitLengthCounts[0]);I++,BitLength++)
+    for (int I=0;I<ASIZE(DBitLengthCounts);I++,BitLength++)
       for (int J=0;J<DBitLengthCounts[I];J++,Slot++,Dist+=(1<<BitLength))
       {
         DDecode[Slot]=Dist;
@@ -254,7 +260,7 @@ void Unpack::Unpack29(bool Solid)
         }
         if (NextCh==-1) // Corrupt PPM data found.
           break;
-        if (NextCh==2)  // End of file in PPM mode..
+        if (NextCh==2)  // End of file in PPM mode.
           break;
         if (NextCh==3)  // Read VM code.
         {
@@ -298,7 +304,7 @@ void Unpack::Unpack29(bool Solid)
       continue;
     }
 
-    int Number=DecodeNumber((struct Decode *)&LD);
+    int Number=DecodeNumber(&LD);
     if (Number<256)
     {
       Window[UnpPtr++]=(byte)Number;
@@ -313,7 +319,7 @@ void Unpack::Unpack29(bool Solid)
         addbits(Bits);
       }
 
-      int DistNumber=DecodeNumber((struct Decode *)&DD);
+      int DistNumber=DecodeNumber(&DD);
       unsigned int Distance=DDecode[DistNumber]+1;
       if ((Bits=DBits[DistNumber])>0)
       {
@@ -331,7 +337,7 @@ void Unpack::Unpack29(bool Solid)
           }
           else
           {
-            int LowDist=DecodeNumber((struct Decode *)&LDD);
+            int LowDist=DecodeNumber(&LDD);
             if (LowDist==16)
             {
               LowDistRepCount=LOW_DIST_REP_COUNT-1;
@@ -359,7 +365,7 @@ void Unpack::Unpack29(bool Solid)
       }
 
       InsertOldDist(Distance);
-      InsertLastMatch(Length,Distance);
+      LastLength=Length;
       CopyString(Length,Distance);
       continue;
     }
@@ -378,7 +384,7 @@ void Unpack::Unpack29(bool Solid)
     if (Number==258)
     {
       if (LastLength!=0)
-        CopyString(LastLength,LastDist);
+        CopyString(LastLength,OldDist[0]);
       continue;
     }
     if (Number<263)
@@ -389,14 +395,14 @@ void Unpack::Unpack29(bool Solid)
         OldDist[I]=OldDist[I-1];
       OldDist[0]=Distance;
 
-      int LengthNumber=DecodeNumber((struct Decode *)&RD);
+      int LengthNumber=DecodeNumber(&RD);
       int Length=LDecode[LengthNumber]+2;
       if ((Bits=LBits[LengthNumber])>0)
       {
         Length+=getbits()>>(16-Bits);
         addbits(Bits);
       }
-      InsertLastMatch(Length,Distance);
+      LastLength=Length;
       CopyString(Length,Distance);
       continue;
     }
@@ -409,7 +415,7 @@ void Unpack::Unpack29(bool Solid)
         addbits(Bits);
       }
       InsertOldDist(Distance);
-      InsertLastMatch(2,Distance);
+      LastLength=2;
       CopyString(2,Distance);
       continue;
     }
@@ -418,11 +424,17 @@ void Unpack::Unpack29(bool Solid)
 }
 
 
+// Return 'false' to quit unpacking the current file or 'true' to continue.
 bool Unpack::ReadEndOfBlock()
 {
   unsigned int BitField=getbits();
   bool NewTable,NewFile=false;
-  if (BitField & 0x8000)
+
+  // "1"  - no new file, new table just here.
+  // "00" - new file,    no new table.
+  // "01" - new file,    new table (in beginning of next file).
+  
+  if ((BitField & 0x8000)!=0)
   {
     NewTable=true;
     addbits(1);
@@ -434,12 +446,21 @@ bool Unpack::ReadEndOfBlock()
     addbits(2);
   }
   TablesRead=!NewTable;
-  return !(NewFile || NewTable && !ReadTables());
+
+  // Quit immediately if "new file" flag is set. If "new table" flag
+  // is present, we'll read the table in beginning of next file
+  // based on 'TablesRead' 'false' value.
+  if (NewFile)
+    return false;
+  return ReadTables(); // Quit only if we failed to read tables.
 }
 
 
 bool Unpack::ReadVMCode()
 {
+  // Entire VM code is guaranteed to fully present in block defined 
+  // by current Huffman table. Compressor checks that VM code does not cross
+  // Huffman block boundaries.
   unsigned int FirstByte=getbits()>>8;
   addbits(8);
   int Length=(FirstByte & 7)+1;
@@ -506,44 +527,51 @@ bool Unpack::ReadVMCodePPM()
 
 bool Unpack::AddVMCode(unsigned int FirstByte,byte *Code,int CodeSize)
 {
-  BitInput Inp;
-  Inp.InitBitInput();
-  memcpy(Inp.InBuf,Code,Min(BitInput::MAX_SIZE,CodeSize));
+  VMCodeInp.InitBitInput();
+  memcpy(VMCodeInp.InBuf,Code,Min(BitInput::MAX_SIZE,CodeSize));
   VM.Init();
 
   uint FiltPos;
   if (FirstByte & 0x80)
   {
-    FiltPos=RarVM::ReadData(Inp);
+    FiltPos=RarVM::ReadData(VMCodeInp);
     if (FiltPos==0)
       InitFilters();
     else
       FiltPos--;
   }
   else
-    FiltPos=LastFilter; // use the same filter as last time
+    FiltPos=LastFilter; // Use the same filter as last time.
 
   if (FiltPos>Filters.Size() || FiltPos>OldFilterLengths.Size())
     return(false);
   LastFilter=FiltPos;
   bool NewFilter=(FiltPos==Filters.Size());
 
-  UnpackFilter *StackFilter=new UnpackFilter; // new filter for PrgStack
+  UnpackFilter *StackFilter=new UnpackFilter; // New filter for PrgStack.
 
   UnpackFilter *Filter;
-  if (NewFilter) // new filter code, never used before since VM reset
+  if (NewFilter) // New filter code, never used before since VM reset.
   {
-    // too many different filters, corrupt archive
-    if (FiltPos>1024)
-      return(false);
+    // Too many different filters, corrupt archive.
+    if (FiltPos>MAX_FILTERS)
+    {
+      delete StackFilter;
+      return false;
+    }
 
     Filters.Add(1);
     Filters[Filters.Size()-1]=Filter=new UnpackFilter;
     StackFilter->ParentFilter=(uint)(Filters.Size()-1);
-    OldFilterLengths.Add(1);
+
+    // Reserve one item, where we store the data block length of our new
+    // filter entry. We'll set it to real block length below, after reading
+    // it. But we need to initialize it now, because when processing corrupt
+    // data, we can access this item even before we set it to real value.
+    OldFilterLengths.Push(0);
     Filter->ExecCount=0;
   }
-  else  // filter was used in the past
+  else  // Filter was used in the past.
   {
     Filter=Filters[FiltPos];
     StackFilter->ParentFilter=FiltPos;
@@ -568,19 +596,29 @@ bool Unpack::AddVMCode(unsigned int FirstByte,byte *Code,int CodeSize)
   PrgStack[StackPos]=StackFilter;
   StackFilter->ExecCount=Filter->ExecCount;
  
-  uint BlockStart=RarVM::ReadData(Inp);
+  uint BlockStart=RarVM::ReadData(VMCodeInp);
   if (FirstByte & 0x40)
     BlockStart+=258;
   StackFilter->BlockStart=(BlockStart+UnpPtr)&MAXWINMASK;
   if (FirstByte & 0x20)
-    StackFilter->BlockLength=RarVM::ReadData(Inp);
+  {
+    StackFilter->BlockLength=RarVM::ReadData(VMCodeInp);
+
+    // Store the last data block length for current filter.
+    OldFilterLengths[FiltPos]=StackFilter->BlockLength;
+  }
   else
+  {
+    // Set the data block size to same value as the previous block size
+    // for same filter. It is possible on corrupt data to access here a new 
+    // and not filled yet item of OldFilterLengths array. This is why above
+    // we set new OldFilterLengths items to zero.
     StackFilter->BlockLength=FiltPos<OldFilterLengths.Size() ? OldFilterLengths[FiltPos]:0;
+  }
+
   StackFilter->NextWindow=WrPtr!=UnpPtr && ((WrPtr-UnpPtr)&MAXWINMASK)<=BlockStart;
 
 //  DebugLog("\nNextWindow: UnpPtr=%08x WrPtr=%08x BlockStart=%08x",UnpPtr,WrPtr,BlockStart);
-
-  OldFilterLengths[FiltPos]=StackFilter->BlockLength;
 
   memset(StackFilter->Prg.InitR,0,sizeof(StackFilter->Prg.InitR));
   StackFilter->Prg.InitR[3]=VM_GLOBALMEMADDR;
@@ -589,25 +627,25 @@ bool Unpack::AddVMCode(unsigned int FirstByte,byte *Code,int CodeSize)
 
   if (FirstByte & 0x10)   // set registers to optional parameters if any
   {
-    unsigned int InitMask=Inp.fgetbits()>>9;
-    Inp.faddbits(7);
+    unsigned int InitMask=VMCodeInp.fgetbits()>>9;
+    VMCodeInp.faddbits(7);
     for (int I=0;I<7;I++)
       if (InitMask & (1<<I))
-        StackFilter->Prg.InitR[I]=RarVM::ReadData(Inp);
+        StackFilter->Prg.InitR[I]=RarVM::ReadData(VMCodeInp);
   }
 
   if (NewFilter)
   {
-    uint VMCodeSize=RarVM::ReadData(Inp);
+    uint VMCodeSize=RarVM::ReadData(VMCodeInp);
     if (VMCodeSize>=0x10000 || VMCodeSize==0)
       return(false);
     Array<byte> VMCode(VMCodeSize);
     for (uint I=0;I<VMCodeSize;I++)
     {
-      if (Inp.Overflow(3))
+      if (VMCodeInp.Overflow(3))
         return(false);
-      VMCode[I]=Inp.fgetbits()>>8;
-      Inp.faddbits(8);
+      VMCode[I]=VMCodeInp.fgetbits()>>8;
+      VMCodeInp.faddbits(8);
     }
     VM.Prepare(&VMCode[0],VMCodeSize,&Filter->Prg);
   }
@@ -635,11 +673,11 @@ bool Unpack::AddVMCode(unsigned int FirstByte,byte *Code,int CodeSize)
   VM.SetLowEndianValue((uint *)&GlobalData[0x2c],StackFilter->ExecCount);
   memset(&GlobalData[0x30],0,16);
 
-  if (FirstByte & 8) // put data block passed as parameter if any
+  if (FirstByte & 8) // Put the data block passed as parameter if any.
   {
-    if (Inp.Overflow(3))
+    if (VMCodeInp.Overflow(3))
       return(false);
-    uint DataSize=RarVM::ReadData(Inp);
+    uint DataSize=RarVM::ReadData(VMCodeInp);
     if (DataSize>VM_GLOBALMEMSIZE-VM_FIXEDGLOBALSIZE)
       return(false);
     size_t CurSize=StackFilter->Prg.GlobalData.Size();
@@ -648,10 +686,10 @@ bool Unpack::AddVMCode(unsigned int FirstByte,byte *Code,int CodeSize)
     byte *GlobalData=&StackFilter->Prg.GlobalData[VM_FIXEDGLOBALSIZE];
     for (uint I=0;I<DataSize;I++)
     {
-      if (Inp.Overflow(3))
+      if (VMCodeInp.Overflow(3))
         return(false);
-      GlobalData[I]=Inp.fgetbits()>>8;
-      Inp.faddbits(8);
+      GlobalData[I]=VMCodeInp.fgetbits()>>8;
+      VMCodeInp.faddbits(8);
     }
   }
   return(true);
@@ -798,6 +836,8 @@ void Unpack::UnpWriteBuf()
       }
       else
       {
+        // Current filter intersects the window write border, so we adjust
+        // the window border to process this filter next time, not now.
         for (size_t J=I;J<PrgStack.Size();J++)
         {
           UnpackFilter *flt=PrgStack[J];
@@ -858,12 +898,12 @@ void Unpack::UnpWriteData(byte *Data,size_t Size)
 bool Unpack::ReadTables()
 {
   byte BitLength[BC];
-  unsigned char Table[HUFF_TABLE_SIZE];
+  byte Table[HUFF_TABLE_SIZE];
   if (InAddr>ReadTop-25)
     if (!UnpReadBuf())
       return(false);
   faddbits((8-InBit)&7);
-  unsigned int BitField=fgetbits();
+  uint BitField=fgetbits();
   if (BitField & 0x8000)
   {
     UnpBlockType=BLOCK_PPM;
@@ -899,7 +939,7 @@ bool Unpack::ReadTables()
     else
       BitLength[I]=Length;
   }
-  MakeDecodeTables(BitLength,(struct Decode *)&BD,BC);
+  MakeDecodeTables(BitLength,&BD,BC);
 
   const int TableSize=HUFF_TABLE_SIZE;
   for (int I=0;I<TableSize;)
@@ -907,7 +947,7 @@ bool Unpack::ReadTables()
     if (InAddr>ReadTop-5)
       if (!UnpReadBuf())
         return(false);
-    int Number=DecodeNumber((struct Decode *)&BD);
+    int Number=DecodeNumber(&BD);
     if (Number<16)
     {
       Table[I]=(Number+UnpOldTable[I]) & 0xf;
@@ -953,10 +993,10 @@ bool Unpack::ReadTables()
   TablesRead=true;
   if (InAddr>ReadTop)
     return(false);
-  MakeDecodeTables(&Table[0],(struct Decode *)&LD,NC);
-  MakeDecodeTables(&Table[NC],(struct Decode *)&DD,DC);
-  MakeDecodeTables(&Table[NC+DC],(struct Decode *)&LDD,LDC);
-  MakeDecodeTables(&Table[NC+DC+LDC],(struct Decode *)&RD,RC);
+  MakeDecodeTables(&Table[0],&LD,NC);
+  MakeDecodeTables(&Table[NC],&DD,DC);
+  MakeDecodeTables(&Table[NC+DC],&LDD,LDC);
+  MakeDecodeTables(&Table[NC+DC+LDC],&RD,RC);
   memcpy(UnpOldTable,Table,sizeof(UnpOldTable));
   return(true);
 }
@@ -1007,28 +1047,141 @@ void Unpack::InitFilters()
 }
 
 
-void Unpack::MakeDecodeTables(unsigned char *LenTab,struct Decode *Dec,int Size)
+// LengthTable contains the length in bits for every element of alphabet.
+// Dec is the structure to decode Huffman code/
+// Size is size of length table and DecodeNum field in Dec structure,
+void Unpack::MakeDecodeTables(byte *LengthTable,DecodeTable *Dec,uint Size)
 {
-  int LenCount[16],TmpPos[16],I;
-  long M,N;
-  memset(LenCount,0,sizeof(LenCount));
-  memset(Dec->DecodeNum,0,Size*sizeof(*Dec->DecodeNum));
-  for (I=0;I<Size;I++)
-    LenCount[LenTab[I] & 0xF]++;
+  // Size of alphabet and DecodePos array.
+  Dec->MaxNum=Size;
 
-  LenCount[0]=0;
-  for (TmpPos[0]=Dec->DecodePos[0]=Dec->DecodeLen[0]=0,N=0,I=1;I<16;I++)
+  // Calculate how many entries for every bit length in LengthTable we have.
+  uint LengthCount[16];
+  memset(LengthCount,0,sizeof(LengthCount));
+  for (size_t I=0;I<Size;I++)
+    LengthCount[LengthTable[I] & 0xf]++;
+
+  // We must not calculate the number of zero length codes.
+  LengthCount[0]=0;
+
+  // Set the entire DecodeNum to zero.
+  memset(Dec->DecodeNum,0,Size*sizeof(*Dec->DecodeNum));
+
+  // Initialize not really used entry for zero length code.
+  Dec->DecodePos[0]=0;
+
+  // Start code for bit length 1 is 0.
+  Dec->DecodeLen[0]=0;
+
+  // Right aligned upper limit code for current bit length.
+  uint UpperLimit=0;
+
+  for (size_t I=1;I<16;I++)
   {
-    N=2*(N+LenCount[I]);
-    M=N<<(15-I);
-    if (M>0xFFFF)
-      M=0xFFFF;
-    Dec->DecodeLen[I]=(unsigned int)M;
-    TmpPos[I]=Dec->DecodePos[I]=Dec->DecodePos[I-1]+LenCount[I-1];
+    // Adjust the upper limit code.
+    UpperLimit+=LengthCount[I];
+
+    // Left aligned upper limit code.
+    uint LeftAligned=UpperLimit<<(16-I);
+
+    // Prepare the upper limit code for next bit length.
+    UpperLimit*=2;
+
+    // Store the left aligned upper limit code.
+    Dec->DecodeLen[I]=(uint)LeftAligned;
+
+    // Every item of this array contains the sum of all preceding items.
+    // So it contains the start position in code list for every bit length. 
+    Dec->DecodePos[I]=Dec->DecodePos[I-1]+LengthCount[I-1];
   }
 
-  for (I=0;I<Size;I++)
-    if (LenTab[I]!=0)
-      Dec->DecodeNum[TmpPos[LenTab[I] & 0xF]++]=I;
-  Dec->MaxNum=Size;
+  // Prepare the copy of DecodePos. We'll modify this copy below,
+  // so we cannot use the original DecodePos.
+  uint CopyDecodePos[16];
+  memcpy(CopyDecodePos,Dec->DecodePos,sizeof(CopyDecodePos));
+
+  // For every bit length in the bit length table and so for every item
+  // of alphabet.
+  for (uint I=0;I<Size;I++)
+  {
+    // Get the current bit length.
+    byte CurBitLength=LengthTable[I] & 0xf;
+
+    if (CurBitLength!=0)
+    {
+      // Last position in code list for current bit length.
+      uint LastPos=CopyDecodePos[CurBitLength];
+
+      // Prepare the decode table, so this position in code list will be
+      // decoded to current alphabet item number.
+      Dec->DecodeNum[LastPos]=(ushort)I;
+
+      // We'll use next position number for this bit length next time.
+      // So we pass through the entire range of positions available
+      // for every bit length.
+      CopyDecodePos[CurBitLength]++;
+    }
+  }
+
+  // Define the number of bits to process in quick mode. We use more bits
+  // for larger alphabets. More bits means that more codes will be processed
+  // in quick mode, but also that more time will be spent to preparation
+  // of tables for quick decode.
+  switch (Size)
+  {
+    case NC:
+    case NC20:
+      Dec->QuickBits=MAX_QUICK_DECODE_BITS;
+      break;
+    default:
+      Dec->QuickBits=MAX_QUICK_DECODE_BITS-3;
+      break;
+  }
+
+  // Size of tables for quick mode.
+  uint QuickDataSize=1<<Dec->QuickBits;
+
+  // Bit length for current code, start from 1 bit codes. It is important
+  // to use 1 bit instead of 0 for minimum code length, so we are moving
+  // forward even when processing a corrupt archive.
+  uint CurBitLength=1;
+
+  // For every right aligned bit string which supports the quick decoding.
+  for (uint Code=0;Code<QuickDataSize;Code++)
+  {
+    // Left align the current code, so it will be in usual bit field format.
+    uint BitField=Code<<(16-Dec->QuickBits);
+
+    // Prepare the table for quick decoding of bit lengths.
+  
+    // Find the upper limit for current bit field and adjust the bit length
+    // accordingly if necessary.
+    while (BitField>=Dec->DecodeLen[CurBitLength] && CurBitLength<ASIZE(Dec->DecodeLen))
+      CurBitLength++;
+
+    // Translation of right aligned bit string to bit length.
+    Dec->QuickLen[Code]=CurBitLength;
+
+    // Prepare the table for quick translation of position in code list
+    // to position in alphabet.
+
+    // Calculate the distance from the start code for current bit length.
+    uint Dist=BitField-Dec->DecodeLen[CurBitLength-1];
+
+    // Right align the distance.
+    Dist>>=(16-CurBitLength);
+
+    // Now we can calculate the position in the code list. It is the sum
+    // of first position for current bit length and right aligned distance
+    // between our bit field and start code for current bit length.
+    uint Pos=Dec->DecodePos[CurBitLength]+Dist;
+
+    if (Pos<Size) // Safety check for damaged archives.
+    {
+      // Define the code to alphabet number translation.
+      Dec->QuickNum[Code]=Dec->DecodeNum[Pos];
+    }
+    else
+      Dec->QuickNum[Code]=0;
+  }
 }

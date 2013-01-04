@@ -37,13 +37,19 @@ void Archive::UnexpEndArcMsg()
 #ifndef SHELL_EXT
     Log(FileName,St(MLogUnexpEOF));
 #endif
-    ErrHandler.SetErrorCode(WARNING);
+    ErrHandler.SetErrorCode(RARX_WARNING);
   }
 }
 
 
 size_t Archive::ReadHeader()
 {
+  // Once we failed to decrypt an encrypted block, there is no reason to
+  // attempt to do it further. We'll never be successful and only generate
+  // endless errors.
+  if (FailedHeaderDecryption)
+    return 0;
+
   CurBlockPos=Tell();
 
 #ifndef SFX_MODULE
@@ -57,7 +63,7 @@ size_t Archive::ReadHeader()
 
   if (Decrypt)
   {
-#if defined(SHELL_EXT) || defined(NOCRYPT)
+#if defined(SHELL_EXT) || defined(RAR_NOCRYPT)
     return(0);
 #else
     if (Read(HeadersSalt,SALT_SIZE)!=SALT_SIZE)
@@ -65,23 +71,42 @@ size_t Archive::ReadHeader()
       UnexpEndArcMsg();
       return(0);
     }
-    if (*Cmd->Password==0)
+    if (!Cmd->Password.IsSet())
+    {
 #ifdef RARDLL
-      if (Cmd->Callback==NULL ||
-          Cmd->Callback(UCM_NEEDPASSWORD,Cmd->UserData,(LPARAM)Cmd->Password,sizeof(Cmd->Password))==-1)
+      if (Cmd->Callback!=NULL)
       {
-        Close();
-        ErrHandler.Exit(USER_BREAK);
+        wchar PasswordW[MAXPASSWORD];
+        *PasswordW=0;
+        if (Cmd->Callback(UCM_NEEDPASSWORDW,Cmd->UserData,(LPARAM)PasswordW,ASIZE(PasswordW))==-1)
+          *PasswordW=0;
+        if (*PasswordW==0)
+        {
+          char PasswordA[MAXPASSWORD];
+          *PasswordA=0;
+          if (Cmd->Callback(UCM_NEEDPASSWORD,Cmd->UserData,(LPARAM)PasswordA,ASIZE(PasswordA))==-1)
+            *PasswordA=0;
+          GetWideName(PasswordA,NULL,PasswordW,ASIZE(PasswordW));
+          cleandata(PasswordA,sizeof(PasswordA));
+        }
+        Cmd->Password.Set(PasswordW);
+        cleandata(PasswordW,sizeof(PasswordW));
       }
-
-#else
-      if (!GetPassword(PASSWORD_ARCHIVE,FileName,Cmd->Password,sizeof(Cmd->Password)))
+      if (!Cmd->Password.IsSet())
       {
         Close();
-        ErrHandler.Exit(USER_BREAK);
+        Cmd->DllError=ERAR_MISSING_PASSWORD;
+        ErrHandler.Exit(RARX_USERBREAK);
+      }
+#else
+      if (!GetPassword(PASSWORD_ARCHIVE,FileName,FileNameW,&Cmd->Password))
+      {
+        Close();
+        ErrHandler.Exit(RARX_USERBREAK);
       }
 #endif
-    HeadersCrypt.SetCryptKeys(Cmd->Password,HeadersSalt,false,false,NewMhd.EncryptVer>=36);
+    }
+    HeadersCrypt.SetCryptKeys(&Cmd->Password,HeadersSalt,false,false,NewMhd.EncryptVer>=36);
     Raw.SetCrypt(&HeadersCrypt);
 #endif
   }
@@ -105,15 +130,27 @@ size_t Archive::ReadHeader()
     Log(FileName,St(MLogFileHead),"???");
 #endif
     BrokenFileHeader=true;
-    ErrHandler.SetErrorCode(CRC_ERROR);
+    ErrHandler.SetErrorCode(RARX_CRC);
     return(0);
   }
 
   if (ShortBlock.HeadType==COMM_HEAD)
+  {
+    // Old style (up to RAR 2.9) comment header embedded into main
+    // or file header. We must not read the entire ShortBlock.HeadSize here
+    // to not break the comment processing logic later.
     Raw.Read(SIZEOF_COMMHEAD-SIZEOF_SHORTBLOCKHEAD);
+  }
   else
     if (ShortBlock.HeadType==MAIN_HEAD && (ShortBlock.Flags & MHD_COMMENT)!=0)
+    {
+      // Old style (up to RAR 2.9) main archive comment embedded into
+      // the main archive header found. While we can read the entire 
+      // ShortBlock.HeadSize here and remove this part of "if", it would be
+      // waste of memory, because we'll read and process this comment data
+      // in other function anyway and we do not need them here now.
       Raw.Read(SIZEOF_NEWMHD-SIZEOF_SHORTBLOCKHEAD);
+    }
     else
       Raw.Read(ShortBlock.HeadSize-SIZEOF_SHORTBLOCKHEAD);
 
@@ -170,7 +207,7 @@ size_t Archive::ReadHeader()
         hd->FullUnpSize=INT32TO64(hd->HighUnpSize,hd->UnpSize);
 
         char FileName[NM*4];
-        int NameSize=Min(hd->NameSize,sizeof(FileName)-1);
+        size_t NameSize=Min(hd->NameSize,sizeof(FileName)-1);
         Raw.Get((byte *)FileName,NameSize);
         FileName[NameSize]=0;
 
@@ -274,14 +311,24 @@ size_t Archive::ReadHeader()
         HeaderCRC=~Raw.GetCRC(CRCProcessedOnly)&0xffff;
         if (hd->HeadCRC!=HeaderCRC)
         {
-          if (hd->HeadType==NEWSUB_HEAD)
+          if (hd->HeadType==NEWSUB_HEAD && strlen(hd->FileName)<ASIZE(hd->FileName)-5)
             strcat(hd->FileName,"- ???");
           BrokenFileHeader=true;
-          ErrHandler.SetErrorCode(WARNING);
+          ErrHandler.SetErrorCode(RARX_WARNING);
+
+          // If we have a broken encrypted header, we do not need to display
+          // the error message here, because it will be displayed for such
+          // headers later in this function. Also such headers are unlikely
+          // to have anything sensible in file name field, so it is useless
+          // to display the file name.
+          bool EncBroken=Decrypt && ShortBlock.HeadCRC!=(~Raw.GetCRC(false)&0xffff);
+          if (!EncBroken)
+          {
 #ifndef SHELL_EXT
-          Log(Archive::FileName,St(MLogFileHead),IntNameToExt(hd->FileName));
-          Alarm();
+            Log(Archive::FileName,St(MLogFileHead),IntNameToExt(hd->FileName));
+            Alarm();
 #endif
+          }
         }
       }
       break;
@@ -401,12 +448,12 @@ size_t Archive::ReadHeader()
 #ifndef SILENT
         Log(FileName,St(MEncrBadCRC),FileName);
 #endif
-        Close();
-
+//        Close();
+        FailedHeaderDecryption=true;
         BrokenFileHeader=true;
-        ErrHandler.SetErrorCode(CRC_ERROR);
+
+        ErrHandler.SetErrorCode(RARX_CRC);
         return(0);
-//        ErrHandler.Exit(CRC_ERROR);
       }
     }
   }
@@ -417,7 +464,7 @@ size_t Archive::ReadHeader()
     Log(FileName,St(MLogFileHead),"???");
 #endif
     BrokenFileHeader=true;
-    ErrHandler.SetErrorCode(CRC_ERROR);
+    ErrHandler.SetErrorCode(RARX_CRC);
     return(0);
   }
   return(Raw.Size());
@@ -503,9 +550,9 @@ void Archive::ConvertNameCase(char *Name)
 void Archive::ConvertNameCase(wchar *Name)
 {
   if (Cmd->ConvertNames==NAMES_UPPERCASE)
-    strupperw(Name);
+    wcsupper(Name);
   if (Cmd->ConvertNames==NAMES_LOWERCASE)
-    strlowerw(Name);
+    wcslower(Name);
 }
 #endif
 
@@ -524,7 +571,7 @@ bool Archive::IsArcLabel()
 
 void Archive::ConvertAttributes()
 {
-#if defined(_WIN_32) || defined(_EMX)
+#if defined(_WIN_ALL) || defined(_EMX)
   switch(NewLhd.HostOS)
   {
     case HOST_MSDOS:
@@ -548,13 +595,15 @@ void Archive::ConvertAttributes()
 #endif
 #ifdef _UNIX
   // umask defines which permission bits must not be set by default
-  // when creating a file or directory.
+  // when creating a file or directory. The typical default value
+  // for the process umask is S_IWGRP | S_IWOTH (octal 022),
+  // resulting in 0644 mode for new files.
   static mode_t mask = (mode_t) -1;
 
   if (mask == (mode_t) -1)
   {
     // umask call returns the current umask value. Argument (022) is not 
-    // important here.
+    // really important here.
     mask = umask(022);
 
     // Restore the original umask value, which was changed to 022 above.
@@ -622,7 +671,7 @@ void Archive::ConvertUnknownHeader()
       *s='_';
 #endif
 
-#if defined(_WIN_32) || defined(_EMX)
+#if defined(_WIN_ALL) || defined(_EMX)
     // ':' in file names is allowed in Unix, but not in Windows.
     // Even worse, file data will be written to NTFS stream on NTFS,
     // so automatic name correction on file create error in extraction 
@@ -639,7 +688,7 @@ void Archive::ConvertUnknownHeader()
     if (*s=='/' || *s=='\\')
       *s=CPATHDIVIDER;
 
-#if defined(_WIN_32) || defined(_EMX)
+#if defined(_WIN_ALL) || defined(_EMX)
     // ':' in file names is allowed in Unix, but not in Windows.
     // Even worse, file data will be written to NTFS stream on NTFS,
     // so automatic name correction on file create error in extraction 
@@ -660,7 +709,7 @@ bool Archive::ReadSubData(Array<byte> *UnpData,File *DestFile)
 #ifndef SHELL_EXT
     Log(FileName,St(MSubHeadCorrupt));
 #endif
-    ErrHandler.SetErrorCode(CRC_ERROR);
+    ErrHandler.SetErrorCode(RARX_CRC);
     return(false);
   }
   if (SubHead.Method<0x30 || SubHead.Method>0x35 || SubHead.UnpVer>/*PACK_VER*/36)
@@ -684,8 +733,8 @@ bool Archive::ReadSubData(Array<byte> *UnpData,File *DestFile)
     SubDataIO.SetUnpackToMemory(&(*UnpData)[0],SubHead.UnpSize);
   }
   if (SubHead.Flags & LHD_PASSWORD)
-    if (*Cmd->Password)
-      SubDataIO.SetEncryption(SubHead.UnpVer,Cmd->Password,
+    if (Cmd->Password.IsSet())
+      SubDataIO.SetEncryption(SubHead.UnpVer,&Cmd->Password,
              (SubHead.Flags & LHD_SALT) ? SubHead.Salt:NULL,false,
              SubHead.UnpVer>=36);
     else
@@ -706,7 +755,7 @@ bool Archive::ReadSubData(Array<byte> *UnpData,File *DestFile)
 #ifndef SHELL_EXT
     Log(FileName,St(MSubHeadDataCRC),SubHead.FileName);
 #endif
-    ErrHandler.SetErrorCode(CRC_ERROR);
+    ErrHandler.SetErrorCode(RARX_CRC);
     if (UnpData!=NULL)
       UnpData->Reset();
     return(false);

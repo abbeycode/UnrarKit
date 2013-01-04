@@ -8,7 +8,7 @@ static int KbdAnsi(char *Addr,int Size);
 
 #if !defined(GUI) && !defined(SILENT)
 static void RawPrint(char *Msg,MESSAGE_TYPE MessageType);
-static uint GetKey();
+static byte GetKey();
 #endif
 
 static MESSAGE_TYPE MsgStream=MSG_STDOUT;
@@ -26,10 +26,16 @@ void mprintf(const char *fmt,...)
 {
   if (MsgStream==MSG_NULL || MsgStream==MSG_ERRONLY)
     return;
-  safebuf char Msg[MaxMsgSize];
+  char Msg[MaxMsgSize];
   va_list argptr;
   va_start(argptr,fmt);
-  vsprintf(Msg,fmt,argptr);
+  vsnprintf(Msg,ASIZE(Msg),fmt,argptr);
+
+  // Different vsnprintf implementation can return either -1 or >=MaxMsgSize
+  // if string is truncated. So we do not check exit code and always zero
+  // terminate the string for safety. It is faster than check for error.
+  Msg[ASIZE(Msg)-1] = 0;
+
   RawPrint(Msg,MsgStream);
   va_end(argptr);
 }
@@ -44,7 +50,13 @@ void eprintf(const char *fmt,...)
   safebuf char Msg[MaxMsgSize];
   va_list argptr;
   va_start(argptr,fmt);
-  vsprintf(Msg,fmt,argptr);
+  vsnprintf(Msg,ASIZE(Msg),fmt,argptr);
+
+  // Different vsnprintf implementation can return either -1 or >=MaxMsgSize
+  // if string is truncated. So we do not check exit code and always zero
+  // terminate the string for safety. It is faster than check for error.
+  Msg[ASIZE(Msg)-1] = 0;
+
   RawPrint(Msg,MSG_STDERR);
   va_end(argptr);
 }
@@ -67,22 +79,24 @@ void RawPrint(char *Msg,MESSAGE_TYPE MessageType)
     default:
       return;
   }
-#ifdef _WIN_32
-  CharToOem(Msg,Msg);
+#ifdef _WIN_ALL
+  CharToOemA(Msg,Msg);
 
-  char OutMsg[MaxMsgSize],*OutPos=OutMsg;
-  for (int I=0;Msg[I]!=0;I++)
+  char OutMsg[MaxMsgSize];
+  size_t OutPos=0;
+  for (size_t I=0;Msg[I]!=0;I++)
   {
-    if (Msg[I]=='\n' && (I==0 || Msg[I-1]!='\r'))
-      *(OutPos++)='\r';
-    *(OutPos++)=Msg[I];
+    if (Msg[I]=='\n' && (I==0 || Msg[I-1]!='\r') && OutPos<ASIZE(OutMsg)-1)
+      OutMsg[OutPos++]='\r';
+    if (OutPos<ASIZE(OutMsg)-1)
+      OutMsg[OutPos++]=Msg[I];
   }
-  *OutPos=0;
+  OutMsg[OutPos]=0;
   strcpy(Msg,OutMsg);
 #endif
 #if defined(_UNIX) || defined(_EMX)
   char OutMsg[MaxMsgSize],*OutPos=OutMsg;
-  for (int I=0;Msg[I]!=0;I++)
+  for (size_t I=0;Msg[I]!=0;I++)
     if (Msg[I]!='\r')
       *(OutPos++)=Msg[I];
   *OutPos=0;
@@ -90,7 +104,6 @@ void RawPrint(char *Msg,MESSAGE_TYPE MessageType)
 #endif
 
   OutFile.Write(Msg,strlen(Msg));
-//  OutFile.Flush();
 }
 #endif
 
@@ -108,9 +121,11 @@ void Alarm()
 
 #ifndef SILENT
 #ifndef GUI
-void GetPasswordText(char *Str,int MaxLength)
+void GetPasswordText(wchar *Str,uint MaxLength)
 {
-#ifdef _WIN_32
+  if (MaxLength==0)
+    return;
+#ifdef _WIN_ALL
   HANDLE hConIn=GetStdHandle(STD_INPUT_HANDLE);
   HANDLE hConOut=GetStdHandle(STD_OUTPUT_HANDLE);
   DWORD ConInMode,ConOutMode;
@@ -119,15 +134,20 @@ void GetPasswordText(char *Str,int MaxLength)
   GetConsoleMode(hConOut,&ConOutMode);
   SetConsoleMode(hConIn,ENABLE_LINE_INPUT);
   SetConsoleMode(hConOut,ENABLE_PROCESSED_OUTPUT|ENABLE_WRAP_AT_EOL_OUTPUT);
-  ReadConsole(hConIn,Str,MaxLength-1,&Read,NULL);
+
+  ReadConsoleW(hConIn,Str,MaxLength-1,&Read,NULL);
   Str[Read]=0;
-  OemToChar(Str,Str);
   SetConsoleMode(hConIn,ConInMode);
   SetConsoleMode(hConOut,ConOutMode);
-#elif defined(_EMX) || defined(_BEOS) || defined(__sparc) || defined(sparc) || defined (__VMS)
-  fgets(Str,MaxLength-1,stdin);
 #else
-  strncpyz(Str,getpass(""),MaxLength);
+  char StrA[MAXPASSWORD];
+#if defined(_EMX) || defined(_BEOS) || defined(__sparc) || defined(sparc) || defined (__VMS)
+  fgets(StrA,ASIZE(StrA)-1,stdin);
+#else
+  strncpyz(StrA,getpass(""),ASIZE(StrA));
+#endif
+  CharToWide(StrA,Str,MaxLength);
+  cleandata(StrA,sizeof(StrA));
 #endif
   Str[MaxLength-1]=0;
   RemoveLF(Str);
@@ -137,7 +157,8 @@ void GetPasswordText(char *Str,int MaxLength)
 
 
 #ifndef SILENT
-bool GetPassword(PASSWORD_TYPE Type,const char *FileName,char *Password,int MaxLength)
+bool GetPassword(PASSWORD_TYPE Type,const char *FileName,const wchar *FileNameW,
+                 SecPassword *Password)
 {
   Alarm();
   while (true)
@@ -156,23 +177,27 @@ bool GetPassword(PASSWORD_TYPE Type,const char *FileName,char *Password,int MaxL
         strcat(PromptStr,NameOnly);
     }
     eprintf("\n%s: ",PromptStr);
-    GetPasswordText(Password,MaxLength);
-    if (*Password==0 && Type==PASSWORD_GLOBAL)
+
+    wchar PlainPsw[MAXPASSWORD];
+    GetPasswordText(PlainPsw,ASIZE(PlainPsw));
+    if (*PlainPsw==0 && Type==PASSWORD_GLOBAL)
       return(false);
     if (Type==PASSWORD_GLOBAL)
     {
       eprintf(St(MReAskPsw));
-      char CmpStr[MAXPASSWORD];
+      wchar CmpStr[MAXPASSWORD];
       GetPasswordText(CmpStr,ASIZE(CmpStr));
-      if (*CmpStr==0 || strcmp(Password,CmpStr)!=0)
+      if (*CmpStr==0 || wcscmp(PlainPsw,CmpStr)!=0)
       {
         eprintf(St(MNotMatchPsw));
-        memset(Password,0,MaxLength);
-        memset(CmpStr,0,sizeof(CmpStr));
+        cleandata(PlainPsw,sizeof(PlainPsw));
+        cleandata(CmpStr,sizeof(CmpStr));
         continue;
       }
-      memset(CmpStr,0,sizeof(CmpStr));
+      cleandata(CmpStr,sizeof(CmpStr));
     }
+    Password->Set(PlainPsw);
+    cleandata(PlainPsw,sizeof(PlainPsw));
     break;
   }
   return(true);
@@ -181,7 +206,7 @@ bool GetPassword(PASSWORD_TYPE Type,const char *FileName,char *Password,int MaxL
 
 
 #if !defined(GUI) && !defined(SILENT)
-uint GetKey()
+byte GetKey()
 {
   char Str[80];
   bool EndOfFile;
@@ -196,9 +221,9 @@ uint GetKey()
   {
     // Looks like stdin is a null device. We can enter to infinite loop
     // calling Ask(), so let's better exit.
-    ErrHandler.Exit(USER_BREAK);
+    ErrHandler.Exit(RARX_USERBREAK);
   }
-  return(Str[0]);
+  return (byte)Str[0];
 }
 #endif
 
@@ -241,13 +266,13 @@ int Ask(const char *AskStr)
     eprintf("[%c]%s",Item[I][KeyPos],&Item[I][KeyPos+1]);
   }
   eprintf(" ");
-  int Ch=GetKey();
-#if defined(_WIN_32)
-  OemToCharBuff((LPCSTR)&Ch,(LPTSTR)&Ch,1);
+  byte Ch=GetKey();
+#if defined(_WIN_ALL)
+  OemToCharBuffA((LPCSTR)&Ch,(LPSTR)&Ch,1);
 #endif
   Ch=loctoupper(Ch);
   for (int I=0;I<NumItems;I++)
-    if (Ch==Item[I][ItemKeyPos[I]])
+    if (Ch==(byte)Item[I][ItemKeyPos[I]])
       return(I+1);
   return(0);
 }

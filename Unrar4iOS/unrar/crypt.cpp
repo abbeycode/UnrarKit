@@ -185,46 +185,52 @@ void CryptData::Swap(byte *Ch1,byte *Ch2)
 #endif
 
 
-void CryptData::SetCryptKeys(const char *Password,const byte *Salt,bool Encrypt,bool OldOnly,bool HandsOffHash)
+void CryptData::SetCryptKeys(SecPassword *Password,const byte *Salt,bool Encrypt,bool OldOnly,bool HandsOffHash)
 {
-  if (*Password==0)
+  if (!Password->IsSet())
     return;
+  wchar PlainPsw[MAXPASSWORD];
+  Password->Get(PlainPsw,ASIZE(PlainPsw));
   if (OldOnly)
   {
 #ifndef SFX_MODULE
     if (CRCTab[1]==0)
       InitCRC();
-    byte Psw[MAXPASSWORD];
-    SetOldKeys(Password);
+    char Psw[MAXPASSWORD];
+    memset(Psw,0,sizeof(Psw));
+
+    // We need to use ASCII password for older encryption algorithms.
+    WideToChar(PlainPsw,Psw,ASIZE(Psw));
+    Psw[ASIZE(Psw)-1]=0;
+
+    size_t PswLength=strlen(Psw);
+
+    SetOldKeys(Psw);
     Key[0]=0xD3A3B879L;
     Key[1]=0x3F6D12F7L;
     Key[2]=0x7515A235L;
     Key[3]=0xA4E7F123L;
-    memset(Psw,0,sizeof(Psw));
-#if defined(_WIN_32) && !defined(GUI)
-    CharToOemBuff(Password,(char*)Psw,(DWORD)strlen(Password));
-#else
-    strncpyz((char *)Psw,Password,ASIZE(Psw));
-#endif
-    size_t PswLength=strlen(Password);
+
     memcpy(SubstTable,InitSubstTable,sizeof(SubstTable));
     for (int J=0;J<256;J++)
       for (size_t I=0;I<PswLength;I+=2)
       {
-        uint N1=(byte)CRCTab[(Psw[I]-J)&0xff];
-        uint N2=(byte)CRCTab[(Psw[I+1]+J)&0xff];
+        uint N1=(byte)CRCTab [ (byte(Psw[I])   - J) &0xff];
+        uint N2=(byte)CRCTab [ (byte(Psw[I+1]) + J) &0xff];
         for (int K=1;N1!=N2;N1=(N1+1)&0xff,K++)
           Swap(&SubstTable[N1],&SubstTable[(N1+I+K)&0xff]);
       }
     for (size_t I=0;I<PswLength;I+=16)
-      EncryptBlock20(&Psw[I]);
+      EncryptBlock20((byte *)&Psw[I]);
+    cleandata(Psw,sizeof(Psw));
 #endif
+    cleandata(PlainPsw,sizeof(PlainPsw));
     return;
   }
 
   bool Cached=false;
-  for (int I=0;I<ASIZE(Cache);I++)
-    if (strcmp(Cache[I].Password,Password)==0 &&
+  for (uint I=0;I<ASIZE(Cache);I++)
+    if (Cache[I].Password==*Password &&
         (Salt==NULL && !Cache[I].SaltPresent || Salt!=NULL &&
         Cache[I].SaltPresent && memcmp(Cache[I].Salt,Salt,SALT_SIZE)==0) &&
         Cache[I].HandsOffHash==HandsOffHash)
@@ -237,12 +243,9 @@ void CryptData::SetCryptKeys(const char *Password,const byte *Salt,bool Encrypt,
 
   if (!Cached)
   {
-    wchar PswW[MAXPASSWORD];
-    CharToWide(Password,PswW,MAXPASSWORD-1);
-    PswW[MAXPASSWORD-1]=0;
     byte RawPsw[2*MAXPASSWORD+SALT_SIZE];
-    WideToRaw(PswW,RawPsw);
-    size_t RawLength=2*strlenw(PswW);
+    WideToRaw(PlainPsw,RawPsw);
+    size_t RawLength=2*wcslen(PlainPsw);
     if (Salt!=NULL)
     {
       memcpy(RawPsw+RawLength,Salt,SALT_SIZE);
@@ -274,15 +277,18 @@ void CryptData::SetCryptKeys(const char *Password,const byte *Salt,bool Encrypt,
       for (int J=0;J<4;J++)
         AESKey[I*4+J]=(byte)(digest[I]>>(J*8));
 
-    strcpy(Cache[CachePos].Password,Password);
+    Cache[CachePos].Password=*Password;
     if ((Cache[CachePos].SaltPresent=(Salt!=NULL))==true)
       memcpy(Cache[CachePos].Salt,Salt,SALT_SIZE);
     Cache[CachePos].HandsOffHash=HandsOffHash;
     memcpy(Cache[CachePos].AESKey,AESKey,sizeof(AESKey));
     memcpy(Cache[CachePos].AESInit,AESInit,sizeof(AESInit));
-    CachePos=(CachePos+1)%(sizeof(Cache)/sizeof(Cache[0]));
+    CachePos=(CachePos+1)%ASIZE(Cache);
+
+    cleandata(RawPsw,sizeof(RawPsw));
   }
   rin.init(Encrypt ? Rijndael::Encrypt : Rijndael::Decrypt,AESKey,AESInit);
+  cleandata(PlainPsw,sizeof(PlainPsw));
 }
 
 
