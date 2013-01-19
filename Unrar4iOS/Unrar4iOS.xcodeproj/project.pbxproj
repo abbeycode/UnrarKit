@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -106,6 +106,8 @@
 		48F211551288B38C002745F2 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E11288B38C002745F2 /* unpack.cpp */; };
 		48F211561288B38C002745F2 /* unpack.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210E21288B38C002745F2 /* unpack.hpp */; };
 		48F2115A1288B38C002745F2 /* version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210E81288B38C002745F2 /* version.hpp */; };
+		A6792C9A16974622006F1B41 /* secpassword.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6792C9816974622006F1B41 /* secpassword.cpp */; };
+		A6792C9B16974622006F1B41 /* secpassword.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A6792C9916974622006F1B41 /* secpassword.hpp */; };
 		AA747D9F0F9514B9006C5449 /* Unrar4iOS_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* Unrar4iOS_Prefix.pch */; };
 /* End PBXBuildFile section */
 
@@ -168,7 +170,6 @@
 		48F210A01288B38C002745F2 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
 		48F210A11288B38C002745F2 /* log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = log.hpp; sourceTree = "<group>"; };
 		48F210A21288B38C002745F2 /* makefile.bcc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = makefile.bcc; sourceTree = "<group>"; };
-		48F210A31288B38C002745F2 /* makefile.cygmin */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = makefile.cygmin; sourceTree = "<group>"; };
 		48F210A41288B38C002745F2 /* makefile.dj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = makefile.dj; sourceTree = "<group>"; };
 		48F210A51288B38C002745F2 /* makefile.dmc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = makefile.dmc; sourceTree = "<group>"; };
 		48F210A61288B38C002745F2 /* makefile.unix */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = makefile.unix; sourceTree = "<group>"; };
@@ -197,7 +198,6 @@
 		48F210BD1288B38C002745F2 /* rawread.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rawread.hpp; sourceTree = "<group>"; };
 		48F210BE1288B38C002745F2 /* rdwrfn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rdwrfn.cpp; sourceTree = "<group>"; };
 		48F210BF1288B38C002745F2 /* rdwrfn.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = rdwrfn.hpp; sourceTree = "<group>"; };
-		48F210C01288B38C002745F2 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		48F210C11288B38C002745F2 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		48F210C21288B38C002745F2 /* recvol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = recvol.cpp; sourceTree = "<group>"; };
 		48F210C31288B38C002745F2 /* recvol.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = recvol.hpp; sourceTree = "<group>"; };
@@ -242,6 +242,9 @@
 		48F210EA1288B38C002745F2 /* volume.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = volume.hpp; sourceTree = "<group>"; };
 		48F210EB1288B38C002745F2 /* win32acl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = win32acl.cpp; sourceTree = "<group>"; };
 		48F210EC1288B38C002745F2 /* win32stm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = win32stm.cpp; sourceTree = "<group>"; };
+		A6792C9716974622006F1B41 /* acknow.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = acknow.txt; sourceTree = "<group>"; };
+		A6792C9816974622006F1B41 /* secpassword.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = secpassword.cpp; sourceTree = "<group>"; };
+		A6792C9916974622006F1B41 /* secpassword.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = secpassword.hpp; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* Unrar4iOS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Unrar4iOS_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		D2AAC07E0554694100DB518D /* libUnrar4iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnrar4iOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -307,6 +310,7 @@
 		48F2106D1288B38C002745F2 /* unrar */ = {
 			isa = PBXGroup;
 			children = (
+				A6792C9716974622006F1B41 /* acknow.txt */,
 				48F2106E1288B38C002745F2 /* arccmt.cpp */,
 				48F2106F1288B38C002745F2 /* archive.cpp */,
 				48F210701288B38C002745F2 /* archive.hpp */,
@@ -360,7 +364,6 @@
 				48F210A01288B38C002745F2 /* log.cpp */,
 				48F210A11288B38C002745F2 /* log.hpp */,
 				48F210A21288B38C002745F2 /* makefile.bcc */,
-				48F210A31288B38C002745F2 /* makefile.cygmin */,
 				48F210A41288B38C002745F2 /* makefile.dj */,
 				48F210A51288B38C002745F2 /* makefile.dmc */,
 				48F210A61288B38C002745F2 /* makefile.unix */,
@@ -389,7 +392,6 @@
 				48F210BD1288B38C002745F2 /* rawread.hpp */,
 				48F210BE1288B38C002745F2 /* rdwrfn.cpp */,
 				48F210BF1288B38C002745F2 /* rdwrfn.hpp */,
-				48F210C01288B38C002745F2 /* README */,
 				48F210C11288B38C002745F2 /* readme.txt */,
 				48F210C21288B38C002745F2 /* recvol.cpp */,
 				48F210C31288B38C002745F2 /* recvol.hpp */,
@@ -403,6 +405,8 @@
 				48F210CB1288B38C002745F2 /* savepos.hpp */,
 				48F210CC1288B38C002745F2 /* scantree.cpp */,
 				48F210CD1288B38C002745F2 /* scantree.hpp */,
+				A6792C9816974622006F1B41 /* secpassword.cpp */,
+				A6792C9916974622006F1B41 /* secpassword.hpp */,
 				48F210CE1288B38C002745F2 /* sha1.cpp */,
 				48F210CF1288B38C002745F2 /* sha1.hpp */,
 				48F210D01288B38C002745F2 /* smallfn.cpp */,
@@ -500,6 +504,7 @@
 				48F2115A1288B38C002745F2 /* version.hpp in Headers */,
 				489CFA10128B5169005DCC2A /* Unrar4iOS.h in Headers */,
 				48BB62EE1621C83D00B424E2 /* RARExtractException.h in Headers */,
+				A6792C9B16974622006F1B41 /* secpassword.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,8 +534,11 @@
 /* Begin PBXProject section */
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "Unrar4iOS" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -615,6 +623,7 @@
 				48F211551288B38C002745F2 /* unpack.cpp in Sources */,
 				489CFA11128B5169005DCC2A /* Unrar4iOS.mm in Sources */,
 				48BB62EF1621C83D00B424E2 /* RARExtractException.m in Sources */,
+				A6792C9A16974622006F1B41 /* secpassword.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -633,13 +642,20 @@
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/Unrar4iOS.dst;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Unrar4iOS_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Unrar4iOS;
+				WARNING_CFLAGS = (
+					"-Wno-dangling-else",
+					"-Wno-parentheses",
+					"-Wno-return-type",
+					"-Wno-unused-variable",
+					"-Wno-switch",
+				);
 			};
 			name = Debug;
 		};
@@ -656,8 +672,16 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Unrar4iOS_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Unrar4iOS;
+				WARNING_CFLAGS = (
+					"-Wno-dangling-else",
+					"-Wno-parentheses",
+					"-Wno-return-type",
+					"-Wno-unused-variable",
+					"-Wno-switch",
+				);
 			};
 			name = Release;
 		};
@@ -671,6 +695,7 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
@@ -680,7 +705,6 @@
 					"$(OTHER_CFLAGS)",
 				);
 				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -694,6 +718,7 @@
 					i386,
 				);
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
@@ -703,7 +728,6 @@
 					"$(OTHER_CFLAGS)",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PREBINDING = NO;
 				SDKROOT = iphoneos;
 			};
 			name = Release;

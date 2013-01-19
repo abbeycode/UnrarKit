@@ -12,7 +12,7 @@ void ExtractStreams(Archive &Arc,char *FileName,wchar *FileNameW)
 #ifndef SILENT
     Log(Arc.FileName,St(MStreamBroken),FileName);
 #endif
-    ErrHandler.SetErrorCode(CRC_ERROR);
+    ErrHandler.SetErrorCode(RARX_CRC);
     return;
   }
 
@@ -21,7 +21,7 @@ void ExtractStreams(Archive &Arc,char *FileName,wchar *FileNameW)
 #ifndef SILENT
     Log(Arc.FileName,St(MStreamUnknown),FileName);
 #endif
-    ErrHandler.SetErrorCode(WARNING);
+    ErrHandler.SetErrorCode(RARX_WARNING);
     return;
   }
 
@@ -39,7 +39,7 @@ void ExtractStreams(Archive &Arc,char *FileName,wchar *FileNameW)
 #ifndef SILENT
     Log(Arc.FileName,St(MStreamBroken),FileName);
 #endif
-    ErrHandler.SetErrorCode(CRC_ERROR);
+    ErrHandler.SetErrorCode(RARX_CRC);
     return;
   }
 
@@ -72,13 +72,13 @@ void ExtractStreams(Archive &Arc,char *FileName,wchar *FileNameW)
 #ifndef SILENT
       Log(Arc.FileName,St(MStreamBroken),StreamName);
 #endif
-      ErrHandler.SetErrorCode(CRC_ERROR);
+      ErrHandler.SetErrorCode(RARX_CRC);
     }
     else
       CurFile.Close();
   }
   File HostFile;
-  if (Found && HostFile.Open(FileName,FileNameW,true,true))
+  if (Found && HostFile.Open(FileName,FileNameW,FMF_OPENSHARED|FMF_UPDATE))
     SetFileTime(HostFile.GetHandle(),&fd.ftCreationTime,&fd.ftLastAccessTime,
                 &fd.ftLastWriteTime);
   if (fd.FileAttr & FILE_ATTRIBUTE_READONLY)
@@ -94,28 +94,28 @@ void ExtractStreamsNew(Archive &Arc,char *FileName,wchar *FileNameW)
 
   wchar NameW[NM];
   if (FileNameW!=NULL && *FileNameW!=0)
-    strcpyw(NameW,FileNameW);
+    wcscpy(NameW,FileNameW);
   else
     CharToWide(FileName,NameW);
   wchar StreamNameW[NM+2];
   if (NameW[0]!=0 && NameW[1]==0)
   {
-    strcpyw(StreamNameW,L".\\");
-    strcpyw(StreamNameW+2,NameW);
+    wcscpy(StreamNameW,L".\\");
+    wcscpy(StreamNameW+2,NameW);
   }
   else
-    strcpyw(StreamNameW,NameW);
+    wcscpy(StreamNameW,NameW);
 
-  wchar *DestName=StreamNameW+strlenw(StreamNameW);
+  wchar *DestName=StreamNameW+wcslen(StreamNameW);
   byte *SrcName=&Arc.SubHead.SubData[0];
   size_t DestSize=Arc.SubHead.SubData.Size()/2;
 
-  if (strlenw(StreamNameW)+DestSize>=ASIZE(StreamNameW))
+  if (wcslen(StreamNameW)+DestSize>=ASIZE(StreamNameW))
   {
 #if !defined(SILENT) && !defined(SFX_MODULE)
     Log(Arc.FileName,St(MStreamBroken),FileName);
 #endif
-    ErrHandler.SetErrorCode(CRC_ERROR);
+    ErrHandler.SetErrorCode(RARX_CRC);
     return;
   }
 
@@ -127,7 +127,7 @@ void ExtractStreamsNew(Archive &Arc,char *FileName,wchar *FileNameW)
 #if !defined(SILENT) && !defined(SFX_MODULE)
     Log(Arc.FileName,St(MStreamBroken),FileName);
 #endif
-    ErrHandler.SetErrorCode(CRC_ERROR);
+    ErrHandler.SetErrorCode(RARX_CRC);
     return;
   }
 
@@ -144,7 +144,7 @@ void ExtractStreamsNew(Archive &Arc,char *FileName,wchar *FileNameW)
   if (CurFile.WCreate(StreamName,StreamNameW) && Arc.ReadSubData(NULL,&CurFile))
     CurFile.Close();
   File HostFile;
-  if (Found && HostFile.Open(FileName,FileNameW,true,true))
+  if (Found && HostFile.Open(FileName,FileNameW,FMF_OPENSHARED|FMF_UPDATE))
     SetFileTime(HostFile.GetHandle(),&fd.ftCreationTime,&fd.ftLastAccessTime,
                 &fd.ftLastWriteTime);
 

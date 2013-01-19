@@ -89,7 +89,7 @@ int ComprDataIO::UnpRead(byte *Addr,size_t Count)
   if (RetCode!=-1)
   {
     RetCode=TotalRead;
-#ifndef NOCRYPT
+#ifndef RAR_NOCRYPT
     if (Decryption)
 #ifndef SFX_MODULE
       if (Decryption<20)
@@ -111,7 +111,7 @@ int ComprDataIO::UnpRead(byte *Addr,size_t Count)
 }
 
 
-#if defined(RARDLL) && defined(_MSC_VER) && !defined(_M_X64)
+#if defined(RARDLL) && defined(_MSC_VER) && !defined(_WIN_64)
 // Disable the run time stack check for unrar.dll, so we can manipulate
 // with ProcessDataProc call type below. Run time check would intercept
 // a wrong ESP before we restore it.
@@ -127,7 +127,7 @@ void ComprDataIO::UnpWrite(byte *Addr,size_t Count)
   {
     if (Cmd->Callback!=NULL &&
         Cmd->Callback(UCM_PROCESSDATA,Cmd->UserData,(LPARAM)Addr,Count)==-1)
-      ErrHandler.Exit(USER_BREAK);
+      ErrHandler.Exit(RARX_USERBREAK);
     if (Cmd->ProcessDataProc!=NULL)
     {
       // Here we preserve ESP value. It is necessary for those developers,
@@ -135,10 +135,10 @@ void ComprDataIO::UnpWrite(byte *Addr,size_t Count)
       // even though in year 2001 we announced in unrar.dll whatsnew.txt
       // that it will be PASCAL type (for compatibility with Visual Basic).
 #if defined(_MSC_VER)
-#ifndef _M_X64
+#ifndef _WIN_64
       __asm mov ebx,esp
 #endif
-#elif defined(_WIN_32) && defined(__BORLANDC__)
+#elif defined(_WIN_ALL) && defined(__BORLANDC__)
       _EBX=_ESP;
 #endif
       int RetCode=Cmd->ProcessDataProc(Addr,(int)Count);
@@ -146,14 +146,14 @@ void ComprDataIO::UnpWrite(byte *Addr,size_t Count)
       // Restore ESP after ProcessDataProc with wrongly defined calling
       // convention broken it.
 #if defined(_MSC_VER)
-#ifndef _M_X64
+#ifndef _WIN_64
       __asm mov esp,ebx
 #endif
-#elif defined(_WIN_32) && defined(__BORLANDC__)
+#elif defined(_WIN_ALL) && defined(__BORLANDC__)
       _ESP=_EBX;
 #endif
       if (RetCode==0)
-        ErrHandler.Exit(USER_BREAK);
+        ErrHandler.Exit(RARX_USERBREAK);
     }
   }
 #endif // RARDLL
@@ -184,7 +184,7 @@ void ComprDataIO::UnpWrite(byte *Addr,size_t Count)
   Wait();
 }
 
-#if defined(RARDLL) && defined(_MSC_VER) && !defined(_M_X64)
+#if defined(RARDLL) && defined(_MSC_VER) && !defined(_WIN_64)
 // Restore the run time stack check for unrar.dll.
 #pragma runtime_checks( "s", restore )
 #endif
@@ -246,26 +246,26 @@ void ComprDataIO::GetUnpackedData(byte **Data,size_t *Size)
 }
 
 
-void ComprDataIO::SetEncryption(int Method,const char *Password,const byte *Salt,bool Encrypt,bool HandsOffHash)
+void ComprDataIO::SetEncryption(int Method,SecPassword *Password,const byte *Salt,bool Encrypt,bool HandsOffHash)
 {
   if (Encrypt)
   {
-    Encryption=*Password ? Method:0;
-#ifndef NOCRYPT
+    Encryption=Password->IsSet() ? Method:0;
+#ifndef RAR_NOCRYPT
     Crypt.SetCryptKeys(Password,Salt,Encrypt,false,HandsOffHash);
 #endif
   }
   else
   {
-    Decryption=*Password ? Method:0;
-#ifndef NOCRYPT
+    Decryption=Password->IsSet() ? Method:0;
+#ifndef RAR_NOCRYPT
     Decrypt.SetCryptKeys(Password,Salt,Encrypt,Method<29,HandsOffHash);
 #endif
   }
 }
 
 
-#if !defined(SFX_MODULE) && !defined(NOCRYPT)
+#if !defined(SFX_MODULE) && !defined(RAR_NOCRYPT)
 void ComprDataIO::SetAV15Encryption()
 {
   Decryption=15;
@@ -274,7 +274,7 @@ void ComprDataIO::SetAV15Encryption()
 #endif
 
 
-#if !defined(SFX_MODULE) && !defined(NOCRYPT)
+#if !defined(SFX_MODULE) && !defined(RAR_NOCRYPT)
 void ComprDataIO::SetCmt13Encryption()
 {
   Decryption=13;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="UnRAR"
 	ProjectGUID="{95CC809B-03FC-4EDB-BB20-FD07A698C05F}"
 	RootNamespace="UnRAR"
@@ -557,11 +557,15 @@
 				>
 			</File>
 			<File
+				RelativePath="secpassword.cpp"
+				>
+			</File>
+			<File
 				RelativePath="sha1.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\smallfn.cpp"
+				RelativePath="smallfn.cpp"
 				>
 			</File>
 			<File

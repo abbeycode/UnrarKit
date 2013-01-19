@@ -15,14 +15,14 @@ void ExtractACL(Archive &Arc,char *FileName,wchar *FileNameW)
   if (Arc.HeaderCRC!=Arc.EAHead.HeadCRC)
   {
     Log(Arc.FileName,St(MACLBroken),FileName);
-    ErrHandler.SetErrorCode(CRC_ERROR);
+    ErrHandler.SetErrorCode(RARX_CRC);
     return;
   }
 
   if (Arc.EAHead.Method<0x31 || Arc.EAHead.Method>0x35 || Arc.EAHead.UnpVer>PACK_VER)
   {
     Log(Arc.FileName,St(MACLUnknown),FileName);
-    ErrHandler.SetErrorCode(WARNING);
+    ErrHandler.SetErrorCode(RARX_WARNING);
     return;
   }
 
@@ -30,7 +30,7 @@ void ExtractACL(Archive &Arc,char *FileName,wchar *FileNameW)
   Unpack Unpack(&DataIO);
   Unpack.Init();
 
-  Array<unsigned char> UnpData(Arc.EAHead.UnpSize);
+  Array<byte> UnpData(Arc.EAHead.UnpSize);
   DataIO.SetUnpackToMemory(&UnpData[0],Arc.EAHead.UnpSize);
   DataIO.SetPackedSizeToRead(Arc.EAHead.DataSize);
   DataIO.EnableShowProgress(false);
@@ -41,7 +41,7 @@ void ExtractACL(Archive &Arc,char *FileName,wchar *FileNameW)
   if (Arc.EAHead.EACRC!=~DataIO.UnpFileCRC)
   {
     Log(Arc.FileName,St(MACLBroken),FileName);
-    ErrHandler.SetErrorCode(CRC_ERROR);
+    ErrHandler.SetErrorCode(RARX_CRC);
     return;
   }
 
@@ -55,13 +55,13 @@ void ExtractACL(Archive &Arc,char *FileName,wchar *FileNameW)
   if (FileNameW!=NULL)
     SetCode=SetFileSecurityW(FileNameW,si,sd);
   else
-    SetCode=SetFileSecurity(FileName,si,sd);
+    SetCode=SetFileSecurityA(FileName,si,sd);
 
   if (!SetCode)
   {
     Log(Arc.FileName,St(MACLSetError),FileName);
     ErrHandler.SysErrMsg();
-    ErrHandler.SetErrorCode(WARNING);
+    ErrHandler.SetErrorCode(RARX_WARNING);
   }
 }
 #endif
@@ -78,8 +78,8 @@ void ExtractACLNew(Archive &Arc,char *FileName,wchar *FileNameW)
 
   SetPrivileges();
 
-  SECURITY_INFORMATION  si=OWNER_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION|
-                           DACL_SECURITY_INFORMATION;
+  SECURITY_INFORMATION si=OWNER_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION|
+                          DACL_SECURITY_INFORMATION;
   if (ReadSacl)
     si|=SACL_SECURITY_INFORMATION;
   SECURITY_DESCRIPTOR *sd=(SECURITY_DESCRIPTOR *)&SubData[0];
@@ -88,13 +88,13 @@ void ExtractACLNew(Archive &Arc,char *FileName,wchar *FileNameW)
   if (FileNameW!=NULL)
     SetCode=SetFileSecurityW(FileNameW,si,sd);
   else
-    SetCode=SetFileSecurity(FileName,si,sd);
+    SetCode=SetFileSecurityA(FileName,si,sd);
 
   if (!SetCode)
   {
     Log(Arc.FileName,St(MACLSetError),FileName);
     ErrHandler.SysErrMsg();
-    ErrHandler.SetErrorCode(WARNING);
+    ErrHandler.SetErrorCode(RARX_WARNING);
   }
 }
 

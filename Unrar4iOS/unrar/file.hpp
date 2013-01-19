@@ -1,7 +1,7 @@
 #ifndef _RAR_FILE_
 #define _RAR_FILE_
 
-#ifdef _WIN_32
+#ifdef _WIN_ALL
 typedef HANDLE FileHandle;
 #define BAD_HANDLE INVALID_HANDLE_VALUE
 #else
@@ -24,6 +24,27 @@ struct FileStat
 };
 
 
+enum FILE_MODE_FLAGS {
+  // Request read only access to file. Default for Open.
+  FMF_READ=0,
+
+  // Request both read and write access to file. Default for Create.
+  FMF_UPDATE=1,
+
+  // Request write only access to file.
+  FMF_WRITE=2,
+
+  // Open files which are already opened for write by other programs.
+  FMF_OPENSHARED=4,
+
+  // Provide read access to created file for other programs.
+  FMF_SHAREREAD=8,
+
+  // Mode flags are not defined yet.
+  FMF_UNDEFINED=256
+};
+
+
 class File
 {
   private:
@@ -37,11 +58,12 @@ class File
     bool NewFile;
     bool AllowDelete;
     bool AllowExceptions;
-#ifdef _WIN_32
+#ifdef _WIN_ALL
     bool NoSequentialRead;
+    uint CreateMode;
 #endif
   protected:
-    bool OpenShared;
+    bool OpenShared; // Set by 'Archive' class.
   public:
     char FileName[NM];
     wchar FileNameW[NM];
@@ -53,12 +75,12 @@ class File
     File();
     virtual ~File();
     void operator = (File &SrcFile);
-    bool Open(const char *Name,const wchar *NameW=NULL,bool OpenShared=false,bool Update=false);
+    bool Open(const char *Name,const wchar *NameW=NULL,uint Mode=FMF_READ);
     void TOpen(const char *Name,const wchar *NameW=NULL);
     bool WOpen(const char *Name,const wchar *NameW=NULL);
-    bool Create(const char *Name,const wchar *NameW=NULL,bool ShareRead=true);
-    void TCreate(const char *Name,const wchar *NameW=NULL,bool ShareRead=true);
-    bool WCreate(const char *Name,const wchar *NameW=NULL,bool ShareRead=true);
+    bool Create(const char *Name,const wchar *NameW=NULL,uint Mode=FMF_UPDATE|FMF_SHAREREAD);
+    void TCreate(const char *Name,const wchar *NameW=NULL,uint Mode=FMF_UPDATE|FMF_SHAREREAD);
+    bool WCreate(const char *Name,const wchar *NameW=NULL,uint Mode=FMF_UPDATE|FMF_SHAREREAD);
     bool Close();
     void Flush();
     bool Delete();
@@ -90,7 +112,7 @@ class File
     int64 Copy(File &Dest,int64 Length=INT64NDF);
     void SetAllowDelete(bool Allow) {AllowDelete=Allow;}
     void SetExceptions(bool Allow) {AllowExceptions=Allow;}
-#ifdef _WIN_32
+#ifdef _WIN_ALL
     void RemoveSequentialFlag() {NoSequentialRead=true;}
 #endif
 };

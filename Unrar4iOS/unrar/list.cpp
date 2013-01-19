@@ -20,7 +20,7 @@ void ListArchive(CommandData *Cmd)
   while (Cmd->GetArcName(ArcName,ArcNameW,sizeof(ArcName)))
   {
     Archive Arc(Cmd);
-#ifdef _WIN_32
+#ifdef _WIN_ALL
     Arc.RemoveSequentialFlag();
 #endif
     if (!Arc.WOpen(ArcName,ArcNameW))
@@ -32,17 +32,12 @@ void ListArchive(CommandData *Cmd)
       uint FileCount=0;
       if (Arc.IsArchive(true))
       {
-        if (!Arc.IsOpened())
-          break;
+//        if (!Arc.IsOpened())
+//          break;
         bool TitleShown=false;
         if (!Bare)
         {
           Arc.ViewComment();
-
-          // RAR can close a corrupt encrypted archive
-          if (!Arc.IsOpened())
-            break;
-
           mprintf("\n");
           if (Arc.Solid)
             mprintf(St(MListSolid));
@@ -77,7 +72,7 @@ void ListArchive(CommandData *Cmd)
             case FILE_HEAD:
               IntToExt(Arc.NewLhd.FileName,Arc.NewLhd.FileName);
               FileMatched=Cmd->IsProcessFile(Arc.NewLhd)!=0;
-			  if (FileMatched)
+              if (FileMatched)
               {
                 ListFileHeader(Arc.NewLhd,Verbose,Technical,TitleShown,Bare);
                 if (!(Arc.NewLhd.Flags & LHD_SPLIT_BEFORE))
@@ -257,12 +252,12 @@ void ListFileHeader(FileHeader &hd,bool Verbose,bool Technical,bool &TitleShown,
   mprintf(" %d.%d",hd.UnpVer/10,hd.UnpVer%10);
 
   static const char *RarOS[]={
-    "DOS","OS/2","Win95/NT","Unix","MacOS","BeOS","WinCE","","",""
+    "DOS","OS/2","Windows","Unix","Mac OS","BeOS","WinCE","","",""
   };
 
   if (Technical)
     mprintf("\n%22s %8s %4s",
-            (hd.HostOS<sizeof(RarOS)/sizeof(RarOS[0]) ? RarOS[hd.HostOS]:""),
+            (hd.HostOS<ASIZE(RarOS) ? RarOS[hd.HostOS]:""),
             (hd.Flags & LHD_SOLID) ? St(MYes):St(MNo),
             (hd.Flags & LHD_VERSION) ? St(MYes):St(MNo));
 }
