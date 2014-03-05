@@ -10,7 +10,6 @@ Pod::Spec.new do |s|
                     "Unrar4iOS/unrar/*.{cpp,hpp}"
   s.exclude_files = "Unrar4iOS/unrar/beosea.cpp",
                     "Unrar4iOS/unrar/coder.cpp",
-                    "Unrar4iOS/unrar/log.cpp",
                     "Unrar4iOS/unrar/model.cpp",
                     "Unrar4iOS/unrar/os2ea.cpp",
                     "Unrar4iOS/unrar/rarpch.cpp",
