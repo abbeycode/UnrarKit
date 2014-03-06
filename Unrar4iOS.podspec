@@ -7,7 +7,8 @@ Pod::Spec.new do |s|
   s.author        = { "Vicent Scott" => "vkan388@gmail.com" }
   s.source        = { :git => "https://github.com/ararog/Unrar4iOS", :commit => "2723b8ab51" }
   s.source_files  = "Unrar4iOS/*.{mm,m,h}",
-                    "Unrar4iOS/unrar/*.{cpp,hpp}"
+                    "Unrar4iOS/unrar/*.{cpp,hpp}",
+                    "Unrar4iOS/ExcludedBuildFiles.txt"
   s.exclude_files = "Unrar4iOS/unrar/beosea.cpp",
                     "Unrar4iOS/unrar/os2ea.cpp",
                     "Unrar4iOS/unrar/rarpch.cpp",
