@@ -9,13 +9,9 @@ Pod::Spec.new do |s|
   s.source_files  = "Unrar4iOS/*.{mm,m,h}",
                     "Unrar4iOS/unrar/*.{cpp,hpp}"
   s.exclude_files = "Unrar4iOS/unrar/beosea.cpp",
-                    "Unrar4iOS/unrar/coder.cpp",
-                    "Unrar4iOS/unrar/model.cpp",
                     "Unrar4iOS/unrar/os2ea.cpp",
                     "Unrar4iOS/unrar/rarpch.cpp",
-                    "Unrar4iOS/unrar/suballoc.cpp",
                     "Unrar4iOS/unrar/unios2.cpp",
-                    "Unrar4iOS/unrar/unpack{15,20}.cpp",
                     "Unrar4iOS/unrar/win32acl.cpp",
                     "Unrar4iOS/unrar/win32stm.cpp"
   s.xcconfig     =  { "OTHER_CFLAGS" => "$(inherited) -Wno-return-type -Wno-logical-op-parentheses -Wno-conversion -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-switch",
