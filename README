@@ -29,18 +29,14 @@ Since some cpp files need to be downloaded, but can't be listed in the build pha
 
 post_install do |installer_representation|
     puts 'Removing unwanted compilation sources from Unrar4iOS'
+
+    excluded_files = File.readlines('Pods/Unrar4iOS/Unrar4iOS/ExcludedBuildFiles.txt')
+    excluded_files.each {|file| file.strip!}
+
     installer_representation.project.targets.each do |target|
         if target.name.end_with? 'Unrar4iOS'
             files_to_remove = target.source_build_phase.files.find_all do |file|
-                ['arccmt.cpp',
-                 'coder.cpp',
-                 'log.cpp',
-                 'model.cpp',
-                 'rarvmtbl.cpp',
-                 'suballoc.cpp',
-                 'unpack15.cpp',
-                 'unpack20.cpp',
-                 'uowners.cpp'].include? file.display_name
+                excluded_files.include? file.display_name
             end
 
             files_to_remove.each{|file| target.source_build_phase.remove_file_reference(file.file_ref)}
