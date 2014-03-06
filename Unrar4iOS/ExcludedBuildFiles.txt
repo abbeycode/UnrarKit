@@ -1,3 +1,4 @@
+ExcludedBuildFiles.txt
 arccmt.cpp
 coder.cpp
 log.cpp
