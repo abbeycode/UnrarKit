@@ -1,4 +1,5 @@
 build
 .DS_Store
 Unrar4iOS/Unrar4iOS.xcodeproj/project.xcworkspace/xcuserdata/*
+Unrar4iOS/Unrar4iOS.xcodeproj/project.xcworkspace/xcshareddata/*.xccheckout
 Unrar4iOS/Unrar4iOS.xcodeproj/xcuserdata/*
