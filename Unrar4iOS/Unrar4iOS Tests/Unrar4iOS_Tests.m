@@ -109,11 +109,10 @@
         NSLog(@"Testing list files of archive %@", testArchiveName);
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
 
-        Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
-        [unrar unrarOpenFile:testArchiveURL.path];
+        Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:testArchiveURL];
         
         NSError *error = nil;
-        NSArray *filesInArchive = [unrar unrarListFiles:&error];
+        NSArray *filesInArchive = [unrar listFiles:&error];
         
         XCTAssertNil(error, @"Error returned by unrarListFiles");
         XCTAssertNotNil(filesInArchive, @"No list of files returned");
@@ -145,23 +144,21 @@
         NSLog(@"Testing list files of archive %@", testArchiveName);
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
 
-        Unrar4iOS *unrarNoPassword = [[Unrar4iOS alloc] init];
-        [unrarNoPassword unrarOpenFile:testArchiveURL.path];
+        Unrar4iOS *unrarNoPassword = [Unrar4iOS unrarFileAtURL:testArchiveURL];
         
         NSError *error = nil;
-        NSArray *filesInArchive = [unrarNoPassword unrarListFiles:&error];
+        NSArray *filesInArchive = [unrarNoPassword listFiles:&error];
         
         XCTAssertNil(error, @"Error returned by unrarListFiles (no password given)");
         XCTAssertNotNil(filesInArchive, @"No list of files returned");
         XCTAssertEqual(filesInArchive.count, (NSUInteger)0, @"File list returned, when no password specified");
         
         
-        Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
-        [unrar unrarOpenFile:testArchiveURL.path withPassword:@"password"];
+        Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:testArchiveURL password:@"password"];
         
         filesInArchive = nil;
         error = nil;
-        filesInArchive = [unrar unrarListFiles:&error];
+        filesInArchive = [unrar listFiles:&error];
         
         XCTAssertNil(error, @"Error returned by unrarListFiles");
         XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
@@ -202,11 +199,10 @@
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
                               ? @"password"
                               : nil);
-        Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
-        [unrar unrarOpenFile:testArchiveURL.path withPassword:password];
+        Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:testArchiveURL password:password];
         
         NSError *error = nil;
-        BOOL success = [unrar unrarFileTo:extractURL.path overWrite:NO error:&error];
+        BOOL success = [unrar extractFilesTo:extractURL.path overWrite:NO error:&error];
         
         XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
         XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
@@ -261,8 +257,7 @@
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
                               ? @"password"
                               : nil);
-        Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
-        [unrar unrarOpenFile:testArchiveURL.path withPassword:password];
+        Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:testArchiveURL password:password];
         
         for (NSInteger i = 0; i < expectedFiles.count; i++) {
             NSString *expectedFilename = expectedFiles[i];
@@ -270,7 +265,7 @@
             NSLog(@"Testing for file %@", expectedFilename);
             
             NSError *error = nil;
-            NSData *extractedData = [unrar extractStream:expectedFilename error:&error];
+            NSData *extractedData = [unrar extractDataFromFile:expectedFilename error:&error];
             
             XCTAssertNil(error, @"Error in extractStream:error:");
             
@@ -285,9 +280,11 @@
 - (void)testUnrarCloseFile
 {
     Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
-    BOOL result = [unrar unrarCloseFile];
-    
+    BOOL result = [unrar closeFile];
     XCTAssertTrue(result, @"Close file returned NO");
+    
+    result = [unrar closeFile];
+    XCTAssertTrue(result, @"Close file returned NO on second attempt");
 }
 
 

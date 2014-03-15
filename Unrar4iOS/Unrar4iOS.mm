@@ -34,23 +34,61 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 
 
 
+#pragma mark - Convenience Methods
+
+
++ (Unrar4iOS *)unrarFileAtPath:(NSString *)filePath;
+{
+    Unrar4iOS *result = [[Unrar4iOS alloc] init];
+    [result openFile:filePath];
+    
+    return [result autorelease];
+}
+
++ (Unrar4iOS *)unrarFileAtURL:(NSURL *)fileURL;
+{
+    Unrar4iOS *result = [[Unrar4iOS alloc] init];
+    [result openFile:fileURL.path];
+    
+    return [result autorelease];
+}
+
++ (Unrar4iOS *)unrarFileAtPath:(NSString *)filePath password:(NSString *)password;
+{
+    Unrar4iOS *result = [[Unrar4iOS alloc] init];
+    [result openFile:filePath password:password];
+    
+    return [result autorelease];
+}
+
++ (Unrar4iOS *)unrarFileAtURL:(NSURL *)fileURL password:(NSString *)password;
+{
+    Unrar4iOS *result = [[Unrar4iOS alloc] init];
+    [result openFile:fileURL.path password:password];
+    
+    return [result autorelease];
+}
+
+
+
 #pragma mark - Public Methods
 
 
-- (BOOL)unrarOpenFile:(NSString*)rarFile {
-    
-	return [self unrarOpenFile:rarFile withPassword:nil];
+- (BOOL)openFile:(NSString *)filePath;
+{
+	return [self openFile:filePath password:nil];
 }
 
-- (BOOL)unrarOpenFile:(NSString*)rarFile withPassword:(NSString *)aPassword {
-    
-	self.filename = rarFile;
-    self.password = aPassword;
+- (BOOL)openFile:(NSString *)filePath password:(NSString*)password;
+{
+	self.filename = filePath;
+    self.password = password;
     
 	return YES;
 }
 
-- (NSArray *)unrarListFiles:(NSError **)error {
+- (NSArray *)listFiles:(NSError **)error;
+{
 	int RHCode = 0, PFCode = 0;
     
 	if (![self _unrarOpenFile:_filename
@@ -74,7 +112,8 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 	return files;
 }
 
-- (BOOL)unrarFileTo:(NSString*)path overWrite:(BOOL)overwrite error:(NSError **)error {
+- (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error;
+{
     int RHCode = 0, PFCode = 0;
     
     if (![self _unrarOpenFile:_filename inMode:RAR_OM_EXTRACT withPassword:_password error:error])
@@ -82,7 +121,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     
 	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
         
-        if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *)[path UTF8String], NULL)) != 0) {
+        if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *)[filePath UTF8String], NULL)) != 0) {
             [self assignError:error code:(NSInteger)PFCode];
             return NO;
         }
@@ -92,7 +131,8 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return YES;
 }
 
-- (NSData *)extractStream:(NSString *)aFile error:(NSError **)error {
+- (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
+{
 	int RHCode = 0, PFCode = 0;
 	
     if (error) {
@@ -110,7 +150,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
 		NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
         
-		if ([filename isEqualToString:aFile]) {
+		if ([filename isEqualToString:filePath]) {
 			length = header->UnpSize;
 			break;
 		}
@@ -142,7 +182,8 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return [NSData dataWithBytesNoCopy:buffer length:length freeWhenDone:YES];
 }
 
-- (BOOL)unrarCloseFile {
+- (BOOL)closeFile;
+{
 	if (_rarFile)
 		RARCloseArchive(_rarFile);
     _rarFile = 0;

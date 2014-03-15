@@ -21,16 +21,21 @@ extern NSString *URRErrorDomain;
 	struct RAROpenArchiveDataEx *flags;
 }
 
-@property(nonatomic, retain) NSString* filename;
-@property(nonatomic, retain) NSString* password;
+@property(nonatomic, retain) NSString *filename;
+@property(nonatomic, retain) NSString *password;
 
-- (BOOL) unrarOpenFile:(NSString*) rarFile;
-- (BOOL) unrarOpenFile:(NSString*) rarFile withPassword:(NSString*) aPassword;
++ (Unrar4iOS *)unrarFileAtPath:(NSString *)filePath;
++ (Unrar4iOS *)unrarFileAtURL:(NSURL *)fileURL;
++ (Unrar4iOS *)unrarFileAtPath:(NSString *)filePath password:(NSString *)password;
++ (Unrar4iOS *)unrarFileAtURL:(NSURL *)fileURL password:(NSString *)password;
 
-- (NSArray *)unrarListFiles:(NSError **)error;
-- (BOOL)unrarFileTo:(NSString*) path overWrite:(BOOL) overwrite error:(NSError **)error;
-- (NSData *)extractStream:(NSString *)aFile error:(NSError **)error;
+- (BOOL)openFile:(NSString *)filePath;
+- (BOOL)openFile:(NSString *)filePath password:(NSString*)password;
 
-- (BOOL)unrarCloseFile;
+- (NSArray *)listFiles:(NSError **)error;
+- (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error;
+- (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
+
+- (BOOL)closeFile;
 
 @end
