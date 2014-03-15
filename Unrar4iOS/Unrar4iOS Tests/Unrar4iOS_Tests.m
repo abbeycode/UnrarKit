@@ -184,7 +184,7 @@
     
     XCTAssertNotNil(error, @"List without password succeeded");
     XCTAssertNil(files, @"List returned without password");
-    XCTAssertEqual(error.code, ERAR_MISSING_PASSWORD, @"Unexpected error code returned");
+    XCTAssertEqual(error.code, URRErrorCodeMissingPassword, @"Unexpected error code returned");
 }
 
 - (void)testListFilesForInvalidArchive
@@ -196,7 +196,7 @@
     
     XCTAssertNotNil(error, @"List files of invalid archive succeeded");
     XCTAssertNil(files, @"List returned for invalid archive");
-    XCTAssertEqual(error.code, ERAR_BAD_ARCHIVE, @"Unexpected error code returned");
+    XCTAssertEqual(error.code, URRErrorCodeBadArchive, @"Unexpected error code returned");
 }
 
 - (void)testExtractFiles
@@ -281,7 +281,7 @@
         BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
         
         XCTAssertFalse(success, @"Extract without password succeeded");
-        XCTAssertEqual(error.code, ERAR_MISSING_PASSWORD, @"Unexpected error code returned");
+        XCTAssertEqual(error.code, URRErrorCodeMissingPassword, @"Unexpected error code returned");
         XCTAssertFalse(dirExists, @"Directory successfully created without password");
     }
 }
@@ -300,7 +300,7 @@
     BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
     
     XCTAssertFalse(success, @"Extract invalid archive succeeded");
-    XCTAssertEqual(error.code, ERAR_BAD_ARCHIVE, @"Unexpected error code returned");
+    XCTAssertEqual(error.code, URRErrorCodeBadArchive, @"Unexpected error code returned");
     XCTAssertFalse(dirExists, @"Directory successfully created for invalid archive");
 }
 
@@ -359,7 +359,7 @@
         
         XCTAssertNotNil(error, @"Extract data without password succeeded");
         XCTAssertNil(data, @"Data returned without password");
-        XCTAssertEqual(error.code, ERAR_MISSING_PASSWORD, @"Unexpected error code returned");
+        XCTAssertEqual(error.code, URRErrorCodeMissingPassword, @"Unexpected error code returned");
     }
 }
 
@@ -372,7 +372,7 @@
     
     XCTAssertNotNil(error, @"Extract data for invalid archive succeeded");
     XCTAssertNil(data, @"Data returned for invalid archive");
-    XCTAssertEqual(error.code, ERAR_BAD_ARCHIVE, @"Unexpected error code returned");
+    XCTAssertEqual(error.code, URRErrorCodeBadArchive, @"Unexpected error code returned");
 }
 
 - (void)testCloseFile
