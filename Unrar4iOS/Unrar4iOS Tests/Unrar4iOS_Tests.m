@@ -39,9 +39,11 @@
                            @"Test File B.jpg",
                            @"Test File C.m4a"];
     
+    NSString *tempDirSubtree = [@"Unrar4iOSTest" stringByAppendingPathComponent:uniqueName];
+    
     self.testFailed = NO;
     self.testFileURLs = [[NSMutableDictionary alloc] init];
-    self.tempDirectory = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:uniqueName]
+    self.tempDirectory = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:tempDirSubtree]
                                     isDirectory:YES];
 
     NSLog(@"Temp directory: %@", self.tempDirectory);
@@ -95,7 +97,7 @@
 #pragma mark - Test Cases
 
 
-- (void)testUnrarListFiles
+- (void)testListFiles
 {
     NSArray *testArchives = @[@"Test Archive.rar", @"Test Archive (Password).rar"];
     
@@ -130,7 +132,7 @@
     }
 }
 
-- (void)testUnrarListFilesWithHeaderPassword
+- (void)testListFilesWithHeaderPassword
 {
     NSArray *testArchives = @[@"Test Archive (Header Password).rar"];
     
@@ -149,10 +151,8 @@
         NSError *error = nil;
         NSArray *filesInArchive = [unrarNoPassword listFiles:&error];
         
-        XCTAssertNil(error, @"Error returned by unrarListFiles (no password given)");
-        XCTAssertNotNil(filesInArchive, @"No list of files returned");
-        XCTAssertEqual(filesInArchive.count, (NSUInteger)0, @"File list returned, when no password specified");
-        
+        XCTAssertNotNil(error, @"No error returned by unrarListFiles (no password given)");
+        XCTAssertNil(filesInArchive, @"List of files returned (no password given)");
         
         Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:testArchiveURL password:@"password"];
         
@@ -175,7 +175,19 @@
     }
 }
 
-- (void)testUnrarFiles
+- (void)testListFilesWithoutPassword
+{
+    Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:self.testFileURLs[@"Test Archive (Header Password).rar"]];
+    
+    NSError *error = nil;
+    NSArray *files = [unrar listFiles:&error];
+    
+    XCTAssertNotNil(error, @"List without password succeeded");
+    XCTAssertNil(files, @"List returned without password");
+    XCTAssertEqual(error.code, ERAR_MISSING_PASSWORD, @"Unexpected error code returned");
+}
+
+- (void)testExtractFiles
 {
     NSArray *testArchives = @[@"Test Archive.rar",
                               @"Test Archive (Password).rar",
@@ -236,7 +248,33 @@
     }
 }
 
-- (void)testExtractStream
+- (void)testExtractFilesWithoutPassword
+{
+    NSArray *testArchives = @[@"Test Archive (Password).rar",
+                              @"Test Archive (Header Password).rar"];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+
+    for (NSString *testArchiveName in testArchives) {
+        NSLog(@"Testing extraction archive (no password given): %@", testArchiveName);
+        Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:self.testFileURLs[testArchiveName]];
+        
+        NSString *extractDirectory = [self randomDirectoryWithPrefix:
+                                      [testArchiveName stringByDeletingPathExtension]];
+        NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+        
+        
+        NSError *error = nil;
+        BOOL success = [unrar extractFilesTo:extractURL.path overWrite:NO error:&error];
+        BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
+        
+        XCTAssertFalse(success, @"Extract without password succeeded");
+        XCTAssertEqual(error.code, ERAR_MISSING_PASSWORD, @"Unexpected error code returned");
+        XCTAssertFalse(dirExists, @"Directory successfully created without password");
+    }
+}
+
+- (void)testExtractData
 {
     NSArray *testArchives = @[@"Test Archive.rar",
                               @"Test Archive (Password).rar",
@@ -251,7 +289,7 @@
     NSFileManager *fm = [NSFileManager defaultManager];
     
     for (NSString *testArchiveName in testArchives) {
-        NSLog(@"Testing extraction of steam from archive %@", testArchiveName);
+        NSLog(@"Testing extraction of data from archive %@", testArchiveName);
 
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
@@ -277,7 +315,25 @@
     }
 }
 
-- (void)testUnrarCloseFile
+- (void)testExtractDataWithoutPassword
+{
+    NSArray *testArchives = @[@"Test Archive (Password).rar",
+                              @"Test Archive (Header Password).rar"];
+    
+    for (NSString *testArchiveName in testArchives) {
+        NSLog(@"Testing extraction of data from archive (no password given): %@", testArchiveName);
+        Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:self.testFileURLs[testArchiveName]];
+        
+        NSError *error = nil;
+        NSData *data = [unrar extractDataFromFile:@"Test File A.txt" error:&error];
+        
+        XCTAssertNotNil(error, @"Extract without password succeeded");
+        XCTAssertNil(data, @"Data returned without password");
+        XCTAssertEqual(error.code, ERAR_MISSING_PASSWORD, @"Unexpected error code returned");
+    }
+}
+
+- (void)testCloseFile
 {
     Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
     BOOL result = [unrar closeFile];

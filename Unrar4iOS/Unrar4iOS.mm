@@ -97,17 +97,25 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     }
 	
 	NSMutableArray *files = [NSMutableArray array];
-	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-		NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
-		[files addObject:filename];
-		
-		if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
-            [self assignError:error code:(NSInteger)PFCode];
-			return nil;
-		}
-	}
     
-	return files;
+    while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+        NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
+        [files addObject:filename];
+        
+        if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+            [self assignError:error code:(NSInteger)PFCode];
+            return nil;
+        }
+    }
+
+    switch (RHCode) {
+        case ERAR_MISSING_PASSWORD:
+            [self assignError:error code:ERAR_MISSING_PASSWORD];
+            return nil;
+            
+        default:
+            return files;
+    }
 }
 
 - (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error;
@@ -118,12 +126,21 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         return NO;
     
 	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-        
+        if ([self headerContainsErrors:error]) {
+            return nil;
+        }
+
         if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *)[filePath UTF8String], NULL)) != 0) {
             [self assignError:error code:(NSInteger)PFCode];
             return NO;
         }
         
+    }
+    
+    switch (RHCode) {
+        case ERAR_MISSING_PASSWORD:
+            [self assignError:error code:ERAR_MISSING_PASSWORD];
+            return nil;
     }
     
     return YES;
@@ -146,6 +163,10 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 	
 	size_t length = 0;
 	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+        if ([self headerContainsErrors:error]) {
+            return nil;
+        }
+        
 		NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
         
 		if ([filename isEqualToString:filePath]) {
@@ -159,7 +180,13 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 			}
 		}
 	}
-	
+	   
+    switch (RHCode) {
+        case ERAR_MISSING_PASSWORD:
+            [self assignError:error code:ERAR_MISSING_PASSWORD];
+            return nil;
+    }
+
 	if (length == 0) {
         [self assignError:error code:ERAR_ARCHIVE_NOT_FOUND];
 		return nil;
@@ -305,6 +332,18 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         *error = [NSError errorWithDomain:URRErrorDomain
                                      code:errorCode
                                  userInfo:@{NSUnderlyingErrorKey: errorName}];
+    }
+    
+    return NO;
+}
+
+- (BOOL)headerContainsErrors:(NSError **)error
+{
+    BOOL isPasswordProtected = header->Flags & 0x04;
+    
+    if (isPasswordProtected && !_password) {
+        [self assignError:error code:ERAR_MISSING_PASSWORD];
+        return YES;
     }
     
     return NO;
