@@ -106,10 +106,85 @@
 		48F211551288B38C002745F2 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E11288B38C002745F2 /* unpack.cpp */; };
 		48F211561288B38C002745F2 /* unpack.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210E21288B38C002745F2 /* unpack.hpp */; };
 		48F2115A1288B38C002745F2 /* version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 48F210E81288B38C002745F2 /* version.hpp */; };
+		964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABC18D28EE000AD7321 /* XCTest.framework */; };
+		964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
+		964C8AC118D28EE000AD7321 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8AC018D28EE000AD7321 /* UIKit.framework */; };
+		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
+		964C8AC918D28EE000AD7321 /* Unrar4iOS_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* Unrar4iOS_Tests.m */; };
+		964C8AD218D28F3500AD7321 /* Test Data in CopyFiles */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
+		964C8B1018D2901D00AD7321 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2106F1288B38C002745F2 /* archive.cpp */; };
+		964C8B1118D2901D00AD7321 /* arcread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210711288B38C002745F2 /* arcread.cpp */; };
+		964C8B1318D2901D00AD7321 /* cmddata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210741288B38C002745F2 /* cmddata.cpp */; };
+		964C8B1518D2901D00AD7321 /* consio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210791288B38C002745F2 /* consio.cpp */; };
+		964C8B1618D2901D00AD7321 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2107B1288B38C002745F2 /* crc.cpp */; };
+		964C8B1718D2901D00AD7321 /* crypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2107D1288B38C002745F2 /* crypt.cpp */; };
+		964C8B1818D2901D00AD7321 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2107F1288B38C002745F2 /* dll.cpp */; };
+		964C8B1918D2901D00AD7321 /* encname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210831288B38C002745F2 /* encname.cpp */; };
+		964C8B1A18D2901D00AD7321 /* errhnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210851288B38C002745F2 /* errhnd.cpp */; };
+		964C8B1B18D2901D00AD7321 /* extinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210871288B38C002745F2 /* extinfo.cpp */; };
+		964C8B1C18D2901D00AD7321 /* extract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210891288B38C002745F2 /* extract.cpp */; };
+		964C8B1D18D2901D00AD7321 /* filcreat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2108B1288B38C002745F2 /* filcreat.cpp */; };
+		964C8B1E18D2901D00AD7321 /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2108D1288B38C002745F2 /* file.cpp */; };
+		964C8B1F18D2901D00AD7321 /* filefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2108F1288B38C002745F2 /* filefn.cpp */; };
+		964C8B2018D2901D00AD7321 /* filestr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210911288B38C002745F2 /* filestr.cpp */; };
+		964C8B2118D2901D00AD7321 /* find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210931288B38C002745F2 /* find.cpp */; };
+		964C8B2218D2901D00AD7321 /* getbits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210951288B38C002745F2 /* getbits.cpp */; };
+		964C8B2318D2901D00AD7321 /* global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210971288B38C002745F2 /* global.cpp */; };
+		964C8B2418D2901D00AD7321 /* isnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2109A1288B38C002745F2 /* isnt.cpp */; };
+		964C8B2518D2901D00AD7321 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F2109D1288B38C002745F2 /* list.cpp */; };
+		964C8B2718D2901D00AD7321 /* match.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210A71288B38C002745F2 /* match.cpp */; };
+		964C8B2918D2901D00AD7321 /* options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210AC1288B38C002745F2 /* options.cpp */; };
+		964C8B2B18D2901D00AD7321 /* pathfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210B01288B38C002745F2 /* pathfn.cpp */; };
+		964C8B2C18D2901D00AD7321 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210B21288B38C002745F2 /* rar.cpp */; };
+		964C8B2E18D2901D00AD7321 /* rarvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210B91288B38C002745F2 /* rarvm.cpp */; };
+		964C8B3018D2901D00AD7321 /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210BC1288B38C002745F2 /* rawread.cpp */; };
+		964C8B3118D2901D00AD7321 /* rdwrfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210BE1288B38C002745F2 /* rdwrfn.cpp */; };
+		964C8B3218D2901D00AD7321 /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210C21288B38C002745F2 /* recvol.cpp */; };
+		964C8B3318D2901D00AD7321 /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210C41288B38C002745F2 /* resource.cpp */; };
+		964C8B3418D2901D00AD7321 /* rijndael.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210C61288B38C002745F2 /* rijndael.cpp */; };
+		964C8B3518D2901D00AD7321 /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210C81288B38C002745F2 /* rs.cpp */; };
+		964C8B3618D2901D00AD7321 /* savepos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210CA1288B38C002745F2 /* savepos.cpp */; };
+		964C8B3718D2901D00AD7321 /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210CC1288B38C002745F2 /* scantree.cpp */; };
+		964C8B3818D2901D00AD7321 /* secpassword.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6792C9816974622006F1B41 /* secpassword.cpp */; };
+		964C8B3918D2901D00AD7321 /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210CE1288B38C002745F2 /* sha1.cpp */; };
+		964C8B3A18D2901D00AD7321 /* smallfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210D01288B38C002745F2 /* smallfn.cpp */; };
+		964C8B3B18D2901D00AD7321 /* strfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210D21288B38C002745F2 /* strfn.cpp */; };
+		964C8B3C18D2901D00AD7321 /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210D41288B38C002745F2 /* strlist.cpp */; };
+		964C8B3E18D2901D00AD7321 /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210D81288B38C002745F2 /* system.cpp */; };
+		964C8B3F18D2901D00AD7321 /* timefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210DA1288B38C002745F2 /* timefn.cpp */; };
+		964C8B4018D2901D00AD7321 /* ulinks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210DC1288B38C002745F2 /* ulinks.cpp */; };
+		964C8B4118D2901D00AD7321 /* unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210DE1288B38C002745F2 /* unicode.cpp */; };
+		964C8B4318D2901D00AD7321 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E11288B38C002745F2 /* unpack.cpp */; };
+		964C8B4718D2901D00AD7321 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48F210E91288B38C002745F2 /* volume.cpp */; };
+		964C8B4A18D290AE00AD7321 /* Unrar4iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* Unrar4iOS.mm */; };
+		964C8B4B18D290AE00AD7321 /* RARExtractException.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BB62ED1621C83D00B424E2 /* RARExtractException.m */; };
 		A6792C9A16974622006F1B41 /* secpassword.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6792C9816974622006F1B41 /* secpassword.cpp */; };
 		A6792C9B16974622006F1B41 /* secpassword.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A6792C9916974622006F1B41 /* secpassword.hpp */; };
 		AA747D9F0F9514B9006C5449 /* Unrar4iOS_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* Unrar4iOS_Prefix.pch */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		964C8ACB18D28EE000AD7321 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = Unrar4iOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		964C8AD118D28F2900AD7321 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				964C8AD218D28F3500AD7321 /* Test Data in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		489CF9F1128B4D8E005DCC2A /* Framework.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Framework.plist; sourceTree = "<group>"; };
@@ -242,6 +317,15 @@
 		48F210EA1288B38C002745F2 /* volume.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = volume.hpp; sourceTree = "<group>"; };
 		48F210EB1288B38C002745F2 /* win32acl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = win32acl.cpp; sourceTree = "<group>"; };
 		48F210EC1288B38C002745F2 /* win32stm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = win32stm.cpp; sourceTree = "<group>"; };
+		964C8ABB18D28EE000AD7321 /* Unrar4iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unrar4iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		964C8ABC18D28EE000AD7321 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		964C8ABE18D28EE000AD7321 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		964C8AC018D28EE000AD7321 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		964C8AC418D28EE000AD7321 /* Unrar4iOS Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unrar4iOS Tests-Info.plist"; sourceTree = "<group>"; };
+		964C8AC618D28EE000AD7321 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		964C8AC818D28EE000AD7321 /* Unrar4iOS_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Unrar4iOS_Tests.m; sourceTree = "<group>"; };
+		964C8ACA18D28EE000AD7321 /* Unrar4iOS Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Unrar4iOS Tests-Prefix.pch"; sourceTree = "<group>"; };
+		964C8AD018D28F1600AD7321 /* Test Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Test Data"; sourceTree = "<group>"; };
 		A6792C9716974622006F1B41 /* acknow.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = acknow.txt; sourceTree = "<group>"; };
 		A6792C9816974622006F1B41 /* secpassword.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = secpassword.cpp; sourceTree = "<group>"; };
 		A6792C9916974622006F1B41 /* secpassword.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = secpassword.hpp; sourceTree = "<group>"; };
@@ -250,6 +334,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		964C8AB818D28EE000AD7321 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */,
+				964C8AC118D28EE000AD7321 /* UIKit.framework in Frameworks */,
+				964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2AAC07C0554694100DB518D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -264,6 +358,7 @@
 			isa = PBXGroup;
 			children = (
 				D2AAC07E0554694100DB518D /* libUnrar4iOS.a */,
+				964C8ABB18D28EE000AD7321 /* Unrar4iOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -272,6 +367,7 @@
 			isa = PBXGroup;
 			children = (
 				08FB77AEFE84172EC02AAC07 /* Classes */,
+				964C8AC218D28EE000AD7321 /* Unrar4iOS Tests */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
@@ -283,6 +379,9 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				964C8ABC18D28EE000AD7321 /* XCTest.framework */,
+				964C8ABE18D28EE000AD7321 /* Foundation.framework */,
+				964C8AC018D28EE000AD7321 /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -442,6 +541,26 @@
 			path = unrar;
 			sourceTree = "<group>";
 		};
+		964C8AC218D28EE000AD7321 /* Unrar4iOS Tests */ = {
+			isa = PBXGroup;
+			children = (
+				964C8AD018D28F1600AD7321 /* Test Data */,
+				964C8AC818D28EE000AD7321 /* Unrar4iOS_Tests.m */,
+				964C8AC318D28EE000AD7321 /* Supporting Files */,
+			);
+			path = "Unrar4iOS Tests";
+			sourceTree = "<group>";
+		};
+		964C8AC318D28EE000AD7321 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				964C8AC418D28EE000AD7321 /* Unrar4iOS Tests-Info.plist */,
+				964C8AC518D28EE000AD7321 /* InfoPlist.strings */,
+				964C8ACA18D28EE000AD7321 /* Unrar4iOS Tests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -511,6 +630,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		964C8ABA18D28EE000AD7321 /* Unrar4iOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "Unrar4iOS Tests" */;
+			buildPhases = (
+				964C8AB718D28EE000AD7321 /* Sources */,
+				964C8AB818D28EE000AD7321 /* Frameworks */,
+				964C8AB918D28EE000AD7321 /* Resources */,
+				964C8AD118D28F2900AD7321 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				964C8ACC18D28EE000AD7321 /* PBXTargetDependency */,
+			);
+			name = "Unrar4iOS Tests";
+			productName = "Unrar4iOS Tests";
+			productReference = 964C8ABB18D28EE000AD7321 /* Unrar4iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		D2AAC07D0554694100DB518D /* Unrar4iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "Unrar4iOS" */;
@@ -546,6 +684,7 @@
 				Japanese,
 				French,
 				German,
+				en,
 			);
 			mainGroup = 0867D691FE84028FC02AAC07 /* Unrar4iOS */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
@@ -553,9 +692,21 @@
 			projectRoot = "";
 			targets = (
 				D2AAC07D0554694100DB518D /* Unrar4iOS */,
+				964C8ABA18D28EE000AD7321 /* Unrar4iOS Tests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		964C8AB918D28EE000AD7321 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		489CF9F5128B4F15005DCC2A /* ShellScript */ = {
@@ -574,6 +725,60 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		964C8AB718D28EE000AD7321 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				964C8AC918D28EE000AD7321 /* Unrar4iOS_Tests.m in Sources */,
+				964C8B4718D2901D00AD7321 /* volume.cpp in Sources */,
+				964C8B1018D2901D00AD7321 /* archive.cpp in Sources */,
+				964C8B1118D2901D00AD7321 /* arcread.cpp in Sources */,
+				964C8B1318D2901D00AD7321 /* cmddata.cpp in Sources */,
+				964C8B1518D2901D00AD7321 /* consio.cpp in Sources */,
+				964C8B1618D2901D00AD7321 /* crc.cpp in Sources */,
+				964C8B1718D2901D00AD7321 /* crypt.cpp in Sources */,
+				964C8B1818D2901D00AD7321 /* dll.cpp in Sources */,
+				964C8B1918D2901D00AD7321 /* encname.cpp in Sources */,
+				964C8B1A18D2901D00AD7321 /* errhnd.cpp in Sources */,
+				964C8B1B18D2901D00AD7321 /* extinfo.cpp in Sources */,
+				964C8B1C18D2901D00AD7321 /* extract.cpp in Sources */,
+				964C8B1D18D2901D00AD7321 /* filcreat.cpp in Sources */,
+				964C8B1E18D2901D00AD7321 /* file.cpp in Sources */,
+				964C8B1F18D2901D00AD7321 /* filefn.cpp in Sources */,
+				964C8B2018D2901D00AD7321 /* filestr.cpp in Sources */,
+				964C8B2118D2901D00AD7321 /* find.cpp in Sources */,
+				964C8B2218D2901D00AD7321 /* getbits.cpp in Sources */,
+				964C8B2318D2901D00AD7321 /* global.cpp in Sources */,
+				964C8B2418D2901D00AD7321 /* isnt.cpp in Sources */,
+				964C8B2518D2901D00AD7321 /* list.cpp in Sources */,
+				964C8B2718D2901D00AD7321 /* match.cpp in Sources */,
+				964C8B2918D2901D00AD7321 /* options.cpp in Sources */,
+				964C8B2B18D2901D00AD7321 /* pathfn.cpp in Sources */,
+				964C8B2C18D2901D00AD7321 /* rar.cpp in Sources */,
+				964C8B2E18D2901D00AD7321 /* rarvm.cpp in Sources */,
+				964C8B3018D2901D00AD7321 /* rawread.cpp in Sources */,
+				964C8B3118D2901D00AD7321 /* rdwrfn.cpp in Sources */,
+				964C8B3218D2901D00AD7321 /* recvol.cpp in Sources */,
+				964C8B3318D2901D00AD7321 /* resource.cpp in Sources */,
+				964C8B3418D2901D00AD7321 /* rijndael.cpp in Sources */,
+				964C8B3518D2901D00AD7321 /* rs.cpp in Sources */,
+				964C8B3618D2901D00AD7321 /* savepos.cpp in Sources */,
+				964C8B3718D2901D00AD7321 /* scantree.cpp in Sources */,
+				964C8B3918D2901D00AD7321 /* sha1.cpp in Sources */,
+				964C8B3A18D2901D00AD7321 /* smallfn.cpp in Sources */,
+				964C8B3B18D2901D00AD7321 /* strfn.cpp in Sources */,
+				964C8B3C18D2901D00AD7321 /* strlist.cpp in Sources */,
+				964C8B3E18D2901D00AD7321 /* system.cpp in Sources */,
+				964C8B3F18D2901D00AD7321 /* timefn.cpp in Sources */,
+				964C8B4018D2901D00AD7321 /* ulinks.cpp in Sources */,
+				964C8B4118D2901D00AD7321 /* unicode.cpp in Sources */,
+				964C8B4318D2901D00AD7321 /* unpack.cpp in Sources */,
+				964C8B3818D2901D00AD7321 /* secpassword.cpp in Sources */,
+				964C8B4A18D290AE00AD7321 /* Unrar4iOS.mm in Sources */,
+				964C8B4B18D290AE00AD7321 /* RARExtractException.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2AAC07B0554694100DB518D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -628,6 +833,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		964C8ACC18D28EE000AD7321 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2AAC07D0554694100DB518D /* Unrar4iOS */;
+			targetProxy = 964C8ACB18D28EE000AD7321 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		964C8AC518D28EE000AD7321 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				964C8AC618D28EE000AD7321 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB921F08733DC00010E9CD /* Debug */ = {
@@ -713,6 +937,72 @@
 			};
 			name = Release;
 		};
+		964C8ACD18D28EE000AD7321 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Unrar4iOS Tests/Unrar4iOS Tests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INFOPLIST_FILE = "Unrar4iOS Tests/Unrar4iOS Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = (
+					"-Wno-dangling-else",
+					"-Wno-parentheses",
+					"-Wno-return-type",
+					"-Wno-unused-variable",
+					"-Wno-switch",
+				);
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		964C8ACE18D28EE000AD7321 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Unrar4iOS Tests/Unrar4iOS Tests-Prefix.pch";
+				INFOPLIST_FILE = "Unrar4iOS Tests/Unrar4iOS Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WARNING_CFLAGS = (
+					"-Wno-dangling-else",
+					"-Wno-parentheses",
+					"-Wno-return-type",
+					"-Wno-unused-variable",
+					"-Wno-switch",
+				);
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -730,6 +1020,15 @@
 			buildConfigurations = (
 				1DEB922308733DC00010E9CD /* Debug */,
 				1DEB922408733DC00010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "Unrar4iOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				964C8ACD18D28EE000AD7321 /* Debug */,
+				964C8ACE18D28EE000AD7321 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
