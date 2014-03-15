@@ -74,17 +74,15 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 #pragma mark - Public Methods
 
 
-- (BOOL)openFile:(NSString *)filePath;
+- (void)openFile:(NSString *)filePath;
 {
-	return [self openFile:filePath password:nil];
+	[self openFile:filePath password:nil];
 }
 
-- (BOOL)openFile:(NSString *)filePath password:(NSString*)password;
+- (void)openFile:(NSString *)filePath password:(NSString*)password;
 {
 	self.filename = filePath;
     self.password = password;
-    
-	return YES;
 }
 
 - (NSArray *)listFiles:(NSError **)error;

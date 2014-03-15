@@ -29,8 +29,8 @@ extern NSString *URRErrorDomain;
 + (Unrar4iOS *)unrarFileAtPath:(NSString *)filePath password:(NSString *)password;
 + (Unrar4iOS *)unrarFileAtURL:(NSURL *)fileURL password:(NSString *)password;
 
-- (BOOL)openFile:(NSString *)filePath;
-- (BOOL)openFile:(NSString *)filePath password:(NSString*)password;
+- (void)openFile:(NSString *)filePath;
+- (void)openFile:(NSString *)filePath password:(NSString*)password;
 
 - (NSArray *)listFiles:(NSError **)error;
 - (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error;
