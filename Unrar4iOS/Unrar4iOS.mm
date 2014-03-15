@@ -258,7 +258,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return errorName;
 }
 
-- (void)assignError:(NSError **)error code:(NSInteger)errorCode
+- (BOOL)assignError:(NSError **)error code:(NSInteger)errorCode
 {
     if (error) {
         NSString *errorName = [self errorNameForErrorCode:errorCode];
@@ -267,6 +267,8 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
                                      code:errorCode
                                  userInfo:@{NSUnderlyingErrorKey: errorName}];
     }
+    
+    return NO;
 }
 
 - (void)dealloc {

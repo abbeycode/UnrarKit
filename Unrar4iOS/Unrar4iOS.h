@@ -16,19 +16,21 @@ extern NSString *URRErrorDomain;
 
 @interface Unrar4iOS : NSObject {
 
-	HANDLE	 _rarFile;
-	struct	 RARHeaderDataEx *header;
-	struct	 RAROpenArchiveDataEx *flags;
+	HANDLE _rarFile;
+	struct RARHeaderDataEx *header;
+	struct RAROpenArchiveDataEx *flags;
 }
 
 @property(nonatomic, retain) NSString* filename;
 @property(nonatomic, retain) NSString* password;
 
--(BOOL) unrarOpenFile:(NSString*) rarFile;
--(BOOL) unrarOpenFile:(NSString*) rarFile withPassword:(NSString*) aPassword;
--(NSArray *) unrarListFiles:(NSError **)error;
--(BOOL) unrarFileTo:(NSString*) path overWrite:(BOOL) overwrite error:(NSError **)error;
--(NSData *) extractStream:(NSString *)aFile error:(NSError **)error;
--(BOOL) unrarCloseFile;
+- (BOOL) unrarOpenFile:(NSString*) rarFile;
+- (BOOL) unrarOpenFile:(NSString*) rarFile withPassword:(NSString*) aPassword;
+
+- (NSArray *)unrarListFiles:(NSError **)error;
+- (BOOL)unrarFileTo:(NSString*) path overWrite:(BOOL) overwrite error:(NSError **)error;
+- (NSData *)extractStream:(NSString *)aFile error:(NSError **)error;
+
+- (BOOL)unrarCloseFile;
 
 @end
