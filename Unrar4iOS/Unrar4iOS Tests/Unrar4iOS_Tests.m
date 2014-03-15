@@ -187,6 +187,18 @@
     XCTAssertEqual(error.code, ERAR_MISSING_PASSWORD, @"Unexpected error code returned");
 }
 
+- (void)testListFilesForInvalidArchive
+{
+    Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:self.testFileURLs[@"Test File A.txt"]];
+    
+    NSError *error = nil;
+    NSArray *files = [unrar listFiles:&error];
+    
+    XCTAssertNotNil(error, @"List files of invalid archive succeeded");
+    XCTAssertNil(files, @"List returned for invalid archive");
+    XCTAssertEqual(error.code, ERAR_BAD_ARCHIVE, @"Unexpected error code returned");
+}
+
 - (void)testExtractFiles
 {
     NSArray *testArchives = @[@"Test Archive.rar",
@@ -274,6 +286,24 @@
     }
 }
 
+- (void)testExtractFilesForInvalidArchive
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:self.testFileURLs[@"Test File A.txt"]];
+    
+    NSString *extractDirectory = [self randomDirectoryWithPrefix:@"ExtractInvalidArchive"];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+    
+    NSError *error = nil;
+    BOOL success = [unrar extractFilesTo:extractURL.path overWrite:NO error:&error];
+    BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
+    
+    XCTAssertFalse(success, @"Extract invalid archive succeeded");
+    XCTAssertEqual(error.code, ERAR_BAD_ARCHIVE, @"Unexpected error code returned");
+    XCTAssertFalse(dirExists, @"Directory successfully created for invalid archive");
+}
+
 - (void)testExtractData
 {
     NSArray *testArchives = @[@"Test Archive.rar",
@@ -327,10 +357,22 @@
         NSError *error = nil;
         NSData *data = [unrar extractDataFromFile:@"Test File A.txt" error:&error];
         
-        XCTAssertNotNil(error, @"Extract without password succeeded");
+        XCTAssertNotNil(error, @"Extract data without password succeeded");
         XCTAssertNil(data, @"Data returned without password");
         XCTAssertEqual(error.code, ERAR_MISSING_PASSWORD, @"Unexpected error code returned");
     }
+}
+
+- (void)testExtractDataForInvalidArchive
+{
+    Unrar4iOS *unrar = [Unrar4iOS unrarFileAtURL:self.testFileURLs[@"Test File A.txt"]];
+    
+    NSError *error = nil;
+    NSData *data = [unrar extractDataFromFile:@"Any file.txt" error:&error];
+    
+    XCTAssertNotNil(error, @"Extract data for invalid archive succeeded");
+    XCTAssertNil(data, @"Data returned for invalid archive");
+    XCTAssertEqual(error.code, ERAR_BAD_ARCHIVE, @"Unexpected error code returned");
 }
 
 - (void)testCloseFile
