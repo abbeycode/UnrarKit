@@ -112,8 +112,10 @@
         Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
         [unrar unrarOpenFile:testArchiveURL.path];
         
-        NSArray *filesInArchive = [unrar unrarListFiles];
+        NSError *error = nil;
+        NSArray *filesInArchive = [unrar unrarListFiles:&error];
         
+        XCTAssertNil(error, @"Error returned by unrarListFiles");
         XCTAssertNotNil(filesInArchive, @"No list of files returned");
         XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
                        @"Incorrect number of files listed in archive");
@@ -146,8 +148,10 @@
         Unrar4iOS *unrarNoPassword = [[Unrar4iOS alloc] init];
         [unrarNoPassword unrarOpenFile:testArchiveURL.path];
         
-        NSArray *filesInArchive = [unrarNoPassword unrarListFiles];
+        NSError *error = nil;
+        NSArray *filesInArchive = [unrarNoPassword unrarListFiles:&error];
         
+        XCTAssertNil(error, @"Error returned by unrarListFiles (no password given)");
         XCTAssertNotNil(filesInArchive, @"No list of files returned");
         XCTAssertEqual(filesInArchive.count, (NSUInteger)0, @"File list returned, when no password specified");
         
@@ -156,9 +160,10 @@
         [unrar unrarOpenFile:testArchiveURL.path withPassword:@"password"];
         
         filesInArchive = nil;
-        filesInArchive = [unrar unrarListFiles];
+        error = nil;
+        filesInArchive = [unrar unrarListFiles:&error];
         
-        XCTAssertNotNil(filesInArchive, @"No list of files returned");
+        XCTAssertNil(error, @"Error returned by unrarListFiles");
         XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
                        @"Incorrect number of files listed in archive");
         
@@ -200,11 +205,13 @@
         Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
         [unrar unrarOpenFile:testArchiveURL.path withPassword:password];
         
-        BOOL success = [unrar unrarFileTo:extractURL.path overWrite:NO];
+        NSError *error = nil;
+        BOOL success = [unrar unrarFileTo:extractURL.path overWrite:NO error:&error];
         
+        XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
         XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
         
-        NSError *error = nil;
+        error = nil;
         NSArray *extractedFiles = [fm contentsOfDirectoryAtPath:extractURL.path
                                                           error:&error];
         
@@ -262,7 +269,11 @@
             
             NSLog(@"Testing for file %@", expectedFilename);
             
-            NSData *extractedData = [unrar extractStream:expectedFilename];
+            NSError *error = nil;
+            NSData *extractedData = [unrar extractStream:expectedFilename error:&error];
+            
+            XCTAssertNil(error, @"Error in extractStream:error:");
+            
             NSData *expectedFileData = [NSData dataWithContentsOfURL:self.testFileURLs[expectedFilename]];
             
             XCTAssertNotNil(extractedData, @"No data extracted");

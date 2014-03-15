@@ -10,13 +10,15 @@
 #import "raros.hpp"
 #import "dll.hpp"
 
+#define ERAR_ARCHIVE_NOT_FOUND  101
+
+extern NSString *URRErrorDomain;
+
 @interface Unrar4iOS : NSObject {
 
 	HANDLE	 _rarFile;
 	struct	 RARHeaderDataEx *header;
 	struct	 RAROpenArchiveDataEx *flags;
-	NSString *filename;
-	NSString *password;
 }
 
 @property(nonatomic, retain) NSString* filename;
@@ -24,9 +26,9 @@
 
 -(BOOL) unrarOpenFile:(NSString*) rarFile;
 -(BOOL) unrarOpenFile:(NSString*) rarFile withPassword:(NSString*) aPassword;
--(NSArray *) unrarListFiles;
--(BOOL) unrarFileTo:(NSString*) path overWrite:(BOOL) overwrite;
--(NSData *) extractStream:(NSString *)aFile;
+-(NSArray *) unrarListFiles:(NSError **)error;
+-(BOOL) unrarFileTo:(NSString*) path overWrite:(BOOL) overwrite error:(NSError **)error;
+-(NSData *) extractStream:(NSString *)aFile error:(NSError **)error;
 -(BOOL) unrarCloseFile;
 
 @end
