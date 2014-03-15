@@ -10,23 +10,32 @@
 #import "raros.hpp"
 #import "dll.hpp"
 
+#define ERAR_ARCHIVE_NOT_FOUND  101
+
+extern NSString *URRErrorDomain;
+
 @interface Unrar4iOS : NSObject {
 
-	HANDLE	 _rarFile;
-	struct	 RARHeaderDataEx *header;
-	struct	 RAROpenArchiveDataEx *flags;
-	NSString *filename;
-	NSString *password;
+	HANDLE _rarFile;
+	struct RARHeaderDataEx *header;
+	struct RAROpenArchiveDataEx *flags;
 }
 
-@property(nonatomic, retain) NSString* filename;
-@property(nonatomic, retain) NSString* password;
+@property(nonatomic, retain) NSString *filename;
+@property(nonatomic, retain) NSString *password;
 
--(BOOL) unrarOpenFile:(NSString*) rarFile;
--(BOOL) unrarOpenFile:(NSString*) rarFile withPassword:(NSString*) aPassword;
--(NSArray *) unrarListFiles;
--(BOOL) unrarFileTo:(NSString*) path overWrite:(BOOL) overwrite;
--(NSData *) extractStream:(NSString *)aFile;
--(BOOL) unrarCloseFile;
++ (Unrar4iOS *)unrarFileAtPath:(NSString *)filePath;
++ (Unrar4iOS *)unrarFileAtURL:(NSURL *)fileURL;
++ (Unrar4iOS *)unrarFileAtPath:(NSString *)filePath password:(NSString *)password;
++ (Unrar4iOS *)unrarFileAtURL:(NSURL *)fileURL password:(NSString *)password;
+
+- (void)openFile:(NSString *)filePath;
+- (void)openFile:(NSString *)filePath password:(NSString*)password;
+
+- (NSArray *)listFiles:(NSError **)error;
+- (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error;
+- (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
+
+- (BOOL)closeFile;
 
 @end

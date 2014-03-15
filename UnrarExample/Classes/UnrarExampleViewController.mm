@@ -7,7 +7,6 @@
 //
 
 #import "UnrarExampleViewController.h"
-#import <Unrar4IOS/RARExtractException.h>
 
 @implementation UnrarExampleViewController
 
@@ -49,36 +48,35 @@
 	//NSString *filePath = [[NSBundle mainBundle] pathForResource:@"not_protected" ofType:@"cbr"]; 
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"protected" ofType:@"cbr"]; 
 
-	Unrar4iOS *unrar = [[Unrar4iOS alloc] init];
-	BOOL ok = [unrar unrarOpenFile:filePath];
-	if (ok) {
-		NSArray *files = [unrar unrarListFiles];
-		for (NSString *filename in files) {
-			NSLog(@"File: %@", filename);
-		}
-		
-		// Extract a stream
-        try {
-            NSData *data = [unrar extractStream:[files objectAtIndex:0]];
-            if (data != nil) {
-                UIImage *image = [UIImage imageWithData:data];
-                imageView.image = image;
-            }
+	Unrar4iOS *unrar = [Unrar4iOS unrarFileAtPath:filePath];
+    NSError *error = nil;
+    NSArray *files = [unrar listFiles:&error];
+    
+	if (error) {
+        NSLog(@"Error reading archive: %@", error);
+        [unrar closeFile];
+        return;
+    }
+    
+    for (NSString *filename in files) {
+        NSLog(@"File: %@", filename);
+    }
+    
+    // Extract a file into memory
+    NSData *data = [unrar extractDataFromFile:[files objectAtIndex:0] error:&error];
+
+    if (error) {
+        if (error.code == ERAR_MISSING_PASSWORD) {
+            NSLog(@"Password protected archive!");
         }
-        catch(RARExtractException *error) {
-            
-            if(error.status == RARArchiveProtected) {
-                
-                NSLog(@"Password protected archive!");
-            }
-        }
-						
-		[unrar unrarCloseFile];
-	}
-	else
-		[unrar unrarCloseFile];
-		
-	[unrar release];
+    }
+    
+    if (data != nil) {
+        UIImage *image = [UIImage imageWithData:data];
+        imageView.image = image;
+    }
+    
+    [unrar closeFile];
 }
 
 - (void)didReceiveMemoryWarning {

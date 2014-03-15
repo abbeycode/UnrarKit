@@ -19,6 +19,7 @@
 #include "errhnd.hpp"
 #include "array.hpp"
 #include "timefn.hpp"
+#include "secpassword.hpp"
 #include "options.hpp"
 #include "headers.hpp"
 #include "pathfn.hpp"
@@ -42,19 +43,20 @@
 #include "filcreat.hpp"
 #include "consio.hpp"
 #include "system.hpp"
+#ifdef _WIN_ALL
 #include "isnt.hpp"
+#endif
 #include "log.hpp"
 #include "rawread.hpp"
 #include "encname.hpp"
 #include "resource.hpp"
 #include "compress.hpp"
 
-
 #include "rarvm.hpp"
 #include "model.hpp"
 
-
 #include "unpack.hpp"
+
 
 
 #include "extinfo.hpp"

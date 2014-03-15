@@ -3,52 +3,52 @@
 
 enum BLOCK_TYPES {BLOCK_LZ,BLOCK_PPM};
 
-struct Decode
-{
-  unsigned int MaxNum;
-  unsigned int DecodeLen[16];
-  unsigned int DecodePos[16];
-  unsigned int DecodeNum[2];
-};
+// Maximum allowed number of compressed bits processed in quick mode.
+#define MAX_QUICK_DECODE_BITS 10
 
-struct LitDecode
-{
-  unsigned int MaxNum;
-  unsigned int DecodeLen[16];
-  unsigned int DecodePos[16];
-  unsigned int DecodeNum[NC];
-};
+// Maximum number of filters per entire data block.
+#define MAX_FILTERS 1024
 
-struct DistDecode
+// Decode compressed bit fields to alphabet numbers.
+struct DecodeTable
 {
-  unsigned int MaxNum;
-  unsigned int DecodeLen[16];
-  unsigned int DecodePos[16];
-  unsigned int DecodeNum[DC];
-};
+  // Real size of DecodeNum table.
+  uint MaxNum;
 
-struct LowDistDecode
-{
-  unsigned int MaxNum;
-  unsigned int DecodeLen[16];
-  unsigned int DecodePos[16];
-  unsigned int DecodeNum[LDC];
-};
+  // Left aligned start and upper limit codes defining code space 
+  // ranges for bit lengths. DecodeLen[BitLength-1] defines the start of
+  // range for bit length and DecodeLen[BitLength] defines next code
+  // after the end of range or in other words the upper limit code
+  // for specified bit length.
+  uint DecodeLen[16]; 
 
-struct RepDecode
-{
-  unsigned int MaxNum;
-  unsigned int DecodeLen[16];
-  unsigned int DecodePos[16];
-  unsigned int DecodeNum[RC];
-};
+  // Every item of this array contains the sum of all preceding items.
+  // So it contains the start position in code list for every bit length. 
+  uint DecodePos[16];
 
-struct BitDecode
-{
-  unsigned int MaxNum;
-  unsigned int DecodeLen[16];
-  unsigned int DecodePos[16];
-  unsigned int DecodeNum[BC];
+  // Number of compressed bits processed in quick mode.
+  // Must not exceed MAX_QUICK_DECODE_BITS.
+  uint QuickBits;
+
+  // Translates compressed bits (up to QuickBits length)
+  // to bit length in quick mode.
+  byte QuickLen[1<<MAX_QUICK_DECODE_BITS];
+
+  // Translates compressed bits (up to QuickBits length)
+  // to position in alphabet in quick mode.
+  // 'ushort' saves some memory and even provides a little speed gain
+  // comparting to 'uint' here.
+  ushort QuickNum[1<<MAX_QUICK_DECODE_BITS];
+
+  // Translate the position in code list to position in alphabet.
+  // We do not allocate it dynamically to avoid performance overhead
+  // introduced by pointer, so we use the largest possible table size
+  // as array dimension. Real size of this array is defined in MaxNum.
+  // We use this array if compressed bit field is too lengthy
+  // for QuickLen based translation.
+  // 'ushort' saves some memory and even provides a little speed gain
+  // comparting to 'uint' here.
+  ushort DecodeNum[LARGEST_TABLE_SIZE];
 };
 
 struct UnpackFilter
@@ -65,16 +65,8 @@ struct UnpackFilter
   VM_PreparedProgram Prg;
 };
 
-/***************************** Unpack v 2.0 *********************************/
-struct MultDecode
-{
-  unsigned int MaxNum;
-  unsigned int DecodeLen[16];
-  unsigned int DecodePos[16];
-  unsigned int DecodeNum[MC20];
-};
 
-struct AudioVariables
+struct AudioVariables // For RAR 2.0 archives only.
 {
   int K1,K2,K3,K4,K5;
   int D1,D2,D3,D4;
@@ -83,13 +75,11 @@ struct AudioVariables
   unsigned int ByteCount;
   int LastChar;
 };
-/***************************** Unpack v 2.0 *********************************/
 
 
 class Unpack:private BitInput
 {
   private:
-    friend class Pack;
 
     void Unpack29(bool Solid);
     bool UnpReadBuf();
@@ -98,14 +88,13 @@ class Unpack:private BitInput
     void UnpWriteArea(unsigned int StartPtr,unsigned int EndPtr);
     void UnpWriteData(byte *Data,size_t Size);
     bool ReadTables();
-    void MakeDecodeTables(unsigned char *LenTab,struct Decode *Dec,int Size);
-    int DecodeNumber(struct Decode *Dec);
+    void MakeDecodeTables(byte *LengthTable,DecodeTable *Dec,uint Size);
+    _forceinline uint DecodeNumber(DecodeTable *Dec);
     inline int SafePPMDecodeChar();
     void CopyString();
     inline void InsertOldDist(unsigned int Distance);
-    inline void InsertLastMatch(unsigned int Length,unsigned int Distance);
     void UnpInitData(int Solid);
-    void CopyString(unsigned int Length,unsigned int Distance);
+    _forceinline void CopyString(uint Length,uint Distance);
     bool ReadEndOfBlock();
     bool ReadVMCode();
     bool ReadVMCodePPM();
@@ -116,29 +105,40 @@ class Unpack:private BitInput
     ModelPPM PPM;
     int PPMEscChar;
 
+    // Virtual machine to execute filters code.
     RarVM VM;
+  
+    // Buffer to read VM filters code. We moved it here from AddVMCode
+    // function to reduce time spent in BitInput constructor.
+    BitInput VMCodeInp;
 
-    /* Filters code, one entry per filter */
+    // Filters code, one entry per filter.
     Array<UnpackFilter*> Filters;
 
-    /* Filters stack, several entrances of same filter are possible */
+    // Filters stack, several entrances of same filter are possible.
     Array<UnpackFilter*> PrgStack;
 
-    /* lengths of preceding blocks, one length per filter. Used to reduce
-       size required to write block length if lengths are repeating */
+    // Lengths of preceding data blocks, one length of one last block
+    // for every filter. Used to reduce the size required to write
+    // the data block length if lengths are repeating.
     Array<int> OldFilterLengths;
 
     int LastFilter;
 
     bool TablesRead;
-    struct LitDecode LD;
-    struct DistDecode DD;
-    struct LowDistDecode LDD;
-    struct RepDecode RD;
-    struct BitDecode BD;
+
+    DecodeTable LD;  // Decode literals.
+    DecodeTable DD;  // Decode distances.
+    DecodeTable LDD; // Decode lower bits of distances.
+    DecodeTable RD;  // Decode repeating distances.
+    DecodeTable BD;  // Decode bit lengths in Huffman table.
 
     unsigned int OldDist[4],OldDistPtr;
-    unsigned int LastDist,LastLength;
+    unsigned int LastLength;
+
+    // LastDist is necessary only for RAR2 and older with circular OldDist
+    // array. In RAR3 last distance is always stored in OldDist[0].
+    unsigned int LastDist;
 
     unsigned int UnpPtr,WrPtr;
     
@@ -150,12 +150,11 @@ class Unpack:private BitInput
     // unless we are at the end of file.
     int ReadBorder;
 
-    unsigned char UnpOldTable[HUFF_TABLE_SIZE];
+    byte UnpOldTable[HUFF_TABLE_SIZE];
 
     int UnpBlockType;
 
     byte *Window;
-    bool ExternalWindow;
 
 
     int64 DestUnpSize;
@@ -176,14 +175,13 @@ class Unpack:private BitInput
     void GetFlagsBuf();
     void OldUnpInitData(int Solid);
     void InitHuff();
-    void CorrHuff(unsigned int *CharSet,unsigned int *NumToPlace);
+    void CorrHuff(ushort *CharSet,byte *NumToPlace);
     void OldCopyString(unsigned int Distance,unsigned int Length);
     uint DecodeNum(uint Num,uint StartPos,uint *DecTab,uint *PosTab);
     void OldUnpWriteBuf();
 
-    unsigned int ChSet[256],ChSetA[256],ChSetB[256],ChSetC[256];
-    unsigned int Place[256],PlaceA[256],PlaceB[256],PlaceC[256];
-    unsigned int NToPl[256],NToPlB[256],NToPlC[256];
+    ushort ChSet[256],ChSetA[256],ChSetB[256],ChSetC[256];
+    byte NToPl[256],NToPlB[256],NToPlC[256];
     unsigned int FlagBuf,AvrPlc,AvrPlcB,AvrLn1,AvrLn2,AvrLn3;
     int Buf60,NumHuf,StMode,LCount,FlagsCnt;
     unsigned int Nhfb,Nlzb,MaxDist3;
@@ -191,7 +189,9 @@ class Unpack:private BitInput
 
 /***************************** Unpack v 2.0 *********************************/
     void Unpack20(bool Solid);
-    struct MultDecode MD[4];
+
+    DecodeTable MD[4]; // Decode multimedia data, up to 4 channels.
+
     unsigned char UnpOldTable20[MC20*4];
     int UnpAudioBlock,UnpChannels,UnpCurChannel,UnpChannelDelta;
     void CopyString20(unsigned int Length,unsigned int Distance);
@@ -205,7 +205,7 @@ class Unpack:private BitInput
   public:
     Unpack(ComprDataIO *DataIO);
     ~Unpack();
-    void Init(byte *Window=NULL);
+    void Init();
     void DoUnpack(int Method,bool Solid);
     bool IsFileExtracted() {return(FileExtracted);}
     void SetDestSize(int64 DestSize) {DestUnpSize=DestSize;FileExtracted=false;}

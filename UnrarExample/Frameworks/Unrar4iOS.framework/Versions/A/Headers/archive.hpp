@@ -5,10 +5,12 @@ class Pack;
 
 enum {EN_LOCK=1,EN_VOL=2,EN_FIRSTVOL=4};
 
+enum ARCSIGN_TYPE {ARCSIGN_NONE,ARCSIGN_OLD,ARCSIGN_CURRENT,ARCSIGN_FUTURE};
+
 class Archive:public File
 {
   private:
-    bool IsSignature(byte *D);
+    ARCSIGN_TYPE IsSignature(const byte *D,size_t Size);
     void UpdateLatestTime(FileHeader *CurBlock);
     void ConvertNameCase(char *Name);
     void ConvertNameCase(wchar *Name);
@@ -16,7 +18,7 @@ class Archive:public File
     size_t ReadOldHeader();
     void UnexpEndArcMsg();
 
-#if !defined(SHELL_EXT) && !defined(NOCRYPT)
+#if !defined(SHELL_EXT) && !defined(RAR_NOCRYPT)
     CryptData HeadersCrypt;
     byte HeadersSalt[SALT_SIZE];
 #endif
@@ -31,6 +33,8 @@ class Archive:public File
 
     int RecoverySectors;
     int64 RecoveryPos;
+
+    bool FailedHeaderDecryption;
 
     RarTime LatestTime;
     int LastReadBlock;
@@ -48,18 +52,8 @@ class Archive:public File
     void SetLhdSize();
     size_t ReadHeader();
     void CheckArc(bool EnableBroken);
-    void CheckOpen(char *Name,wchar *NameW=NULL);
-    bool WCheckOpen(char *Name,wchar *NameW=NULL);
-    bool TestLock(int Mode);
-    void MakeTemp();
-    void CopyMainHeader(Archive &Src,bool CopySFX=true,char *NameToDisplay=NULL);
-    bool ProcessToFileHead(Archive &Src,bool LastBlockAdded,
-      Pack *Pack=NULL,const char *SkipName=NULL);
-    void TmpToArc(Archive &Src);
-    void CloseNew(int AdjustRecovery,bool CloseVolume);
-    void WriteEndBlock(bool CloseVolume);
-    void CopyFileRecord(Archive &Src);
-    void CopyArchiveData(Archive &Src);
+    void CheckOpen(const char *Name,const wchar *NameW=NULL);
+    bool WCheckOpen(const char *Name,const wchar *NameW=NULL);
     bool GetComment(Array<byte> *CmtData,Array<wchar> *CmtDataW);
     void ViewComment();
     void ViewFileComment();
@@ -122,5 +116,6 @@ class Archive:public File
     char FirstVolumeName[NM];
     wchar FirstVolumeNameW[NM];
 };
+
 
 #endif
