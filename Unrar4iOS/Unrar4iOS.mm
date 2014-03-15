@@ -10,7 +10,6 @@
 #import "RARExtractException.h"
 
 @interface Unrar4iOS(PrivateMethods)
--(BOOL)_unrarOpenFile:(NSString*)rarFile inMode:(NSInteger)mode;
 -(BOOL)_unrarOpenFile:(NSString*)rarFile inMode:(NSInteger)mode withPassword:(NSString*)password;
 -(BOOL)_unrarCloseFile;
 @end
@@ -48,11 +47,6 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 	self.filename = rarFile;
     self.password = aPassword;
 	return YES;
-}
-
--(BOOL) _unrarOpenFile:(NSString*)rarFile inMode:(NSInteger)mode{
-	
-    return [self _unrarOpenFile:rarFile inMode:mode withPassword:nil];
 }
 
 - (BOOL)_unrarOpenFile:(NSString *)rarFile inMode:(NSInteger)mode withPassword:(NSString *)aPassword {
@@ -105,7 +99,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 -(BOOL) unrarFileTo:(NSString*)path overWrite:(BOOL)overwrite {
     int RHCode = 0, PFCode = 0;
     
-    if ([self _unrarOpenFile:filename inMode:RAR_OM_EXTRACT] == NO)
+    if ([self _unrarOpenFile:filename inMode:RAR_OM_EXTRACT withPassword:password] == NO)
         return NO;
     
 	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
