@@ -5,16 +5,16 @@ Pod::Spec.new do |s|
   s.license       = "BSD"
   s.homepage      = "https://github.com/abbeycode/Unrar4iOS"
   s.author        = { "Dov Frankel" => "dov@abbey-code.com" }
-  s.source        = { :git => "https://github.com/abbeycode/Unrar4iOS.git", :tag => "1.1.1" }
-  s.source_files  = "Unrar4iOS/*.{mm,m,h}",
-                    "Unrar4iOS/unrar/*.{cpp,hpp}",
-                    "Unrar4iOS/ExcludedBuildFiles.txt"
-  s.exclude_files = "Unrar4iOS/unrar/beosea.cpp",
-                    "Unrar4iOS/unrar/os2ea.cpp",
-                    "Unrar4iOS/unrar/rarpch.cpp",
-                    "Unrar4iOS/unrar/unios2.cpp",
-                    "Unrar4iOS/unrar/win32acl.cpp",
-                    "Unrar4iOS/unrar/win32stm.cpp"
+  s.source        = { :git => "https://github.com/abbeycode/Unrar4iOS.git", :tag => "2.0.0" }
+  s.source_files  = "Classes/*.{mm,m,h}",
+                    "Libraries/unrar/*.{cpp,hpp}",
+                    "Resources/ExcludedBuildFiles.txt"
+  s.exclude_files = "Libraries/unrar/beosea.cpp",
+                    "Libraries/unrar/os2ea.cpp",
+                    "Libraries/unrar/rarpch.cpp",
+                    "Libraries/unrar/unios2.cpp",
+                    "Libraries/unrar/win32acl.cpp",
+                    "Libraries/unrar/win32stm.cpp"
   s.xcconfig     =  { "OTHER_CFLAGS" => "$(inherited) -Wno-return-type -Wno-logical-op-parentheses -Wno-conversion -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-switch",
                       "OTHER_CPLUSPLUSFLAGS" => "$(inherited) -DSILENT -DRARDLL $(OTHER_CFLAGS)" }
   s.ios.deployment_target = "3.0"
