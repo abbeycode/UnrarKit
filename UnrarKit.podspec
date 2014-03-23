@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name          = "UnrarKit"
-  s.version       = "2.0.1"
+  s.version       = "2.0.2"
   s.summary       = "Provides a port of Unrar library to iOS and Mac platforms"
   s.license       = "BSD"
   s.homepage      = "https://github.com/abbeycode/UnrarKit"
   s.author        = { "Dov Frankel" => "dov@abbey-code.com" }
-  s.source        = { :git => "https://github.com/abbeycode/UnrarKit.git", :tag => "2.0.1" }
+  s.source        = { :git => "https://github.com/abbeycode/UnrarKit.git", :tag => "2.0.2" }
   s.source_files  = "Classes/*.{mm,m,h}",
                     "Libraries/unrar/*.hpp"                    
                     "Libraries/unrar/archive.cpp"                    
