@@ -1,14 +1,13 @@
 //
-//  URRArchiveTests.m
-//  Unrar4iOS Tests
+//  URKArchiveTests.m
+//  UnrarKit Tests
 //
-//  Created by Dov Frankel on 3/13/14.
 //
 
 #import <XCTest/XCTest.h>
-#import <Unrar4iOS/URRArchive.h>
+#import <UnrarKit/URKArchive.h>
 
-@interface URRArchiveTests : XCTestCase
+@interface URKArchiveTests : XCTestCase
 
 @property BOOL testFailed;
 
@@ -17,7 +16,7 @@
 
 @end
 
-@implementation URRArchiveTests
+@implementation URKArchiveTests
 
 
 
@@ -39,7 +38,7 @@
                            @"Test File B.jpg",
                            @"Test File C.m4a"];
     
-    NSString *tempDirSubtree = [@"Unrar4iOSTest" stringByAppendingPathComponent:uniqueName];
+    NSString *tempDirSubtree = [@"UnrarKitTest" stringByAppendingPathComponent:uniqueName];
     
     self.testFailed = NO;
     self.testFileURLs = [[NSMutableDictionary alloc] init];
@@ -111,7 +110,7 @@
         NSLog(@"Testing list files of archive %@", testArchiveName);
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
 
-        URRArchive *archive = [URRArchive rarArchiveAtURL:testArchiveURL];
+        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
         
         NSError *error = nil;
         NSArray *filesInArchive = [archive listFiles:&error];
@@ -146,7 +145,7 @@
         NSLog(@"Testing list files of archive %@", testArchiveName);
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
 
-        URRArchive *archiveNoPassword = [URRArchive rarArchiveAtURL:testArchiveURL];
+        URKArchive *archiveNoPassword = [URKArchive rarArchiveAtURL:testArchiveURL];
         
         NSError *error = nil;
         NSArray *filesInArchive = [archiveNoPassword listFiles:&error];
@@ -154,7 +153,7 @@
         XCTAssertNotNil(error, @"No error returned by unrarListFiles (no password given)");
         XCTAssertNil(filesInArchive, @"List of files returned (no password given)");
         
-        URRArchive *archive = [URRArchive rarArchiveAtURL:testArchiveURL password:@"password"];
+        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:@"password"];
         
         filesInArchive = nil;
         error = nil;
@@ -177,26 +176,26 @@
 
 - (void)testListFilesWithoutPassword
 {
-    URRArchive *archive = [URRArchive rarArchiveAtURL:self.testFileURLs[@"Test Archive (Header Password).rar"]];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test Archive (Header Password).rar"]];
     
     NSError *error = nil;
     NSArray *files = [archive listFiles:&error];
     
     XCTAssertNotNil(error, @"List without password succeeded");
     XCTAssertNil(files, @"List returned without password");
-    XCTAssertEqual(error.code, URRErrorCodeMissingPassword, @"Unexpected error code returned");
+    XCTAssertEqual(error.code, URKErrorCodeMissingPassword, @"Unexpected error code returned");
 }
 
 - (void)testListFilesForInvalidArchive
 {
-    URRArchive *archive = [URRArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
     
     NSError *error = nil;
     NSArray *files = [archive listFiles:&error];
     
     XCTAssertNotNil(error, @"List files of invalid archive succeeded");
     XCTAssertNil(files, @"List returned for invalid archive");
-    XCTAssertEqual(error.code, URRErrorCodeBadArchive, @"Unexpected error code returned");
+    XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
 }
 
 - (void)testExtractFiles
@@ -223,7 +222,7 @@
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
                               ? @"password"
                               : nil);
-        URRArchive *archive = [URRArchive rarArchiveAtURL:testArchiveURL password:password];
+        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:password];
         
         NSError *error = nil;
         BOOL success = [archive extractFilesTo:extractURL.path overWrite:NO error:&error];
@@ -269,7 +268,7 @@
 
     for (NSString *testArchiveName in testArchives) {
         NSLog(@"Testing extraction archive (no password given): %@", testArchiveName);
-        URRArchive *archive = [URRArchive rarArchiveAtURL:self.testFileURLs[testArchiveName]];
+        URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[testArchiveName]];
         
         NSString *extractDirectory = [self randomDirectoryWithPrefix:
                                       [testArchiveName stringByDeletingPathExtension]];
@@ -281,7 +280,7 @@
         BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
         
         XCTAssertFalse(success, @"Extract without password succeeded");
-        XCTAssertEqual(error.code, URRErrorCodeMissingPassword, @"Unexpected error code returned");
+        XCTAssertEqual(error.code, URKErrorCodeMissingPassword, @"Unexpected error code returned");
         XCTAssertFalse(dirExists, @"Directory successfully created without password");
     }
 }
@@ -290,7 +289,7 @@
 {
     NSFileManager *fm = [NSFileManager defaultManager];
     
-    URRArchive *archive = [URRArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
     
     NSString *extractDirectory = [self randomDirectoryWithPrefix:@"ExtractInvalidArchive"];
     NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
@@ -300,7 +299,7 @@
     BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
     
     XCTAssertFalse(success, @"Extract invalid archive succeeded");
-    XCTAssertEqual(error.code, URRErrorCodeBadArchive, @"Unexpected error code returned");
+    XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
     XCTAssertFalse(dirExists, @"Directory successfully created for invalid archive");
 }
 
@@ -325,7 +324,7 @@
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
                               ? @"password"
                               : nil);
-        URRArchive *archive = [URRArchive rarArchiveAtURL:testArchiveURL password:password];
+        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:password];
         
         for (NSInteger i = 0; i < expectedFiles.count; i++) {
             NSString *expectedFilename = expectedFiles[i];
@@ -352,32 +351,32 @@
     
     for (NSString *testArchiveName in testArchives) {
         NSLog(@"Testing extraction of data from archive (no password given): %@", testArchiveName);
-        URRArchive *archive = [URRArchive rarArchiveAtURL:self.testFileURLs[testArchiveName]];
+        URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[testArchiveName]];
         
         NSError *error = nil;
         NSData *data = [archive extractDataFromFile:@"Test File A.txt" error:&error];
         
         XCTAssertNotNil(error, @"Extract data without password succeeded");
         XCTAssertNil(data, @"Data returned without password");
-        XCTAssertEqual(error.code, URRErrorCodeMissingPassword, @"Unexpected error code returned");
+        XCTAssertEqual(error.code, URKErrorCodeMissingPassword, @"Unexpected error code returned");
     }
 }
 
 - (void)testExtractDataForInvalidArchive
 {
-    URRArchive *archive = [URRArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
     
     NSError *error = nil;
     NSData *data = [archive extractDataFromFile:@"Any file.txt" error:&error];
     
     XCTAssertNotNil(error, @"Extract data for invalid archive succeeded");
     XCTAssertNil(data, @"Data returned for invalid archive");
-    XCTAssertEqual(error.code, URRErrorCodeBadArchive, @"Unexpected error code returned");
+    XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
 }
 
 - (void)testCloseFile
 {
-    URRArchive *archive = [[URRArchive alloc] init];
+    URKArchive *archive = [[URKArchive alloc] init];
     BOOL result = [archive closeFile];
     XCTAssertTrue(result, @"Close file returned NO");
     

@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Unrar4iOS.xcodeproj">
+      location = "self:UnrarKit.xcodeproj">
    </FileRef>
 </Workspace>

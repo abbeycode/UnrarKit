@@ -11,10 +11,10 @@
 		964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		964C8AC118D28EE000AD7321 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8AC018D28EE000AD7321 /* UIKit.framework */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
-		964C8AC918D28EE000AD7321 /* URRArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URRArchiveTests.m */; };
+		964C8AC918D28EE000AD7321 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
 		964C8AD218D28F3500AD7321 /* Test Data in CopyFiles */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		9685411118DBA06000B5651B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
-		9685413218DBA13200B5651B /* URRArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URRArchive.mm */; };
+		9685413218DBA13200B5651B /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 		9685413318DBA16300B5651B /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0818DB722E00B5651B /* archive.cpp */; };
 		9685413418DBA16300B5651B /* arcread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0A18DB722E00B5651B /* arcread.cpp */; };
 		9685413618DBA16300B5651B /* cmddata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0D18DB722E00B5651B /* cmddata.cpp */; };
@@ -59,7 +59,7 @@
 		9685416418DBA16300B5651B /* unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7718DB722E00B5651B /* unicode.cpp */; };
 		9685416618DBA16300B5651B /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; };
 		9685416A18DBA16300B5651B /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; };
-		9685417018DBA43A00B5651B /* URRArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 489CFA0E128B5169005DCC2A /* URRArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9685417018DBA43A00B5651B /* URKArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 489CFA0E128B5169005DCC2A /* URKArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9685417118DBA58F00B5651B /* archive.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F0918DB722E00B5651B /* archive.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		9685417218DBA58F00B5651B /* array.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F0B18DB722E00B5651B /* array.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		9685417318DBA58F00B5651B /* cmddata.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F0E18DB722E00B5651B /* cmddata.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -161,7 +161,7 @@
 		968541D418DC7BDA00B5651B /* unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7718DB722E00B5651B /* unicode.cpp */; };
 		968541D518DC7BDA00B5651B /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; };
 		968541D618DC7BDA00B5651B /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; };
-		968541D718DC7BF800B5651B /* URRArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URRArchive.mm */; };
+		968541D718DC7BF800B5651B /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -170,7 +170,7 @@
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 9685410F18DBA06000B5651B;
-			remoteInfo = Unrar4iOS;
+			remoteInfo = UnrarKit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -197,18 +197,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		489CFA0E128B5169005DCC2A /* URRArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URRArchive.h; sourceTree = "<group>"; };
-		489CFA0F128B5169005DCC2A /* URRArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = URRArchive.mm; sourceTree = "<group>"; };
-		964C8ABB18D28EE000AD7321 /* Unrar4iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unrar4iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		489CFA0E128B5169005DCC2A /* URKArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = URKArchive.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		489CFA0F128B5169005DCC2A /* URKArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = URKArchive.mm; sourceTree = "<group>"; };
+		964C8ABB18D28EE000AD7321 /* UnrarKit Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "UnrarKit Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		964C8ABC18D28EE000AD7321 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		964C8ABE18D28EE000AD7321 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		964C8AC018D28EE000AD7321 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		964C8AC418D28EE000AD7321 /* Unrar4iOS Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unrar4iOS Tests-Info.plist"; sourceTree = "<group>"; };
+		964C8AC418D28EE000AD7321 /* UnrarKit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnrarKit Tests-Info.plist"; sourceTree = "<group>"; };
 		964C8AC618D28EE000AD7321 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		964C8AC818D28EE000AD7321 /* URRArchiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URRArchiveTests.m; sourceTree = "<group>"; };
-		964C8ACA18D28EE000AD7321 /* Unrar4iOS Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Unrar4iOS Tests-Prefix.pch"; sourceTree = "<group>"; };
+		964C8AC818D28EE000AD7321 /* URKArchiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URKArchiveTests.m; sourceTree = "<group>"; };
+		964C8ACA18D28EE000AD7321 /* UnrarKit Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnrarKit Tests-Prefix.pch"; sourceTree = "<group>"; };
 		964C8AD018D28F1600AD7321 /* Test Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Test Data"; sourceTree = "<group>"; };
-		96853ED418DB707000B5651B /* Unrar4iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unrar4iOS-Info.plist"; sourceTree = "<group>"; };
+		96853ED418DB707000B5651B /* UnrarKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnrarKit-Info.plist"; sourceTree = "<group>"; };
 		96853EDC18DB71CD00B5651B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		96853EDF18DB71CD00B5651B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		96853EE018DB71CD00B5651B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -343,8 +343,8 @@
 		96853F8518DB722F00B5651B /* win32stm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = win32stm.cpp; sourceTree = "<group>"; };
 		968540F418DB78A400B5651B /* Unrar4Mac-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unrar4Mac-Info.plist"; sourceTree = "<group>"; };
 		968540F518DB87F500B5651B /* Unrar4Mac_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Unrar4Mac_Prefix.pch; sourceTree = "<group>"; };
-		9685411018DBA06000B5651B /* libUnrar4iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnrar4iOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA747D9E0F9514B9006C5449 /* Unrar4iOS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Unrar4iOS_Prefix.pch; sourceTree = "<group>"; };
+		9685411018DBA06000B5651B /* libUnrarKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnrarKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA747D9E0F9514B9006C5449 /* UnrarKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKit_Prefix.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -372,13 +372,13 @@
 		034768DFFF38A50411DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9685411018DBA06000B5651B /* libUnrar4iOS.a */,
-				964C8ABB18D28EE000AD7321 /* Unrar4iOS Tests.xctest */,
+				9685411018DBA06000B5651B /* libUnrarKit.a */,
+				964C8ABB18D28EE000AD7321 /* UnrarKit Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0867D691FE84028FC02AAC07 /* Unrar4iOS */ = {
+		0867D691FE84028FC02AAC07 /* UnrarKit */ = {
 			isa = PBXGroup;
 			children = (
 				96853ED318DB704900B5651B /* Resources */,
@@ -389,7 +389,7 @@
 				034768DFFF38A50411DB9C8B /* Products */,
 				96853F0418DB722E00B5651B /* Libraries */,
 			);
-			name = Unrar4iOS;
+			name = UnrarKit;
 			sourceTree = "<group>";
 		};
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
@@ -407,8 +407,8 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				489CFA0E128B5169005DCC2A /* URRArchive.h */,
-				489CFA0F128B5169005DCC2A /* URRArchive.mm */,
+				489CFA0E128B5169005DCC2A /* URKArchive.h */,
+				489CFA0F128B5169005DCC2A /* URKArchive.mm */,
 			);
 			path = Classes;
 			sourceTree = SOURCE_ROOT;
@@ -416,7 +416,7 @@
 		32C88DFF0371C24200C91783 /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				AA747D9E0F9514B9006C5449 /* Unrar4iOS_Prefix.pch */,
+				AA747D9E0F9514B9006C5449 /* UnrarKit_Prefix.pch */,
 				968540F518DB87F500B5651B /* Unrar4Mac_Prefix.pch */,
 			);
 			name = "Other Sources";
@@ -427,7 +427,7 @@
 			isa = PBXGroup;
 			children = (
 				964C8AD018D28F1600AD7321 /* Test Data */,
-				964C8AC818D28EE000AD7321 /* URRArchiveTests.m */,
+				964C8AC818D28EE000AD7321 /* URKArchiveTests.m */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
 			);
 			path = Tests;
@@ -436,9 +436,9 @@
 		964C8AC318D28EE000AD7321 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				964C8AC418D28EE000AD7321 /* Unrar4iOS Tests-Info.plist */,
+				964C8AC418D28EE000AD7321 /* UnrarKit Tests-Info.plist */,
 				964C8AC518D28EE000AD7321 /* InfoPlist.strings */,
-				964C8ACA18D28EE000AD7321 /* Unrar4iOS Tests-Prefix.pch */,
+				964C8ACA18D28EE000AD7321 /* UnrarKit Tests-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -446,7 +446,7 @@
 		96853ED318DB704900B5651B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				96853ED418DB707000B5651B /* Unrar4iOS-Info.plist */,
+				96853ED418DB707000B5651B /* UnrarKit-Info.plist */,
 				968540F418DB78A400B5651B /* Unrar4Mac-Info.plist */,
 			);
 			path = Resources;
@@ -612,7 +612,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9685417018DBA43A00B5651B /* URRArchive.h in Headers */,
+				9685417018DBA43A00B5651B /* URKArchive.h in Headers */,
 				9685417118DBA58F00B5651B /* archive.hpp in Headers */,
 				9685417218DBA58F00B5651B /* array.hpp in Headers */,
 				9685417318DBA58F00B5651B /* cmddata.hpp in Headers */,
@@ -676,9 +676,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		964C8ABA18D28EE000AD7321 /* Unrar4iOS Tests */ = {
+		964C8ABA18D28EE000AD7321 /* UnrarKit Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "Unrar4iOS Tests" */;
+			buildConfigurationList = 964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "UnrarKit Tests" */;
 			buildPhases = (
 				964C8AB718D28EE000AD7321 /* Sources */,
 				964C8AB818D28EE000AD7321 /* Frameworks */,
@@ -690,14 +690,14 @@
 			dependencies = (
 				968541D918DC81F500B5651B /* PBXTargetDependency */,
 			);
-			name = "Unrar4iOS Tests";
-			productName = "Unrar4iOS Tests";
-			productReference = 964C8ABB18D28EE000AD7321 /* Unrar4iOS Tests.xctest */;
+			name = "UnrarKit Tests";
+			productName = "UnrarKit Tests";
+			productReference = 964C8ABB18D28EE000AD7321 /* UnrarKit Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		9685410F18DBA06000B5651B /* Unrar4iOS */ = {
+		9685410F18DBA06000B5651B /* UnrarKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9685412C18DBA06100B5651B /* Build configuration list for PBXNativeTarget "Unrar4iOS" */;
+			buildConfigurationList = 9685412C18DBA06100B5651B /* Build configuration list for PBXNativeTarget "UnrarKit" */;
 			buildPhases = (
 				9685410C18DBA06000B5651B /* Sources */,
 				9685410D18DBA06000B5651B /* Frameworks */,
@@ -708,9 +708,9 @@
 			);
 			dependencies = (
 			);
-			name = Unrar4iOS;
-			productName = Unrar4iOS;
-			productReference = 9685411018DBA06000B5651B /* libUnrar4iOS.a */;
+			name = UnrarKit;
+			productName = UnrarKit;
+			productReference = 9685411018DBA06000B5651B /* libUnrarKit.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -726,7 +726,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "Unrar4iOS" */;
+			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "UnrarKit" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -737,13 +737,13 @@
 				German,
 				en,
 			);
-			mainGroup = 0867D691FE84028FC02AAC07 /* Unrar4iOS */;
+			mainGroup = 0867D691FE84028FC02AAC07 /* UnrarKit */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9685410F18DBA06000B5651B /* Unrar4iOS */,
-				964C8ABA18D28EE000AD7321 /* Unrar4iOS Tests */,
+				9685410F18DBA06000B5651B /* UnrarKit */,
+				964C8ABA18D28EE000AD7321 /* UnrarKit Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -779,7 +779,7 @@
 				968541CA18DC7BDA00B5651B /* savepos.cpp in Sources */,
 				968541B918DC7BDA00B5651B /* filestr.cpp in Sources */,
 				968541B118DC7BDA00B5651B /* dll.cpp in Sources */,
-				964C8AC918D28EE000AD7321 /* URRArchiveTests.m in Sources */,
+				964C8AC918D28EE000AD7321 /* URKArchiveTests.m in Sources */,
 				968541C718DC7BDA00B5651B /* resource.cpp in Sources */,
 				968541D418DC7BDA00B5651B /* unicode.cpp in Sources */,
 				968541D118DC7BDA00B5651B /* system.cpp in Sources */,
@@ -807,7 +807,7 @@
 				968541C918DC7BDA00B5651B /* rs.cpp in Sources */,
 				968541B618DC7BDA00B5651B /* filcreat.cpp in Sources */,
 				968541D518DC7BDA00B5651B /* unpack.cpp in Sources */,
-				968541D718DC7BF800B5651B /* URRArchive.mm in Sources */,
+				968541D718DC7BF800B5651B /* URKArchive.mm in Sources */,
 				968541B518DC7BDA00B5651B /* extract.cpp in Sources */,
 				968541BA18DC7BDA00B5651B /* find.cpp in Sources */,
 			);
@@ -855,7 +855,7 @@
 				9685413818DBA16300B5651B /* consio.cpp in Sources */,
 				9685416318DBA16300B5651B /* ulinks.cpp in Sources */,
 				9685415E18DBA16300B5651B /* strfn.cpp in Sources */,
-				9685413218DBA13200B5651B /* URRArchive.mm in Sources */,
+				9685413218DBA13200B5651B /* URKArchive.mm in Sources */,
 				9685415718DBA16300B5651B /* rijndael.cpp in Sources */,
 				9685415F18DBA16300B5651B /* strlist.cpp in Sources */,
 				9685414218DBA16300B5651B /* filefn.cpp in Sources */,
@@ -870,7 +870,7 @@
 /* Begin PBXTargetDependency section */
 		968541D918DC81F500B5651B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9685410F18DBA06000B5651B /* Unrar4iOS */;
+			target = 9685410F18DBA06000B5651B /* UnrarKit */;
 			targetProxy = 968541D818DC81F500B5651B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -939,7 +939,7 @@
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Tests/Unrar4iOS Tests-Prefix.pch";
+				GCC_PREFIX_HEADER = "Tests/UnrarKit Tests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -950,7 +950,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(BUILT_PRODUCTS_DIR)/../../Headers",
 				);
-				INFOPLIST_FILE = "Tests/Unrar4iOS Tests-Info.plist";
+				INFOPLIST_FILE = "Tests/UnrarKit Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -980,13 +980,13 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Tests/Unrar4iOS Tests-Prefix.pch";
+				GCC_PREFIX_HEADER = "Tests/UnrarKit Tests-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(BUILT_PRODUCTS_DIR)/../../Headers",
 				);
-				INFOPLIST_FILE = "Tests/Unrar4iOS Tests-Info.plist";
+				INFOPLIST_FILE = "Tests/UnrarKit Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1018,14 +1018,14 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DSTROOT = /tmp/Unrar4iOS.dst;
+				DSTROOT = /tmp/UnrarKit.dst;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Other/Unrar4iOS_Prefix.pch;
+				GCC_PREFIX_HEADER = Other/UnrarKit_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1039,7 +1039,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/Unrar4iOS;
+				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/UnrarKit;
 				SKIP_INSTALL = YES;
 				WARNING_CFLAGS = (
 					"-Wno-dangling-else",
@@ -1069,14 +1069,14 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/Unrar4iOS.dst;
+				DSTROOT = /tmp/UnrarKit.dst;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Other/Unrar4iOS_Prefix.pch;
+				GCC_PREFIX_HEADER = Other/UnrarKit_Prefix.pch;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1085,7 +1085,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/Unrar4iOS;
+				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/UnrarKit;
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
 				WARNING_CFLAGS = (
@@ -1104,7 +1104,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "Unrar4iOS" */ = {
+		1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "UnrarKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB922308733DC00010E9CD /* Debug */,
@@ -1113,7 +1113,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "Unrar4iOS Tests" */ = {
+		964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "UnrarKit Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				964C8ACD18D28EE000AD7321 /* Debug */,
@@ -1122,7 +1122,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9685412C18DBA06100B5651B /* Build configuration list for PBXNativeTarget "Unrar4iOS" */ = {
+		9685412C18DBA06100B5651B /* Build configuration list for PBXNativeTarget "UnrarKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9685412D18DBA06100B5651B /* Debug */,

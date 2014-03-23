@@ -1,17 +1,15 @@
 //
-//  URRArchive.mm
-//  Unrar4iOS
+//  URKArchive.mm
+//  UnrarKit
 //
-//  Created by Dov Frankel on 03/21/14.
-//  Copyright 2014 Abbey Code. All rights reserved.
 //
 
-#import "URRArchive.h"
+#import "URKArchive.h"
 
 
-NSString *URRErrorDomain = @"URRErrorDomain";
+NSString *URKErrorDomain = @"URKErrorDomain";
 
-@implementation URRArchive
+@implementation URKArchive
 
 int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 	UInt8 **buffer;
@@ -37,27 +35,27 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 #pragma mark - Convenience Methods
 
 
-+ (URRArchive *)rarArchiveAtPath:(NSString *)filePath;
++ (URKArchive *)rarArchiveAtPath:(NSString *)filePath;
 {
-    URRArchive *result = [[URRArchive alloc] initWithFile:filePath];
+    URKArchive *result = [[URKArchive alloc] initWithFile:filePath];
     return [result autorelease];
 }
 
-+ (URRArchive *)rarArchiveAtURL:(NSURL *)fileURL;
++ (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL;
 {
-    URRArchive *result = [[URRArchive alloc] initWithFile:fileURL.path];
+    URKArchive *result = [[URKArchive alloc] initWithFile:fileURL.path];
     return [result autorelease];
 }
 
-+ (URRArchive *)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password;
++ (URKArchive *)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password;
 {
-    URRArchive *result = [[URRArchive alloc] initWithFile:filePath password:password];
+    URKArchive *result = [[URKArchive alloc] initWithFile:filePath password:password];
     return [result autorelease];
 }
 
-+ (URRArchive *)rarArchiveAtURL:(NSURL *)fileURL password:(NSString *)password;
++ (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL password:(NSString *)password;
 {
-    URRArchive *result = [[URRArchive alloc] initWithFile:fileURL.path password:password];
+    URKArchive *result = [[URKArchive alloc] initWithFile:fileURL.path password:password];
     return [result autorelease];
 }
 
@@ -328,7 +326,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     if (error) {
         NSString *errorName = [self errorNameForErrorCode:errorCode];
         
-        *error = [NSError errorWithDomain:URRErrorDomain
+        *error = [NSError errorWithDomain:URKErrorDomain
                                      code:errorCode
                                  userInfo:@{NSUnderlyingErrorKey: errorName}];
     }

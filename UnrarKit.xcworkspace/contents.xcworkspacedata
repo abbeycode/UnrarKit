@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Unrar4iOS.xcodeproj">
+      location = "group:UnrarKit.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Example/UnrarExample.xcodeproj">

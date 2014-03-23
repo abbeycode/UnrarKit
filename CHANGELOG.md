@@ -1,4 +1,4 @@
-# Unrar4iOS CHANGELOG
+# UnrarKit CHANGELOG
 
 ## 0.1.0
 

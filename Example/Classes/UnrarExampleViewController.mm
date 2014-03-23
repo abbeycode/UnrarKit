@@ -2,12 +2,10 @@
 //  UnrarExampleViewController.m
 //  UnrarExample
 //
-//  Created by Rogerio Pereira Araujo on 08/11/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
 #import "UnrarExampleViewController.h"
-#import <Unrar4iOS/URRArchive.h>
+#import <UnrarKit/URKArchive.h>
 
 @implementation UnrarExampleViewController
 
@@ -49,13 +47,13 @@
 	//NSString *filePath = [[NSBundle mainBundle] pathForResource:@"not_protected" ofType:@"cbr"]; 
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"protected" ofType:@"cbr"]; 
 
-	URRArchive *archive = [URRArchive rarArchiveAtPath:filePath];
+	URKArchive *archive = [URKArchive rarArchiveAtPath:filePath];
     NSError *error = nil;
-    NSArray *files = [unrar listFiles:&error];
+    NSArray *files = [archive listFiles:&error];
     
 	if (error) {
         NSLog(@"Error reading archive: %@", error);
-        [unrar closeFile];
+        [archive closeFile];
         return;
     }
     
@@ -77,7 +75,7 @@
         imageView.image = image;
     }
     
-    [unrar closeFile];
+    [archive closeFile];
 }
 
 - (void)didReceiveMemoryWarning {

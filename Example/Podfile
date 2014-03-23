@@ -1,4 +1,4 @@
-pod "Unrar4iOS", :path => "../Unrar4iOS.podspec"
+pod "UnrarKit", :path => "../UnrarKit.podspec"
 
 target "Demo" do
 end
@@ -7,13 +7,13 @@ target "DemoTests" do
 end
 
 post_install do |installer_representation|
-    puts 'Removing unwanted compilation sources from Unrar4iOS'
+    puts 'Removing unwanted compilation sources from UnrarKit'
 
-    excluded_files = File.readlines('Pods/Unrar4iOS/Resources/ExcludedBuildFiles.txt')
+    excluded_files = File.readlines('Pods/UnrarKit/Resources/ExcludedBuildFiles.txt')
     excluded_files.each {|file| file.strip!}
 
     installer_representation.project.targets.each do |target|
-        if target.name.end_with? 'Unrar4iOS'
+        if target.name.end_with? 'UnrarKit'
             files_to_remove = target.source_build_phase.files.find_all do |file|
                 excluded_files.include? file.display_name
             end
