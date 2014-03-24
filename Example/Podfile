@@ -5,20 +5,3 @@ end
 
 target "DemoTests" do
 end
-
-post_install do |installer_representation|
-    puts 'Removing unwanted compilation sources from UnrarKit'
-
-    excluded_files = File.readlines('Pods/UnrarKit/Resources/ExcludedBuildFiles.txt')
-    excluded_files.each {|file| file.strip!}
-
-    installer_representation.project.targets.each do |target|
-        if target.name.end_with? 'UnrarKit'
-            files_to_remove = target.source_build_phase.files.find_all do |file|
-                excluded_files.include? file.display_name
-            end
-
-            files_to_remove.each{|file| target.source_build_phase.remove_file_reference(file.file_ref)}
-        end
-    end
-end
