@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.license       = "BSD"
   s.homepage      = "https://github.com/abbeycode/UnrarKit"
   s.author        = { "Dov Frankel" => "dov@abbey-code.com" }
-  s.source        = { :git => "https://github.com/abbeycode/UnrarKit.git", :tag => "2.0.3" }
+  s.source        = { :git => "https://github.com/abbeycode/UnrarKit.git", :tag => "#{s.version}" }
   s.ios.deployment_target = "5.0"
   s.osx.deployment_target = "10.7"
   s.source_files = "Classes/*.{mm,m,h}",
