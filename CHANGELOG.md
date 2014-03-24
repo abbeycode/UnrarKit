@@ -11,3 +11,7 @@ First release in CocoaPods spec repo
 ## 2.0.3
 
 Fixed podspec so compiled output is correct
+
+## 2.0.4
+
+Updated podspec to read Git tag, rather than hardcoding it
