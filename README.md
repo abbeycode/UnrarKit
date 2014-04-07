@@ -11,7 +11,7 @@ I'm always open to improvements, so please submit your pull requests.
 
 UnrarKit has been converted to a CocoaPods project. If you're not familiar with [CocoaPods](http://cocoapods.org), you can start with their [Getting Started guide](http://guides.cocoapods.org/using/getting-started.html).
 
-I've included a sample [`podfile`](Example/Podfile) in the Example directory along with the sample project. Because of the way the `unrar` library (which `UnrarKit` wraps) was written[1], the CocoaPods installation isn't as straightforward as it should be. As long as you include the `post_install` hook in your `podfile`, everything should still install with the single command:
+I've included a sample [`podfile`](Example/Podfile) in the Example directory along with the sample project. Everything should install with the single command:
 
     pod install
 
@@ -27,5 +27,3 @@ To open in Xcode, use the [UnrarKit.xcworkspace](UnrarKit.xcworkspace) file, whi
 * Rogerio Pereira Araujo (rogerio.araujo@gmail.com)
 * Vicent Scott (vkan388@gmail.com)
 * Dov Frankel (dov@abbey-code.com)
-
-[1]: Some cpp files need to be downloaded, but can't be listed in the build phase. They have to be included in the build by includes in other files.
