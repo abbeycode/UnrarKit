@@ -124,7 +124,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     
 	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
         if ([self headerContainsErrors:error]) {
-            return nil;
+            return NO;
         }
 
         if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *)[filePath UTF8String], NULL)) != 0) {
@@ -137,7 +137,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     switch (RHCode) {
         case ERAR_MISSING_PASSWORD:
             [self assignError:error code:ERAR_MISSING_PASSWORD];
-            return nil;
+            return NO;
     }
     
     return YES;
