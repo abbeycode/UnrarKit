@@ -9,10 +9,7 @@
 /* Begin PBXBuildFile section */
 		964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABC18D28EE000AD7321 /* XCTest.framework */; };
 		964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
-		964C8AC118D28EE000AD7321 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8AC018D28EE000AD7321 /* UIKit.framework */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
-		964C8AC918D28EE000AD7321 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
-		964C8AD218D28F3500AD7321 /* Test Data in CopyFiles */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		9685411118DBA06000B5651B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		9685413218DBA13200B5651B /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 		9685413318DBA16300B5651B /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0818DB722E00B5651B /* archive.cpp */; };
@@ -161,7 +158,9 @@
 		968541D418DC7BDA00B5651B /* unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7718DB722E00B5651B /* unicode.cpp */; };
 		968541D518DC7BDA00B5651B /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; };
 		968541D618DC7BDA00B5651B /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; };
-		968541D718DC7BF800B5651B /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
+		96E5D345198B333200A74340 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
+		96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
+		96E5D347198B334500A74340 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -181,7 +180,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 1;
 			files = (
-				964C8AD218D28F3500AD7321 /* Test Data in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,7 +351,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */,
-				964C8AC118D28EE000AD7321 /* UIKit.framework in Frameworks */,
 				964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -754,6 +751,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */,
+				96E5D345198B333200A74340 /* Test Data in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,11 +803,11 @@
 				968541D118DC7BDA00B5651B /* system.cpp in Sources */,
 				968541D218DC7BDA00B5651B /* timefn.cpp in Sources */,
 				968541D318DC7BDA00B5651B /* ulinks.cpp in Sources */,
+				96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */,
 				968541D418DC7BDA00B5651B /* unicode.cpp in Sources */,
 				968541D518DC7BDA00B5651B /* unpack.cpp in Sources */,
 				968541D618DC7BDA00B5651B /* volume.cpp in Sources */,
-				968541D718DC7BF800B5651B /* URKArchive.mm in Sources */,
-				964C8AC918D28EE000AD7321 /* URKArchiveTests.m in Sources */,
+				96E5D347198B334500A74340 /* URKArchive.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -933,9 +931,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -952,8 +949,8 @@
 				);
 				INFOPLIST_FILE = "Tests/UnrarKit Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WARNING_CFLAGS = (
 					"-Wno-dangling-else",
@@ -973,11 +970,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/UnrarKit Tests-Prefix.pch";
@@ -988,10 +985,9 @@
 				);
 				INFOPLIST_FILE = "Tests/UnrarKit Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				VALIDATE_PRODUCT = YES;
 				WARNING_CFLAGS = (
 					"-Wno-dangling-else",
 					"-Wno-parentheses",

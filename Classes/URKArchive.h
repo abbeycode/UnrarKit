@@ -48,6 +48,4 @@ extern NSString *URKErrorDomain;
 - (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error;
 - (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
 
-- (BOOL)closeFile;
-
 @end

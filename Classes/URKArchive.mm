@@ -93,25 +93,30 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         return nil;
     }
 	
-	NSMutableArray *files = [NSMutableArray array];
-    
-    while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-        NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
-        [files addObject:filename];
+    @try {
+        NSMutableArray *files = [NSMutableArray array];
         
-        if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
-            [self assignError:error code:(NSInteger)PFCode];
-            return nil;
+        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
+            [files addObject:filename];
+            
+            if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                [self assignError:error code:(NSInteger)PFCode];
+                return nil;
+            }
+        }
+        
+        switch (RHCode) {
+            case ERAR_MISSING_PASSWORD:
+                [self assignError:error code:ERAR_MISSING_PASSWORD];
+                return nil;
+                
+            default:
+                return files;
         }
     }
-
-    switch (RHCode) {
-        case ERAR_MISSING_PASSWORD:
-            [self assignError:error code:ERAR_MISSING_PASSWORD];
-            return nil;
-            
-        default:
-            return files;
+    @finally {
+        [self closeFile];
     }
 }
 
@@ -119,28 +124,36 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 {
     int RHCode = 0, PFCode = 0;
     
-    if (![self _unrarOpenFile:_filename inMode:RAR_OM_EXTRACT withPassword:_password error:error])
+    if (![self _unrarOpenFile:_filename
+                       inMode:RAR_OM_EXTRACT
+                 withPassword:_password
+                        error:error])
         return NO;
     
-	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-        if ([self headerContainsErrors:error]) {
-            return NO;
-        }
-
-        if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *)[filePath UTF8String], NULL)) != 0) {
-            [self assignError:error code:(NSInteger)PFCode];
-            return NO;
+    @try {
+        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+            if ([self headerContainsErrors:error]) {
+                return NO;
+            }
+            
+            if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *)[filePath UTF8String], NULL)) != 0) {
+                [self assignError:error code:(NSInteger)PFCode];
+                return NO;
+            }
+            
         }
         
+        switch (RHCode) {
+            case ERAR_MISSING_PASSWORD:
+                [self assignError:error code:ERAR_MISSING_PASSWORD];
+                return NO;
+        }
+        
+        return YES;
     }
-    
-    switch (RHCode) {
-        case ERAR_MISSING_PASSWORD:
-            [self assignError:error code:ERAR_MISSING_PASSWORD];
-            return NO;
+    @finally {
+        [self closeFile];
     }
-    
-    return YES;
 }
 
 - (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
@@ -158,50 +171,55 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         return nil;
     }
 	
-	size_t length = 0;
-	while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-        if ([self headerContainsErrors:error]) {
+    @try {
+        size_t length = 0;
+        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+            if ([self headerContainsErrors:error]) {
+                return nil;
+            }
+            
+            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
+            
+            if ([filename isEqualToString:filePath]) {
+                length = header->UnpSize;
+                break;
+            }
+            else {
+                if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                    [self assignError:error code:(NSInteger)PFCode];
+                    return nil;
+                }
+            }
+        }
+        
+        switch (RHCode) {
+            case ERAR_MISSING_PASSWORD:
+                [self assignError:error code:ERAR_MISSING_PASSWORD];
+                return nil;
+        }
+        
+        if (length == 0) {
+            [self assignError:error code:ERAR_ARCHIVE_NOT_FOUND];
             return nil;
         }
         
-		NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
+        UInt8 *buffer = (UInt8 *)malloc(length * sizeof(UInt8));
+        UInt8 *callBackBuffer = buffer;
         
-		if ([filename isEqualToString:filePath]) {
-			length = header->UnpSize;
-			break;
-		}
-		else {
-			if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
-                [self assignError:error code:(NSInteger)PFCode];
-                return nil;
-			}
-		}
-	}
-	   
-    switch (RHCode) {
-        case ERAR_MISSING_PASSWORD:
-            [self assignError:error code:ERAR_MISSING_PASSWORD];
+        RARSetCallback(_rarFile, CallbackProc, (long) &callBackBuffer);
+        
+        PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        
+        if (PFCode != 0) {
+            [self assignError:error code:(NSInteger)PFCode];
             return nil;
+        }
+        
+        return [NSData dataWithBytesNoCopy:buffer length:length freeWhenDone:YES];
     }
-
-	if (length == 0) {
-        [self assignError:error code:ERAR_ARCHIVE_NOT_FOUND];
-		return nil;
-	}
-	
-	UInt8 *buffer = (UInt8 *)malloc(length * sizeof(UInt8));
-	UInt8 *callBackBuffer = buffer;
-	
-	RARSetCallback(_rarFile, CallbackProc, (long) &callBackBuffer);
-	
-	PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
-
-    if (PFCode != 0) {
-        [self assignError:error code:(NSInteger)PFCode];
-        return nil;
+    @finally {
+        [self closeFile];
     }
-    
-    return [NSData dataWithBytesNoCopy:buffer length:length freeWhenDone:YES];
 }
 
 - (BOOL)closeFile;
