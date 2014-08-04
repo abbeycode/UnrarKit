@@ -18,7 +18,7 @@ I've included a sample [`podfile`](Example/Podfile) in the Example directory alo
 
 # Notes
 
-Since UnrarKit uses C++ libraries, you will need to change the extension of classes that use UnrarKit to .mm. This will include libstdc++ in the linking stage. If you would like to keep your extension .m (though I'm not sure what the advantage would be), you will need to add libstdc++ to the linker flags in your application.
+Since UnrarKit uses C++ libraries, you will need to change the extension of classes that use UnrarKit to `.mm`. This will include `libstdc++` in the linking stage. If you would like to keep your extension `.m` (though I'm not sure what the advantage would be), you will need to add `libstdc++` to the linker flags in your application.
 
 To open in Xcode, use the [UnrarKit.xcworkspace](UnrarKit.xcworkspace) file, which includes the other projects.
 
