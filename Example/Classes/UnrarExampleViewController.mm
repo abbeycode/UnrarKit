@@ -53,7 +53,6 @@
     
 	if (error) {
         NSLog(@"Error reading archive: %@", error);
-        [archive closeFile];
         return;
     }
     
@@ -74,8 +73,6 @@
         UIImage *image = [UIImage imageWithData:data];
         imageView.image = image;
     }
-    
-    [archive closeFile];
 }
 
 - (void)didReceiveMemoryWarning {
