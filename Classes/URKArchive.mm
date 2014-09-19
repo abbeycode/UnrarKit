@@ -346,7 +346,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         
         *error = [NSError errorWithDomain:URKErrorDomain
                                      code:errorCode
-                                 userInfo:@{NSUnderlyingErrorKey: errorName}];
+                                 userInfo:@{NSLocalizedFailureReasonErrorKey: errorName}];
     }
     
     return NO;
