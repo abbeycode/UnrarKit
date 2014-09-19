@@ -13,6 +13,7 @@
 
 @property (copy) NSURL *tempDirectory;
 @property (retain) NSMutableDictionary *testFileURLs;
+@property NSURL *corruptArchive;
 
 @end
 
@@ -71,6 +72,15 @@
         
         [self.testFileURLs setObject:destinationURL forKey:file];
     }
+    
+    // Make a "corrupt" rar file
+    NSURL *m4aFileURL = [self urlOfTestFile:testFiles[5]];
+    self.corruptArchive = [self.tempDirectory URLByAppendingPathComponent:@"corrupt.rar"];
+    [fm copyItemAtURL:m4aFileURL
+                toURL:self.corruptArchive
+                error:&error];
+    
+    XCTAssertNil(error, @"Failed to create corrupt archive (copy from %@ to %@)", m4aFileURL, self.corruptArchive);
 }
 
 - (void)tearDown
@@ -413,6 +423,15 @@
     NSInteger finalFileCount = [self numberOfOpenFileHandles];
     
     XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 1, @"File descriptors were left open");
+}
+
+- (void)testErrorIsCorrect
+{
+    NSError *error = nil;
+    URKArchive *archive = [URKArchive rarArchiveAtURL:self.corruptArchive];
+    XCTAssertNil([archive listFiles:&error], "Listing files in corrupt archive should return nil");
+    XCTAssertNotNil(error, @"An error should be returned when listing files in a corrupt archive");
+    XCTAssertNotNil(error.description, @"Error's description is nil");
 }
 
 
