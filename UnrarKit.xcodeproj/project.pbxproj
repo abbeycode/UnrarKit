@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		96370FDF19ED925E00DAF8F1 /* sha256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCF19ED8BB200DAF8F1 /* sha256.cpp */; };
+		96370FE019ED926F00DAF8F1 /* blake2s.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FB419ED8A8200DAF8F1 /* blake2s.cpp */; };
+		96370FE119ED928C00DAF8F1 /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC419ED8B0400DAF8F1 /* hash.cpp */; };
+		96370FE219ED92B700DAF8F1 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; };
+		96370FE319ED92C400DAF8F1 /* threadpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD219ED8C6100DAF8F1 /* threadpool.cpp */; };
+		96370FE419ED92D800DAF8F1 /* rs16.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCD19ED8B9700DAF8F1 /* rs16.cpp */; };
+		96370FE519ED92E000DAF8F1 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD419ED8C8000DAF8F1 /* ui.cpp */; };
+		96370FE619ED931100DAF8F1 /* filestr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2A18DB722E00B5651B /* filestr.cpp */; };
+		96370FE719ED931A00DAF8F1 /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5918DB722E00B5651B /* recvol.cpp */; };
+		96370FE819ED932200DAF8F1 /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5F18DB722E00B5651B /* rs.cpp */; };
+		96370FE919ED932900DAF8F1 /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; };
+		96370FEA19ED933100DAF8F1 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; };
+		96370FEB19ED934B00DAF8F1 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; };
 		964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABC18D28EE000AD7321 /* XCTest.framework */; };
 		964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
@@ -18,7 +31,6 @@
 		9685413818DBA16300B5651B /* consio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1218DB722E00B5651B /* consio.cpp */; };
 		9685413918DBA16300B5651B /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1418DB722E00B5651B /* crc.cpp */; };
 		9685413A18DBA16300B5651B /* crypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1618DB722E00B5651B /* crypt.cpp */; };
-		9685413B18DBA16300B5651B /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; };
 		9685413C18DBA16300B5651B /* encname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1C18DB722E00B5651B /* encname.cpp */; };
 		9685413D18DBA16300B5651B /* errhnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1E18DB722E00B5651B /* errhnd.cpp */; };
 		9685413E18DBA16300B5651B /* extinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2018DB722E00B5651B /* extinfo.cpp */; };
@@ -26,7 +38,6 @@
 		9685414018DBA16300B5651B /* filcreat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2418DB722E00B5651B /* filcreat.cpp */; };
 		9685414118DBA16300B5651B /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2618DB722E00B5651B /* file.cpp */; };
 		9685414218DBA16300B5651B /* filefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2818DB722E00B5651B /* filefn.cpp */; };
-		9685414318DBA16300B5651B /* filestr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2A18DB722E00B5651B /* filestr.cpp */; };
 		9685414418DBA16300B5651B /* find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2C18DB722E00B5651B /* find.cpp */; };
 		9685414518DBA16300B5651B /* getbits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2E18DB722E00B5651B /* getbits.cpp */; };
 		9685414618DBA16300B5651B /* global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3018DB722E00B5651B /* global.cpp */; };
@@ -39,12 +50,8 @@
 		9685415118DBA16300B5651B /* rarvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5118DB722E00B5651B /* rarvm.cpp */; };
 		9685415318DBA16300B5651B /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5418DB722E00B5651B /* rawread.cpp */; };
 		9685415418DBA16300B5651B /* rdwrfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5618DB722E00B5651B /* rdwrfn.cpp */; };
-		9685415518DBA16300B5651B /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5918DB722E00B5651B /* recvol.cpp */; };
 		9685415618DBA16300B5651B /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5B18DB722E00B5651B /* resource.cpp */; };
 		9685415718DBA16300B5651B /* rijndael.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5D18DB722E00B5651B /* rijndael.cpp */; };
-		9685415818DBA16300B5651B /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5F18DB722E00B5651B /* rs.cpp */; };
-		9685415918DBA16300B5651B /* savepos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6118DB722E00B5651B /* savepos.cpp */; };
-		9685415A18DBA16300B5651B /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; };
 		9685415B18DBA16300B5651B /* secpassword.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6518DB722E00B5651B /* secpassword.cpp */; };
 		9685415C18DBA16300B5651B /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6718DB722E00B5651B /* sha1.cpp */; };
 		9685415D18DBA16300B5651B /* smallfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6918DB722E00B5651B /* smallfn.cpp */; };
@@ -52,7 +59,6 @@
 		9685415F18DBA16300B5651B /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6D18DB722E00B5651B /* strlist.cpp */; };
 		9685416118DBA16300B5651B /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7118DB722E00B5651B /* system.cpp */; };
 		9685416218DBA16300B5651B /* timefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7318DB722E00B5651B /* timefn.cpp */; };
-		9685416318DBA16300B5651B /* ulinks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7518DB722E00B5651B /* ulinks.cpp */; };
 		9685416418DBA16300B5651B /* unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7718DB722E00B5651B /* unicode.cpp */; };
 		9685416618DBA16300B5651B /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; };
 		9685416A18DBA16300B5651B /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; };
@@ -145,7 +151,6 @@
 		968541C718DC7BDA00B5651B /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5B18DB722E00B5651B /* resource.cpp */; };
 		968541C818DC7BDA00B5651B /* rijndael.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5D18DB722E00B5651B /* rijndael.cpp */; };
 		968541C918DC7BDA00B5651B /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5F18DB722E00B5651B /* rs.cpp */; };
-		968541CA18DC7BDA00B5651B /* savepos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6118DB722E00B5651B /* savepos.cpp */; };
 		968541CB18DC7BDA00B5651B /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; };
 		968541CC18DC7BDA00B5651B /* secpassword.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6518DB722E00B5651B /* secpassword.cpp */; };
 		968541CD18DC7BDA00B5651B /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6718DB722E00B5651B /* sha1.cpp */; };
@@ -197,6 +202,41 @@
 /* Begin PBXFileReference section */
 		489CFA0E128B5169005DCC2A /* URKArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = URKArchive.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		489CFA0F128B5169005DCC2A /* URKArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = URKArchive.mm; sourceTree = "<group>"; };
+		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
+		96370FB419ED8A8200DAF8F1 /* blake2s.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s.cpp; sourceTree = "<group>"; };
+		96370FB519ED8A8200DAF8F1 /* blake2s.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = blake2s.hpp; sourceTree = "<group>"; };
+		96370FB619ED8A8200DAF8F1 /* blake2sp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2sp.cpp; sourceTree = "<group>"; };
+		96370FBB19ED8AAC00DAF8F1 /* crypt1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crypt1.cpp; sourceTree = "<group>"; };
+		96370FBC19ED8AAC00DAF8F1 /* crypt2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crypt2.cpp; sourceTree = "<group>"; };
+		96370FBD19ED8AAC00DAF8F1 /* crypt3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crypt3.cpp; sourceTree = "<group>"; };
+		96370FBE19ED8AAC00DAF8F1 /* crypt5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crypt5.cpp; sourceTree = "<group>"; };
+		96370FC319ED8ACF00DAF8F1 /* hardlinks.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hardlinks.cpp; sourceTree = "<group>"; };
+		96370FC419ED8B0400DAF8F1 /* hash.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hash.cpp; sourceTree = "<group>"; };
+		96370FC519ED8B0400DAF8F1 /* hash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = hash.hpp; sourceTree = "<group>"; };
+		96370FC619ED8B1F00DAF8F1 /* headers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = headers.cpp; sourceTree = "<group>"; };
+		96370FC819ED8B2B00DAF8F1 /* headers5.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = headers5.hpp; sourceTree = "<group>"; };
+		96370FC919ED8B4E00DAF8F1 /* qopen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = qopen.cpp; sourceTree = "<group>"; };
+		96370FCA19ED8B4E00DAF8F1 /* qopen.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = qopen.hpp; sourceTree = "<group>"; };
+		96370FCB19ED8B7900DAF8F1 /* recvol3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = recvol3.cpp; sourceTree = "<group>"; };
+		96370FCC19ED8B7900DAF8F1 /* recvol5.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = recvol5.cpp; sourceTree = "<group>"; };
+		96370FCD19ED8B9700DAF8F1 /* rs16.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rs16.cpp; sourceTree = "<group>"; };
+		96370FCE19ED8B9700DAF8F1 /* rs16.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = rs16.hpp; sourceTree = "<group>"; };
+		96370FCF19ED8BB200DAF8F1 /* sha256.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sha256.cpp; sourceTree = "<group>"; };
+		96370FD019ED8BB200DAF8F1 /* sha256.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sha256.hpp; sourceTree = "<group>"; };
+		96370FD119ED8BC800DAF8F1 /* threadmisc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = threadmisc.cpp; sourceTree = "<group>"; };
+		96370FD219ED8C6100DAF8F1 /* threadpool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = threadpool.cpp; sourceTree = "<group>"; };
+		96370FD319ED8C6100DAF8F1 /* threadpool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = threadpool.hpp; sourceTree = "<group>"; };
+		96370FD419ED8C8000DAF8F1 /* ui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ui.cpp; sourceTree = "<group>"; };
+		96370FD519ED8C8000DAF8F1 /* ui.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ui.hpp; sourceTree = "<group>"; };
+		96370FD619ED8C8000DAF8F1 /* uicommon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = uicommon.cpp; sourceTree = "<group>"; };
+		96370FD719ED8C8000DAF8F1 /* uiconsole.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = uiconsole.cpp; sourceTree = "<group>"; };
+		96370FD819ED8C8000DAF8F1 /* uisilent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = uisilent.cpp; sourceTree = "<group>"; };
+		96370FD919ED8CAE00DAF8F1 /* unpack30.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpack30.cpp; sourceTree = "<group>"; };
+		96370FDA19ED8CAE00DAF8F1 /* unpack50.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpack50.cpp; sourceTree = "<group>"; };
+		96370FDB19ED8CAE00DAF8F1 /* unpack50frag.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpack50frag.cpp; sourceTree = "<group>"; };
+		96370FDC19ED8CAE00DAF8F1 /* unpack50mt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpack50mt.cpp; sourceTree = "<group>"; };
+		96370FDD19ED8CAE00DAF8F1 /* unpackinline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpackinline.cpp; sourceTree = "<group>"; };
+		96370FDE19ED8CBF00DAF8F1 /* win32lnk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = win32lnk.cpp; sourceTree = "<group>"; };
 		964C8ABB18D28EE000AD7321 /* UnrarKit Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "UnrarKit Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		964C8ABC18D28EE000AD7321 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		964C8ABE18D28EE000AD7321 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -216,7 +256,6 @@
 		96853F0918DB722E00B5651B /* archive.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = archive.hpp; sourceTree = "<group>"; };
 		96853F0A18DB722E00B5651B /* arcread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = arcread.cpp; sourceTree = "<group>"; };
 		96853F0B18DB722E00B5651B /* array.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = array.hpp; sourceTree = "<group>"; };
-		96853F0C18DB722E00B5651B /* beosea.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = beosea.cpp; sourceTree = "<group>"; };
 		96853F0D18DB722E00B5651B /* cmddata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cmddata.cpp; sourceTree = "<group>"; };
 		96853F0E18DB722E00B5651B /* cmddata.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cmddata.hpp; sourceTree = "<group>"; };
 		96853F0F18DB722E00B5651B /* coder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = coder.cpp; sourceTree = "<group>"; };
@@ -266,11 +305,9 @@
 		96853F4018DB722E00B5651B /* match.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = match.hpp; sourceTree = "<group>"; };
 		96853F4118DB722E00B5651B /* model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = model.cpp; sourceTree = "<group>"; };
 		96853F4218DB722E00B5651B /* model.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = model.hpp; sourceTree = "<group>"; };
-		96853F4318DB722E00B5651B /* msc.dep */ = {isa = PBXFileReference; lastKnownFileType = text; path = msc.dep; sourceTree = "<group>"; };
 		96853F4418DB722E00B5651B /* options.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = options.cpp; sourceTree = "<group>"; };
 		96853F4518DB722E00B5651B /* options.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = options.hpp; sourceTree = "<group>"; };
 		96853F4618DB722E00B5651B /* os.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = os.hpp; sourceTree = "<group>"; };
-		96853F4718DB722E00B5651B /* os2ea.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = os2ea.cpp; sourceTree = "<group>"; };
 		96853F4818DB722E00B5651B /* pathfn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pathfn.cpp; sourceTree = "<group>"; };
 		96853F4918DB722E00B5651B /* pathfn.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = pathfn.hpp; sourceTree = "<group>"; };
 		96853F4A18DB722E00B5651B /* rar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rar.cpp; sourceTree = "<group>"; };
@@ -295,7 +332,6 @@
 		96853F5E18DB722E00B5651B /* rijndael.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = rijndael.hpp; sourceTree = "<group>"; };
 		96853F5F18DB722E00B5651B /* rs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rs.cpp; sourceTree = "<group>"; };
 		96853F6018DB722E00B5651B /* rs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = rs.hpp; sourceTree = "<group>"; };
-		96853F6118DB722E00B5651B /* savepos.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = savepos.cpp; sourceTree = "<group>"; };
 		96853F6218DB722E00B5651B /* savepos.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = savepos.hpp; sourceTree = "<group>"; };
 		96853F6318DB722E00B5651B /* scantree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scantree.cpp; sourceTree = "<group>"; };
 		96853F6418DB722E00B5651B /* scantree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = scantree.hpp; sourceTree = "<group>"; };
@@ -319,7 +355,6 @@
 		96853F7618DB722E00B5651B /* ulinks.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ulinks.hpp; sourceTree = "<group>"; };
 		96853F7718DB722E00B5651B /* unicode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unicode.cpp; sourceTree = "<group>"; };
 		96853F7818DB722E00B5651B /* unicode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = unicode.hpp; sourceTree = "<group>"; };
-		96853F7918DB722E00B5651B /* unios2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unios2.cpp; sourceTree = "<group>"; };
 		96853F7A18DB722E00B5651B /* unpack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpack.cpp; sourceTree = "<group>"; };
 		96853F7B18DB722E00B5651B /* unpack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = unpack.hpp; sourceTree = "<group>"; };
 		96853F7C18DB722E00B5651B /* unpack15.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpack15.cpp; sourceTree = "<group>"; };
@@ -462,7 +497,10 @@
 				96853F0918DB722E00B5651B /* archive.hpp */,
 				96853F0A18DB722E00B5651B /* arcread.cpp */,
 				96853F0B18DB722E00B5651B /* array.hpp */,
-				96853F0C18DB722E00B5651B /* beosea.cpp */,
+				96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */,
+				96370FB419ED8A8200DAF8F1 /* blake2s.cpp */,
+				96370FB519ED8A8200DAF8F1 /* blake2s.hpp */,
+				96370FB619ED8A8200DAF8F1 /* blake2sp.cpp */,
 				96853F0D18DB722E00B5651B /* cmddata.cpp */,
 				96853F0E18DB722E00B5651B /* cmddata.hpp */,
 				96853F0F18DB722E00B5651B /* coder.cpp */,
@@ -474,6 +512,10 @@
 				96853F1518DB722E00B5651B /* crc.hpp */,
 				96853F1618DB722E00B5651B /* crypt.cpp */,
 				96853F1718DB722E00B5651B /* crypt.hpp */,
+				96370FBB19ED8AAC00DAF8F1 /* crypt1.cpp */,
+				96370FBC19ED8AAC00DAF8F1 /* crypt2.cpp */,
+				96370FBD19ED8AAC00DAF8F1 /* crypt3.cpp */,
+				96370FBE19ED8AAC00DAF8F1 /* crypt5.cpp */,
 				96853F1818DB722E00B5651B /* dll.cpp */,
 				96853F1918DB722E00B5651B /* dll.def */,
 				96853F1A18DB722E00B5651B /* dll.hpp */,
@@ -500,7 +542,12 @@
 				96853F2F18DB722E00B5651B /* getbits.hpp */,
 				96853F3018DB722E00B5651B /* global.cpp */,
 				96853F3118DB722E00B5651B /* global.hpp */,
+				96370FC319ED8ACF00DAF8F1 /* hardlinks.cpp */,
+				96370FC419ED8B0400DAF8F1 /* hash.cpp */,
+				96370FC519ED8B0400DAF8F1 /* hash.hpp */,
+				96370FC619ED8B1F00DAF8F1 /* headers.cpp */,
 				96853F3218DB722E00B5651B /* headers.hpp */,
+				96370FC819ED8B2B00DAF8F1 /* headers5.hpp */,
 				96853F3318DB722E00B5651B /* isnt.cpp */,
 				96853F3418DB722E00B5651B /* isnt.hpp */,
 				96853F3618DB722E00B5651B /* list.cpp */,
@@ -512,13 +559,13 @@
 				96853F4018DB722E00B5651B /* match.hpp */,
 				96853F4118DB722E00B5651B /* model.cpp */,
 				96853F4218DB722E00B5651B /* model.hpp */,
-				96853F4318DB722E00B5651B /* msc.dep */,
 				96853F4418DB722E00B5651B /* options.cpp */,
 				96853F4518DB722E00B5651B /* options.hpp */,
 				96853F4618DB722E00B5651B /* os.hpp */,
-				96853F4718DB722E00B5651B /* os2ea.cpp */,
 				96853F4818DB722E00B5651B /* pathfn.cpp */,
 				96853F4918DB722E00B5651B /* pathfn.hpp */,
+				96370FC919ED8B4E00DAF8F1 /* qopen.cpp */,
+				96370FCA19ED8B4E00DAF8F1 /* qopen.hpp */,
 				96853F4A18DB722E00B5651B /* rar.cpp */,
 				96853F4B18DB722E00B5651B /* rar.hpp */,
 				96853F4C18DB722E00B5651B /* rardefs.hpp */,
@@ -535,13 +582,16 @@
 				96853F5718DB722E00B5651B /* rdwrfn.hpp */,
 				96853F5918DB722E00B5651B /* recvol.cpp */,
 				96853F5A18DB722E00B5651B /* recvol.hpp */,
+				96370FCB19ED8B7900DAF8F1 /* recvol3.cpp */,
+				96370FCC19ED8B7900DAF8F1 /* recvol5.cpp */,
 				96853F5B18DB722E00B5651B /* resource.cpp */,
 				96853F5C18DB722E00B5651B /* resource.hpp */,
 				96853F5D18DB722E00B5651B /* rijndael.cpp */,
 				96853F5E18DB722E00B5651B /* rijndael.hpp */,
 				96853F5F18DB722E00B5651B /* rs.cpp */,
 				96853F6018DB722E00B5651B /* rs.hpp */,
-				96853F6118DB722E00B5651B /* savepos.cpp */,
+				96370FCD19ED8B9700DAF8F1 /* rs16.cpp */,
+				96370FCE19ED8B9700DAF8F1 /* rs16.hpp */,
 				96853F6218DB722E00B5651B /* savepos.hpp */,
 				96853F6318DB722E00B5651B /* scantree.cpp */,
 				96853F6418DB722E00B5651B /* scantree.hpp */,
@@ -549,6 +599,8 @@
 				96853F6618DB722E00B5651B /* secpassword.hpp */,
 				96853F6718DB722E00B5651B /* sha1.cpp */,
 				96853F6818DB722E00B5651B /* sha1.hpp */,
+				96370FCF19ED8BB200DAF8F1 /* sha256.cpp */,
+				96370FD019ED8BB200DAF8F1 /* sha256.hpp */,
 				96853F6918DB722E00B5651B /* smallfn.cpp */,
 				96853F6A18DB722E00B5651B /* smallfn.hpp */,
 				96853F6B18DB722E00B5651B /* strfn.cpp */,
@@ -559,22 +611,35 @@
 				96853F7018DB722E00B5651B /* suballoc.hpp */,
 				96853F7118DB722E00B5651B /* system.cpp */,
 				96853F7218DB722E00B5651B /* system.hpp */,
+				96370FD119ED8BC800DAF8F1 /* threadmisc.cpp */,
+				96370FD219ED8C6100DAF8F1 /* threadpool.cpp */,
+				96370FD319ED8C6100DAF8F1 /* threadpool.hpp */,
 				96853F7318DB722E00B5651B /* timefn.cpp */,
 				96853F7418DB722E00B5651B /* timefn.hpp */,
+				96370FD419ED8C8000DAF8F1 /* ui.cpp */,
+				96370FD519ED8C8000DAF8F1 /* ui.hpp */,
+				96370FD619ED8C8000DAF8F1 /* uicommon.cpp */,
+				96370FD719ED8C8000DAF8F1 /* uiconsole.cpp */,
+				96370FD819ED8C8000DAF8F1 /* uisilent.cpp */,
 				96853F7518DB722E00B5651B /* ulinks.cpp */,
 				96853F7618DB722E00B5651B /* ulinks.hpp */,
 				96853F7718DB722E00B5651B /* unicode.cpp */,
 				96853F7818DB722E00B5651B /* unicode.hpp */,
-				96853F7918DB722E00B5651B /* unios2.cpp */,
 				96853F7A18DB722E00B5651B /* unpack.cpp */,
 				96853F7B18DB722E00B5651B /* unpack.hpp */,
 				96853F7C18DB722E00B5651B /* unpack15.cpp */,
 				96853F7D18DB722E00B5651B /* unpack20.cpp */,
+				96370FD919ED8CAE00DAF8F1 /* unpack30.cpp */,
+				96370FDA19ED8CAE00DAF8F1 /* unpack50.cpp */,
+				96370FDB19ED8CAE00DAF8F1 /* unpack50frag.cpp */,
+				96370FDC19ED8CAE00DAF8F1 /* unpack50mt.cpp */,
+				96370FDD19ED8CAE00DAF8F1 /* unpackinline.cpp */,
 				96853F8018DB722F00B5651B /* uowners.cpp */,
 				96853F8118DB722F00B5651B /* version.hpp */,
 				96853F8218DB722F00B5651B /* volume.cpp */,
 				96853F8318DB722F00B5651B /* volume.hpp */,
 				96853F8418DB722F00B5651B /* win32acl.cpp */,
+				96370FDE19ED8CBF00DAF8F1 /* win32lnk.cpp */,
 				96853F8518DB722F00B5651B /* win32stm.cpp */,
 			);
 			path = unrar;
@@ -740,52 +805,58 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				968541AB18DC7BDA00B5651B /* archive.cpp in Sources */,
-				968541AC18DC7BDA00B5651B /* arcread.cpp in Sources */,
-				968541AD18DC7BDA00B5651B /* cmddata.cpp in Sources */,
-				968541AE18DC7BDA00B5651B /* consio.cpp in Sources */,
-				968541AF18DC7BDA00B5651B /* crc.cpp in Sources */,
-				968541B018DC7BDA00B5651B /* crypt.cpp in Sources */,
-				968541B118DC7BDA00B5651B /* dll.cpp in Sources */,
-				968541B218DC7BDA00B5651B /* encname.cpp in Sources */,
-				968541B318DC7BDA00B5651B /* errhnd.cpp in Sources */,
-				968541B418DC7BDA00B5651B /* extinfo.cpp in Sources */,
-				968541B518DC7BDA00B5651B /* extract.cpp in Sources */,
-				968541B618DC7BDA00B5651B /* filcreat.cpp in Sources */,
-				968541B718DC7BDA00B5651B /* file.cpp in Sources */,
-				968541B818DC7BDA00B5651B /* filefn.cpp in Sources */,
-				968541B918DC7BDA00B5651B /* filestr.cpp in Sources */,
-				968541BA18DC7BDA00B5651B /* find.cpp in Sources */,
-				968541BB18DC7BDA00B5651B /* getbits.cpp in Sources */,
-				968541BC18DC7BDA00B5651B /* global.cpp in Sources */,
-				968541BD18DC7BDA00B5651B /* isnt.cpp in Sources */,
-				968541BE18DC7BDA00B5651B /* list.cpp in Sources */,
-				968541BF18DC7BDA00B5651B /* match.cpp in Sources */,
-				968541C018DC7BDA00B5651B /* options.cpp in Sources */,
-				968541C118DC7BDA00B5651B /* pathfn.cpp in Sources */,
-				968541C218DC7BDA00B5651B /* rar.cpp in Sources */,
-				968541C318DC7BDA00B5651B /* rarvm.cpp in Sources */,
-				968541C418DC7BDA00B5651B /* rawread.cpp in Sources */,
-				968541C518DC7BDA00B5651B /* rdwrfn.cpp in Sources */,
-				968541C618DC7BDA00B5651B /* recvol.cpp in Sources */,
-				968541C718DC7BDA00B5651B /* resource.cpp in Sources */,
-				968541C818DC7BDA00B5651B /* rijndael.cpp in Sources */,
-				968541C918DC7BDA00B5651B /* rs.cpp in Sources */,
-				968541CA18DC7BDA00B5651B /* savepos.cpp in Sources */,
-				968541CB18DC7BDA00B5651B /* scantree.cpp in Sources */,
-				968541CC18DC7BDA00B5651B /* secpassword.cpp in Sources */,
-				968541CD18DC7BDA00B5651B /* sha1.cpp in Sources */,
-				968541CE18DC7BDA00B5651B /* smallfn.cpp in Sources */,
-				968541CF18DC7BDA00B5651B /* strfn.cpp in Sources */,
-				968541D018DC7BDA00B5651B /* strlist.cpp in Sources */,
-				968541D118DC7BDA00B5651B /* system.cpp in Sources */,
-				968541D218DC7BDA00B5651B /* timefn.cpp in Sources */,
-				968541D318DC7BDA00B5651B /* ulinks.cpp in Sources */,
-				96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */,
-				968541D418DC7BDA00B5651B /* unicode.cpp in Sources */,
-				968541D518DC7BDA00B5651B /* unpack.cpp in Sources */,
-				968541D618DC7BDA00B5651B /* volume.cpp in Sources */,
+				9685414F18DBA16300B5651B /* rar.cpp in Sources */,
+				9685415F18DBA16300B5651B /* strlist.cpp in Sources */,
+				9685415E18DBA16300B5651B /* strfn.cpp in Sources */,
+				9685414E18DBA16300B5651B /* pathfn.cpp in Sources */,
+				9685415D18DBA16300B5651B /* smallfn.cpp in Sources */,
+				9685414618DBA16300B5651B /* global.cpp in Sources */,
+				9685414118DBA16300B5651B /* file.cpp in Sources */,
+				9685414218DBA16300B5651B /* filefn.cpp in Sources */,
+				9685414018DBA16300B5651B /* filcreat.cpp in Sources */,
+				9685413318DBA16300B5651B /* archive.cpp in Sources */,
+				9685413418DBA16300B5651B /* arcread.cpp in Sources */,
+				9685416418DBA16300B5651B /* unicode.cpp in Sources */,
+				9685416118DBA16300B5651B /* system.cpp in Sources */,
+				9685414718DBA16300B5651B /* isnt.cpp in Sources */,
+				9685413A18DBA16300B5651B /* crypt.cpp in Sources */,
+				9685413918DBA16300B5651B /* crc.cpp in Sources */,
+				9685415318DBA16300B5651B /* rawread.cpp in Sources */,
+				9685413C18DBA16300B5651B /* encname.cpp in Sources */,
+				9685415618DBA16300B5651B /* resource.cpp in Sources */,
+				9685414A18DBA16300B5651B /* match.cpp in Sources */,
+				9685416218DBA16300B5651B /* timefn.cpp in Sources */,
+				9685415418DBA16300B5651B /* rdwrfn.cpp in Sources */,
+				9685413818DBA16300B5651B /* consio.cpp in Sources */,
+				9685414C18DBA16300B5651B /* options.cpp in Sources */,
+				9685413D18DBA16300B5651B /* errhnd.cpp in Sources */,
+				9685415118DBA16300B5651B /* rarvm.cpp in Sources */,
+				9685415B18DBA16300B5651B /* secpassword.cpp in Sources */,
+				9685415718DBA16300B5651B /* rijndael.cpp in Sources */,
+				9685414518DBA16300B5651B /* getbits.cpp in Sources */,
+				9685415C18DBA16300B5651B /* sha1.cpp in Sources */,
+				96370FDF19ED925E00DAF8F1 /* sha256.cpp in Sources */,
+				96370FE019ED926F00DAF8F1 /* blake2s.cpp in Sources */,
+				96370FE119ED928C00DAF8F1 /* hash.cpp in Sources */,
+				9685413E18DBA16300B5651B /* extinfo.cpp in Sources */,
+				9685413F18DBA16300B5651B /* extract.cpp in Sources */,
+				9685416A18DBA16300B5651B /* volume.cpp in Sources */,
+				9685414818DBA16300B5651B /* list.cpp in Sources */,
+				9685414418DBA16300B5651B /* find.cpp in Sources */,
+				9685416618DBA16300B5651B /* unpack.cpp in Sources */,
+				96370FE219ED92B700DAF8F1 /* headers.cpp in Sources */,
+				96370FE319ED92C400DAF8F1 /* threadpool.cpp in Sources */,
+				96370FE419ED92D800DAF8F1 /* rs16.cpp in Sources */,
+				9685413618DBA16300B5651B /* cmddata.cpp in Sources */,
+				96370FE519ED92E000DAF8F1 /* ui.cpp in Sources */,
+				96370FE619ED931100DAF8F1 /* filestr.cpp in Sources */,
+				96370FE719ED931A00DAF8F1 /* recvol.cpp in Sources */,
+				96370FE819ED932200DAF8F1 /* rs.cpp in Sources */,
+				96370FE919ED932900DAF8F1 /* scantree.cpp in Sources */,
+				96370FEA19ED933100DAF8F1 /* qopen.cpp in Sources */,
+				96370FEB19ED934B00DAF8F1 /* dll.cpp in Sources */,
 				96E5D347198B334500A74340 /* URKArchive.mm in Sources */,
+				96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -793,50 +864,56 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9685413318DBA16300B5651B /* archive.cpp in Sources */,
-				9685413418DBA16300B5651B /* arcread.cpp in Sources */,
-				9685413618DBA16300B5651B /* cmddata.cpp in Sources */,
-				9685413818DBA16300B5651B /* consio.cpp in Sources */,
-				9685413918DBA16300B5651B /* crc.cpp in Sources */,
-				9685413A18DBA16300B5651B /* crypt.cpp in Sources */,
-				9685413B18DBA16300B5651B /* dll.cpp in Sources */,
-				9685413C18DBA16300B5651B /* encname.cpp in Sources */,
-				9685413D18DBA16300B5651B /* errhnd.cpp in Sources */,
-				9685413E18DBA16300B5651B /* extinfo.cpp in Sources */,
-				9685413F18DBA16300B5651B /* extract.cpp in Sources */,
-				9685414018DBA16300B5651B /* filcreat.cpp in Sources */,
+				9685414F18DBA16300B5651B /* rar.cpp in Sources */,
+				9685415F18DBA16300B5651B /* strlist.cpp in Sources */,
+				9685415E18DBA16300B5651B /* strfn.cpp in Sources */,
+				9685414E18DBA16300B5651B /* pathfn.cpp in Sources */,
+				9685415D18DBA16300B5651B /* smallfn.cpp in Sources */,
+				9685414618DBA16300B5651B /* global.cpp in Sources */,
 				9685414118DBA16300B5651B /* file.cpp in Sources */,
 				9685414218DBA16300B5651B /* filefn.cpp in Sources */,
-				9685414318DBA16300B5651B /* filestr.cpp in Sources */,
-				9685414418DBA16300B5651B /* find.cpp in Sources */,
-				9685414518DBA16300B5651B /* getbits.cpp in Sources */,
-				9685414618DBA16300B5651B /* global.cpp in Sources */,
-				9685414718DBA16300B5651B /* isnt.cpp in Sources */,
-				9685414818DBA16300B5651B /* list.cpp in Sources */,
-				9685414A18DBA16300B5651B /* match.cpp in Sources */,
-				9685414C18DBA16300B5651B /* options.cpp in Sources */,
-				9685414E18DBA16300B5651B /* pathfn.cpp in Sources */,
-				9685414F18DBA16300B5651B /* rar.cpp in Sources */,
-				9685415118DBA16300B5651B /* rarvm.cpp in Sources */,
-				9685415318DBA16300B5651B /* rawread.cpp in Sources */,
-				9685415418DBA16300B5651B /* rdwrfn.cpp in Sources */,
-				9685415518DBA16300B5651B /* recvol.cpp in Sources */,
-				9685415618DBA16300B5651B /* resource.cpp in Sources */,
-				9685415718DBA16300B5651B /* rijndael.cpp in Sources */,
-				9685415818DBA16300B5651B /* rs.cpp in Sources */,
-				9685415918DBA16300B5651B /* savepos.cpp in Sources */,
-				9685415A18DBA16300B5651B /* scantree.cpp in Sources */,
-				9685415B18DBA16300B5651B /* secpassword.cpp in Sources */,
-				9685415C18DBA16300B5651B /* sha1.cpp in Sources */,
-				9685415D18DBA16300B5651B /* smallfn.cpp in Sources */,
-				9685415E18DBA16300B5651B /* strfn.cpp in Sources */,
-				9685415F18DBA16300B5651B /* strlist.cpp in Sources */,
-				9685416118DBA16300B5651B /* system.cpp in Sources */,
-				9685416218DBA16300B5651B /* timefn.cpp in Sources */,
-				9685416318DBA16300B5651B /* ulinks.cpp in Sources */,
+				9685414018DBA16300B5651B /* filcreat.cpp in Sources */,
+				9685413318DBA16300B5651B /* archive.cpp in Sources */,
+				9685413418DBA16300B5651B /* arcread.cpp in Sources */,
 				9685416418DBA16300B5651B /* unicode.cpp in Sources */,
-				9685416618DBA16300B5651B /* unpack.cpp in Sources */,
+				9685416118DBA16300B5651B /* system.cpp in Sources */,
+				9685414718DBA16300B5651B /* isnt.cpp in Sources */,
+				9685413A18DBA16300B5651B /* crypt.cpp in Sources */,
+				9685413918DBA16300B5651B /* crc.cpp in Sources */,
+				9685415318DBA16300B5651B /* rawread.cpp in Sources */,
+				9685413C18DBA16300B5651B /* encname.cpp in Sources */,
+				9685415618DBA16300B5651B /* resource.cpp in Sources */,
+				9685414A18DBA16300B5651B /* match.cpp in Sources */,
+				9685416218DBA16300B5651B /* timefn.cpp in Sources */,
+				9685415418DBA16300B5651B /* rdwrfn.cpp in Sources */,
+				9685413818DBA16300B5651B /* consio.cpp in Sources */,
+				9685414C18DBA16300B5651B /* options.cpp in Sources */,
+				9685413D18DBA16300B5651B /* errhnd.cpp in Sources */,
+				9685415118DBA16300B5651B /* rarvm.cpp in Sources */,
+				9685415B18DBA16300B5651B /* secpassword.cpp in Sources */,
+				9685415718DBA16300B5651B /* rijndael.cpp in Sources */,
+				9685414518DBA16300B5651B /* getbits.cpp in Sources */,
+				9685415C18DBA16300B5651B /* sha1.cpp in Sources */,
+				96370FDF19ED925E00DAF8F1 /* sha256.cpp in Sources */,
+				96370FE019ED926F00DAF8F1 /* blake2s.cpp in Sources */,
+				96370FE119ED928C00DAF8F1 /* hash.cpp in Sources */,
+				9685413E18DBA16300B5651B /* extinfo.cpp in Sources */,
+				9685413F18DBA16300B5651B /* extract.cpp in Sources */,
 				9685416A18DBA16300B5651B /* volume.cpp in Sources */,
+				9685414818DBA16300B5651B /* list.cpp in Sources */,
+				9685414418DBA16300B5651B /* find.cpp in Sources */,
+				9685416618DBA16300B5651B /* unpack.cpp in Sources */,
+				96370FE219ED92B700DAF8F1 /* headers.cpp in Sources */,
+				96370FE319ED92C400DAF8F1 /* threadpool.cpp in Sources */,
+				96370FE419ED92D800DAF8F1 /* rs16.cpp in Sources */,
+				9685413618DBA16300B5651B /* cmddata.cpp in Sources */,
+				96370FE519ED92E000DAF8F1 /* ui.cpp in Sources */,
+				96370FE619ED931100DAF8F1 /* filestr.cpp in Sources */,
+				96370FE719ED931A00DAF8F1 /* recvol.cpp in Sources */,
+				96370FE819ED932200DAF8F1 /* rs.cpp in Sources */,
+				96370FE919ED932900DAF8F1 /* scantree.cpp in Sources */,
+				96370FEA19ED933100DAF8F1 /* qopen.cpp in Sources */,
+				96370FEB19ED934B00DAF8F1 /* dll.cpp in Sources */,
 				9685413218DBA13200B5651B /* URKArchive.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
