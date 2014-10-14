@@ -211,7 +211,6 @@
 		96853EDF18DB71CD00B5651B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		96853EE018DB71CD00B5651B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		96853EE118DB71CD00B5651B /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		96853F0618DB722E00B5651B /* acknow.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = acknow.txt; sourceTree = "<group>"; };
 		96853F0718DB722E00B5651B /* arccmt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = arccmt.cpp; sourceTree = "<group>"; };
 		96853F0818DB722E00B5651B /* archive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = archive.cpp; sourceTree = "<group>"; };
 		96853F0918DB722E00B5651B /* archive.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = archive.hpp; sourceTree = "<group>"; };
@@ -258,16 +257,11 @@
 		96853F3218DB722E00B5651B /* headers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = headers.hpp; sourceTree = "<group>"; };
 		96853F3318DB722E00B5651B /* isnt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = isnt.cpp; sourceTree = "<group>"; };
 		96853F3418DB722E00B5651B /* isnt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = isnt.hpp; sourceTree = "<group>"; };
-		96853F3518DB722E00B5651B /* license.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
 		96853F3618DB722E00B5651B /* list.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = list.cpp; sourceTree = "<group>"; };
 		96853F3718DB722E00B5651B /* list.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = list.hpp; sourceTree = "<group>"; };
 		96853F3818DB722E00B5651B /* loclang.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = loclang.hpp; sourceTree = "<group>"; };
 		96853F3918DB722E00B5651B /* log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
 		96853F3A18DB722E00B5651B /* log.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = log.hpp; sourceTree = "<group>"; };
-		96853F3B18DB722E00B5651B /* makefile.bcc */ = {isa = PBXFileReference; lastKnownFileType = text; path = makefile.bcc; sourceTree = "<group>"; };
-		96853F3C18DB722E00B5651B /* makefile.dj */ = {isa = PBXFileReference; lastKnownFileType = text; path = makefile.dj; sourceTree = "<group>"; };
-		96853F3D18DB722E00B5651B /* makefile.dmc */ = {isa = PBXFileReference; lastKnownFileType = text; path = makefile.dmc; sourceTree = "<group>"; };
-		96853F3E18DB722E00B5651B /* makefile.unix */ = {isa = PBXFileReference; lastKnownFileType = text; path = makefile.unix; sourceTree = "<group>"; };
 		96853F3F18DB722E00B5651B /* match.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = match.cpp; sourceTree = "<group>"; };
 		96853F4018DB722E00B5651B /* match.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = match.hpp; sourceTree = "<group>"; };
 		96853F4118DB722E00B5651B /* model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = model.cpp; sourceTree = "<group>"; };
@@ -293,7 +287,6 @@
 		96853F5518DB722E00B5651B /* rawread.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = rawread.hpp; sourceTree = "<group>"; };
 		96853F5618DB722E00B5651B /* rdwrfn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rdwrfn.cpp; sourceTree = "<group>"; };
 		96853F5718DB722E00B5651B /* rdwrfn.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = rdwrfn.hpp; sourceTree = "<group>"; };
-		96853F5818DB722E00B5651B /* readme.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		96853F5918DB722E00B5651B /* recvol.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = recvol.cpp; sourceTree = "<group>"; };
 		96853F5A18DB722E00B5651B /* recvol.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = recvol.hpp; sourceTree = "<group>"; };
 		96853F5B18DB722E00B5651B /* resource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = resource.cpp; sourceTree = "<group>"; };
@@ -331,8 +324,6 @@
 		96853F7B18DB722E00B5651B /* unpack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = unpack.hpp; sourceTree = "<group>"; };
 		96853F7C18DB722E00B5651B /* unpack15.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpack15.cpp; sourceTree = "<group>"; };
 		96853F7D18DB722E00B5651B /* unpack20.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpack20.cpp; sourceTree = "<group>"; };
-		96853F7E18DB722F00B5651B /* UnRAR.vcproj */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UnRAR.vcproj; sourceTree = "<group>"; };
-		96853F7F18DB722F00B5651B /* UnRARDll.vcproj */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UnRARDll.vcproj; sourceTree = "<group>"; };
 		96853F8018DB722F00B5651B /* uowners.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = uowners.cpp; sourceTree = "<group>"; };
 		96853F8118DB722F00B5651B /* version.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = version.hpp; sourceTree = "<group>"; };
 		96853F8218DB722F00B5651B /* volume.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = volume.cpp; sourceTree = "<group>"; };
@@ -466,7 +457,6 @@
 		96853F0518DB722E00B5651B /* unrar */ = {
 			isa = PBXGroup;
 			children = (
-				96853F0618DB722E00B5651B /* acknow.txt */,
 				96853F0718DB722E00B5651B /* arccmt.cpp */,
 				96853F0818DB722E00B5651B /* archive.cpp */,
 				96853F0918DB722E00B5651B /* archive.hpp */,
@@ -513,16 +503,11 @@
 				96853F3218DB722E00B5651B /* headers.hpp */,
 				96853F3318DB722E00B5651B /* isnt.cpp */,
 				96853F3418DB722E00B5651B /* isnt.hpp */,
-				96853F3518DB722E00B5651B /* license.txt */,
 				96853F3618DB722E00B5651B /* list.cpp */,
 				96853F3718DB722E00B5651B /* list.hpp */,
 				96853F3818DB722E00B5651B /* loclang.hpp */,
 				96853F3918DB722E00B5651B /* log.cpp */,
 				96853F3A18DB722E00B5651B /* log.hpp */,
-				96853F3B18DB722E00B5651B /* makefile.bcc */,
-				96853F3C18DB722E00B5651B /* makefile.dj */,
-				96853F3D18DB722E00B5651B /* makefile.dmc */,
-				96853F3E18DB722E00B5651B /* makefile.unix */,
 				96853F3F18DB722E00B5651B /* match.cpp */,
 				96853F4018DB722E00B5651B /* match.hpp */,
 				96853F4118DB722E00B5651B /* model.cpp */,
@@ -548,7 +533,6 @@
 				96853F5518DB722E00B5651B /* rawread.hpp */,
 				96853F5618DB722E00B5651B /* rdwrfn.cpp */,
 				96853F5718DB722E00B5651B /* rdwrfn.hpp */,
-				96853F5818DB722E00B5651B /* readme.txt */,
 				96853F5918DB722E00B5651B /* recvol.cpp */,
 				96853F5A18DB722E00B5651B /* recvol.hpp */,
 				96853F5B18DB722E00B5651B /* resource.cpp */,
@@ -586,8 +570,6 @@
 				96853F7B18DB722E00B5651B /* unpack.hpp */,
 				96853F7C18DB722E00B5651B /* unpack15.cpp */,
 				96853F7D18DB722E00B5651B /* unpack20.cpp */,
-				96853F7E18DB722F00B5651B /* UnRAR.vcproj */,
-				96853F7F18DB722F00B5651B /* UnRARDll.vcproj */,
 				96853F8018DB722F00B5651B /* uowners.cpp */,
 				96853F8118DB722F00B5651B /* version.hpp */,
 				96853F8218DB722F00B5651B /* volume.cpp */,
