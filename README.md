@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/abbeycode/UnrarKit.svg?branch=master)](https://travis-ci.org/abbeycode/UnrarKit)
+
 # About
 
 UnrarKit is here to enable Mac and iOS apps to easily work with RAR files for read-only operations.
