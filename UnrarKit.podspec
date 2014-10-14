@@ -60,17 +60,33 @@ Pod::Spec.new do |s|
                    "Libraries/unrar/rs.cpp",
                    "Libraries/unrar/scantree.cpp",
                    "Libraries/unrar/qopen.cpp",
-                   "Libraries/unrar/dll.cpp",
-                     # These files are built implicitly as dependencies
+                   "Libraries/unrar/dll.cpp"
+                   # These files are built implicitly as dependencies
   s.preserve_paths = "Libraries/unrar/arccmt.cpp",
+                     "Libraries/unrar/blake2sp.cpp",
                      "Libraries/unrar/coder.cpp",
+                     "Libraries/unrar/crypt1.cpp",
+                     "Libraries/unrar/crypt2.cpp",
+                     "Libraries/unrar/crypt3.cpp",
+                     "Libraries/unrar/crypt5.cpp",
+                     "Libraries/unrar/hardlinks.cpp",
                      "Libraries/unrar/log.cpp",
                      "Libraries/unrar/model.cpp",
                      "Libraries/unrar/rarvmtbl.cpp",
+                     "Libraries/unrar/recvol3.cpp",
+                     "Libraries/unrar/recvol5.cpp",
                      "Libraries/unrar/suballoc.cpp",
+                     "Libraries/unrar/uicommon.cpp",
+                     "Libraries/unrar/uisilent.cpp",
+                     "Libraries/unrar/ulinks.cpp",
                      "Libraries/unrar/unpack15.cpp",
                      "Libraries/unrar/unpack20.cpp",
-                     "Libraries/unrar/uowners.cpp"
+                     "Libraries/unrar/unpack30.cpp",
+                     "Libraries/unrar/unpack50.cpp",
+                     "Libraries/unrar/unpack50frag.cpp",
+                     "Libraries/unrar/unpackinline.cpp",
+                     "Libraries/unrar/uowners.cpp",
+                     "Libraries/unrar/win32stm.cpp"
   s.xcconfig = { "OTHER_CFLAGS" => "$(inherited) -Wno-return-type -Wno-logical-op-parentheses -Wno-conversion -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-switch",
                  "OTHER_CPLUSPLUSFLAGS" => "$(inherited) -DSILENT -DRARDLL $(OTHER_CFLAGS)" }
 end
