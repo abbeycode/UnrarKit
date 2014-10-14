@@ -5,6 +5,7 @@
 //
 
 #import "URKArchive.h"
+#import "rar.hpp"
 
 
 NSString *URKErrorDomain = @"URKErrorDomain";
@@ -246,7 +247,9 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         *error = nil;
     }
     
-	header = new RARHeaderDataEx;
+    ErrHandler.Clean();
+    
+    header = new RARHeaderDataEx;
     bzero(header, sizeof(RARHeaderDataEx));
 	flags = new RAROpenArchiveDataEx;
     bzero(flags, sizeof(RAROpenArchiveDataEx));
