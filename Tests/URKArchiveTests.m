@@ -13,7 +13,7 @@
 
 @property (copy) NSURL *tempDirectory;
 @property (retain) NSMutableDictionary *testFileURLs;
-@property NSURL *corruptArchive;
+@property (retain) NSURL *corruptArchive;
 
 @end
 
