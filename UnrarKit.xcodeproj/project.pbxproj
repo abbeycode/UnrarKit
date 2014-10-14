@@ -339,7 +339,6 @@
 		96853F8318DB722F00B5651B /* volume.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = volume.hpp; sourceTree = "<group>"; };
 		96853F8418DB722F00B5651B /* win32acl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = win32acl.cpp; sourceTree = "<group>"; };
 		96853F8518DB722F00B5651B /* win32stm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = win32stm.cpp; sourceTree = "<group>"; };
-		968540F518DB87F500B5651B /* Unrar4Mac_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Unrar4Mac_Prefix.pch; sourceTree = "<group>"; };
 		9685411018DBA06000B5651B /* libUnrarKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnrarKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA747D9E0F9514B9006C5449 /* UnrarKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKit_Prefix.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -413,7 +412,6 @@
 			isa = PBXGroup;
 			children = (
 				AA747D9E0F9514B9006C5449 /* UnrarKit_Prefix.pch */,
-				968540F518DB87F500B5651B /* Unrar4Mac_Prefix.pch */,
 			);
 			name = "Other Sources";
 			path = Other;
