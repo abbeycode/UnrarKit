@@ -7,6 +7,56 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		960F667519EDDC2600512951 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4A18DB722E00B5651B /* rar.cpp */; };
+		960F667619EDDC2600512951 /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6D18DB722E00B5651B /* strlist.cpp */; };
+		960F667719EDDC2600512951 /* strfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6B18DB722E00B5651B /* strfn.cpp */; };
+		960F667819EDDC2600512951 /* pathfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4818DB722E00B5651B /* pathfn.cpp */; };
+		960F667919EDDC2600512951 /* smallfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6918DB722E00B5651B /* smallfn.cpp */; };
+		960F667A19EDDC2600512951 /* global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3018DB722E00B5651B /* global.cpp */; };
+		960F667B19EDDC2600512951 /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2618DB722E00B5651B /* file.cpp */; };
+		960F667C19EDDC2600512951 /* filefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2818DB722E00B5651B /* filefn.cpp */; };
+		960F667D19EDDC2600512951 /* filcreat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2418DB722E00B5651B /* filcreat.cpp */; };
+		960F667E19EDDC2600512951 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0818DB722E00B5651B /* archive.cpp */; };
+		960F667F19EDDC2600512951 /* arcread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0A18DB722E00B5651B /* arcread.cpp */; };
+		960F668019EDDC2600512951 /* unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7718DB722E00B5651B /* unicode.cpp */; };
+		960F668119EDDC2600512951 /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7118DB722E00B5651B /* system.cpp */; };
+		960F668219EDDC2600512951 /* isnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3318DB722E00B5651B /* isnt.cpp */; };
+		960F668319EDDC2600512951 /* crypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1618DB722E00B5651B /* crypt.cpp */; };
+		960F668419EDDC2600512951 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1418DB722E00B5651B /* crc.cpp */; };
+		960F668519EDDC2600512951 /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5418DB722E00B5651B /* rawread.cpp */; };
+		960F668619EDDC2600512951 /* encname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1C18DB722E00B5651B /* encname.cpp */; };
+		960F668719EDDC2600512951 /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5B18DB722E00B5651B /* resource.cpp */; };
+		960F668819EDDC2600512951 /* match.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3F18DB722E00B5651B /* match.cpp */; };
+		960F668919EDDC2600512951 /* timefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7318DB722E00B5651B /* timefn.cpp */; };
+		960F668A19EDDC2600512951 /* rdwrfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5618DB722E00B5651B /* rdwrfn.cpp */; };
+		960F668B19EDDC2600512951 /* consio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1218DB722E00B5651B /* consio.cpp */; };
+		960F668C19EDDC2600512951 /* options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4418DB722E00B5651B /* options.cpp */; };
+		960F668D19EDDC2600512951 /* errhnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1E18DB722E00B5651B /* errhnd.cpp */; };
+		960F668E19EDDC2600512951 /* rarvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5118DB722E00B5651B /* rarvm.cpp */; };
+		960F668F19EDDC2600512951 /* secpassword.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6518DB722E00B5651B /* secpassword.cpp */; };
+		960F669019EDDC2600512951 /* rijndael.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5D18DB722E00B5651B /* rijndael.cpp */; };
+		960F669119EDDC2600512951 /* getbits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2E18DB722E00B5651B /* getbits.cpp */; };
+		960F669219EDDC2600512951 /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6718DB722E00B5651B /* sha1.cpp */; };
+		960F669319EDDC2600512951 /* sha256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCF19ED8BB200DAF8F1 /* sha256.cpp */; };
+		960F669419EDDC2600512951 /* blake2s.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FB419ED8A8200DAF8F1 /* blake2s.cpp */; };
+		960F669519EDDC2600512951 /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC419ED8B0400DAF8F1 /* hash.cpp */; };
+		960F669619EDDC2600512951 /* extinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2018DB722E00B5651B /* extinfo.cpp */; };
+		960F669719EDDC2600512951 /* extract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2218DB722E00B5651B /* extract.cpp */; };
+		960F669819EDDC2600512951 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; };
+		960F669919EDDC2600512951 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3618DB722E00B5651B /* list.cpp */; };
+		960F669A19EDDC2600512951 /* find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2C18DB722E00B5651B /* find.cpp */; };
+		960F669B19EDDC2600512951 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; };
+		960F669C19EDDC2600512951 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; };
+		960F669D19EDDC2600512951 /* threadpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD219ED8C6100DAF8F1 /* threadpool.cpp */; };
+		960F669E19EDDC2600512951 /* rs16.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCD19ED8B9700DAF8F1 /* rs16.cpp */; };
+		960F669F19EDDC2600512951 /* cmddata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0D18DB722E00B5651B /* cmddata.cpp */; };
+		960F66A019EDDC2600512951 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD419ED8C8000DAF8F1 /* ui.cpp */; };
+		960F66A119EDDC2600512951 /* filestr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2A18DB722E00B5651B /* filestr.cpp */; };
+		960F66A219EDDC2600512951 /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5918DB722E00B5651B /* recvol.cpp */; };
+		960F66A319EDDC2600512951 /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5F18DB722E00B5651B /* rs.cpp */; };
+		960F66A419EDDC2600512951 /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; };
+		960F66A519EDDC2600512951 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; };
+		960F66A619EDDC2600512951 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; };
 		96370FDF19ED925E00DAF8F1 /* sha256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCF19ED8BB200DAF8F1 /* sha256.cpp */; };
 		96370FE019ED926F00DAF8F1 /* blake2s.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FB419ED8A8200DAF8F1 /* blake2s.cpp */; };
 		96370FE119ED928C00DAF8F1 /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC419ED8B0400DAF8F1 /* hash.cpp */; };
@@ -120,49 +170,6 @@
 		968541A718DBA58F00B5651B /* unpack.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F7B18DB722E00B5651B /* unpack.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		968541A818DBA58F00B5651B /* version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F8118DB722F00B5651B /* version.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		968541A918DBA58F00B5651B /* volume.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F8318DB722F00B5651B /* volume.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		968541AB18DC7BDA00B5651B /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0818DB722E00B5651B /* archive.cpp */; };
-		968541AC18DC7BDA00B5651B /* arcread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0A18DB722E00B5651B /* arcread.cpp */; };
-		968541AD18DC7BDA00B5651B /* cmddata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0D18DB722E00B5651B /* cmddata.cpp */; };
-		968541AE18DC7BDA00B5651B /* consio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1218DB722E00B5651B /* consio.cpp */; };
-		968541AF18DC7BDA00B5651B /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1418DB722E00B5651B /* crc.cpp */; };
-		968541B018DC7BDA00B5651B /* crypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1618DB722E00B5651B /* crypt.cpp */; };
-		968541B118DC7BDA00B5651B /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; };
-		968541B218DC7BDA00B5651B /* encname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1C18DB722E00B5651B /* encname.cpp */; };
-		968541B318DC7BDA00B5651B /* errhnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1E18DB722E00B5651B /* errhnd.cpp */; };
-		968541B418DC7BDA00B5651B /* extinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2018DB722E00B5651B /* extinfo.cpp */; };
-		968541B518DC7BDA00B5651B /* extract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2218DB722E00B5651B /* extract.cpp */; };
-		968541B618DC7BDA00B5651B /* filcreat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2418DB722E00B5651B /* filcreat.cpp */; };
-		968541B718DC7BDA00B5651B /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2618DB722E00B5651B /* file.cpp */; };
-		968541B818DC7BDA00B5651B /* filefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2818DB722E00B5651B /* filefn.cpp */; };
-		968541B918DC7BDA00B5651B /* filestr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2A18DB722E00B5651B /* filestr.cpp */; };
-		968541BA18DC7BDA00B5651B /* find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2C18DB722E00B5651B /* find.cpp */; };
-		968541BB18DC7BDA00B5651B /* getbits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2E18DB722E00B5651B /* getbits.cpp */; };
-		968541BC18DC7BDA00B5651B /* global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3018DB722E00B5651B /* global.cpp */; };
-		968541BD18DC7BDA00B5651B /* isnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3318DB722E00B5651B /* isnt.cpp */; };
-		968541BE18DC7BDA00B5651B /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3618DB722E00B5651B /* list.cpp */; };
-		968541BF18DC7BDA00B5651B /* match.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3F18DB722E00B5651B /* match.cpp */; };
-		968541C018DC7BDA00B5651B /* options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4418DB722E00B5651B /* options.cpp */; };
-		968541C118DC7BDA00B5651B /* pathfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4818DB722E00B5651B /* pathfn.cpp */; };
-		968541C218DC7BDA00B5651B /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4A18DB722E00B5651B /* rar.cpp */; };
-		968541C318DC7BDA00B5651B /* rarvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5118DB722E00B5651B /* rarvm.cpp */; };
-		968541C418DC7BDA00B5651B /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5418DB722E00B5651B /* rawread.cpp */; };
-		968541C518DC7BDA00B5651B /* rdwrfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5618DB722E00B5651B /* rdwrfn.cpp */; };
-		968541C618DC7BDA00B5651B /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5918DB722E00B5651B /* recvol.cpp */; };
-		968541C718DC7BDA00B5651B /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5B18DB722E00B5651B /* resource.cpp */; };
-		968541C818DC7BDA00B5651B /* rijndael.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5D18DB722E00B5651B /* rijndael.cpp */; };
-		968541C918DC7BDA00B5651B /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5F18DB722E00B5651B /* rs.cpp */; };
-		968541CB18DC7BDA00B5651B /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; };
-		968541CC18DC7BDA00B5651B /* secpassword.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6518DB722E00B5651B /* secpassword.cpp */; };
-		968541CD18DC7BDA00B5651B /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6718DB722E00B5651B /* sha1.cpp */; };
-		968541CE18DC7BDA00B5651B /* smallfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6918DB722E00B5651B /* smallfn.cpp */; };
-		968541CF18DC7BDA00B5651B /* strfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6B18DB722E00B5651B /* strfn.cpp */; };
-		968541D018DC7BDA00B5651B /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6D18DB722E00B5651B /* strlist.cpp */; };
-		968541D118DC7BDA00B5651B /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7118DB722E00B5651B /* system.cpp */; };
-		968541D218DC7BDA00B5651B /* timefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7318DB722E00B5651B /* timefn.cpp */; };
-		968541D318DC7BDA00B5651B /* ulinks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7518DB722E00B5651B /* ulinks.cpp */; };
-		968541D418DC7BDA00B5651B /* unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7718DB722E00B5651B /* unicode.cpp */; };
-		968541D518DC7BDA00B5651B /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; };
-		968541D618DC7BDA00B5651B /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; };
 		96E5D345198B333200A74340 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
 		96E5D347198B334500A74340 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
@@ -805,56 +812,56 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9685414F18DBA16300B5651B /* rar.cpp in Sources */,
-				9685415F18DBA16300B5651B /* strlist.cpp in Sources */,
-				9685415E18DBA16300B5651B /* strfn.cpp in Sources */,
-				9685414E18DBA16300B5651B /* pathfn.cpp in Sources */,
-				9685415D18DBA16300B5651B /* smallfn.cpp in Sources */,
-				9685414618DBA16300B5651B /* global.cpp in Sources */,
-				9685414118DBA16300B5651B /* file.cpp in Sources */,
-				9685414218DBA16300B5651B /* filefn.cpp in Sources */,
-				9685414018DBA16300B5651B /* filcreat.cpp in Sources */,
-				9685413318DBA16300B5651B /* archive.cpp in Sources */,
-				9685413418DBA16300B5651B /* arcread.cpp in Sources */,
-				9685416418DBA16300B5651B /* unicode.cpp in Sources */,
-				9685416118DBA16300B5651B /* system.cpp in Sources */,
-				9685414718DBA16300B5651B /* isnt.cpp in Sources */,
-				9685413A18DBA16300B5651B /* crypt.cpp in Sources */,
-				9685413918DBA16300B5651B /* crc.cpp in Sources */,
-				9685415318DBA16300B5651B /* rawread.cpp in Sources */,
-				9685413C18DBA16300B5651B /* encname.cpp in Sources */,
-				9685415618DBA16300B5651B /* resource.cpp in Sources */,
-				9685414A18DBA16300B5651B /* match.cpp in Sources */,
-				9685416218DBA16300B5651B /* timefn.cpp in Sources */,
-				9685415418DBA16300B5651B /* rdwrfn.cpp in Sources */,
-				9685413818DBA16300B5651B /* consio.cpp in Sources */,
-				9685414C18DBA16300B5651B /* options.cpp in Sources */,
-				9685413D18DBA16300B5651B /* errhnd.cpp in Sources */,
-				9685415118DBA16300B5651B /* rarvm.cpp in Sources */,
-				9685415B18DBA16300B5651B /* secpassword.cpp in Sources */,
-				9685415718DBA16300B5651B /* rijndael.cpp in Sources */,
-				9685414518DBA16300B5651B /* getbits.cpp in Sources */,
-				9685415C18DBA16300B5651B /* sha1.cpp in Sources */,
-				96370FDF19ED925E00DAF8F1 /* sha256.cpp in Sources */,
-				96370FE019ED926F00DAF8F1 /* blake2s.cpp in Sources */,
-				96370FE119ED928C00DAF8F1 /* hash.cpp in Sources */,
-				9685413E18DBA16300B5651B /* extinfo.cpp in Sources */,
-				9685413F18DBA16300B5651B /* extract.cpp in Sources */,
-				9685416A18DBA16300B5651B /* volume.cpp in Sources */,
-				9685414818DBA16300B5651B /* list.cpp in Sources */,
-				9685414418DBA16300B5651B /* find.cpp in Sources */,
-				9685416618DBA16300B5651B /* unpack.cpp in Sources */,
-				96370FE219ED92B700DAF8F1 /* headers.cpp in Sources */,
-				96370FE319ED92C400DAF8F1 /* threadpool.cpp in Sources */,
-				96370FE419ED92D800DAF8F1 /* rs16.cpp in Sources */,
-				9685413618DBA16300B5651B /* cmddata.cpp in Sources */,
-				96370FE519ED92E000DAF8F1 /* ui.cpp in Sources */,
-				96370FE619ED931100DAF8F1 /* filestr.cpp in Sources */,
-				96370FE719ED931A00DAF8F1 /* recvol.cpp in Sources */,
-				96370FE819ED932200DAF8F1 /* rs.cpp in Sources */,
-				96370FE919ED932900DAF8F1 /* scantree.cpp in Sources */,
-				96370FEA19ED933100DAF8F1 /* qopen.cpp in Sources */,
-				96370FEB19ED934B00DAF8F1 /* dll.cpp in Sources */,
+				960F667519EDDC2600512951 /* rar.cpp in Sources */,
+				960F667619EDDC2600512951 /* strlist.cpp in Sources */,
+				960F667719EDDC2600512951 /* strfn.cpp in Sources */,
+				960F667819EDDC2600512951 /* pathfn.cpp in Sources */,
+				960F667919EDDC2600512951 /* smallfn.cpp in Sources */,
+				960F667A19EDDC2600512951 /* global.cpp in Sources */,
+				960F667B19EDDC2600512951 /* file.cpp in Sources */,
+				960F667C19EDDC2600512951 /* filefn.cpp in Sources */,
+				960F667D19EDDC2600512951 /* filcreat.cpp in Sources */,
+				960F667E19EDDC2600512951 /* archive.cpp in Sources */,
+				960F667F19EDDC2600512951 /* arcread.cpp in Sources */,
+				960F668019EDDC2600512951 /* unicode.cpp in Sources */,
+				960F668119EDDC2600512951 /* system.cpp in Sources */,
+				960F668219EDDC2600512951 /* isnt.cpp in Sources */,
+				960F668319EDDC2600512951 /* crypt.cpp in Sources */,
+				960F668419EDDC2600512951 /* crc.cpp in Sources */,
+				960F668519EDDC2600512951 /* rawread.cpp in Sources */,
+				960F668619EDDC2600512951 /* encname.cpp in Sources */,
+				960F668719EDDC2600512951 /* resource.cpp in Sources */,
+				960F668819EDDC2600512951 /* match.cpp in Sources */,
+				960F668919EDDC2600512951 /* timefn.cpp in Sources */,
+				960F668A19EDDC2600512951 /* rdwrfn.cpp in Sources */,
+				960F668B19EDDC2600512951 /* consio.cpp in Sources */,
+				960F668C19EDDC2600512951 /* options.cpp in Sources */,
+				960F668D19EDDC2600512951 /* errhnd.cpp in Sources */,
+				960F668E19EDDC2600512951 /* rarvm.cpp in Sources */,
+				960F668F19EDDC2600512951 /* secpassword.cpp in Sources */,
+				960F669019EDDC2600512951 /* rijndael.cpp in Sources */,
+				960F669119EDDC2600512951 /* getbits.cpp in Sources */,
+				960F669219EDDC2600512951 /* sha1.cpp in Sources */,
+				960F669319EDDC2600512951 /* sha256.cpp in Sources */,
+				960F669419EDDC2600512951 /* blake2s.cpp in Sources */,
+				960F669519EDDC2600512951 /* hash.cpp in Sources */,
+				960F669619EDDC2600512951 /* extinfo.cpp in Sources */,
+				960F669719EDDC2600512951 /* extract.cpp in Sources */,
+				960F669819EDDC2600512951 /* volume.cpp in Sources */,
+				960F669919EDDC2600512951 /* list.cpp in Sources */,
+				960F669A19EDDC2600512951 /* find.cpp in Sources */,
+				960F669B19EDDC2600512951 /* unpack.cpp in Sources */,
+				960F669C19EDDC2600512951 /* headers.cpp in Sources */,
+				960F669D19EDDC2600512951 /* threadpool.cpp in Sources */,
+				960F669E19EDDC2600512951 /* rs16.cpp in Sources */,
+				960F669F19EDDC2600512951 /* cmddata.cpp in Sources */,
+				960F66A019EDDC2600512951 /* ui.cpp in Sources */,
+				960F66A119EDDC2600512951 /* filestr.cpp in Sources */,
+				960F66A219EDDC2600512951 /* recvol.cpp in Sources */,
+				960F66A319EDDC2600512951 /* rs.cpp in Sources */,
+				960F66A419EDDC2600512951 /* scantree.cpp in Sources */,
+				960F66A519EDDC2600512951 /* qopen.cpp in Sources */,
+				960F66A619EDDC2600512951 /* dll.cpp in Sources */,
 				96E5D347198B334500A74340 /* URKArchive.mm in Sources */,
 				96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */,
 			);
@@ -956,7 +963,7 @@
 					"$(OTHER_CFLAGS)",
 				);
 				OTHER_LDFLAGS = "";
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -974,7 +981,7 @@
 					"$(OTHER_CFLAGS)",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
