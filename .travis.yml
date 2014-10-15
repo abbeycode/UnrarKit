@@ -1,5 +1,4 @@
 language: objective-c
-xcode_workspace: UnrarKit.xcworkspace
-xcode_scheme:
-  - UnrarKit
-  - UnrarExample
+script:
+  - xctool -workspace UnrarKit.xcworkspace -scheme UnrarKit build
+  - xctool -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator build
