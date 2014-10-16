@@ -105,7 +105,7 @@ extern NSString *URKErrorDomain;
 /**
  *  Unarchive a single file from the archive into memory
  *
- *  @param filePath The path of the file iwithn the archive to be expanded
+ *  @param filePath The path of the file within the archive to be expanded
  *  @param error    Contains an NSError object when there was an error reading the archive
  *
  *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
