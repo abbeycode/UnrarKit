@@ -2,16 +2,16 @@
 
 # About
 
-UnrarKit is here to enable Mac and iOS apps to easily work with RAR files for read-only operations.
+UnrarKit is here to enable Mac and iOS apps to easily work with RAR files for read-only operations. It is currently based on version 5.2.1 of the [UnRAR library](http://www.rarlab.com/rar/unrarsrc-5.2.1.tar.gz).
 
-There is a main project, with a static library target and a unit tests target, and an example project, which demonstrates how to use the library.
+There is a main project, with unit tests, and a basic iOS example project, which demonstrates how to use the library.
 
-I'm always open to improvements, so please submit your pull requests.
+I'm always open to improvements, so please submit your pull requests, or [create issues](https://github.com/abbeycode/UnrarKit/issues) for someone else to implement.
 
 
 # Installation
 
-UnrarKit has been converted to a CocoaPods project. If you're not familiar with [CocoaPods](http://cocoapods.org), you can start with their [Getting Started guide](http://guides.cocoapods.org/using/getting-started.html).
+UnrarKit is a CocoaPods project, which is the recommended way to install it. If you're not familiar with [CocoaPods](http://cocoapods.org), you can start with their [Getting Started guide](http://guides.cocoapods.org/using/getting-started.html).
 
 I've included a sample [`podfile`](Example/Podfile) in the Example directory along with the sample project. Everything should install with the single command:
 
@@ -26,6 +26,6 @@ To open in Xcode, use the [UnrarKit.xcworkspace](UnrarKit.xcworkspace) file, whi
 
 # Credits
 
+* Dov Frankel (dov@abbey-code.com)
 * Rogerio Pereira Araujo (rogerio.araujo@gmail.com)
 * Vicent Scott (vkan388@gmail.com)
-* Dov Frankel (dov@abbey-code.com)
