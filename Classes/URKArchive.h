@@ -8,20 +8,80 @@
 #import "raros.hpp"
 #import "dll.hpp"
 
+/**
+ *  Defines the various error codes that the listing and extraction methods return.
+ *  These are returned in NSError's [code]([NSError code]) field.
+ */
 typedef NS_ENUM(NSInteger, URKErrorCode) {
-    URKErrorCodeEndOfArchive    = ERAR_END_ARCHIVE,
-    URKErrorCodeNoMemory        = ERAR_NO_MEMORY,
-    URKErrorCodeBadData         = ERAR_BAD_DATA,
-    URKErrorCodeBadArchive      = ERAR_BAD_ARCHIVE,
-    URKErrorCodeUnknownFormat   = ERAR_UNKNOWN_FORMAT,
-    URKErrorCodeOpen            = ERAR_EOPEN,
-    URKErrorCodeCreate          = ERAR_ECREATE,
-    URKErrorCodeClose           = ERAR_ECLOSE,
-    URKErrorCodeRead            = ERAR_EREAD,
-    URKErrorCodeWrite           = ERAR_EWRITE,
-    URKErrorCodeSmall           = ERAR_SMALL_BUF,
-    URKErrorCodeUnknown         = ERAR_UNKNOWN,
+
+    /**
+     *  The archive's header is empty
+     */
+    URKErrorCodeEndOfArchive = ERAR_END_ARCHIVE,
+    
+    /**
+     *  The library ran out of memory while reading the archive
+     */
+    URKErrorCodeNoMemory = ERAR_NO_MEMORY,
+    
+    /**
+     *  The header is broken
+     */
+    URKErrorCodeBadData = ERAR_BAD_DATA,
+    
+    /**
+     *  The archive is not a valid RAR file
+     */
+    URKErrorCodeBadArchive = ERAR_BAD_ARCHIVE,
+    
+    /**
+     *  The archive is an unsupported RAR format or version
+     */
+    URKErrorCodeUnknownFormat = ERAR_UNKNOWN_FORMAT,
+    
+    /**
+     *  Failed to open a reference to the file
+     */
+    URKErrorCodeOpen = ERAR_EOPEN,
+    
+    /**
+     *  Failed to create the target directory for extraction
+     */
+    URKErrorCodeCreate = ERAR_ECREATE,
+    
+    /**
+     *  Failed to close the archive
+     */
+    URKErrorCodeClose = ERAR_ECLOSE,
+    
+    /**
+     *  Failed to read the archive
+     */
+    URKErrorCodeRead = ERAR_EREAD,
+
+    /**
+     *  Failed to write a file to disk
+     */
+    URKErrorCodeWrite = ERAR_EWRITE,
+
+    /**
+     *  The archive header's comments are larger than the buffer size
+     */
+    URKErrorCodeSmall = ERAR_SMALL_BUF,
+
+    /**
+     *  The cause of the error is unspecified
+     */
+    URKErrorCodeUnknown = ERAR_UNKNOWN,
+
+    /**
+     *  A password was not given for a password-protected archive
+     */
     URKErrorCodeMissingPassword = ERAR_MISSING_PASSWORD,
+
+    /**
+     *  No data was returned from the archive
+     */
     URKErrorCodeArchiveNotFound = 101,
 };
 
