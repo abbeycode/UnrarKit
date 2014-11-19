@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = "UnrarKit"
-  s.version       = "2.2.3"
+  s.version       = "2.2.4"
   s.summary       = "A port of the UnRAR library for the iOS and Mac platforms"
   s.license       = "BSD"
   s.homepage      = "https://github.com/abbeycode/UnrarKit"
@@ -87,6 +87,7 @@ Pod::Spec.new do |s|
                      "Libraries/unrar/unpackinline.cpp",
                      "Libraries/unrar/uowners.cpp",
                      "Libraries/unrar/win32stm.cpp"
-  s.xcconfig = { "OTHER_CFLAGS" => "$(inherited) -Wno-return-type -Wno-logical-op-parentheses -Wno-conversion -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-switch",
+  s.xcconfig = { "OTHER_LDFLAGS" => "$(inherited) -lc++",
+                 "OTHER_CFLAGS" => "$(inherited) -Wno-return-type -Wno-logical-op-parentheses -Wno-conversion -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-switch",
                  "OTHER_CPLUSPLUSFLAGS" => "$(inherited) -DSILENT -DRARDLL $(OTHER_CFLAGS)" }
 end
