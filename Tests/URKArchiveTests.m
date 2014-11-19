@@ -422,7 +422,7 @@
     
     NSInteger finalFileCount = [self numberOfOpenFileHandles];
     
-    XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 1, @"File descriptors were left open");
+    XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
 }
 
 - (void)testErrorIsCorrect
