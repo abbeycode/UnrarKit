@@ -152,6 +152,15 @@ extern NSString *URKErrorDomain;
 - (NSArray *)listFiles:(NSError **)error;
 
 /**
+ *  Lists the files with their metadata in the archive
+ *
+ *  @param error Contains an NSError object when there was an error reading the archive
+ *
+ *  @return Returns a list of URKFileInfo containing metadata about all archive files, or nil if an error was encountered
+ */
+- (NSArray *)listFilesWithMetadata:(NSError **)error;
+
+/**
  *  Writes all files in the archive to the given path
  *
  *  @param filePath  The destination path of the unarchived files
