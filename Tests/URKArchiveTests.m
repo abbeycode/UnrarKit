@@ -32,7 +32,8 @@
     NSString *uniqueName = [self randomDirectoryName];
     NSError *error = nil;
     
-    NSArray *testFiles = @[@"Test Archive.rar",
+    NSArray *testFiles = @[@"Large Archive.rar",
+                           @"Test Archive.rar",
                            @"Test Archive (Password).rar",
                            @"Test Archive (Header Password).rar",
                            @"Test File A.txt",
@@ -74,7 +75,7 @@
     }
     
     // Make a "corrupt" rar file
-    NSURL *m4aFileURL = [self urlOfTestFile:testFiles[5]];
+    NSURL *m4aFileURL = [self urlOfTestFile:@"Test File C.m4a"];
     self.corruptArchive = [self.tempDirectory URLByAppendingPathComponent:@"corrupt.rar"];
     [fm copyItemAtURL:m4aFileURL
                 toURL:self.corruptArchive
@@ -432,6 +433,46 @@
     XCTAssertNil([archive listFiles:&error], "Listing files in corrupt archive should return nil");
     XCTAssertNotNil(error, @"An error should be returned when listing files in a corrupt archive");
     XCTAssertNotNil(error.description, @"Error's description is nil");
+}
+
+- (void)testFileMoved
+{
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    
+    NSError *error = nil;
+    NSArray *archiveFiles = [archive listFiles:&error];
+
+    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [NSThread sleepForTimeInterval:1];
+        
+        NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"unittest"];
+        
+        NSError *renameError = nil;
+        NSFileManager *fm = [NSFileManager defaultManager];
+        [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
+        XCTAssertNil(error, @"Error renaming file: %@", renameError);
+    });
+    
+    NSMutableSet *allDirectories = [NSMutableSet set];
+    
+    [archiveFiles enumerateObjectsUsingBlock:^(NSString *archiveFile, NSUInteger idx, BOOL *stop) {
+        [allDirectories addObjectsFromArray:archiveFile.stringByDeletingLastPathComponent.pathComponents];
+            
+        NSError *extractError = nil;
+        NSData *fileData = [archive extractDataFromFile:archiveFile error:&extractError];
+        XCTAssertNil(extractError, @"Error extracting file %@: %@", @(idx), extractError);
+        
+        XCTAssertNotNil(fileData, @"Extracted file %@ is nil", @(idx));
+        
+        // All non-directory files must be non-empty
+        if (![allDirectories containsObject:archiveFile]) {
+            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", archiveFile);
+        }
+    }];
 }
 
 
