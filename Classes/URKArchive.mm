@@ -132,7 +132,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         return NO;
     
     @try {
-        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:error]) {
                 return NO;
             }
@@ -144,7 +144,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
             
         }
         
-        if (RHCode != ERAR_SUCCESS) {
+        if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             [self assignError:error code:RHCode];
             return NO;
         }
