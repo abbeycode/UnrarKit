@@ -144,10 +144,9 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
             
         }
         
-        switch (RHCode) {
-            case ERAR_MISSING_PASSWORD:
-                [self assignError:error code:ERAR_MISSING_PASSWORD];
-                return NO;
+        if (RHCode != ERAR_SUCCESS) {
+            [self assignError:error code:RHCode];
+            return NO;
         }
         
         return YES;
@@ -193,15 +192,14 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
             }
         }
         
-        switch (RHCode) {
-            case ERAR_MISSING_PASSWORD:
-                [self assignError:error code:ERAR_MISSING_PASSWORD];
-                return nil;
+        if (RHCode != ERAR_SUCCESS) {
+            [self assignError:error code:RHCode];
+            return nil;
         }
         
+        // Empty file, or a directory
         if (length == 0) {
-            [self assignError:error code:ERAR_ARCHIVE_NOT_FOUND];
-            return nil;
+            return [NSData data];
         }
         
         UInt8 *buffer = (UInt8 *)malloc(length * sizeof(UInt8));
