@@ -236,6 +236,40 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 	return YES;
 }
 
+- (BOOL)isPasswordProtected
+{
+    @try {
+        if ([self _unrarOpenFile:_filename inMode:RAR_OM_LIST_INCSPLIT withPassword:nil error:nil] == NO)
+            return NO;
+        int RHCode = RARReadHeaderEx(_rarFile, header);
+        int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
+        
+        if(RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD)
+            return YES;
+    }
+    @finally {
+        [self closeFile];
+    }
+    return NO;
+}
+
+- (BOOL)validatePassword
+{
+    @try {
+        if ([self _unrarOpenFile:_filename inMode:RAR_OM_LIST_INCSPLIT withPassword:_password error:nil] == NO)
+            return NO;
+        int RHCode = RARReadHeaderEx(_rarFile, header);
+        int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
+        
+        if(RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD || RHCode == ERAR_BAD_DATA || PFCode == ERAR_BAD_DATA )
+            return NO;
+        return YES;
+    }
+    @finally {
+        [self closeFile];
+    }
+}
+
 
 
 #pragma mark - Private Methods
@@ -366,48 +400,6 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     
     return NO;
 }
-
-
-
-
-- (BOOL)isPasswordProtected
-{
-    @try {
-        if ([self _unrarOpenFile:_filename inMode:RAR_OM_LIST_INCSPLIT withPassword:nil error:nil] == NO)
-            return NO;
-        int RHCode = RARReadHeaderEx(_rarFile, header);
-        int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
-        
-        if(RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD)
-            return YES;
-    }
-    @finally {
-        [self closeFile];
-    }
-    return NO;
-}
-
-- (BOOL)checkPassword
-{
-    @try {
-        if ([self _unrarOpenFile:_filename inMode:RAR_OM_LIST_INCSPLIT withPassword:_password error:nil] == NO)
-            return NO;
-        int RHCode = RARReadHeaderEx(_rarFile, header);
-        int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
-        
-        if(RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD || RHCode == ERAR_BAD_DATA || PFCode == ERAR_BAD_DATA )
-            return NO;
-        return YES;
-    }
-    @finally {
-        [self closeFile];
-    }
-}
-
-
-
-
-
 
 - (void)dealloc {
 	[_filename release];

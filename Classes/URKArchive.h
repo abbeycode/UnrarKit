@@ -174,15 +174,15 @@ extern NSString *URKErrorDomain;
 
 
 /**
- *  Is archive protected with password
+ *  YES if archive protected with a password, NO otherwise
  */
 - (BOOL)isPasswordProtected;
 
 /**
- *  Check if password
+ *  Tests whether the provided password unlocks the archive
  *
- *  @return YES currect pasaword , NO wrong password
+ *  @return YES if correct password or archive is not password protected, NO if password is wrong
  */
-- (BOOL)checkPassword;
+- (BOOL)validatePassword;
 
 @end
