@@ -425,6 +425,44 @@
     XCTAssertNil(error, @"Error reading files: %@", error);
 }
 
+- (void)testExtractData_FileDeleted
+{
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    
+    NSError *error = nil;
+    NSArray *archiveFiles = [archive listFiles:&error];
+    
+    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [NSThread sleepForTimeInterval:1];
+        
+        NSError *removeError = nil;
+        NSFileManager *fm = [NSFileManager defaultManager];
+        [fm removeItemAtURL:largeArchiveURL error:&removeError];
+        XCTAssertNil(error, @"Error removing file: %@", removeError);
+    });
+    
+    NSMutableSet *allDirectories = [NSMutableSet set];
+    
+    error = nil;
+    BOOL success = [archive performOnDataInArchive:^(NSString *filePath, NSData *fileData, BOOL *stop) {
+        [allDirectories addObjectsFromArray:filePath.stringByDeletingLastPathComponent.pathComponents];
+        
+        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", filePath);
+
+        // All non-directory files must be non-empty
+        if (![allDirectories containsObject:filePath]) {
+            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", filePath);
+        }
+    } error:&error];
+    
+    XCTAssertTrue(success, @"Failed to read files");
+    XCTAssertNil(error, @"Error reading files: %@", error);
+}
+
 - (void)testFileDescriptorUsage
 {
     NSInteger initialFileCount = [self numberOfOpenFileHandles];
