@@ -272,13 +272,31 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 - (BOOL)validatePassword
 {
     @try {
-        if ([self _unrarOpenFile:_filename inMode:RAR_OM_LIST_INCSPLIT withPassword:_password error:nil] == NO)
+        NSError *error = nil;
+        if (![self _unrarOpenFile:_filename
+                           inMode:RAR_OM_EXTRACT
+                     withPassword:_password
+                            error:&error])
+        {
             return NO;
-        int RHCode = RARReadHeaderEx(_rarFile, header);
-        int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
+        }
         
-        if(RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD || RHCode == ERAR_BAD_DATA || PFCode == ERAR_BAD_DATA )
+        if (error) {
+            NSLog(@"Error validating password: %@", error);
             return NO;
+        }
+        
+        int RHCode = RARReadHeaderEx(_rarFile, header);
+        int PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, NULL, NULL);
+        
+        if ([self headerContainsErrors:&error] && error.code == ERAR_MISSING_PASSWORD) {
+            NSLog(@"Errors in header while validating password: %@", error);
+            return NO;
+        }
+        
+        if (RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD || RHCode == ERAR_BAD_DATA || PFCode == ERAR_BAD_DATA)
+            return NO;
+        
         return YES;
     }
     @finally {
