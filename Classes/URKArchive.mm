@@ -244,7 +244,9 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
                            inMode:RAR_OM_EXTRACT
                      withPassword:nil
                             error:&error])
+        {
             return NO;
+        }
         
         if (error) {
             NSLog(@"Error checking for password: %@", error);
