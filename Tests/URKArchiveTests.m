@@ -539,6 +539,31 @@
     XCTAssertNil(error, @"Error reading files: %@", error);
 }
 
+- (void)testExtractBufferedData
+{
+    NSURL *archiveURL = self.testFileURLs[@"Test Archive.rar"];
+    NSString *extractedFile = @"Test File B.jpg";
+    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    
+    NSError *error = nil;
+    NSMutableData *reconstructedFile = [NSMutableData data];
+    BOOL success = [archive extractBufferedDataFromFile:extractedFile
+                                                  error:&error
+                                                 action:
+                    ^(NSData *dataChunk) {
+                        [reconstructedFile appendBytes:dataChunk.bytes
+                                                length:dataChunk.length];
+                    }];
+    
+    XCTAssertTrue(success, @"Failed to read buffered data");
+    XCTAssertNil(error, @"Error reading buffered data");
+    XCTAssertGreaterThan(reconstructedFile.length, 0, @"No data returned");
+    
+    NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[extractedFile]];
+    XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
+                  @"File extracted in buffer not returned correctly");
+}
+
 - (void)testFileDescriptorUsage
 {
     NSInteger initialFileCount = [self numberOfOpenFileHandles];

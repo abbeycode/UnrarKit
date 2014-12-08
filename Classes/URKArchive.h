@@ -178,6 +178,21 @@ extern NSString *URKErrorDomain;
 - (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
 
 /**
+ *  Unarchive a single file from the archive into memory
+ *
+ *  @param filePath   The path of the file within the archive to be expanded
+ *  @param error      Contains an NSError object when there was an error reading the archive
+ *  @param action     The block to run for each chunk of data, each of size <= bufferSize
+ *
+ *       - *dataChunk* The data read from the archived file. Read bytes and length to write the data
+ *
+ *  @return YES if all data was read successfully, NO if an error was encountered
+ */
+- (BOOL)extractBufferedDataFromFile:(NSString *)filePath
+                              error:(NSError **)error
+                             action:(void(^)(NSData *dataChunk))action;
+
+/**
  *  Extracts each file in the archive into memory, allowing you to perform an action on it
  *
  *  @param action The action to perform using the data
