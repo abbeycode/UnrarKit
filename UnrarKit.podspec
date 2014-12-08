@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source        = { :git => "https://github.com/abbeycode/UnrarKit.git", :tag => "#{s.version}" }
   s.ios.deployment_target = "5.0"
   s.osx.deployment_target = "10.7"
-  s.requires_arc = false
+  s.requires_arc = 'Classes/*'
   s.source_files = "Classes/*.{mm,m,h}",
                    "Libraries/unrar/*.hpp",
                    "Libraries/unrar/rar.cpp",

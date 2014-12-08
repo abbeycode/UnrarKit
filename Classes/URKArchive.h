@@ -101,14 +101,19 @@ extern NSString *URKErrorDomain;
 
 
 /**
+ *  The URL of the archive
+ */
+@property(weak, readonly) NSURL *fileURL;
+
+/**
  *  The filename of the archive
  */
-@property(nonatomic, retain) NSString *filename;
+@property(weak, readonly) NSString *filename;
 
 /**
  *  The password of the archive
  */
-@property(nonatomic, retain) NSString *password;
+@property(nonatomic, strong) NSString *password;
 
 
 /**
@@ -172,6 +177,21 @@ extern NSString *URKErrorDomain;
  */
 - (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
 
+/**
+ *  Extracts each file in the archive into memory, allowing you to perform an action on it
+ *
+ *  @param action The action to perform using the data
+ *
+ *       - *filePath* The name/path of the file within the archive
+ *       - *fileData* The full data of the file in the archive
+ *       - *stop*     Set to YES to stop reading the archive
+ *
+ *  @param error  Contains an error if any was returned
+ *
+ *  @return YES if no errors were encountered, NO otherwise
+ */
+- (BOOL)performOnDataInArchive:(void(^)(NSString *filePath, NSData *fileData, BOOL *stop))action
+                         error:(NSError **)error;
 
 /**
  *  YES if archive protected with a password, NO otherwise
@@ -184,5 +204,6 @@ extern NSString *URKErrorDomain;
  *  @return YES if correct password or archive is not password protected, NO if password is wrong
  */
 - (BOOL)validatePassword;
+
 
 @end
