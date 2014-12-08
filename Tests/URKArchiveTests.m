@@ -355,7 +355,7 @@
     }
 }
 
-- (void)testExtractDataWithoutPassword
+- (void)testExtractData_NoPassword
 {
     NSArray *testArchives = @[@"Test Archive (Password).rar",
                               @"Test Archive (Header Password).rar"];
@@ -373,7 +373,7 @@
     }
 }
 
-- (void)testExtractDataForInvalidArchive
+- (void)testExtractData_InvalidArchive
 {
     URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
     
@@ -383,6 +383,46 @@
     XCTAssertNotNil(error, @"Extract data for invalid archive succeeded");
     XCTAssertNil(data, @"Data returned for invalid archive");
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
+}
+
+- (void)testExtractData_FileMoved
+{
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    
+    NSError *error = nil;
+    NSArray *archiveFiles = [archive listFiles:&error];
+    
+    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [NSThread sleepForTimeInterval:1];
+        
+        NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"unittest"];
+        
+        NSError *renameError = nil;
+        NSFileManager *fm = [NSFileManager defaultManager];
+        [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
+        XCTAssertNil(error, @"Error renaming file: %@", renameError);
+    });
+    
+    NSMutableSet *allDirectories = [NSMutableSet set];
+    
+    error = nil;
+    BOOL success = [archive performOnDataInArchive:^(NSString *filePath, NSData *fileData, BOOL *stop) {
+        [allDirectories addObjectsFromArray:filePath.stringByDeletingLastPathComponent.pathComponents];
+        
+        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", filePath);
+        
+        // All non-directory files must be non-empty
+        if (![allDirectories containsObject:filePath]) {
+            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", filePath);
+        }
+    } error:&error];
+    
+    XCTAssertTrue(success, @"Failed to read files");
+    XCTAssertNil(error, @"Error reading files: %@", error);
 }
 
 - (void)testFileDescriptorUsage
@@ -433,46 +473,6 @@
     XCTAssertNil([archive listFiles:&error], "Listing files in corrupt archive should return nil");
     XCTAssertNotNil(error, @"An error should be returned when listing files in a corrupt archive");
     XCTAssertNotNil(error.description, @"Error's description is nil");
-}
-
-- (void)testFileMoved
-{
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
-    
-    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
-    
-    NSError *error = nil;
-    NSArray *archiveFiles = [archive listFiles:&error];
-
-    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [NSThread sleepForTimeInterval:1];
-        
-        NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"unittest"];
-        
-        NSError *renameError = nil;
-        NSFileManager *fm = [NSFileManager defaultManager];
-        [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
-        XCTAssertNil(error, @"Error renaming file: %@", renameError);
-    });
-    
-    NSMutableSet *allDirectories = [NSMutableSet set];
-    
-    [archiveFiles enumerateObjectsUsingBlock:^(NSString *archiveFile, NSUInteger idx, BOOL *stop) {
-        [allDirectories addObjectsFromArray:archiveFile.stringByDeletingLastPathComponent.pathComponents];
-            
-        NSError *extractError = nil;
-        NSData *fileData = [archive extractDataFromFile:archiveFile error:&extractError];
-        XCTAssertNil(extractError, @"Error extracting file %@: %@", @(idx), extractError);
-        
-        XCTAssertNotNil(fileData, @"Extracted file %@ is nil", @(idx));
-        
-        // All non-directory files must be non-empty
-        if (![allDirectories containsObject:archiveFile]) {
-            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", archiveFile);
-        }
-    }];
 }
 
 
