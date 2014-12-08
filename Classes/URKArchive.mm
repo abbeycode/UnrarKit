@@ -254,7 +254,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         }
         
         int RHCode = RARReadHeaderEx(_rarFile, header);
-        int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
+        int PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
         
         if ([self headerContainsErrors:&error]) {
             NSLog(@"Errors in header while checking for password: %@", error);
@@ -289,7 +289,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         }
         
         int RHCode = RARReadHeaderEx(_rarFile, header);
-        int PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, NULL, NULL);
+        int PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
         
         if ([self headerContainsErrors:&error] && error.code == ERAR_MISSING_PASSWORD) {
             NSLog(@"Errors in header while validating password: %@", error);
