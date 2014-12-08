@@ -312,19 +312,6 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return success;
 }
 
-- (BOOL)closeFile;
-{
-	if (_rarFile)
-		RARCloseArchive(_rarFile);
-    _rarFile = 0;
-    
-    if (flags)
-        delete flags->ArcName;
-	delete flags, flags = 0;
-    delete header, header = 0;
-	return YES;
-}
-
 - (BOOL)isPasswordProtected
 {
     @try {
@@ -455,6 +442,19 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     }
     
 	return YES;
+}
+
+- (BOOL)closeFile;
+{
+    if (_rarFile)
+        RARCloseArchive(_rarFile);
+    _rarFile = 0;
+    
+    if (flags)
+        delete flags->ArcName;
+    delete flags, flags = 0;
+    delete header, header = 0;
+    return YES;
 }
 
 - (NSString *)errorNameForErrorCode:(NSInteger)errorCode
