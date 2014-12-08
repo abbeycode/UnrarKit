@@ -239,17 +239,33 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 - (BOOL)isPasswordProtected
 {
     @try {
-        if ([self _unrarOpenFile:_filename inMode:RAR_OM_LIST_INCSPLIT withPassword:nil error:nil] == NO)
+        NSError *error = nil;
+        if (![self _unrarOpenFile:_filename
+                           inMode:RAR_OM_EXTRACT
+                     withPassword:nil
+                            error:&error])
             return NO;
+        
+        if (error) {
+            NSLog(@"Error checking for password: %@", error);
+            return NO;
+        }
+        
         int RHCode = RARReadHeaderEx(_rarFile, header);
         int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
         
-        if(RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD)
+        if ([self headerContainsErrors:&error]) {
+            NSLog(@"Errors in header while checking for password: %@", error);
+            return error.code == ERAR_MISSING_PASSWORD;
+        }
+        
+        if (RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD)
             return YES;
     }
     @finally {
         [self closeFile];
     }
+    
     return NO;
 }
 
