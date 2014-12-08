@@ -172,4 +172,17 @@ extern NSString *URKErrorDomain;
  */
 - (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
 
+
+/**
+ *  Is archive protected with password
+ */
+- (BOOL)isPasswordProtected;
+
+/**
+ *  Check if password
+ *
+ *  @return YES currect pasaword , NO wrong password
+ */
+- (BOOL)checkPassword;
+
 @end
