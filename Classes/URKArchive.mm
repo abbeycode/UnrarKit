@@ -367,6 +367,38 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return NO;
 }
 
+
+
+
+- (BOOL)isPasswordProtected
+{
+     if ([self _unrarOpenFile:_filename inMode:RAR_OM_LIST_INCSPLIT withPassword:nil error:nil] == NO)
+        return NO;
+    int RHCode = RARReadHeaderEx(_rarFile, header);
+    int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
+    
+    if(RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD)
+        return YES;
+    return NO;
+}
+
+- (BOOL)checkPassword
+{
+    if ([self _unrarOpenFile:_filename inMode:RAR_OM_LIST_INCSPLIT withPassword:_password error:nil] == NO)
+        return NO;
+    int RHCode = RARReadHeaderEx(_rarFile, header);
+    int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
+    
+    if(RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD || RHCode == ERAR_BAD_DATA || PFCode == ERAR_BAD_DATA )
+        return NO;
+    return YES;
+}
+
+
+
+
+
+
 - (void)dealloc {
 	[_filename release];
     [_password release];
