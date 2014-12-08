@@ -101,14 +101,19 @@ extern NSString *URKErrorDomain;
 
 
 /**
+ *  The URL of the archive
+ */
+@property(weak, readonly) NSURL *fileURL;
+
+/**
  *  The filename of the archive
  */
-@property(nonatomic, retain) NSString *filename;
+@property(weak, readonly) NSString *filename;
 
 /**
  *  The password of the archive
  */
-@property(nonatomic, retain) NSString *password;
+@property(nonatomic, strong) NSString *password;
 
 
 /**

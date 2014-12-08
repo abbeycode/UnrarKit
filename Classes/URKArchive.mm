@@ -10,6 +10,13 @@
 
 NSString *URKErrorDomain = @"URKErrorDomain";
 
+@interface URKArchive ()
+
+@property (strong) NSData *fileBookmark;
+
+@end
+
+
 @implementation URKArchive
 
 int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
@@ -38,50 +45,103 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 
 + (URKArchive *)rarArchiveAtPath:(NSString *)filePath;
 {
-    URKArchive *result = [[URKArchive alloc] initWithFile:filePath];
-    return [result autorelease];
+    return [[URKArchive alloc] initWithFile:[NSURL fileURLWithPath:filePath]];
 }
 
 + (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL;
 {
-    URKArchive *result = [[URKArchive alloc] initWithFile:fileURL.path];
-    return [result autorelease];
+    return [[URKArchive alloc] initWithFile:fileURL];
 }
 
 + (URKArchive *)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password;
 {
-    URKArchive *result = [[URKArchive alloc] initWithFile:filePath password:password];
-    return [result autorelease];
+    return [[URKArchive alloc] initWithFile:[NSURL fileURLWithPath:filePath]
+                                   password:password];
 }
 
 + (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL password:(NSString *)password;
 {
-    URKArchive *result = [[URKArchive alloc] initWithFile:fileURL.path password:password];
-    return [result autorelease];
+    return [[URKArchive alloc] initWithFile:fileURL password:password];
+}
+
+
+
+#pragma mark - Initializers
+
+
+- (id)initWithFile:(NSURL *)fileURL;
+{
+    if ((self = [super init])) {
+        NSError *error = nil;
+        self.fileBookmark = [fileURL bookmarkDataWithOptions:0
+                              includingResourceValuesForKeys:@[]
+                                               relativeToURL:nil
+                                                       error:&error];
+        
+        if (error) {
+            NSLog(@"Error creating bookmark to RAR archive: %@", error);
+        }
+    }
+    
+	return self;
+}
+
+- (id)initWithFile:(NSURL *)fileURL password:(NSString*)password;
+{
+	if ((self = [self initWithFile:fileURL])) {
+        self.password = password;
+    }
+    
+    return self;
+}
+
+
+#pragma mark - Properties
+
+
+- (NSURL *)fileURL {
+    BOOL bookmarkIsStale = NO;
+    NSError *error = nil;
+    
+    NSURL *result = [NSURL URLByResolvingBookmarkData:self.fileBookmark
+                                              options:0
+                                        relativeToURL:nil
+                                  bookmarkDataIsStale:&bookmarkIsStale
+                                                error:&error];
+    
+    if (error) {
+        NSLog(@"Error resolving bookmark to RAR archive: %@", error);
+        return nil;
+    }
+    
+    if (bookmarkIsStale) {
+        self.fileBookmark = [result bookmarkDataWithOptions:0
+                             includingResourceValuesForKeys:@[]
+                                              relativeToURL:nil
+                                                      error:&error];
+        
+        if (error) {
+            NSLog(@"Error creating fresh bookmark to RAR archive: %@", error);
+        }
+  }
+    
+    return result;
+}
+
+- (NSString *)filename {
+    NSURL *url = self.fileURL;
+    
+    if (!url) {
+        return nil;
+    }
+    
+    return url.path;
 }
 
 
 
 #pragma mark - Public Methods
 
-
-- (id)initWithFile:(NSString *)filePath;
-{
-    if ((self = [super init])) {
-        self.filename = filePath;
-    }
-    
-	return self;
-}
-
-- (id)initWithFile:(NSString *)filePath password:(NSString*)password;
-{
-	if ((self = [self initWithFile:filePath])) {
-        self.password = password;
-    }
-    
-    return self;
-}
 
 - (NSArray *)listFiles:(NSError **)error;
 {
@@ -278,9 +338,9 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         *error = nil;
     }
     
-    if (![self _unrarOpenFile:_filename
+    if (![self _unrarOpenFile:self.filename
                        inMode:mode
-                 withPassword:_password
+                 withPassword:self.password
                         error:error]) {
         return NO;
     }
@@ -413,18 +473,12 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 {
     BOOL isPasswordProtected = header->Flags & 0x04;
     
-    if (isPasswordProtected && !_password) {
+    if (isPasswordProtected && !self.password) {
         [self assignError:error code:ERAR_MISSING_PASSWORD];
         return YES;
     }
     
     return NO;
-}
-
-- (void)dealloc {
-	[_filename release];
-    [_password release];
-	[super dealloc];
 }
 
 @end

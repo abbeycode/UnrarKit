@@ -11,9 +11,9 @@
 
 @property BOOL testFailed;
 
-@property (copy) NSURL *tempDirectory;
-@property (retain) NSMutableDictionary *testFileURLs;
-@property (retain) NSURL *corruptArchive;
+@property NSURL *tempDirectory;
+@property NSMutableDictionary *testFileURLs;
+@property NSURL *corruptArchive;
 
 @end
 
@@ -106,6 +106,46 @@
 
 #pragma mark - Test Cases
 
+
+- (void)testFileURL {
+    NSArray *testArchives = @[@"Large Archive.rar",
+                              @"Test Archive.rar",
+                              @"Test Archive (Password).rar",
+                              @"Test Archive (Header Password).rar"];
+    
+    for (NSString *testArchiveName in testArchives) {
+        NSLog(@"Testing fileURL of archive %@", testArchiveName);
+        NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+        
+        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+        
+        NSURL *resolvedURL = archive.fileURL.URLByResolvingSymlinksInPath;
+        XCTAssertNotNil(resolvedURL, @"Nil URL returned for valid archive");
+        XCTAssertTrue([testArchiveURL isEqual:resolvedURL], @"Resolved URL doesn't match original");
+    }
+}
+
+- (void)testFilename {
+    NSArray *testArchives = @[@"Large Archive.rar",
+                              @"Test Archive.rar",
+                              @"Test Archive (Password).rar",
+                              @"Test Archive (Header Password).rar"];
+    
+    for (NSString *testArchiveName in testArchives) {
+        NSLog(@"Testing filename of archive %@", testArchiveName);
+        NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+        
+        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+        
+        NSString *resolvedFilename = archive.filename;
+        XCTAssertNotNil(resolvedFilename, @"Nil filename returned for valid archive");
+        
+        // Testing by suffix, since the original points to /private/var, but the resolved one
+        // points straight to /var. They're equivalent, but not character-for-character equal
+        XCTAssertTrue([resolvedFilename hasSuffix:testArchiveURL.path],
+                      @"Resolved filename doesn't match original");
+    }
+}
 
 - (void)testListFiles
 {
@@ -453,6 +493,42 @@
         
         XCTAssertNotNil(fileData, @"Extracted file is nil: %@", filePath);
 
+        // All non-directory files must be non-empty
+        if (![allDirectories containsObject:filePath]) {
+            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", filePath);
+        }
+    } error:&error];
+    
+    XCTAssertTrue(success, @"Failed to read files");
+    XCTAssertNil(error, @"Error reading files: %@", error);
+}
+
+- (void)testExtractData_FileMovedBeforeBegin
+{
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    
+    NSError *error = nil;
+    NSArray *archiveFiles = [archive listFiles:&error];
+    
+    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
+    
+    NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"unittest"];
+    
+    NSError *renameError = nil;
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
+    XCTAssertNil(error, @"Error renaming file: %@", renameError);
+    
+    NSMutableSet *allDirectories = [NSMutableSet set];
+    
+    error = nil;
+    BOOL success = [archive performOnDataInArchive:^(NSString *filePath, NSData *fileData, BOOL *stop) {
+        [allDirectories addObjectsFromArray:filePath.stringByDeletingLastPathComponent.pathComponents];
+        
+        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", filePath);
+        
         // All non-directory files must be non-empty
         if (![allDirectories containsObject:filePath]) {
             XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", filePath);
