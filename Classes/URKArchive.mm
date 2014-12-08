@@ -236,6 +236,76 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 	return YES;
 }
 
+- (BOOL)isPasswordProtected
+{
+    @try {
+        NSError *error = nil;
+        if (![self _unrarOpenFile:_filename
+                           inMode:RAR_OM_EXTRACT
+                     withPassword:nil
+                            error:&error])
+        {
+            return NO;
+        }
+        
+        if (error) {
+            NSLog(@"Error checking for password: %@", error);
+            return NO;
+        }
+        
+        int RHCode = RARReadHeaderEx(_rarFile, header);
+        int PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        
+        if ([self headerContainsErrors:&error]) {
+            NSLog(@"Errors in header while checking for password: %@", error);
+            return error.code == ERAR_MISSING_PASSWORD;
+        }
+        
+        if (RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD)
+            return YES;
+    }
+    @finally {
+        [self closeFile];
+    }
+    
+    return NO;
+}
+
+- (BOOL)validatePassword
+{
+    @try {
+        NSError *error = nil;
+        if (![self _unrarOpenFile:_filename
+                           inMode:RAR_OM_EXTRACT
+                     withPassword:_password
+                            error:&error])
+        {
+            return NO;
+        }
+        
+        if (error) {
+            NSLog(@"Error validating password: %@", error);
+            return NO;
+        }
+        
+        int RHCode = RARReadHeaderEx(_rarFile, header);
+        int PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        
+        if ([self headerContainsErrors:&error] && error.code == ERAR_MISSING_PASSWORD) {
+            NSLog(@"Errors in header while validating password: %@", error);
+            return NO;
+        }
+        
+        if (RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD || RHCode == ERAR_BAD_DATA || PFCode == ERAR_BAD_DATA)
+            return NO;
+        
+        return YES;
+    }
+    @finally {
+        [self closeFile];
+    }
+}
+
 
 
 #pragma mark - Private Methods
