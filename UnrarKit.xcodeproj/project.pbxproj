@@ -538,8 +538,8 @@
 		0867D691FE84028FC02AAC07 /* UnrarKit */ = {
 			isa = PBXGroup;
 			children = (
-				96853ED318DB704900B5651B /* Resources */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
+				96853ED318DB704900B5651B /* Resources */,
 				964C8AC218D28EE000AD7321 /* Tests */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
