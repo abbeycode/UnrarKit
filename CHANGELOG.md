@@ -1,5 +1,11 @@
 # UnrarKit CHANGELOG
 
+## 2.3
+
+* Full Unicode support (Issue #11)
+* Better support for moving files during a decompression into memory by adding a new block-based method
+
+
 ## 2.2.4
 
 Added -lc++ to CocoaPods linker flags, so that a .mm file is no longer required for a successful build
