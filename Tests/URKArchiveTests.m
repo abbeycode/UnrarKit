@@ -13,6 +13,7 @@
 
 @property NSURL *tempDirectory;
 @property NSMutableDictionary *testFileURLs;
+@property NSMutableDictionary *unicodeFileURLs;
 @property NSURL *corruptArchive;
 
 @end
@@ -40,10 +41,16 @@
                            @"Test File B.jpg",
                            @"Test File C.m4a"];
     
+    NSArray *unicodeFiles = @[@"Ⓣest Ⓐrchive.rar",
+                              @"Test File Ⓐ.txt",
+                              @"Test File Ⓑ.jpg",
+                              @"Test File Ⓒ.m4a"];
+    
     NSString *tempDirSubtree = [@"UnrarKitTest" stringByAppendingPathComponent:uniqueName];
     
     self.testFailed = NO;
     self.testFileURLs = [[NSMutableDictionary alloc] init];
+    self.unicodeFileURLs = [[NSMutableDictionary alloc] init];
     self.tempDirectory = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:tempDirSubtree]
                                     isDirectory:YES];
 
@@ -56,7 +63,10 @@
     
     XCTAssertNil(error, @"Failed to create temp directory: %@", self.tempDirectory);
 
-    for (NSString *file in testFiles) {
+    NSMutableArray *filesToCopy = [NSMutableArray arrayWithArray:testFiles];
+    [filesToCopy addObjectsFromArray:unicodeFiles];
+    
+    for (NSString *file in filesToCopy) {
         NSURL *testFileURL = [self urlOfTestFile:file];
         BOOL testFileExists = [fm fileExistsAtPath:testFileURL.path];
         XCTAssertTrue(testFileExists, @"%@ not found", file);
@@ -71,7 +81,12 @@
         XCTAssertNil(error, @"Failed to copy temp file %@ from %@ to %@",
                      file, testFileURL, destinationURL);
         
-        [self.testFileURLs setObject:destinationURL forKey:file];
+        if ([testFiles containsObject:file]) {
+            [self.testFileURLs setObject:destinationURL forKey:file];
+        }
+        else if ([unicodeFiles containsObject:file]) {
+            [self.unicodeFileURLs setObject:destinationURL forKey:file];
+        }
     }
     
     // Make a "corrupt" rar file
@@ -182,7 +197,34 @@
     }
 }
 
-- (void)testListFilesWithHeaderPassword
+- (void)testListFiles_Unicode
+{
+    NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
+        return ![key hasSuffix:@"rar"];
+    }];
+    
+    NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    
+    NSError *error = nil;
+    NSArray *filesInArchive = [archive listFiles:&error];
+    
+    XCTAssertNil(error, @"Error returned by unrarListFiles");
+    XCTAssertNotNil(filesInArchive, @"No list of files returned");
+    XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
+                   @"Incorrect number of files listed in archive");
+    
+    for (NSInteger i = 0; i < filesInArchive.count; i++) {
+        NSString *archiveFilename = filesInArchive[i];
+        NSString *expectedFilename = expectedFiles[i];
+        
+        XCTAssertEqualObjects(archiveFilename, expectedFilename, @"Incorrect filename listed");
+    }
+}
+
+- (void)testListFiles_HeaderPassword
 {
     NSArray *testArchives = @[@"Test Archive (Header Password).rar"];
     
@@ -225,7 +267,7 @@
     }
 }
 
-- (void)testListFilesWithoutPassword
+- (void)testListFiles_NoHeaderPasswordGiven
 {
     URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test Archive (Header Password).rar"]];
     
@@ -237,7 +279,7 @@
     XCTAssertEqual(error.code, URKErrorCodeMissingPassword, @"Unexpected error code returned");
 }
 
-- (void)testListFilesForInvalidArchive
+- (void)testListFiles_InvalidArchive
 {
     URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
     
@@ -262,14 +304,14 @@
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
     
     NSFileManager *fm = [NSFileManager defaultManager];
-
+    
     for (NSString *testArchiveName in testArchives) {
         NSLog(@"Testing extraction of archive %@", testArchiveName);
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         NSString *extractDirectory = [self randomDirectoryWithPrefix:
                                       [testArchiveName stringByDeletingPathExtension]];
         NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
-
+        
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
                               ? @"password"
                               : nil);
@@ -294,9 +336,9 @@
         for (NSInteger i = 0; i < extractedFiles.count; i++) {
             NSString *extractedFilename = extractedFiles[i];
             NSString *expectedFilename = expectedFiles[i];
-
+            
             NSLog(@"Testing for file %@", expectedFilename);
-
+            
             XCTAssertEqualObjects(extractedFilename, expectedFilename, @"Incorrect filename listed");
             
             NSURL *extractedFileURL = [extractURL URLByAppendingPathComponent:extractedFilename];
@@ -310,7 +352,57 @@
     }
 }
 
-- (void)testExtractFilesWithoutPassword
+- (void)testExtractFiles_Unicode
+{
+    NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
+        return ![key hasSuffix:@"rar"];
+    }];
+    
+    NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSString *testArchiveName = @"Ⓣest Ⓐrchive.rar";
+    NSURL *testArchiveURL = self.unicodeFileURLs[testArchiveName];
+    NSString *extractDirectory = [self randomDirectoryWithPrefix:
+                                  [testArchiveName stringByDeletingPathExtension]];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    
+    NSError *error = nil;
+    BOOL success = [archive extractFilesTo:extractURL.path overWrite:NO error:&error];
+    
+    XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
+    XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
+    
+    error = nil;
+    NSArray *extractedFiles = [fm contentsOfDirectoryAtPath:extractURL.path
+                                                      error:&error];
+    
+    XCTAssertNil(error, @"Failed to list contents of extract directory: %@", extractURL);
+    
+    XCTAssertNotNil(extractedFiles, @"No list of files returned");
+    XCTAssertEqual(extractedFiles.count, expectedFileSet.count,
+                   @"Incorrect number of files listed in archive");
+    
+    for (NSInteger i = 0; i < extractedFiles.count; i++) {
+        NSString *extractedFilename = extractedFiles[i];
+        NSString *expectedFilename = expectedFiles[i];
+        
+        XCTAssertEqualObjects(extractedFilename, expectedFilename, @"Incorrect filename listed");
+        
+        NSURL *extractedFileURL = [extractURL URLByAppendingPathComponent:extractedFilename];
+        NSURL *expectedFileURL = self.testFileURLs[expectedFilename];
+        
+        NSData *extractedFileData = [NSData dataWithContentsOfURL:extractedFileURL];
+        NSData *expectedFileData = [NSData dataWithContentsOfURL:expectedFileURL];
+        
+        XCTAssertTrue([expectedFileData isEqualToData:extractedFileData], @"Data in file doesn't match source");
+    }
+}
+
+- (void)testExtractFiles_NoPasswordGiven
 {
     NSArray *testArchives = @[@"Test Archive (Password).rar",
                               @"Test Archive (Header Password).rar"];
@@ -336,7 +428,7 @@
     }
 }
 
-- (void)testExtractFilesForInvalidArchive
+- (void)testExtractFiles_InvalidArchive
 {
     NSFileManager *fm = [NSFileManager defaultManager];
     
@@ -392,6 +484,34 @@
             XCTAssertNotNil(extractedData, @"No data extracted");
             XCTAssertTrue([expectedFileData isEqualToData:extractedData], @"Extracted data doesn't match original file");
         }
+    }
+}
+
+- (void)testExtractData_Unicode
+{
+    NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
+        return ![key hasSuffix:@"rar"];
+    }];
+    
+    NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    
+    for (NSInteger i = 0; i < expectedFiles.count; i++) {
+        NSString *expectedFilename = expectedFiles[i];
+        
+        NSError *error = nil;
+        NSData *extractedData = [archive extractDataFromFile:expectedFilename error:&error];
+        
+        XCTAssertNil(error, @"Error in extractStream:error:");
+        
+        NSData *expectedFileData = [NSData dataWithContentsOfURL:self.testFileURLs[expectedFilename]];
+        
+        XCTAssertNotNil(extractedData, @"No data extracted");
+        XCTAssertTrue([expectedFileData isEqualToData:extractedData], @"Extracted data doesn't match original file");
     }
 }
 
