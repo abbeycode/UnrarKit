@@ -151,9 +151,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         int RHCode = 0, PFCode = 0;
 
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-            NSString *filename = [[NSString alloc] initWithBytes:header->FileNameW
-                                                          length:wcslen(header->FileNameW) * sizeof(*header->FileNameW)
-                                                        encoding:NSUTF32LittleEndianStringEncoding];
+            NSString *filename = stringFromUnichars(header->FileNameW);
             [files addObject:filename];
             
             if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
@@ -189,8 +187,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
                 return;
             }
             
-            wchar_t *destFilePath = (wchar_t *)[filePath cStringUsingEncoding:NSUTF32LittleEndianStringEncoding];
-            if ((PFCode = RARProcessFileW(_rarFile, RAR_EXTRACT, destFilePath, NULL)) != 0) {
+            if ((PFCode = RARProcessFileW(_rarFile, RAR_EXTRACT, unicharsFromString(filePath), NULL)) != 0) {
                 [self assignError:error code:(NSInteger)PFCode];
                 result = NO;
                 return;
@@ -220,9 +217,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
                 return;
             }
             
-            NSString *filename = [[NSString alloc] initWithBytes:header->FileNameW
-                                                          length:wcslen(header->FileNameW) * sizeof(*header->FileNameW)
-                                                        encoding:NSUTF32LittleEndianStringEncoding];
+            NSString *filename = stringFromUnichars(header->FileNameW);
 
             if ([filename isEqualToString:filePath]) {
                 length = header->UnpSize;
@@ -548,5 +543,14 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     
     return NO;
 }
+
+static NSString *stringFromUnichars(wchar_t *unichars) {
+    return [[NSString alloc] initWithBytes:unichars
+                                    length:wcslen(unichars) * sizeof(*unichars)
+                                  encoding:NSUTF32LittleEndianStringEncoding];
+}
+
+static wchar_t *unicharsFromString(NSString *string) {
+    return (wchar_t *)[string cStringUsingEncoding:NSUTF32LittleEndianStringEncoding];}
 
 @end
