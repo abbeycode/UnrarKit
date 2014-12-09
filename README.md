@@ -9,6 +9,24 @@ There is a main project, with unit tests, and a basic iOS example project, which
 I'm always open to improvements, so please submit your pull requests, or [create issues](https://github.com/abbeycode/UnrarKit/issues) for someone else to implement.
 
 
+# Example Usage
+
+```Objective-C
+URKArchive *archive = [URKArchive rarArchiveAtPath:@"An Archive.rar"];
+
+NSError *error = nil;
+
+NSArray *filesInArchive = [archive listFiles:&error];
+BOOL extractFilesSuccessful = [archive extractFilesTo:extractURL.path
+                                            overWrite:NO
+                                                error:&error];
+NSData *extractedData = [archive extractDataFromFile:@"a file in the archive.jpg"
+                                               error:&error];
+```
+
+UnrarKit is a CocoaPods project, which is the recommended way to install it. If you're not familiar with [CocoaPods](http://cocoapods.org), you can start with their [Getting Started guide](http://guides.cocoapods.org/using/getting-started.html).
+
+
 # Installation
 
 UnrarKit is a CocoaPods project, which is the recommended way to install it. If you're not familiar with [CocoaPods](http://cocoapods.org), you can start with their [Getting Started guide](http://guides.cocoapods.org/using/getting-started.html).
@@ -21,6 +39,10 @@ I've included a sample [`podfile`](Example/Podfile) in the Example directory alo
 # Notes
 
 To open in Xcode, use the [UnrarKit.xcworkspace](UnrarKit.xcworkspace) file, which includes the other projects.
+
+## Documentation
+
+Full documentation for the project is available on [CocoaDocs](http://cocoadocs.org/docsets/UnrarKit).
 
 # Credits
 
