@@ -5,6 +5,7 @@
 //
 
 #import "URKArchive.h"
+#import "URKFileInfo.h"
 #import "rar.hpp"
 
 
@@ -83,7 +84,12 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return self;
 }
 
-- (NSArray *)listFiles:(NSError **)error;
+- (NSArray *)listFilenames:(NSError **)error {
+    NSArray *files = [self listFileInfo:error];
+    return [files valueForKey:@"fileName"];
+}
+
+- (NSArray *)listFileInfo:(NSError **)error;
 {
 	int RHCode = 0, PFCode = 0;
     
@@ -98,8 +104,9 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         NSMutableArray *files = [NSMutableArray array];
         
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
-            [files addObject:filename];
+
+            URKFileInfo *fileInfo = [[URKFileInfo alloc] initWithFileHeader:header];
+            [files addObject:fileInfo];
             
             if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                 [self assignError:error code:(NSInteger)PFCode];

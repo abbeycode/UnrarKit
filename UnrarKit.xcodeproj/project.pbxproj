@@ -283,6 +283,13 @@
 		96E5D345198B333200A74340 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
 		96E5D347198B334500A74340 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
+		F328A0E41A3697640012CE17 /* NSData+CRC.m in Sources */ = {isa = PBXBuildFile; fileRef = F337CAAA1A3569FA00542961 /* NSData+CRC.m */; };
+		F337CAAB1A3569FA00542961 /* NSData+CRC.h in Headers */ = {isa = PBXBuildFile; fileRef = F337CAA91A3569FA00542961 /* NSData+CRC.h */; };
+		F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; };
+		F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; };
+		F3FCD46D1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
+		F3FCD46E1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
+		F3FCD46F1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -494,6 +501,10 @@
 		9685411018DBA06000B5651B /* libUnrarKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnrarKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		969BDA2419EDE88E002CE755 /* libUnrarKit iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libUnrarKit iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA747D9E0F9514B9006C5449 /* UnrarKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKit_Prefix.pch; sourceTree = "<group>"; };
+		F337CAA91A3569FA00542961 /* NSData+CRC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC.h"; sourceTree = "<group>"; };
+		F337CAAA1A3569FA00542961 /* NSData+CRC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC.m"; sourceTree = "<group>"; };
+		F3FCD4691A3262E5003612BF /* URKFileInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URKFileInfo.h; sourceTree = "<group>"; };
+		F3FCD46A1A3262E5003612BF /* URKFileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URKFileInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -566,6 +577,8 @@
 			children = (
 				489CFA0E128B5169005DCC2A /* URKArchive.h */,
 				489CFA0F128B5169005DCC2A /* URKArchive.mm */,
+				F3FCD4691A3262E5003612BF /* URKFileInfo.h */,
+				F3FCD46A1A3262E5003612BF /* URKFileInfo.m */,
 			);
 			path = Classes;
 			sourceTree = SOURCE_ROOT;
@@ -582,6 +595,7 @@
 		964C8AC218D28EE000AD7321 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				F3FCD4701A34D3C3003612BF /* Utils */,
 				964C8AD018D28F1600AD7321 /* Test Data */,
 				964C8AC818D28EE000AD7321 /* URKArchiveTests.m */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
@@ -781,6 +795,15 @@
 			path = unrar;
 			sourceTree = "<group>";
 		};
+		F3FCD4701A34D3C3003612BF /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				F337CAA91A3569FA00542961 /* NSData+CRC.h */,
+				F337CAAA1A3569FA00542961 /* NSData+CRC.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -788,6 +811,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F337CAAB1A3569FA00542961 /* NSData+CRC.h in Headers */,
 				9685417018DBA43A00B5651B /* URKArchive.h in Headers */,
 				9685417118DBA58F00B5651B /* archive.hpp in Headers */,
 				9685417218DBA58F00B5651B /* array.hpp in Headers */,
@@ -825,6 +849,7 @@
 				9685419218DBA58F00B5651B /* raros.hpp in Headers */,
 				9685419318DBA58F00B5651B /* rartypes.hpp in Headers */,
 				9685419418DBA58F00B5651B /* rarvm.hpp in Headers */,
+				F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */,
 				9685419518DBA58F00B5651B /* rawread.hpp in Headers */,
 				9685419618DBA58F00B5651B /* rdwrfn.hpp in Headers */,
 				9685419718DBA58F00B5651B /* recvol.hpp in Headers */,
@@ -890,6 +915,7 @@
 				969BDA0919EDE88E002CE755 /* raros.hpp in Headers */,
 				969BDA0A19EDE88E002CE755 /* rartypes.hpp in Headers */,
 				969BDA0B19EDE88E002CE755 /* rarvm.hpp in Headers */,
+				F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */,
 				969BDA0C19EDE88E002CE755 /* rawread.hpp in Headers */,
 				969BDA0D19EDE88E002CE755 /* rdwrfn.hpp in Headers */,
 				969BDA0E19EDE88E002CE755 /* recvol.hpp in Headers */,
@@ -1032,6 +1058,7 @@
 				960F667919EDDC2600512951 /* smallfn.cpp in Sources */,
 				960F667A19EDDC2600512951 /* global.cpp in Sources */,
 				960F667B19EDDC2600512951 /* file.cpp in Sources */,
+				F328A0E41A3697640012CE17 /* NSData+CRC.m in Sources */,
 				960F667C19EDDC2600512951 /* filefn.cpp in Sources */,
 				960F667D19EDDC2600512951 /* filcreat.cpp in Sources */,
 				960F667E19EDDC2600512951 /* archive.cpp in Sources */,
@@ -1056,6 +1083,7 @@
 				960F669119EDDC2600512951 /* getbits.cpp in Sources */,
 				960F669219EDDC2600512951 /* sha1.cpp in Sources */,
 				960F669319EDDC2600512951 /* sha256.cpp in Sources */,
+				F3FCD46E1A3262E5003612BF /* URKFileInfo.m in Sources */,
 				960F669419EDDC2600512951 /* blake2s.cpp in Sources */,
 				960F669519EDDC2600512951 /* hash.cpp in Sources */,
 				960F669619EDDC2600512951 /* extinfo.cpp in Sources */,
@@ -1090,6 +1118,7 @@
 				9685414E18DBA16300B5651B /* pathfn.cpp in Sources */,
 				9685415D18DBA16300B5651B /* smallfn.cpp in Sources */,
 				9685414618DBA16300B5651B /* global.cpp in Sources */,
+				F3FCD46D1A3262E5003612BF /* URKFileInfo.m in Sources */,
 				9685414118DBA16300B5651B /* file.cpp in Sources */,
 				9685414218DBA16300B5651B /* filefn.cpp in Sources */,
 				9685414018DBA16300B5651B /* filcreat.cpp in Sources */,
@@ -1148,6 +1177,7 @@
 				969BD9B319EDE88E002CE755 /* pathfn.cpp in Sources */,
 				969BD9B419EDE88E002CE755 /* smallfn.cpp in Sources */,
 				969BD9B519EDE88E002CE755 /* global.cpp in Sources */,
+				F3FCD46F1A3262E5003612BF /* URKFileInfo.m in Sources */,
 				969BD9B619EDE88E002CE755 /* file.cpp in Sources */,
 				969BD9B719EDE88E002CE755 /* filefn.cpp in Sources */,
 				969BD9B819EDE88E002CE755 /* filcreat.cpp in Sources */,
