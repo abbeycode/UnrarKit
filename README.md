@@ -17,7 +17,7 @@ URKArchive *archive = [URKArchive rarArchiveAtPath:@"An Archive.rar"];
 NSError *error = nil;
 
 NSArray *filesInArchive = [archive listFiles:&error];
-BOOL extractFilesSuccessful = [archive extractFilesTo:extractURL.path
+BOOL extractFilesSuccessful = [archive extractFilesTo:@"some/directory"
                                             overWrite:NO
                                                 error:&error];
 NSData *extractedData = [archive extractDataFromFile:@"a file in the archive.jpg"
