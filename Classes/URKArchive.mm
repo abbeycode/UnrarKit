@@ -289,7 +289,6 @@ NSString *URKErrorDomain = @"URKErrorDomain";
         RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
 
         self.bufferedReadBlock = action;
-        NSLog(@"Self: %@", self);
         PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
         
         if (PFCode != 0) {
@@ -449,7 +448,8 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     URKArchive *refToSelf = (__bridge URKArchive *)(void *)UserData;
     
     if (msg == UCM_PROCESSDATA) {
-        refToSelf.bufferedReadBlock([NSData dataWithBytes:(UInt8 *)P1 length:P2]);
+        NSData *dataChunk = [NSData dataWithBytesNoCopy:(UInt8 *)P1 length:P2 freeWhenDone:NO];
+        refToSelf.bufferedReadBlock(dataChunk);
     }
     
     return 0;
