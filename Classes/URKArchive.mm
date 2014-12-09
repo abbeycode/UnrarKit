@@ -151,7 +151,9 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         int RHCode = 0, PFCode = 0;
 
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
+            NSString *filename = [[NSString alloc] initWithBytes:header->FileNameW
+                                                          length:wcslen(header->FileNameW) * sizeof(*header->FileNameW)
+                                                        encoding:NSUTF32LittleEndianStringEncoding];
             [files addObject:filename];
             
             if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
@@ -187,7 +189,8 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
                 return;
             }
             
-            if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *)[filePath UTF8String], NULL)) != 0) {
+            wchar_t *destFilePath = (wchar_t *)[filePath cStringUsingEncoding:NSUTF32LittleEndianStringEncoding];
+            if ((PFCode = RARProcessFileW(_rarFile, RAR_EXTRACT, destFilePath, NULL)) != 0) {
                 [self assignError:error code:(NSInteger)PFCode];
                 result = NO;
                 return;
@@ -217,14 +220,16 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
                 return;
             }
             
-            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
-            
+            NSString *filename = [[NSString alloc] initWithBytes:header->FileNameW
+                                                          length:wcslen(header->FileNameW) * sizeof(*header->FileNameW)
+                                                        encoding:NSUTF32LittleEndianStringEncoding];
+
             if ([filename isEqualToString:filePath]) {
                 length = header->UnpSize;
                 break;
             }
             else {
-                if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                if ((PFCode = RARProcessFileW(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                     [self assignError:error code:(NSInteger)PFCode];
                     return;
                 }

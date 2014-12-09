@@ -393,7 +393,7 @@
         XCTAssertEqualObjects(extractedFilename, expectedFilename, @"Incorrect filename listed");
         
         NSURL *extractedFileURL = [extractURL URLByAppendingPathComponent:extractedFilename];
-        NSURL *expectedFileURL = self.testFileURLs[expectedFilename];
+        NSURL *expectedFileURL = self.unicodeFileURLs[expectedFilename];
         
         NSData *extractedFileData = [NSData dataWithContentsOfURL:extractedFileURL];
         NSData *expectedFileData = [NSData dataWithContentsOfURL:expectedFileURL];
@@ -508,7 +508,7 @@
         
         XCTAssertNil(error, @"Error in extractStream:error:");
         
-        NSData *expectedFileData = [NSData dataWithContentsOfURL:self.testFileURLs[expectedFilename]];
+        NSData *expectedFileData = [NSData dataWithContentsOfURL:self.unicodeFileURLs[expectedFilename]];
         
         XCTAssertNotNil(extractedData, @"No data extracted");
         XCTAssertTrue([expectedFileData isEqualToData:extractedData], @"Extracted data doesn't match original file");
