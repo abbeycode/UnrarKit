@@ -658,6 +658,36 @@
     XCTAssertTrue(archive.validatePassword, @"validatePassword = NO when password supplied");
 }
 
+- (void)testUnicodeArchiveName
+{
+    NSURL *originalArchiveURL = self.testFileURLs[@"Test Archive.rar"];
+    
+    NSString *newArchiveName = @" ♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟.rar";
+    
+    NSURL *newArchiveURL = [[originalArchiveURL URLByDeletingLastPathComponent]
+                            URLByAppendingPathComponent:newArchiveName];
+    
+    NSError *error = nil;
+    BOOL moveSuccess = [[NSFileManager defaultManager] moveItemAtURL:originalArchiveURL
+                                                               toURL:newArchiveURL
+                                                               error:&error];
+    XCTAssertTrue(moveSuccess, @"Failed to rename Test Archive to unicode name");
+    XCTAssertNil(error, @"Error renaming Test Archive to unicode name: %@", error);
+    
+    NSString *extractDirectory = [self randomDirectoryWithPrefix:
+                                  [@"Unicode contents" stringByDeletingPathExtension]];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+
+    NSError *extractFilesError = nil;
+    URKArchive *unicodeNamedArchive = [URKArchive rarArchiveAtURL:newArchiveURL];
+    BOOL extractSuccess = [unicodeNamedArchive extractFilesTo:extractURL.path
+                                                    overWrite:YES
+                                                        error:&extractFilesError];
+    
+    XCTAssertTrue(extractSuccess, @"Failed to extract archive");
+    XCTAssertNil(extractFilesError, @"Error extracting archive: %@", extractFilesError);
+}
+
 
 
 #pragma mark - Helper Methods
