@@ -578,7 +578,7 @@
 - (void)testExtractBufferedData_VeryLarge
 {
     DTSendSignalFlag("Begin creating text file", DT_START_SIGNAL, TRUE);
-    NSURL *largeTextFile = [self randomTextFieldOfLength:10000000];
+    NSURL *largeTextFile = [self randomTextFieldOfLength:1000000]; // Increase for a more dramatic test
     XCTAssertNotNil(largeTextFile, @"No large text file URL returned");
     DTSendSignalFlag("End creating text file", DT_END_SIGNAL, TRUE);
 
