@@ -134,7 +134,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
         int RHCode = 0, PFCode = 0;
 
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
+            NSString *filename = stringFromUnichars(header->FileNameW);
             [files addObject:filename];
             
             if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
@@ -170,18 +170,18 @@ NSString *URKErrorDomain = @"URKErrorDomain";
                 return;
             }
             
-            if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *)[filePath UTF8String], NULL)) != 0) {
+            if ((PFCode = RARProcessFileW(_rarFile, RAR_EXTRACT, unicharsFromString(filePath), NULL)) != 0) {
                 [self assignError:error code:(NSInteger)PFCode];
                 result = NO;
                 return;
             }
-            
         }
         
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             [self assignError:error code:RHCode];
             result = NO;
         }
+        
     } inMode:RAR_OM_EXTRACT error:error];
     
     return success && result;
@@ -200,14 +200,14 @@ NSString *URKErrorDomain = @"URKErrorDomain";
                 return;
             }
             
-            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
-            
+            NSString *filename = stringFromUnichars(header->FileNameW);
+
             if ([filename isEqualToString:filePath]) {
                 length = header->UnpSize;
                 break;
             }
             else {
-                if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                if ((PFCode = RARProcessFileW(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                     [self assignError:error code:(NSInteger)PFCode];
                     return;
                 }
@@ -623,5 +623,14 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     
     return NO;
 }
+
+static NSString *stringFromUnichars(wchar_t *unichars) {
+    return [[NSString alloc] initWithBytes:unichars
+                                    length:wcslen(unichars) * sizeof(*unichars)
+                                  encoding:NSUTF32LittleEndianStringEncoding];
+}
+
+static wchar_t *unicharsFromString(NSString *string) {
+    return (wchar_t *)[string cStringUsingEncoding:NSUTF32LittleEndianStringEncoding];}
 
 @end
