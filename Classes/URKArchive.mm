@@ -21,37 +21,6 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 
 @implementation URKArchive
 
-int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
-	UInt8 **buffer;
-	
-	switch(msg) {
-		case UCM_CHANGEVOLUME:
-			break;
-            
-		case UCM_PROCESSDATA:
-			buffer = (UInt8 **) UserData;
-			memcpy(*buffer, (UInt8 *)P1, P2);
-			// advance the buffer ptr, original m_buffer ptr is untouched
-			*buffer += P2;
-			break;
-            
-		case UCM_NEEDPASSWORD:
-			break;
-	}
-    
-	return 0;
-}
-
-int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2) {
-    URKArchive *refToSelf = (__bridge URKArchive *)(void *)UserData;
-    
-    if (msg == UCM_PROCESSDATA) {
-        refToSelf.bufferedReadBlock([NSData dataWithBytes:(UInt8 *)P1 length:P2]);
-    }
-
-    return 0;
-}
-
 
 
 #pragma mark - Convenience Methods
@@ -448,6 +417,42 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     } inMode:RAR_OM_EXTRACT error:&error];
     
     return success && result;
+}
+
+
+
+#pragma mark - Callback Functions
+
+
+int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
+    UInt8 **buffer;
+    
+    switch(msg) {
+        case UCM_CHANGEVOLUME:
+            break;
+            
+        case UCM_PROCESSDATA:
+            buffer = (UInt8 **) UserData;
+            memcpy(*buffer, (UInt8 *)P1, P2);
+            // advance the buffer ptr, original m_buffer ptr is untouched
+            *buffer += P2;
+            break;
+            
+        case UCM_NEEDPASSWORD:
+            break;
+    }
+    
+    return 0;
+}
+
+int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2) {
+    URKArchive *refToSelf = (__bridge URKArchive *)(void *)UserData;
+    
+    if (msg == UCM_PROCESSDATA) {
+        refToSelf.bufferedReadBlock([NSData dataWithBytes:(UInt8 *)P1 length:P2]);
+    }
+    
+    return 0;
 }
 
 
