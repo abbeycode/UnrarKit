@@ -192,13 +192,13 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
                 result = NO;
                 return;
             }
-            
         }
         
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             [self assignError:error code:RHCode];
             result = NO;
         }
+        
     } inMode:RAR_OM_EXTRACT error:error];
     
     return success && result;
