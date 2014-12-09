@@ -25,6 +25,8 @@
 }
 
 - (NSDate *)parseDOSDate:(NSUInteger)dosTime {
+    if (dosTime == 0) return nil;
+    
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
     // MSDOS Date Format Parsing specified

@@ -283,6 +283,8 @@
 		96E5D345198B333200A74340 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
 		96E5D347198B334500A74340 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
+		F328A0E41A3697640012CE17 /* NSData+CRC.m in Sources */ = {isa = PBXBuildFile; fileRef = F337CAAA1A3569FA00542961 /* NSData+CRC.m */; };
+		F337CAAB1A3569FA00542961 /* NSData+CRC.h in Headers */ = {isa = PBXBuildFile; fileRef = F337CAA91A3569FA00542961 /* NSData+CRC.h */; };
 		F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; };
 		F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; };
 		F3FCD46D1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
@@ -499,6 +501,8 @@
 		9685411018DBA06000B5651B /* libUnrarKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnrarKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		969BDA2419EDE88E002CE755 /* libUnrarKit iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libUnrarKit iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA747D9E0F9514B9006C5449 /* UnrarKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKit_Prefix.pch; sourceTree = "<group>"; };
+		F337CAA91A3569FA00542961 /* NSData+CRC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC.h"; sourceTree = "<group>"; };
+		F337CAAA1A3569FA00542961 /* NSData+CRC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC.m"; sourceTree = "<group>"; };
 		F3FCD4691A3262E5003612BF /* URKFileInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URKFileInfo.h; sourceTree = "<group>"; };
 		F3FCD46A1A3262E5003612BF /* URKFileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URKFileInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -591,6 +595,7 @@
 		964C8AC218D28EE000AD7321 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				F3FCD4701A34D3C3003612BF /* Utils */,
 				964C8AD018D28F1600AD7321 /* Test Data */,
 				964C8AC818D28EE000AD7321 /* URKArchiveTests.m */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
@@ -790,6 +795,15 @@
 			path = unrar;
 			sourceTree = "<group>";
 		};
+		F3FCD4701A34D3C3003612BF /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				F337CAA91A3569FA00542961 /* NSData+CRC.h */,
+				F337CAAA1A3569FA00542961 /* NSData+CRC.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -797,6 +811,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F337CAAB1A3569FA00542961 /* NSData+CRC.h in Headers */,
 				9685417018DBA43A00B5651B /* URKArchive.h in Headers */,
 				9685417118DBA58F00B5651B /* archive.hpp in Headers */,
 				9685417218DBA58F00B5651B /* array.hpp in Headers */,
@@ -1043,6 +1058,7 @@
 				960F667919EDDC2600512951 /* smallfn.cpp in Sources */,
 				960F667A19EDDC2600512951 /* global.cpp in Sources */,
 				960F667B19EDDC2600512951 /* file.cpp in Sources */,
+				F328A0E41A3697640012CE17 /* NSData+CRC.m in Sources */,
 				960F667C19EDDC2600512951 /* filefn.cpp in Sources */,
 				960F667D19EDDC2600512951 /* filcreat.cpp in Sources */,
 				960F667E19EDDC2600512951 /* archive.cpp in Sources */,

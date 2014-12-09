@@ -84,12 +84,12 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return self;
 }
 
-- (NSArray *)listFiles:(NSError **)error {
-    NSArray *files = [self listFilesWithMetadata:error];
+- (NSArray *)listFilenames:(NSError **)error {
+    NSArray *files = [self listFileInfo:error];
     return [files valueForKey:@"fileName"];
 }
 
-- (NSArray *)listFilesWithMetadata:(NSError **)error;
+- (NSArray *)listFileInfo:(NSError **)error;
 {
 	int RHCode = 0, PFCode = 0;
     
