@@ -11,44 +11,136 @@
    http://www.rarlab.com/technote.htm#filehead for
    more information about the RAR File Header spec */
 
-typedef NS_OPTIONS(NSUInteger, URKFileFlags) {
-    URKFileFlagsFileContinuedFromPreviousVolume = 1 << 0,
-    URKFileFlagsFileContinuedOnNextVolume       = 1 << 1,
-    URKFileFlagsFileEncryptedWithPassword       = 1 << 2,
-    URKFileFlagsFileCommentPresent              = 1 << 3,
+/**
+ *  Defines the packing methods that can be used on a file in an archive
+ */
+typedef NS_ENUM(NSUInteger, URKCompressionMethod) {
+    
+    /**
+     *  No compression is used
+     */
+    URKCompressionMethodStorage = 0x30,
+    
+    /**
+     *  Fastest compression
+     */
+    URKCompressionMethodFastest = 0x31,
+    
+    /**
+     *  Fast compression
+     */
+    URKCompressionMethodFast = 0x32,
+    
+    /**
+     *  Normal compression
+     */
+    URKCompressionMethodNormal = 0x33,
+    
+    /**
+     *  Good compression
+     */
+    URKCompressionMethodGood = 0x34,
+    
+    /**
+     *  Best compression
+     */
+    URKCompressionMethodBest = 0x35,
 };
 
-typedef NS_ENUM(NSUInteger, URKFilePackingMethod) {
-    URKFilePackingMethodStorage            = 0x30,
-    URKFilePackingMethodFastestCompression = 0x31,
-    URKFilePackingMethodFastCompression    = 0x32,
-    URKFilePackingMethodNormalCompression  = 0x33,
-    URKFilePackingMethodGoodCompression    = 0x34,
-    URKFIlePackingMethodBestCompression    = 0x35,
+/**
+ *  Defines the various operating systems that can be used when archiving
+ */
+typedef NS_ENUM(NSUInteger, URKHostOS) {
+    
+    /**
+     *  MS-DOS
+     */
+    URKHostOSMSDOS = 0,
+    
+    /**
+     *  OS/2
+     */
+    URKHostOSOS2 = 1,
+    
+    /**
+     *  Windows
+     */
+    URKHostOSWindows = 2,
+    
+    /**
+     *  Unix
+     */
+    URKHostOSUnix = 3,
+    
+    /**
+     *  Mac OS
+     */
+    URKHostOSMacOS = 4,
+    
+    /**
+     *  BeOS
+     */
+    URKHostOSBeOS = 5,
 };
 
-typedef NS_ENUM(NSUInteger, URKFileHostOS) {
-    URKFileHostOSMSDOS   = 0,
-    URKFileHostOSOS2     = 1,
-    URKFileHostOSWindows = 2,
-    URKFileHostOSUnix    = 3,
-    URKFileHostOSMacOS   = 4,
-    URKFileHostOSBeOS    = 5,
-};
-
+/**
+ *  A wrapper around a RAR archive's file header, defining the various fields
+ *  it contains
+ */
 @interface URKFileInfo : NSObject
 
-@property (nonatomic, strong) NSString *archiveName;
-@property (nonatomic, strong) NSString *fileName;
-@property (nonatomic, strong) NSDate *fileTime;
-@property (nonatomic, assign) NSUInteger fileCRC;
-@property (nonatomic, assign) NSUInteger fileDictionary;
-@property (nonatomic, assign) long long unpackedSize;
-@property (nonatomic, assign) long long packedSize;
-@property (nonatomic, assign) URKFileFlags flags;
-@property (nonatomic, assign) URKFilePackingMethod packingMethod;
-@property (nonatomic, assign) URKFileHostOS hostOS;
+/**
+ *  The name of the file's archive
+ */
+@property (readonly, strong) NSString *archiveName;
 
-- (instancetype)initWithFileHeader:(struct RARHeaderDataEx *)fileHeader;
+/**
+ *  The name of the file
+ */
+@property (readonly, strong) NSString *filename;
+
+/**
+ *  The timestamp of the file
+ */
+@property (readonly, strong) NSDate *timestamp;
+
+/**
+ *  The CRC checksum of the file
+ */
+@property (readonly, assign) NSUInteger CRC;
+
+/**
+ *  Size of the uncompressed file
+ */
+@property (readonly, assign) long long uncompressedSize;
+
+/**
+ *  Size of the compressed file
+ */
+@property (readonly, assign) long long compressedSize;
+
+/**
+ *  YES if the file will be continued of the next volume
+ */
+@property (readonly) BOOL isEncryptedWithPassword;
+
+/**
+ *  The type of compression
+ */
+@property (readonly, assign) URKCompressionMethod compressionMethod;
+
+/**
+ *  The OS of the file
+ */
+@property (readonly, assign) URKHostOS hostOS;
+
+/**
+ *  Returns a URKFileInfo instance for the given extended header data
+ *
+ *  @param fileHeader The header data for a RAR file
+ *
+ *  @return an instance of URKFileInfo
+ */
++ (instancetype) fileInfo:(struct RARHeaderDataEx *)fileHeader;
 
 @end

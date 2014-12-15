@@ -86,7 +86,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 
 - (NSArray *)listFilenames:(NSError **)error {
     NSArray *files = [self listFileInfo:error];
-    return [files valueForKey:@"fileName"];
+    return [files valueForKey:@"filename"];
 }
 
 - (NSArray *)listFileInfo:(NSError **)error;
@@ -105,7 +105,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
 
-            URKFileInfo *fileInfo = [[URKFileInfo alloc] initWithFileHeader:header];
+            URKFileInfo *fileInfo = [URKFileInfo fileInfo:header];
             [files addObject:fileInfo];
             
             if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {

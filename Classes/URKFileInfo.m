@@ -7,22 +7,39 @@
 
 @implementation URKFileInfo
 
+
+
+#pragma mark - Initialization
+
+
++ (instancetype) fileInfo:(struct RARHeaderDataEx *)fileHeader {
+    return [[URKFileInfo alloc] initWithFileHeader:fileHeader];
+}
+
 - (instancetype)initWithFileHeader:(struct RARHeaderDataEx *)fileHeader
 {
     if ((self = [super init])) {
-        _fileName = [NSString stringWithCString:fileHeader->FileName encoding:NSASCIIStringEncoding];
+        _filename = [NSString stringWithCString:fileHeader->FileName encoding:NSASCIIStringEncoding];
         _archiveName = [NSString stringWithCString:fileHeader->ArcName encoding:NSASCIIStringEncoding];
-        _unpackedSize = (long long) fileHeader->UnpSizeHigh << 32 | fileHeader->UnpSize;
-        _packedSize = (long long) fileHeader->PackSizeHigh << 32 | fileHeader->PackSize;
-        _packingMethod = fileHeader->Method;
+        _uncompressedSize = (long long) fileHeader->UnpSizeHigh << 32 | fileHeader->UnpSize;
+        _compressedSize = (long long) fileHeader->PackSizeHigh << 32 | fileHeader->PackSize;
+        _compressionMethod = fileHeader->Method;
         _hostOS = fileHeader->HostOS;
-        _fileTime = [self parseDOSDate:fileHeader->FileTime];
-        _fileCRC = fileHeader->FileCRC;
-        _flags = fileHeader->Flags;
-        _fileDictionary = fileHeader->DictSize;
+        _timestamp = [self parseDOSDate:fileHeader->FileTime];
+        _CRC = fileHeader->FileCRC;
+
+        //_fileContinuedFromPreviousVolume = fileHeader->Flags << 0;
+        //_fileContinuedOnNextVolume = fileHeader->Flags << 1;
+        _isEncryptedWithPassword = fileHeader->Flags << 2;
+        //_fileHasComment = fileHeader->Flags << 3;
     }
     return self;
 }
+
+
+
+#pragma mark - Private Methods
+
 
 - (NSDate *)parseDOSDate:(NSUInteger)dosTime
 {

@@ -227,15 +227,15 @@
         
     for (NSInteger i = 0; i < filesInArchive.count; i++) {
         URKFileInfo *archiveFileInfo = filesInArchive[i];
-        NSLog(@"Testing URKFileInfo for %@", archiveFileInfo.fileName);
+        NSLog(@"Testing URKFileInfo for %@", archiveFileInfo.filename);
        
         // Test FileName
-        NSString *archiveFilename = archiveFileInfo.fileName;
+        NSString *archiveFilename = archiveFileInfo.filename;
         NSString *expectedFilename = expectedFiles[i];
         XCTAssertEqualObjects(archiveFilename, expectedFilename, @"Incorrect filename listed");
         
         // Test CRC
-        NSUInteger *archiveFileCRC = archiveFileInfo.fileCRC;
+        NSUInteger *archiveFileCRC = archiveFileInfo.CRC;
         NSUInteger *expectedFileCRC = [self crcOfTestFile:expectedFilename];
         XCTAssertEqual(archiveFileCRC, expectedFileCRC, @"Incorrect CRC checksum");
        
@@ -244,12 +244,12 @@
         NSDictionary *expectedFileAttributes = [fm attributesOfItemAtPath:expectedFilePath error:nil];
        
         // Test Unpacked Size
-        long long archiveFileUnpackedSize = archiveFileInfo.unpackedSize;
+        long long archiveFileUnpackedSize = archiveFileInfo.uncompressedSize;
         long long expectedFileSize = [expectedFileAttributes fileSize];
         XCTAssertEqual(archiveFileUnpackedSize, expectedFileSize, @"Incorrect Unpacked FileSize");
         
         // Test Last Modify Date
-        NSDate *archiveFileModifyDate = archiveFileInfo.fileTime;
+        NSDate *archiveFileModifyDate = archiveFileInfo.timestamp;
         NSDate *expectedFileModifyDate = [expectedFileAttributes objectForKey:NSFileModificationDate];
         NSTimeInterval archiveFileTimeInterval = [archiveFileModifyDate timeIntervalSinceReferenceDate];
         NSTimeInterval expectedFileTimeInterval = [expectedFileModifyDate timeIntervalSinceReferenceDate];
@@ -291,7 +291,7 @@
         
         for (NSInteger i = 0; i < filesInArchive.count; i++) {
             URKFileInfo *archiveFileInfo = filesInArchive[i];
-            NSString *archiveFilename = archiveFileInfo.fileName;
+            NSString *archiveFilename = archiveFileInfo.filename;
             NSString *expectedFilename = expectedFiles[i];
             
             NSLog(@"Testing for file %@", expectedFilename);
