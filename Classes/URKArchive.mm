@@ -46,23 +46,23 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 #pragma mark - Convenience Methods
 
 
-+ (URKArchive *)rarArchiveAtPath:(NSString *)filePath;
++ (URKArchive *)rarArchiveAtPath:(NSString *)filePath
 {
     return [[URKArchive alloc] initWithFile:[NSURL fileURLWithPath:filePath]];
 }
 
-+ (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL;
++ (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL
 {
     return [[URKArchive alloc] initWithFile:fileURL];
 }
 
-+ (URKArchive *)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password;
++ (URKArchive *)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password
 {
     return [[URKArchive alloc] initWithFile:[NSURL fileURLWithPath:filePath]
                                    password:password];
 }
 
-+ (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL password:(NSString *)password;
++ (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL password:(NSString *)password
 {
     return [[URKArchive alloc] initWithFile:fileURL password:password];
 }
@@ -72,7 +72,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 #pragma mark - Initializers
 
 
-- (id)initWithFile:(NSURL *)fileURL;
+- (id)initWithFile:(NSURL *)fileURL
 {
     if ((self = [super init])) {
         NSError *error = nil;
@@ -89,7 +89,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 	return self;
 }
 
-- (id)initWithFile:(NSURL *)fileURL password:(NSString*)password;
+- (id)initWithFile:(NSURL *)fileURL password:(NSString*)password
 {
 	if ((self = [self initWithFile:fileURL])) {
         self.password = password;
@@ -102,7 +102,8 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 #pragma mark - Properties
 
 
-- (NSURL *)fileURL {
+- (NSURL *)fileURL
+{
     BOOL bookmarkIsStale = NO;
     NSError *error = nil;
     
@@ -131,7 +132,8 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return result;
 }
 
-- (NSString *)filename {
+- (NSString *)filename
+{
     NSURL *url = self.fileURL;
     
     if (!url) {
@@ -146,43 +148,43 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 #pragma mark - Public Methods
 
 
-- (NSArray *)listFilenames:(NSError **)error {
+- (NSArray *)listFilenames:(NSError **)error
+{
     NSArray *files = [self listFileInfo:error];
     return [files valueForKey:@"filename"];
 }
 
-- (NSArray *)listFileInfo:(NSError **)error;
+- (NSArray *)listFileInfo:(NSError **)error
 {
-    __block NSMutableArray *files = [NSMutableArray array];
+    __block NSMutableArray *fileInfos = [NSMutableArray array];
     
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         int RHCode = 0, PFCode = 0;
 
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-            URKFileInfo *fileInfo = [URKFileInfo fileInfo:header];
-            [files addObject:fileInfo];
+            [fileInfos addObject:[URKFileInfo fileInfo:header]];
             
             if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                 [self assignError:error code:(NSInteger)PFCode];
-                files = nil;
+                fileInfos = nil;
                 return;
             }
         }
         
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             [self assignError:error code:RHCode];
-            files = nil;
+            fileInfos = nil;
         }
     } inMode:RAR_OM_LIST_INCSPLIT error:error];
 
-	if (!success || !files) {
+	if (!success || !fileInfos) {
         return nil;
     }
 
-    return [NSArray arrayWithArray:files];
+    return [NSArray arrayWithArray:fileInfos];
 }
 
-- (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error;
+- (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error
 {
     __block BOOL result = YES;
     
@@ -212,7 +214,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return success && result;
 }
 
-- (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
+- (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error
 {
     __block NSData *result = nil;
     
