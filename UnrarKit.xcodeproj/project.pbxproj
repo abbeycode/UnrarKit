@@ -73,6 +73,7 @@
 		964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABC18D28EE000AD7321 /* XCTest.framework */; };
 		964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
+		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		9685411118DBA06000B5651B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		9685413218DBA13200B5651B /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 		9685413318DBA16300B5651B /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0818DB722E00B5651B /* archive.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -280,9 +281,19 @@
 		969BDA1E19EDE88E002CE755 /* unpack.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F7B18DB722E00B5651B /* unpack.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		969BDA1F19EDE88E002CE755 /* version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F8118DB722F00B5651B /* version.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		969BDA2019EDE88E002CE755 /* volume.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F8318DB722F00B5651B /* volume.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		96DBF7F91A3F72800033B759 /* NSString+UnrarKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */; };
+		96DBF7FA1A3F72800033B759 /* NSString+UnrarKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */; };
+		96DBF7FB1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
+		96DBF7FC1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
+		96DBF7FD1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
 		96E5D345198B333200A74340 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
 		96E5D347198B334500A74340 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
+		F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; };
+		F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; };
+		F3FCD46D1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
+		F3FCD46E1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
+		F3FCD46F1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -372,6 +383,7 @@
 		964C8AC818D28EE000AD7321 /* URKArchiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URKArchiveTests.m; sourceTree = "<group>"; };
 		964C8ACA18D28EE000AD7321 /* UnrarKit Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnrarKit Tests-Prefix.pch"; sourceTree = "<group>"; };
 		964C8AD018D28F1600AD7321 /* Test Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Test Data"; sourceTree = "<group>"; };
+		9660D7AE1A3F4FF90059AC1E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		96853ED418DB707000B5651B /* UnrarKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnrarKit-Info.plist"; sourceTree = "<group>"; };
 		96853EDC18DB71CD00B5651B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		96853EDF18DB71CD00B5651B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -493,7 +505,11 @@
 		96853F8518DB722F00B5651B /* win32stm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = win32stm.cpp; sourceTree = "<group>"; };
 		9685411018DBA06000B5651B /* libUnrarKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnrarKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		969BDA2419EDE88E002CE755 /* libUnrarKit iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libUnrarKit iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+UnrarKit.h"; path = "Categories/NSString+UnrarKit.h"; sourceTree = "<group>"; };
+		96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSString+UnrarKit.mm"; path = "Categories/NSString+UnrarKit.mm"; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* UnrarKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKit_Prefix.pch; sourceTree = "<group>"; };
+		F3FCD4691A3262E5003612BF /* URKFileInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URKFileInfo.h; sourceTree = "<group>"; };
+		F3FCD46A1A3262E5003612BF /* URKFileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URKFileInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -501,6 +517,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */,
 				964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */,
 				964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */,
 			);
@@ -552,6 +569,7 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9660D7AE1A3F4FF90059AC1E /* libz.dylib */,
 				964C8ABC18D28EE000AD7321 /* XCTest.framework */,
 				964C8ABE18D28EE000AD7321 /* Foundation.framework */,
 				964C8AC018D28EE000AD7321 /* UIKit.framework */,
@@ -564,8 +582,11 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				96DBF7F61A3F72370033B759 /* Categories */,
 				489CFA0E128B5169005DCC2A /* URKArchive.h */,
 				489CFA0F128B5169005DCC2A /* URKArchive.mm */,
+				F3FCD4691A3262E5003612BF /* URKFileInfo.h */,
+				F3FCD46A1A3262E5003612BF /* URKFileInfo.m */,
 			);
 			path = Classes;
 			sourceTree = SOURCE_ROOT;
@@ -781,6 +802,15 @@
 			path = unrar;
 			sourceTree = "<group>";
 		};
+		96DBF7F61A3F72370033B759 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */,
+				96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -825,12 +855,14 @@
 				9685419218DBA58F00B5651B /* raros.hpp in Headers */,
 				9685419318DBA58F00B5651B /* rartypes.hpp in Headers */,
 				9685419418DBA58F00B5651B /* rarvm.hpp in Headers */,
+				F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */,
 				9685419518DBA58F00B5651B /* rawread.hpp in Headers */,
 				9685419618DBA58F00B5651B /* rdwrfn.hpp in Headers */,
 				9685419718DBA58F00B5651B /* recvol.hpp in Headers */,
 				9685419818DBA58F00B5651B /* resource.hpp in Headers */,
 				9685419918DBA58F00B5651B /* rijndael.hpp in Headers */,
 				9685419A18DBA58F00B5651B /* rs.hpp in Headers */,
+				96DBF7F91A3F72800033B759 /* NSString+UnrarKit.h in Headers */,
 				9685419B18DBA58F00B5651B /* savepos.hpp in Headers */,
 				9685419C18DBA58F00B5651B /* scantree.hpp in Headers */,
 				9685419D18DBA58F00B5651B /* secpassword.hpp in Headers */,
@@ -890,12 +922,14 @@
 				969BDA0919EDE88E002CE755 /* raros.hpp in Headers */,
 				969BDA0A19EDE88E002CE755 /* rartypes.hpp in Headers */,
 				969BDA0B19EDE88E002CE755 /* rarvm.hpp in Headers */,
+				F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */,
 				969BDA0C19EDE88E002CE755 /* rawread.hpp in Headers */,
 				969BDA0D19EDE88E002CE755 /* rdwrfn.hpp in Headers */,
 				969BDA0E19EDE88E002CE755 /* recvol.hpp in Headers */,
 				969BDA0F19EDE88E002CE755 /* resource.hpp in Headers */,
 				969BDA1019EDE88E002CE755 /* rijndael.hpp in Headers */,
 				969BDA1119EDE88E002CE755 /* rs.hpp in Headers */,
+				96DBF7FA1A3F72800033B759 /* NSString+UnrarKit.h in Headers */,
 				969BDA1219EDE88E002CE755 /* savepos.hpp in Headers */,
 				969BDA1319EDE88E002CE755 /* scantree.hpp in Headers */,
 				969BDA1419EDE88E002CE755 /* secpassword.hpp in Headers */,
@@ -1056,6 +1090,7 @@
 				960F669119EDDC2600512951 /* getbits.cpp in Sources */,
 				960F669219EDDC2600512951 /* sha1.cpp in Sources */,
 				960F669319EDDC2600512951 /* sha256.cpp in Sources */,
+				F3FCD46E1A3262E5003612BF /* URKFileInfo.m in Sources */,
 				960F669419EDDC2600512951 /* blake2s.cpp in Sources */,
 				960F669519EDDC2600512951 /* hash.cpp in Sources */,
 				960F669619EDDC2600512951 /* extinfo.cpp in Sources */,
@@ -1069,6 +1104,7 @@
 				960F669E19EDDC2600512951 /* rs16.cpp in Sources */,
 				960F669F19EDDC2600512951 /* cmddata.cpp in Sources */,
 				960F66A019EDDC2600512951 /* ui.cpp in Sources */,
+				96DBF7FC1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */,
 				960F66A119EDDC2600512951 /* filestr.cpp in Sources */,
 				960F66A219EDDC2600512951 /* recvol.cpp in Sources */,
 				960F66A319EDDC2600512951 /* rs.cpp in Sources */,
@@ -1090,6 +1126,7 @@
 				9685414E18DBA16300B5651B /* pathfn.cpp in Sources */,
 				9685415D18DBA16300B5651B /* smallfn.cpp in Sources */,
 				9685414618DBA16300B5651B /* global.cpp in Sources */,
+				F3FCD46D1A3262E5003612BF /* URKFileInfo.m in Sources */,
 				9685414118DBA16300B5651B /* file.cpp in Sources */,
 				9685414218DBA16300B5651B /* filefn.cpp in Sources */,
 				9685414018DBA16300B5651B /* filcreat.cpp in Sources */,
@@ -1113,6 +1150,7 @@
 				9685415B18DBA16300B5651B /* secpassword.cpp in Sources */,
 				9685415718DBA16300B5651B /* rijndael.cpp in Sources */,
 				9685414518DBA16300B5651B /* getbits.cpp in Sources */,
+				96DBF7FB1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */,
 				9685415C18DBA16300B5651B /* sha1.cpp in Sources */,
 				96370FDF19ED925E00DAF8F1 /* sha256.cpp in Sources */,
 				96370FE019ED926F00DAF8F1 /* blake2s.cpp in Sources */,
@@ -1148,6 +1186,7 @@
 				969BD9B319EDE88E002CE755 /* pathfn.cpp in Sources */,
 				969BD9B419EDE88E002CE755 /* smallfn.cpp in Sources */,
 				969BD9B519EDE88E002CE755 /* global.cpp in Sources */,
+				F3FCD46F1A3262E5003612BF /* URKFileInfo.m in Sources */,
 				969BD9B619EDE88E002CE755 /* file.cpp in Sources */,
 				969BD9B719EDE88E002CE755 /* filefn.cpp in Sources */,
 				969BD9B819EDE88E002CE755 /* filcreat.cpp in Sources */,
@@ -1171,6 +1210,7 @@
 				969BD9CA19EDE88E002CE755 /* secpassword.cpp in Sources */,
 				969BD9CB19EDE88E002CE755 /* rijndael.cpp in Sources */,
 				969BD9CC19EDE88E002CE755 /* getbits.cpp in Sources */,
+				96DBF7FD1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */,
 				969BD9CD19EDE88E002CE755 /* sha1.cpp in Sources */,
 				969BD9CE19EDE88E002CE755 /* sha256.cpp in Sources */,
 				969BD9CF19EDE88E002CE755 /* blake2s.cpp in Sources */,

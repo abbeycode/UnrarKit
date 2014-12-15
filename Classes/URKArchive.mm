@@ -5,6 +5,9 @@
 //
 
 #import "URKArchive.h"
+#import "URKFileInfo.h"
+#import "NSString+UnrarKit.h"
+
 #import "rar.hpp"
 
 
@@ -143,7 +146,12 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 #pragma mark - Public Methods
 
 
-- (NSArray *)listFiles:(NSError **)error;
+- (NSArray *)listFilenames:(NSError **)error {
+    NSArray *files = [self listFileInfo:error];
+    return [files valueForKey:@"filename"];
+}
+
+- (NSArray *)listFileInfo:(NSError **)error;
 {
     __block NSMutableArray *files = [NSMutableArray array];
     
@@ -151,8 +159,8 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         int RHCode = 0, PFCode = 0;
 
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-            NSString *filename = stringFromUnichars(header->FileNameW);
-            [files addObject:filename];
+            URKFileInfo *fileInfo = [URKFileInfo fileInfo:header];
+            [files addObject:fileInfo];
             
             if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                 [self assignError:error code:(NSInteger)PFCode];
@@ -217,7 +225,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
                 return;
             }
             
-            NSString *filename = stringFromUnichars(header->FileNameW);
+            NSString *filename = [NSString stringWithUnichars:header->FileNameW];
 
             if ([filename isEqualToString:filePath]) {
                 length = header->UnpSize;
@@ -542,12 +550,6 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     }
     
     return NO;
-}
-
-static NSString *stringFromUnichars(wchar_t *unichars) {
-    return [[NSString alloc] initWithBytes:unichars
-                                    length:wcslen(unichars) * sizeof(*unichars)
-                                  encoding:NSUTF32LittleEndianStringEncoding];
 }
 
 static wchar_t *unicharsFromString(NSString *string) {
