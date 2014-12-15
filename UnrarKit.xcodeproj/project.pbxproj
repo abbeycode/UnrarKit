@@ -73,6 +73,7 @@
 		964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABC18D28EE000AD7321 /* XCTest.framework */; };
 		964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
+		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		9685411118DBA06000B5651B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		9685413218DBA13200B5651B /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 		9685413318DBA16300B5651B /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0818DB722E00B5651B /* archive.cpp */; };
@@ -283,8 +284,6 @@
 		96E5D345198B333200A74340 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
 		96E5D347198B334500A74340 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
-		F328A0E41A3697640012CE17 /* NSData+CRC.m in Sources */ = {isa = PBXBuildFile; fileRef = F337CAAA1A3569FA00542961 /* NSData+CRC.m */; };
-		F337CAAB1A3569FA00542961 /* NSData+CRC.h in Headers */ = {isa = PBXBuildFile; fileRef = F337CAA91A3569FA00542961 /* NSData+CRC.h */; };
 		F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; };
 		F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; };
 		F3FCD46D1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
@@ -379,6 +378,7 @@
 		964C8AC818D28EE000AD7321 /* URKArchiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URKArchiveTests.m; sourceTree = "<group>"; };
 		964C8ACA18D28EE000AD7321 /* UnrarKit Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnrarKit Tests-Prefix.pch"; sourceTree = "<group>"; };
 		964C8AD018D28F1600AD7321 /* Test Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Test Data"; sourceTree = "<group>"; };
+		9660D7AE1A3F4FF90059AC1E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		96853ED418DB707000B5651B /* UnrarKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnrarKit-Info.plist"; sourceTree = "<group>"; };
 		96853EDC18DB71CD00B5651B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		96853EDF18DB71CD00B5651B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -501,8 +501,6 @@
 		9685411018DBA06000B5651B /* libUnrarKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnrarKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		969BDA2419EDE88E002CE755 /* libUnrarKit iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libUnrarKit iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA747D9E0F9514B9006C5449 /* UnrarKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKit_Prefix.pch; sourceTree = "<group>"; };
-		F337CAA91A3569FA00542961 /* NSData+CRC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC.h"; sourceTree = "<group>"; };
-		F337CAAA1A3569FA00542961 /* NSData+CRC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC.m"; sourceTree = "<group>"; };
 		F3FCD4691A3262E5003612BF /* URKFileInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URKFileInfo.h; sourceTree = "<group>"; };
 		F3FCD46A1A3262E5003612BF /* URKFileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URKFileInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -512,6 +510,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */,
 				964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */,
 				964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */,
 			);
@@ -563,6 +562,7 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9660D7AE1A3F4FF90059AC1E /* libz.dylib */,
 				964C8ABC18D28EE000AD7321 /* XCTest.framework */,
 				964C8ABE18D28EE000AD7321 /* Foundation.framework */,
 				964C8AC018D28EE000AD7321 /* UIKit.framework */,
@@ -595,7 +595,6 @@
 		964C8AC218D28EE000AD7321 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				F3FCD4701A34D3C3003612BF /* Utils */,
 				964C8AD018D28F1600AD7321 /* Test Data */,
 				964C8AC818D28EE000AD7321 /* URKArchiveTests.m */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
@@ -795,15 +794,6 @@
 			path = unrar;
 			sourceTree = "<group>";
 		};
-		F3FCD4701A34D3C3003612BF /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				F337CAA91A3569FA00542961 /* NSData+CRC.h */,
-				F337CAAA1A3569FA00542961 /* NSData+CRC.m */,
-			);
-			name = Utils;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -811,7 +801,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F337CAAB1A3569FA00542961 /* NSData+CRC.h in Headers */,
 				9685417018DBA43A00B5651B /* URKArchive.h in Headers */,
 				9685417118DBA58F00B5651B /* archive.hpp in Headers */,
 				9685417218DBA58F00B5651B /* array.hpp in Headers */,
@@ -1058,7 +1047,6 @@
 				960F667919EDDC2600512951 /* smallfn.cpp in Sources */,
 				960F667A19EDDC2600512951 /* global.cpp in Sources */,
 				960F667B19EDDC2600512951 /* file.cpp in Sources */,
-				F328A0E41A3697640012CE17 /* NSData+CRC.m in Sources */,
 				960F667C19EDDC2600512951 /* filefn.cpp in Sources */,
 				960F667D19EDDC2600512951 /* filcreat.cpp in Sources */,
 				960F667E19EDDC2600512951 /* archive.cpp in Sources */,

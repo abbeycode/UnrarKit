@@ -6,7 +6,8 @@
 
 #import <XCTest/XCTest.h>
 #import <UnrarKit/URKArchive.h>
-#import "NSData+CRC.h"
+#import <zlib.h>
+
 #import "URKFileInfo.h"
 
 @interface URKArchiveTests : XCTestCase
@@ -236,33 +237,44 @@
     XCTAssertNil(error, @"Error returned by listFileInfo");
     XCTAssertNotNil(filesInArchive, @"No list of files returned");
     XCTAssertEqual(filesInArchive.count, expectedFileSet.count, @"Incorrect number of files listed in archive");
-        
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+
     for (NSInteger i = 0; i < filesInArchive.count; i++) {
         URKFileInfo *fileInfo = filesInArchive[i];
        
-        // Test FileName
-        NSString *archiveFilename = fileInfo.filename;
+        // Test Archive Name
+        NSString *expectedArchiveName = archive.filename;
+        XCTAssertEqualObjects(fileInfo.archiveName, expectedArchiveName, @"Incorrect archive name");
+        
+        // Test Filename
         NSString *expectedFilename = expectedFiles[i];
-        XCTAssertEqualObjects(archiveFilename, expectedFilename, @"Incorrect filename");
+        XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Incorrect filename");
         
         // Test CRC
-        NSUInteger *archiveFileCRC = fileInfo.CRC;
-        NSUInteger *expectedFileCRC = [self crcOfTestFile:expectedFilename];
-        XCTAssertEqual(archiveFileCRC, expectedFileCRC, @"Incorrect CRC checksum");
-       
-        NSFileManager *fm = [NSFileManager defaultManager];
-        NSString *expectedFilePath = [[self urlOfTestFile:expectedFilename] path];
-        NSDictionary *expectedFileAttributes = [fm attributesOfItemAtPath:expectedFilePath error:nil];
-       
-        // Test Uncompressed Size
-        long long archiveFileUncompressedSize = fileInfo.uncompressedSize;
-        long long expectedFileSize = [expectedFileAttributes fileSize];
-        XCTAssertEqual(archiveFileUncompressedSize, expectedFileSize, @"Incorrect uncompressed file size");
+        NSUInteger expectedFileCRC = [self crcOfTestFile:expectedFilename];
+        XCTAssertEqual(fileInfo.CRC, expectedFileCRC, @"Incorrect CRC checksum");
         
         // Test Last Modify Date
         NSTimeInterval archiveFileTimeInterval = [fileInfo.timestamp timeIntervalSinceReferenceDate];
         NSTimeInterval expectedFileTimeInterval = [expectedTimestamps[fileInfo.filename] timeIntervalSinceReferenceDate];
         XCTAssertEqualWithAccuracy(archiveFileTimeInterval, expectedFileTimeInterval, 60, @"Incorrect file timestamp (more than 60 seconds off)");
+
+        // Test Uncompressed Size
+        NSError *attributesError = nil;
+        NSString *expectedFilePath = [[self urlOfTestFile:expectedFilename] path];
+        NSDictionary *expectedFileAttributes = [fm attributesOfItemAtPath:expectedFilePath
+                                                                    error:&attributesError];
+        XCTAssertNil(attributesError, @"Error getting file attributes of %@", expectedFilename);
+       
+        long long expectedFileSize = expectedFileAttributes.fileSize;
+        XCTAssertEqual(fileInfo.uncompressedSize, expectedFileSize, @"Incorrect uncompressed file size");
+        
+        // Test Compression method
+        XCTAssertEqual(fileInfo.compressionMethod, URKCompressionMethodNormal, @"Incorrect compression method");
+        
+        // Test Host OS
+        XCTAssertEqual(fileInfo.hostOS, URKHostOSUnix, @"Incorrect host OS");
     }
 }
 
@@ -277,7 +289,6 @@
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
     
     for (NSString *testArchiveName in testArchives) {
-        NSLog(@"Testing list files of archive %@", testArchiveName);
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         
         URKArchive *archiveNoPassword = [URKArchive rarArchiveAtURL:testArchiveURL];
@@ -302,8 +313,6 @@
             URKFileInfo *archiveFileInfo = filesInArchive[i];
             NSString *archiveFilename = archiveFileInfo.filename;
             NSString *expectedFilename = expectedFiles[i];
-            
-            NSLog(@"Testing for file %@", expectedFilename);
             
             XCTAssertEqualObjects(archiveFilename, expectedFilename, @"Incorrect filename listed");
         }
@@ -612,7 +621,7 @@
 - (NSUInteger)crcOfTestFile:(NSString *)filename {
     NSURL *fileURL = [self urlOfTestFile:filename];
     NSData *fileContents = [[NSFileManager defaultManager] contentsAtPath:[fileURL path]];
-    return [fileContents CRC32];
+    return crc32(0, fileContents.bytes, fileContents.length);
 }
 
 @end
