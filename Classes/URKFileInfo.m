@@ -22,7 +22,7 @@
 {
     if ((self = [super init])) {
         _filename = [NSString stringWithUnichars:fileHeader->FileNameW];
-        _archiveName = [NSString stringWithCString:fileHeader->ArcName encoding:NSASCIIStringEncoding];
+        _archiveName = [NSString stringWithUnichars:fileHeader->ArcNameW];
         _uncompressedSize = (long long) fileHeader->UnpSizeHigh << 32 | fileHeader->UnpSize;
         _compressedSize = (long long) fileHeader->PackSizeHigh << 32 | fileHeader->PackSize;
         _compressionMethod = fileHeader->Method;

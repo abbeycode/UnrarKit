@@ -361,7 +361,34 @@
     }
 }
 
-- (void)testListFileInfoWithHeaderPassword
+- (void)testListFileInfo_Unicode
+{
+    NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
+        return ![key hasSuffix:@"rar"];
+    }];
+    
+    NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    
+    NSError *error = nil;
+    NSArray *filesInArchive = [archive listFileInfo:&error];
+    
+    XCTAssertNil(error, @"Error returned by unrarListFiles");
+    XCTAssertNotNil(filesInArchive, @"No list of files returned");
+    XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
+                   @"Incorrect number of files listed in archive");
+    
+    for (NSInteger i = 0; i < filesInArchive.count; i++) {
+        URKFileInfo *fileInfo = (URKFileInfo *)filesInArchive[i];
+        
+        XCTAssertEqualObjects(fileInfo.filename, expectedFiles[i], @"Incorrect filename listed");
+        XCTAssertEqualObjects(fileInfo.archiveName, archive.filename, @"Incorrect archiveName listed");
+    }
+}
+
+- (void)testListFileInfo_HeaderPassword
 {
     NSArray *testArchives = @[@"Test Archive (Header Password).rar"];
     
@@ -402,7 +429,7 @@
     }
 }
 
-- (void)testListFileInfoWithoutPassword {
+- (void)testListFileInfo_NoHeaderPasswordGiven {
     URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test Archive (Header Password).rar"]];
     
     NSError *error = nil;
@@ -413,7 +440,7 @@
     XCTAssertEqual(error.code, URKErrorCodeMissingPassword, @"Unexpected error code returned");
 }
 
-- (void)testListFileInfoForInvalidArchive
+- (void)testListFileInfo_InvalidArchive
 {
     URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
     
