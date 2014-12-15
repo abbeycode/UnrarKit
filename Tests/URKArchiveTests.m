@@ -731,14 +731,14 @@
     NSMutableSet *allDirectories = [NSMutableSet set];
     
     error = nil;
-    BOOL success = [archive performOnDataInArchive:^(NSString *filePath, NSData *fileData, BOOL *stop) {
-        [allDirectories addObjectsFromArray:filePath.stringByDeletingLastPathComponent.pathComponents];
+    BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+        [allDirectories addObjectsFromArray:fileInfo.filename.stringByDeletingLastPathComponent.pathComponents];
         
-        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", filePath);
+        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
         
         // All non-directory files must be non-empty
-        if (![allDirectories containsObject:filePath]) {
-            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", filePath);
+        if (![allDirectories containsObject:fileInfo.filename]) {
+            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
         }
     } error:&error];
     
@@ -769,14 +769,14 @@
     NSMutableSet *allDirectories = [NSMutableSet set];
     
     error = nil;
-    BOOL success = [archive performOnDataInArchive:^(NSString *filePath, NSData *fileData, BOOL *stop) {
-        [allDirectories addObjectsFromArray:filePath.stringByDeletingLastPathComponent.pathComponents];
+    BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+        [allDirectories addObjectsFromArray:fileInfo.filename.stringByDeletingLastPathComponent.pathComponents];
         
-        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", filePath);
+        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
 
         // All non-directory files must be non-empty
-        if (![allDirectories containsObject:filePath]) {
-            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", filePath);
+        if (![allDirectories containsObject:fileInfo.filename]) {
+            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
         }
     } error:&error];
     
@@ -805,14 +805,14 @@
     NSMutableSet *allDirectories = [NSMutableSet set];
     
     error = nil;
-    BOOL success = [archive performOnDataInArchive:^(NSString *filePath, NSData *fileData, BOOL *stop) {
-        [allDirectories addObjectsFromArray:filePath.stringByDeletingLastPathComponent.pathComponents];
+    BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+        [allDirectories addObjectsFromArray:fileInfo.filename.stringByDeletingLastPathComponent.pathComponents];
         
-        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", filePath);
+        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
         
         // All non-directory files must be non-empty
-        if (![allDirectories containsObject:filePath]) {
-            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", filePath);
+        if (![allDirectories containsObject:fileInfo.filename]) {
+            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
         }
     } error:&error];
     

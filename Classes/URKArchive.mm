@@ -274,7 +274,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return result;
 }
 
-- (BOOL)performOnDataInArchive:(void (^)(NSString *, NSData *, BOOL *))action
+- (BOOL)performOnDataInArchive:(void (^)(URKFileInfo *, NSData *, BOOL *))action
                          error:(NSError **)error
 {
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
@@ -288,12 +288,12 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
                 return;
             }
             
-            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
+            URKFileInfo *info = [URKFileInfo fileInfo:header];
             length = header->UnpSize;
 
             // Empty file, or a directory
             if (length == 0) {
-                action(filename, [NSData data], &stop);
+                action(info, [NSData data], &stop);
                 break;
             }
             
@@ -310,7 +310,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
             }
             
             NSData *data = [NSData dataWithBytesNoCopy:buffer length:length freeWhenDone:YES];
-            action(filename, data, &stop);
+            action(info, data, &stop);
         }
         
         if (RHCode != ERAR_SUCCESS) {

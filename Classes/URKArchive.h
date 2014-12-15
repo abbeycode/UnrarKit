@@ -8,6 +8,8 @@
 #import "raros.hpp"
 #import "dll.hpp"
 
+@class URKFileInfo;
+
 /**
  *  Defines the various error codes that the listing and extraction methods return.
  *  These are returned in NSError's [code]([NSError code]) field.
@@ -191,7 +193,7 @@ extern NSString *URKErrorDomain;
  *
  *  @param action The action to perform using the data
  *
- *       - *filePath* The name/path of the file within the archive
+ *       - *fileInfo* The metadata of the file within the archive
  *       - *fileData* The full data of the file in the archive
  *       - *stop*     Set to YES to stop reading the archive
  *
@@ -199,7 +201,7 @@ extern NSString *URKErrorDomain;
  *
  *  @return YES if no errors were encountered, NO otherwise
  */
-- (BOOL)performOnDataInArchive:(void(^)(NSString *filePath, NSData *fileData, BOOL *stop))action
+- (BOOL)performOnDataInArchive:(void(^)(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop))action
                          error:(NSError **)error;
 
 /**
