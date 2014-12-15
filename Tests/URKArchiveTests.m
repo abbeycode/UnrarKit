@@ -218,6 +218,18 @@
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
 
+    static NSDateFormatter *testFileInfoDateFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        testFileInfoDateFormatter = [[NSDateFormatter alloc] init];
+        testFileInfoDateFormatter.dateFormat = @"M/dd/yyyy h:mm a";
+        testFileInfoDateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
+    });
+    
+    NSDictionary *expectedTimestamps = @{@"Test File A.txt": [testFileInfoDateFormatter dateFromString:@"3/13/2014 8:02 PM"],
+                                         @"Test File B.jpg": [testFileInfoDateFormatter dateFromString:@"3/13/2014 8:04 PM"],
+                                         @"Test File C.m4a": [testFileInfoDateFormatter dateFromString:@"3/13/2014 8:05 PM"],};
+    
     NSError *error = nil;
     NSArray *filesInArchive = [archive listFileInfo:&error];
         
@@ -226,16 +238,15 @@
     XCTAssertEqual(filesInArchive.count, expectedFileSet.count, @"Incorrect number of files listed in archive");
         
     for (NSInteger i = 0; i < filesInArchive.count; i++) {
-        URKFileInfo *archiveFileInfo = filesInArchive[i];
-        NSLog(@"Testing URKFileInfo for %@", archiveFileInfo.filename);
+        URKFileInfo *fileInfo = filesInArchive[i];
        
         // Test FileName
-        NSString *archiveFilename = archiveFileInfo.filename;
+        NSString *archiveFilename = fileInfo.filename;
         NSString *expectedFilename = expectedFiles[i];
-        XCTAssertEqualObjects(archiveFilename, expectedFilename, @"Incorrect filename listed");
+        XCTAssertEqualObjects(archiveFilename, expectedFilename, @"Incorrect filename");
         
         // Test CRC
-        NSUInteger *archiveFileCRC = archiveFileInfo.CRC;
+        NSUInteger *archiveFileCRC = fileInfo.CRC;
         NSUInteger *expectedFileCRC = [self crcOfTestFile:expectedFilename];
         XCTAssertEqual(archiveFileCRC, expectedFileCRC, @"Incorrect CRC checksum");
        
@@ -243,17 +254,15 @@
         NSString *expectedFilePath = [[self urlOfTestFile:expectedFilename] path];
         NSDictionary *expectedFileAttributes = [fm attributesOfItemAtPath:expectedFilePath error:nil];
        
-        // Test Unpacked Size
-        long long archiveFileUnpackedSize = archiveFileInfo.uncompressedSize;
+        // Test Uncompressed Size
+        long long archiveFileUncompressedSize = fileInfo.uncompressedSize;
         long long expectedFileSize = [expectedFileAttributes fileSize];
-        XCTAssertEqual(archiveFileUnpackedSize, expectedFileSize, @"Incorrect Unpacked FileSize");
+        XCTAssertEqual(archiveFileUncompressedSize, expectedFileSize, @"Incorrect uncompressed file size");
         
         // Test Last Modify Date
-        NSDate *archiveFileModifyDate = archiveFileInfo.timestamp;
-        NSDate *expectedFileModifyDate = [expectedFileAttributes objectForKey:NSFileModificationDate];
-        NSTimeInterval archiveFileTimeInterval = [archiveFileModifyDate timeIntervalSinceReferenceDate];
-        NSTimeInterval expectedFileTimeInterval = [expectedFileModifyDate timeIntervalSinceReferenceDate];
-        XCTAssertEqualWithAccuracy(archiveFileTimeInterval, expectedFileTimeInterval, 0.001, @"Incorrect FileTime");
+        NSTimeInterval archiveFileTimeInterval = [fileInfo.timestamp timeIntervalSinceReferenceDate];
+        NSTimeInterval expectedFileTimeInterval = [expectedTimestamps[fileInfo.filename] timeIntervalSinceReferenceDate];
+        XCTAssertEqualWithAccuracy(archiveFileTimeInterval, expectedFileTimeInterval, 60, @"Incorrect file timestamp (more than 60 seconds off)");
     }
 }
 
