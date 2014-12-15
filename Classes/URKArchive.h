@@ -143,7 +143,7 @@ extern NSString *URKErrorDomain;
 
 
 /**
- *  Lists the filenames in the archive
+ *  Lists the names of the files in the archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive
  *
@@ -152,11 +152,11 @@ extern NSString *URKErrorDomain;
 - (NSArray *)listFilenames:(NSError **)error;
 
 /**
- *  Lists the files with their metadata in the archive
+ *  Lists the various attributes of each file in the archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive
  *
- *  @return Returns a list of URKFileInfo objects which contain metadata about the archive files, or nil if an error was encountered
+ *  @return Returns a list of URKFileInfo objects, which contain metadata about the archive's files, or nil if an error was encountered
  */
 - (NSArray *)listFileInfo:(NSError **)error;
 

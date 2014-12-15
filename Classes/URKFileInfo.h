@@ -9,34 +9,35 @@
 
 /* See http://www.forensicswiki.org/wiki/RAR and
    http://www.rarlab.com/technote.htm#filehead for
-  more information about the File Header spec */
+   more information about the RAR File Header spec */
 
 typedef NS_OPTIONS(NSUInteger, URKFileFlags) {
-    URKFileFlagsFileContinuedFromPreviousVolume     = 1 << 0,
-    URKFileFlagsFileContinuedOnNextVolume           = 1 << 1,
-    URKFileFlagsFileEncryptedWithPassword           = 1 << 2,
-    URKFileFlagsFileCommentPresent                  = 1 << 3
+    URKFileFlagsFileContinuedFromPreviousVolume = 1 << 0,
+    URKFileFlagsFileContinuedOnNextVolume       = 1 << 1,
+    URKFileFlagsFileEncryptedWithPassword       = 1 << 2,
+    URKFileFlagsFileCommentPresent              = 1 << 3,
 };
 
 typedef NS_ENUM(NSUInteger, URKFilePackingMethod) {
-    URKFilePackingMethodStorage                     = 0x30,
-    URKFilePackingMethodFastestCompression          = 0x31,
-    URKFilePackingMethodFastCompression             = 0x32,
-    URKFilePackingMethodNormalCompression           = 0x33,
-    URKFilePackingMethodGoodCompression             = 0x34,
-    URKFIlePackingMethodBestCompression             = 0x35
+    URKFilePackingMethodStorage            = 0x30,
+    URKFilePackingMethodFastestCompression = 0x31,
+    URKFilePackingMethodFastCompression    = 0x32,
+    URKFilePackingMethodNormalCompression  = 0x33,
+    URKFilePackingMethodGoodCompression    = 0x34,
+    URKFIlePackingMethodBestCompression    = 0x35,
 };
 
 typedef NS_ENUM(NSUInteger, URKFileHostOS) {
-    URKFileHostOSMSDOS                              = 0,
-    URKFileHostOSOS2                                = 1,
-    URKFileHostOSWindows                            = 2,
-    URKFileHostOSUnix                               = 3,
-    URKFileHostOSMacOS                              = 4,
-    URKFileHostOSBeOS                               = 5
+    URKFileHostOSMSDOS   = 0,
+    URKFileHostOSOS2     = 1,
+    URKFileHostOSWindows = 2,
+    URKFileHostOSUnix    = 3,
+    URKFileHostOSMacOS   = 4,
+    URKFileHostOSBeOS    = 5,
 };
 
 @interface URKFileInfo : NSObject
+
 @property (nonatomic, strong) NSString *archiveName;
 @property (nonatomic, strong) NSString *fileName;
 @property (nonatomic, strong) NSDate *fileTime;
@@ -48,5 +49,6 @@ typedef NS_ENUM(NSUInteger, URKFileHostOS) {
 @property (nonatomic, assign) URKFilePackingMethod packingMethod;
 @property (nonatomic, assign) URKFileHostOS hostOS;
 
-- (id)initWithFileHeader:(struct RARHeaderDataEx *)fileHeader;
+- (instancetype)initWithFileHeader:(struct RARHeaderDataEx *)fileHeader;
+
 @end

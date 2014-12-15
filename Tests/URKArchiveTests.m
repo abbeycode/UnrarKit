@@ -545,7 +545,7 @@
 {
     NSError *error = nil;
     URKArchive *archive = [URKArchive rarArchiveAtURL:self.corruptArchive];
-    XCTAssertNil([archive listFilenames:&error], "Listing files in corrupt archive should return nil");
+    XCTAssertNil([archive listFilenames:&error], "Listing filenamess in corrupt archive should return nil");
     XCTAssertNotNil(error, @"An error should be returned when listing filenames in a corrupt archive");
     XCTAssertNotNil(error.description, @"Error's description is nil");
 }
@@ -553,6 +553,7 @@
 
 
 #pragma mark - Helper Methods
+
 
 - (NSURL *)urlOfTestFile:(NSString *)fileName
 {
