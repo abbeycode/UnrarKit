@@ -49,19 +49,19 @@
 
 	URKArchive *archive = [URKArchive rarArchiveAtPath:filePath];
     NSError *error = nil;
-    NSArray *files = [archive listFiles:&error];
+    NSArray *filenames = [archive listFilenames:&error];
     
 	if (error) {
         NSLog(@"Error reading archive: %@", error);
         return;
     }
     
-    for (NSString *filename in files) {
+    for (NSString *filename in filenames) {
         NSLog(@"File: %@", filename);
     }
     
     // Extract a file into memory
-    NSData *data = [archive extractDataFromFile:[files objectAtIndex:0] error:&error];
+    NSData *data = [archive extractDataFromFile:filenames[0] progress:nil error:&error];
 
     if (error) {
         if (error.code == ERAR_MISSING_PASSWORD) {

@@ -5,6 +5,9 @@
 //
 
 #import "URKArchive.h"
+#import "URKFileInfo.h"
+#import "NSString+UnrarKit.h"
+
 #import "rar.hpp"
 
 
@@ -26,23 +29,23 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 #pragma mark - Convenience Methods
 
 
-+ (URKArchive *)rarArchiveAtPath:(NSString *)filePath;
++ (URKArchive *)rarArchiveAtPath:(NSString *)filePath
 {
     return [[URKArchive alloc] initWithFile:[NSURL fileURLWithPath:filePath]];
 }
 
-+ (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL;
++ (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL
 {
     return [[URKArchive alloc] initWithFile:fileURL];
 }
 
-+ (URKArchive *)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password;
++ (URKArchive *)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password
 {
     return [[URKArchive alloc] initWithFile:[NSURL fileURLWithPath:filePath]
                                    password:password];
 }
 
-+ (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL password:(NSString *)password;
++ (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL password:(NSString *)password
 {
     return [[URKArchive alloc] initWithFile:fileURL password:password];
 }
@@ -52,7 +55,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 #pragma mark - Initializers
 
 
-- (id)initWithFile:(NSURL *)fileURL;
+- (id)initWithFile:(NSURL *)fileURL
 {
     if ((self = [super init])) {
         NSError *error = nil;
@@ -69,7 +72,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 	return self;
 }
 
-- (id)initWithFile:(NSURL *)fileURL password:(NSString*)password;
+- (id)initWithFile:(NSURL *)fileURL password:(NSString*)password
 {
 	if ((self = [self initWithFile:fileURL])) {
         self.password = password;
@@ -82,7 +85,8 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 #pragma mark - Properties
 
 
-- (NSURL *)fileURL {
+- (NSURL *)fileURL
+{
     BOOL bookmarkIsStale = NO;
     NSError *error = nil;
     
@@ -111,7 +115,8 @@ NSString *URKErrorDomain = @"URKErrorDomain";
     return result;
 }
 
-- (NSString *)filename {
+- (NSString *)filename
+{
     NSURL *url = self.fileURL;
     
     if (!url) {
@@ -126,45 +131,76 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 #pragma mark - Public Methods
 
 
-- (NSArray *)listFiles:(NSError **)error;
+- (NSArray *)listFilenames:(NSError **)error
 {
-    __block NSMutableArray *files = [NSMutableArray array];
+    NSArray *files = [self listFileInfo:error];
+    return [files valueForKey:@"filename"];
+}
+
+- (NSArray *)listFileInfo:(NSError **)error
+{
+    __block NSMutableArray *fileInfos = [NSMutableArray array];
     
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         int RHCode = 0, PFCode = 0;
 
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-            NSString *filename = stringFromUnichars(header->FileNameW);
-            [files addObject:filename];
+            [fileInfos addObject:[URKFileInfo fileInfo:header]];
             
             if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                 [self assignError:error code:(NSInteger)PFCode];
-                files = nil;
+                fileInfos = nil;
                 return;
             }
         }
         
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             [self assignError:error code:RHCode];
-            files = nil;
+            fileInfos = nil;
         }
     } inMode:RAR_OM_LIST_INCSPLIT error:error];
 
-	if (!success || !files) {
+	if (!success || !fileInfos) {
         return nil;
     }
 
-    return [NSArray arrayWithArray:files];
+    return [NSArray arrayWithArray:fileInfos];
 }
 
-- (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error;
+- (BOOL)extractFilesTo:(NSString *)filePath
+             overwrite:(BOOL)overwrite
+              progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progress
+                 error:(NSError **)error
 {
     __block BOOL result = YES;
     
+    NSError *listError = nil;
+    NSArray *fileInfo = [self listFileInfo:&listError];
+    
+    if (!fileInfo || listError) {
+        NSLog(@"Error listing contents of archive: %@", listError);
+        
+        if (error) {
+            *error = listError;
+        }
+        
+        return NO;
+    }
+    
+    NSNumber *totalSize = [fileInfo valueForKeyPath:@"@sum.uncompressedSize"];
+    __block long long bytesDecompressed = 0;
+    
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         int RHCode = 0, PFCode = 0;
+        URKFileInfo *fileInfo;
 
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
+            fileInfo = [URKFileInfo fileInfo:header];
+            
+            if (progress) {
+                progress(fileInfo, bytesDecompressed / totalSize.floatValue);
+            }
+
             if ([self headerContainsErrors:error]) {
                 result = NO;
                 return;
@@ -175,6 +211,8 @@ NSString *URKErrorDomain = @"URKErrorDomain";
                 result = NO;
                 return;
             }
+            
+            bytesDecompressed += fileInfo.uncompressedSize;
         }
         
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
@@ -182,28 +220,40 @@ NSString *URKErrorDomain = @"URKErrorDomain";
             result = NO;
         }
         
+        if (progress) {
+            progress(fileInfo, 1.0);
+        }
+        
     } inMode:RAR_OM_EXTRACT error:error];
     
     return success && result;
 }
 
-- (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
+- (NSData *)extractData:(URKFileInfo *)fileInfo
+               progress:(void (^)(CGFloat percentDecompressed))progress
+                  error:(NSError **)error
+{
+    return [self extractDataFromFile:fileInfo.filename progress:progress error:error];
+}
+
+- (NSData *)extractDataFromFile:(NSString *)filePath
+                       progress:(void (^)(CGFloat percentDecompressed))progress
+                          error:(NSError **)error
 {
     __block NSData *result = nil;
     
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         int RHCode = 0, PFCode = 0;
-        
-        size_t length = 0;
+        URKFileInfo *fileInfo;
+
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:error]) {
                 return;
             }
             
-            NSString *filename = stringFromUnichars(header->FileNameW);
+            fileInfo = [URKFileInfo fileInfo:header];
 
-            if ([filename isEqualToString:filePath]) {
-                length = header->UnpSize;
+            if ([fileInfo.filename isEqualToString:filePath]) {
                 break;
             }
             else {
@@ -220,15 +270,29 @@ NSString *URKErrorDomain = @"URKErrorDomain";
         }
         
         // Empty file, or a directory
-        if (length == 0) {
+        if (fileInfo.uncompressedSize == 0) {
             result = [NSData data];
             return;
         }
         
-        UInt8 *buffer = (UInt8 *)malloc(length * sizeof(UInt8));
-        UInt8 *callBackBuffer = buffer;
+        NSMutableData *fileData = [NSMutableData dataWithCapacity:fileInfo.uncompressedSize];
+        CGFloat totalBytes = fileInfo.uncompressedSize;
+        __block long long bytesRead = 0;
         
-        RARSetCallback(_rarFile, CallbackProc, (long) &callBackBuffer);
+        if (progress) {
+            progress(0.0);
+        }
+        
+        RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
+        self.bufferedReadBlock = ^void(NSData *dataChunk) {
+            [fileData appendData:dataChunk];
+
+            bytesRead += dataChunk.length;
+
+            if (progress) {
+                progress(bytesRead / totalBytes);
+            }
+        };
         
         PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
         
@@ -237,7 +301,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
             return;
         }
         
-        result = [NSData dataWithBytesNoCopy:buffer length:length freeWhenDone:YES];
+        result = [NSData dataWithData:fileData];
     } inMode:RAR_OM_EXTRACT error:error];
     
     if (!success) {
@@ -307,7 +371,28 @@ NSString *URKErrorDomain = @"URKErrorDomain";
     return success && !innerError;
 }
 
-- (BOOL)performOnDataInArchive:(void (^)(NSString *, NSData *, BOOL *))action
+- (BOOL)performOnFilesInArchive:(void(^)(URKFileInfo *fileInfo, BOOL *stop))action
+                          error:(NSError **)error
+{
+    NSError *listError = nil;
+    NSArray *fileInfo = [self listFileInfo:&listError];
+    
+    if (listError || !fileInfo) {
+        NSLog(@"Failed to list the files in the archive");
+        
+        if (error) {
+            *error = listError;
+        }
+        
+        return;
+    }
+    
+    [fileInfo enumerateObjectsUsingBlock:^(URKFileInfo *info, NSUInteger idx, BOOL *stop) {
+        action(info, stop);
+    }];
+}
+
+- (BOOL)performOnDataInArchive:(void (^)(URKFileInfo *, NSData *, BOOL *))action
                          error:(NSError **)error
 {
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
@@ -321,12 +406,12 @@ NSString *URKErrorDomain = @"URKErrorDomain";
                 return;
             }
             
-            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
+            URKFileInfo *info = [URKFileInfo fileInfo:header];
             length = header->UnpSize;
 
             // Empty file, or a directory
             if (length == 0) {
-                action(filename, [NSData data], &stop);
+                action(info, [NSData data], &stop);
                 break;
             }
             
@@ -343,10 +428,10 @@ NSString *URKErrorDomain = @"URKErrorDomain";
             }
             
             NSData *data = [NSData dataWithBytesNoCopy:buffer length:length freeWhenDone:YES];
-            action(filename, data, &stop);
+            action(info, data, &stop);
         }
         
-        if (RHCode != ERAR_SUCCESS) {
+        if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             [self assignError:error code:RHCode];
             return;
         }
@@ -622,12 +707,6 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     }
     
     return NO;
-}
-
-static NSString *stringFromUnichars(wchar_t *unichars) {
-    return [[NSString alloc] initWithBytes:unichars
-                                    length:wcslen(unichars) * sizeof(*unichars)
-                                  encoding:NSUTF32LittleEndianStringEncoding];
 }
 
 static wchar_t *unicharsFromString(NSString *string) {

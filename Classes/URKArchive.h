@@ -4,9 +4,12 @@
 //
 //
 
+#import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
 #import "raros.hpp"
 #import "dll.hpp"
+
+@class URKFileInfo;
 
 /**
  *  Defines the various error codes that the listing and extraction methods return.
@@ -148,34 +151,88 @@ extern NSString *URKErrorDomain;
 
 
 /**
- *  Lists the files in the archive
+ *  Lists the names of the files in the archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive
  *
  *  @return Returns a list of NSString containing the paths within the archive's contents, or nil if an error was encountered
  */
-- (NSArray *)listFiles:(NSError **)error;
+- (NSArray *)listFilenames:(NSError **)error;
+
+/**
+ *  Lists the various attributes of each file in the archive
+ *
+ *  @param error Contains an NSError object when there was an error reading the archive
+ *
+ *  @return Returns a list of URKFileInfo objects, which contain metadata about the archive's files, or nil if an error was encountered
+ */
+- (NSArray *)listFileInfo:(NSError **)error;
 
 /**
  *  Writes all files in the archive to the given path
  *
  *  @param filePath  The destination path of the unarchived files
  *  @param overwrite YES to overwrite files in the destination directory, NO otherwise
+ *  @param progress  Called every so often to report the progress of the extraction
+ *
+ *       - *currentFile*                The info about the file that's being extracted
+ *       - *percentArchiveDecompressed* The percentage of the archive that has been decompressed
+ *
  *  @param error     Contains an NSError object when there was an error reading the archive
  *
  *  @return YES on successful extraction, NO if an error was encountered
  */
-- (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error;
+- (BOOL)extractFilesTo:(NSString *)filePath
+             overwrite:(BOOL)overwrite
+              progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progress
+                 error:(NSError **)error;
+
+/**
+ *  Unarchive a single file from the archive into memory
+ *
+ *  @param fileInfo The info of the file within the archive to be expanded. Only the filename property is used
+ *  @param progress Called every so often to report the progress of the extraction
+ *
+ *       - *percentDecompressed* The percentage of the archive that has been decompressed
+ *
+ *  @param error    Contains an NSError object when there was an error reading the archive
+ *
+ *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
+ */
+- (NSData *)extractData:(URKFileInfo *)fileInfo
+               progress:(void (^)(CGFloat percentDecompressed))progress
+                  error:(NSError **)error;
 
 /**
  *  Unarchive a single file from the archive into memory
  *
  *  @param filePath The path of the file within the archive to be expanded
+ *  @param progress Called every so often to report the progress of the extraction
+ *
+ *       - *percentDecompressed* The percentage of the archive that has been decompressed
+ *
  *  @param error    Contains an NSError object when there was an error reading the archive
  *
  *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
  */
-- (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
+- (NSData *)extractDataFromFile:(NSString *)filePath
+                       progress:(void (^)(CGFloat percentDecompressed))progress
+                          error:(NSError **)error;
+
+/**
+ *  Loops through each file in the archive into memory, allowing you to perform an action using its info
+ *
+ *  @param action The action to perform using the data
+ *
+ *       - *fileInfo* The metadata of the file within the archive
+ *       - *stop*     Set to YES to stop reading the archive
+ *
+ *  @param error  Contains an error if any was returned
+ *
+ *  @return YES if no errors were encountered, NO otherwise
+ */
+- (BOOL)performOnFilesInArchive:(void(^)(URKFileInfo *fileInfo, BOOL *stop))action
+                          error:(NSError **)error;
 
 /**
  *  Unarchive a single file from the archive into memory
@@ -197,7 +254,7 @@ extern NSString *URKErrorDomain;
  *
  *  @param action The action to perform using the data
  *
- *       - *filePath* The name/path of the file within the archive
+ *       - *fileInfo* The metadata of the file within the archive
  *       - *fileData* The full data of the file in the archive
  *       - *stop*     Set to YES to stop reading the archive
  *
@@ -205,7 +262,7 @@ extern NSString *URKErrorDomain;
  *
  *  @return YES if no errors were encountered, NO otherwise
  */
-- (BOOL)performOnDataInArchive:(void(^)(NSString *filePath, NSData *fileData, BOOL *stop))action
+- (BOOL)performOnDataInArchive:(void(^)(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop))action
                          error:(NSError **)error;
 
 /**
