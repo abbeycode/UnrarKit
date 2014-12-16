@@ -172,11 +172,19 @@ extern NSString *URKErrorDomain;
  *
  *  @param filePath  The destination path of the unarchived files
  *  @param overwrite YES to overwrite files in the destination directory, NO otherwise
+ *  @param progress  Called every so often to report the progress of the extraction
+ *
+ *       - *currentFile*                The info about the file that's being extracted
+ *       - *percentArchiveDecompressed* The percentage of the archive that has been decompressed
+ *
  *  @param error     Contains an NSError object when there was an error reading the archive
  *
  *  @return YES on successful extraction, NO if an error was encountered
  */
-- (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error;
+- (BOOL)extractFilesTo:(NSString *)filePath
+             overwrite:(BOOL)overwrite
+              progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progress
+                 error:(NSError **)error;
 
 /**
  *  Unarchive a single file from the archive into memory

@@ -184,14 +184,40 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return [NSArray arrayWithArray:fileInfos];
 }
 
-- (BOOL)extractFilesTo:(NSString *)filePath overWrite:(BOOL)overwrite error:(NSError **)error
+- (BOOL)extractFilesTo:(NSString *)filePath
+             overwrite:(BOOL)overwrite
+              progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progress
+                 error:(NSError **)error
 {
     __block BOOL result = YES;
     
+    NSError *listError = nil;
+    NSArray *fileInfo = [self listFileInfo:&listError];
+    
+    if (!fileInfo || listError) {
+        NSLog(@"Error listing contents of archive: %@", listError);
+        
+        if (error) {
+            *error = listError;
+        }
+        
+        return NO;
+    }
+    
+    NSNumber *totalSize = [fileInfo valueForKeyPath:@"@sum.uncompressedSize"];
+    __block long long bytesDecompressed = 0;
+    
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         int RHCode = 0, PFCode = 0;
+        URKFileInfo *fileInfo;
 
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
+            fileInfo = [URKFileInfo fileInfo:header];
+            
+            if (progress) {
+                progress(fileInfo, bytesDecompressed / totalSize.floatValue);
+            }
+
             if ([self headerContainsErrors:error]) {
                 result = NO;
                 return;
@@ -202,11 +228,17 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
                 result = NO;
                 return;
             }
+            
+            bytesDecompressed += fileInfo.uncompressedSize;
         }
         
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             [self assignError:error code:RHCode];
             result = NO;
+        }
+        
+        if (progress) {
+            progress(fileInfo, 1.0);
         }
         
     } inMode:RAR_OM_EXTRACT error:error];

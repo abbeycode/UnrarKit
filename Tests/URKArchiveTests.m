@@ -479,7 +479,12 @@
         URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:password];
         
         NSError *error = nil;
-        BOOL success = [archive extractFilesTo:extractURL.path overWrite:NO error:&error];
+        BOOL success = [archive extractFilesTo:extractURL.path
+                                     overwrite:NO
+                                      progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
+                                          NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
+                                      }
+                                         error:&error];
         
         XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
         XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
@@ -497,8 +502,6 @@
         for (NSInteger i = 0; i < extractedFiles.count; i++) {
             NSString *extractedFilename = extractedFiles[i];
             NSString *expectedFilename = expectedFiles[i];
-            
-            NSLog(@"Testing for file %@", expectedFilename);
             
             XCTAssertEqualObjects(extractedFilename, expectedFilename, @"Incorrect filename listed");
             
@@ -532,7 +535,12 @@
     URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
     
     NSError *error = nil;
-    BOOL success = [archive extractFilesTo:extractURL.path overWrite:NO error:&error];
+    BOOL success = [archive extractFilesTo:extractURL.path
+                                 overwrite:NO
+                                  progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
+                                      NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
+                                  }
+                                     error:&error];
     
     XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
     XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
@@ -580,7 +588,12 @@
         
         
         NSError *error = nil;
-        BOOL success = [archive extractFilesTo:extractURL.path overWrite:NO error:&error];
+        BOOL success = [archive extractFilesTo:extractURL.path
+                                     overwrite:NO
+                                      progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
+                                          NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
+                                      }
+                                         error:&error];
         BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
         
         XCTAssertFalse(success, @"Extract without password succeeded");
@@ -599,7 +612,12 @@
     NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
     
     NSError *error = nil;
-    BOOL success = [archive extractFilesTo:extractURL.path overWrite:NO error:&error];
+    BOOL success = [archive extractFilesTo:extractURL.path
+                                 overwrite:NO
+                                  progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
+                                      NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
+                                  }
+                                     error:&error];
     BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
     
     XCTAssertFalse(success, @"Extract invalid archive succeeded");
@@ -1110,9 +1128,10 @@
     NSError *extractFilesError = nil;
     URKArchive *unicodeNamedArchive = [URKArchive rarArchiveAtURL:newArchiveURL];
     BOOL extractSuccess = [unicodeNamedArchive extractFilesTo:extractURL.path
-                                                    overWrite:YES
-                                                        error:&extractFilesError];
-    
+                                                    overwrite:NO
+                                                     progress:nil
+                                                        error:&error];
+
     XCTAssertTrue(extractSuccess, @"Failed to extract archive");
     XCTAssertNil(extractFilesError, @"Error extracting archive: %@", extractFilesError);
 }
