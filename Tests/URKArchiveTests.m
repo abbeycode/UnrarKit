@@ -794,117 +794,6 @@
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
 }
 
-- (void)testPerformOnData_FileMoved
-{
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
-    
-    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
-    
-    NSError *error = nil;
-    NSArray *archiveFiles = [archive listFilenames:&error];
-    
-    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [NSThread sleepForTimeInterval:1];
-        
-        NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"unittest"];
-        
-        NSError *renameError = nil;
-        NSFileManager *fm = [NSFileManager defaultManager];
-        [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
-        XCTAssertNil(error, @"Error renaming file: %@", renameError);
-    });
-    
-    __block NSUInteger fileCount = 0;
-    
-    error = nil;
-    BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
-        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
-        
-        if (!fileInfo.isDirectory) {
-            fileCount++;
-            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
-        }
-    } error:&error];
-    
-    XCTAssertEqual(fileCount, 38, @"Not all files read");
-    XCTAssertTrue(success, @"Failed to read files");
-    XCTAssertNil(error, @"Error reading files: %@", error);
-}
-
-- (void)testPerformOnData_FileDeleted
-{
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
-    
-    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
-    
-    NSError *error = nil;
-    NSArray *archiveFiles = [archive listFilenames:&error];
-    
-    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [NSThread sleepForTimeInterval:1];
-        
-        NSError *removeError = nil;
-        NSFileManager *fm = [NSFileManager defaultManager];
-        [fm removeItemAtURL:largeArchiveURL error:&removeError];
-        XCTAssertNil(error, @"Error removing file: %@", removeError);
-    });
-    
-    __block NSUInteger fileCount = 0;
-    
-    error = nil;
-    BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
-        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
-
-        if (!fileInfo.isDirectory) {
-            fileCount++;
-            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
-        }
-    } error:&error];
-    
-    XCTAssertEqual(fileCount, 38, @"Not all files read");
-    XCTAssertTrue(success, @"Failed to read files");
-    XCTAssertNil(error, @"Error reading files: %@", error);
-}
-
-- (void)testPerformOnData_FileMovedBeforeBegin
-{
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
-    
-    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
-    
-    NSError *error = nil;
-    NSArray *archiveFiles = [archive listFilenames:&error];
-    
-    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
-    
-    NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"unittest"];
-    
-    NSError *renameError = nil;
-    NSFileManager *fm = [NSFileManager defaultManager];
-    [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
-    XCTAssertNil(error, @"Error renaming file: %@", renameError);
-    
-    __block NSUInteger fileCount = 0;
-
-    error = nil;
-    BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
-        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
-        
-        if (!fileInfo.isDirectory) {
-            fileCount++;
-            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
-        }
-    } error:&error];
-    
-    XCTAssertEqual(fileCount, 38, @"Not all files read");
-    XCTAssertTrue(success, @"Failed to read files");
-    XCTAssertNil(error, @"Error reading files: %@", error);
-}
-
 
 #pragma mark Perform on Files
 
@@ -1043,6 +932,117 @@
     
     XCTAssertNil(error, @"Error iterating through files");
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
+}
+
+- (void)testPerformOnData_FileMoved
+{
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    
+    NSError *error = nil;
+    NSArray *archiveFiles = [archive listFilenames:&error];
+    
+    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [NSThread sleepForTimeInterval:1];
+        
+        NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"unittest"];
+        
+        NSError *renameError = nil;
+        NSFileManager *fm = [NSFileManager defaultManager];
+        [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
+        XCTAssertNil(error, @"Error renaming file: %@", renameError);
+    });
+    
+    __block NSUInteger fileCount = 0;
+    
+    error = nil;
+    BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
+        
+        if (!fileInfo.isDirectory) {
+            fileCount++;
+            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
+        }
+    } error:&error];
+    
+    XCTAssertEqual(fileCount, 38, @"Not all files read");
+    XCTAssertTrue(success, @"Failed to read files");
+    XCTAssertNil(error, @"Error reading files: %@", error);
+}
+
+- (void)testPerformOnData_FileDeleted
+{
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    
+    NSError *error = nil;
+    NSArray *archiveFiles = [archive listFilenames:&error];
+    
+    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [NSThread sleepForTimeInterval:1];
+        
+        NSError *removeError = nil;
+        NSFileManager *fm = [NSFileManager defaultManager];
+        [fm removeItemAtURL:largeArchiveURL error:&removeError];
+        XCTAssertNil(error, @"Error removing file: %@", removeError);
+    });
+    
+    __block NSUInteger fileCount = 0;
+    
+    error = nil;
+    BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
+        
+        if (!fileInfo.isDirectory) {
+            fileCount++;
+            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
+        }
+    } error:&error];
+    
+    XCTAssertEqual(fileCount, 38, @"Not all files read");
+    XCTAssertTrue(success, @"Failed to read files");
+    XCTAssertNil(error, @"Error reading files: %@", error);
+}
+
+- (void)testPerformOnData_FileMovedBeforeBegin
+{
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    
+    NSError *error = nil;
+    NSArray *archiveFiles = [archive listFilenames:&error];
+    
+    XCTAssertNil(error, @"Error listing files in test archive: %@", error);
+    
+    NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"unittest"];
+    
+    NSError *renameError = nil;
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
+    XCTAssertNil(error, @"Error renaming file: %@", renameError);
+    
+    __block NSUInteger fileCount = 0;
+    
+    error = nil;
+    BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+        XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
+        
+        if (!fileInfo.isDirectory) {
+            fileCount++;
+            XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
+        }
+    } error:&error];
+    
+    XCTAssertEqual(fileCount, 38, @"Not all files read");
+    XCTAssertTrue(success, @"Failed to read files");
+    XCTAssertNil(error, @"Error reading files: %@", error);
 }
 
 
