@@ -311,66 +311,6 @@ NSString *URKErrorDomain = @"URKErrorDomain";
     return result;
 }
 
-- (BOOL)extractBufferedDataFromFile:(NSString *)filePath
-                              error:(NSError **)error
-                             action:(void (^)(NSData *))action
-{
-    NSError *innerError = nil;
-    
-    BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
-        int RHCode = 0, PFCode = 0;
-        
-        size_t length = 0;
-        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
-            if ([self headerContainsErrors:error]) {
-                return;
-            }
-            
-            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
-            
-            if ([filename isEqualToString:filePath]) {
-                length = header->UnpSize;
-                break;
-            }
-            else {
-                if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
-                    [self assignError:error code:(NSInteger)PFCode];
-                    return;
-                }
-            }
-        }
-        
-        if (RHCode != ERAR_SUCCESS) {
-            [self assignError:error code:RHCode];
-            return;
-        }
-        
-        // Empty file, or a directory
-        if (length == 0) {
-            return;
-        }
-        
-        RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
-
-        self.bufferedReadBlock = action;
-        PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
-        
-        if (PFCode != 0) {
-            [self assignError:error code:(NSInteger)PFCode];
-        }
-    } inMode:RAR_OM_EXTRACT error:&innerError];
-    
-    if (error) {
-        *error = innerError ? innerError : nil;
-        
-        if (innerError) {
-            NSLog(@"Error reading buffered data from file\nfilePath: %@\nerror: %@", filePath, innerError);
-        }
-    }
-
-    return success && !innerError;
-}
-
 - (BOOL)performOnFilesInArchive:(void(^)(URKFileInfo *fileInfo, BOOL *stop))action
                           error:(NSError **)error
 {
@@ -438,6 +378,66 @@ NSString *URKErrorDomain = @"URKErrorDomain";
     } inMode:RAR_OM_EXTRACT error:error];
     
     return success;
+}
+
+- (BOOL)extractBufferedDataFromFile:(NSString *)filePath
+                              error:(NSError **)error
+                             action:(void (^)(NSData *))action
+{
+    NSError *innerError = nil;
+    
+    BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
+        int RHCode = 0, PFCode = 0;
+        
+        size_t length = 0;
+        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
+            if ([self headerContainsErrors:error]) {
+                return;
+            }
+            
+            NSString *filename = [NSString stringWithCString:header->FileName encoding:NSASCIIStringEncoding];
+            
+            if ([filename isEqualToString:filePath]) {
+                length = header->UnpSize;
+                break;
+            }
+            else {
+                if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                    [self assignError:error code:(NSInteger)PFCode];
+                    return;
+                }
+            }
+        }
+        
+        if (RHCode != ERAR_SUCCESS) {
+            [self assignError:error code:RHCode];
+            return;
+        }
+        
+        // Empty file, or a directory
+        if (length == 0) {
+            return;
+        }
+        
+        RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
+        
+        self.bufferedReadBlock = action;
+        PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        
+        if (PFCode != 0) {
+            [self assignError:error code:(NSInteger)PFCode];
+        }
+    } inMode:RAR_OM_EXTRACT error:&innerError];
+    
+    if (error) {
+        *error = innerError ? innerError : nil;
+        
+        if (innerError) {
+            NSLog(@"Error reading buffered data from file\nfilePath: %@\nerror: %@", filePath, innerError);
+        }
+    }
+    
+    return success && !innerError;
 }
 
 - (BOOL)isPasswordProtected
