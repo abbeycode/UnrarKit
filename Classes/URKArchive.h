@@ -209,7 +209,7 @@ extern NSString *URKErrorDomain;
  *  @param filePath The path of the file within the archive to be expanded
  *  @param progress Called every so often to report the progress of the extraction
  *
- *       - *percentDecompressed* The percentage of the archive that has been decompressed
+ *       - *percentDecompressed* The percentage of the file that has been decompressed
  *
  *  @param error    Contains an NSError object when there was an error reading the archive
  *
