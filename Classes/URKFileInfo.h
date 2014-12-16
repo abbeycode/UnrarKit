@@ -125,6 +125,11 @@ typedef NS_ENUM(NSUInteger, URKHostOS) {
 @property (readonly) BOOL isEncryptedWithPassword;
 
 /**
+ *  YES if the file is a directory
+ */
+@property (readonly) BOOL isDirectory;
+
+/**
  *  The type of compression
  */
 @property (readonly, assign) URKCompressionMethod compressionMethod;

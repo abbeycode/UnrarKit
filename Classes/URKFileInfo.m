@@ -30,10 +30,12 @@
         _timestamp = [self parseDOSDate:fileHeader->FileTime];
         _CRC = fileHeader->FileCRC;
 
-        //_fileContinuedFromPreviousVolume = fileHeader->Flags << 0;
-        //_fileContinuedOnNextVolume = fileHeader->Flags << 1;
-        _isEncryptedWithPassword = fileHeader->Flags << 2;
-        //_fileHasComment = fileHeader->Flags << 3;
+        //_fileContinuedFromPreviousVolume = fileHeader->Flags  & (1 << 0)
+        //_fileContinuedOnNextVolume = fileHeader->Flags & (1 << 1)
+        _isEncryptedWithPassword = fileHeader->Flags & (1 << 2);
+        //_fileHasComment = fileHeader->Flags  & (1 << 3)
+        
+        _isDirectory = fileHeader->Flags & RHDF_DIRECTORY;
     }
     return self;
 }

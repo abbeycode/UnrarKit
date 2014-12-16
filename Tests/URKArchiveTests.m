@@ -794,7 +794,7 @@
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
 }
 
-- (void)testExtractData_FileMoved
+- (void)testPerformOnData_FileMoved
 {
     NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
     
@@ -816,25 +816,24 @@
         XCTAssertNil(error, @"Error renaming file: %@", renameError);
     });
     
-    NSMutableSet *allDirectories = [NSMutableSet set];
+    __block NSUInteger fileCount = 0;
     
     error = nil;
     BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
-        [allDirectories addObjectsFromArray:fileInfo.filename.stringByDeletingLastPathComponent.pathComponents];
-        
         XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
         
-        // All non-directory files must be non-empty
-        if (![allDirectories containsObject:fileInfo.filename]) {
+        if (!fileInfo.isDirectory) {
+            fileCount++;
             XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
         }
     } error:&error];
     
+    XCTAssertEqual(fileCount, 38, @"Not all files read");
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
 }
 
-- (void)testExtractData_FileDeleted
+- (void)testPerformOnData_FileDeleted
 {
     NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
     
@@ -854,25 +853,24 @@
         XCTAssertNil(error, @"Error removing file: %@", removeError);
     });
     
-    NSMutableSet *allDirectories = [NSMutableSet set];
+    __block NSUInteger fileCount = 0;
     
     error = nil;
     BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
-        [allDirectories addObjectsFromArray:fileInfo.filename.stringByDeletingLastPathComponent.pathComponents];
-        
         XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
 
-        // All non-directory files must be non-empty
-        if (![allDirectories containsObject:fileInfo.filename]) {
+        if (!fileInfo.isDirectory) {
+            fileCount++;
             XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
         }
     } error:&error];
     
+    XCTAssertEqual(fileCount, 38, @"Not all files read");
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
 }
 
-- (void)testExtractData_FileMovedBeforeBegin
+- (void)testPerformOnData_FileMovedBeforeBegin
 {
     NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
     
@@ -890,20 +888,19 @@
     [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
     XCTAssertNil(error, @"Error renaming file: %@", renameError);
     
-    NSMutableSet *allDirectories = [NSMutableSet set];
-    
+    __block NSUInteger fileCount = 0;
+
     error = nil;
     BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
-        [allDirectories addObjectsFromArray:fileInfo.filename.stringByDeletingLastPathComponent.pathComponents];
-        
         XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
         
-        // All non-directory files must be non-empty
-        if (![allDirectories containsObject:fileInfo.filename]) {
+        if (!fileInfo.isDirectory) {
+            fileCount++;
             XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
         }
     } error:&error];
     
+    XCTAssertEqual(fileCount, 38, @"Not all files read");
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
 }
