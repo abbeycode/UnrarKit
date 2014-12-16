@@ -214,6 +214,11 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return success && result;
 }
 
+- (NSData *)extractData:(URKFileInfo *)fileInfo error:(NSError **)error
+{
+    return [self extractDataFromFile:fileInfo.filename error:error];
+}
+
 - (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error
 {
     __block NSData *result = nil;
@@ -274,6 +279,27 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return result;
 }
 
+- (BOOL)performOnFilesInArchive:(void(^)(URKFileInfo *fileInfo, BOOL *stop))action
+                          error:(NSError **)error
+{
+    NSError *listError = nil;
+    NSArray *fileInfo = [self listFileInfo:&listError];
+    
+    if (listError || !fileInfo) {
+        NSLog(@"Failed to list the files in the archive");
+        
+        if (error) {
+            *error = listError;
+        }
+        
+        return;
+    }
+    
+    [fileInfo enumerateObjectsUsingBlock:^(URKFileInfo *info, NSUInteger idx, BOOL *stop) {
+        action(info, stop);
+    }];
+}
+
 - (BOOL)performOnDataInArchive:(void (^)(URKFileInfo *, NSData *, BOOL *))action
                          error:(NSError **)error
 {
@@ -313,7 +339,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
             action(info, data, &stop);
         }
         
-        if (RHCode != ERAR_SUCCESS) {
+        if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             [self assignError:error code:RHCode];
             return;
         }

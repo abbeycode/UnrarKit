@@ -181,12 +181,37 @@ extern NSString *URKErrorDomain;
 /**
  *  Unarchive a single file from the archive into memory
  *
+ *  @param fileInfo The info of the file within the archive to be expanded. Only the filename property is used
+ *  @param error    Contains an NSError object when there was an error reading the archive
+ *
+ *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
+ */
+- (NSData *)extractData:(URKFileInfo *)fileInfo error:(NSError **)error;
+
+/**
+ *  Unarchive a single file from the archive into memory
+ *
  *  @param filePath The path of the file within the archive to be expanded
  *  @param error    Contains an NSError object when there was an error reading the archive
  *
  *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
  */
 - (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error;
+
+/**
+ *  Loops through each file in the archive into memory, allowing you to perform an action using its info
+ *
+ *  @param action The action to perform using the data
+ *
+ *       - *fileInfo* The metadata of the file within the archive
+ *       - *stop*     Set to YES to stop reading the archive
+ *
+ *  @param error  Contains an error if any was returned
+ *
+ *  @return YES if no errors were encountered, NO otherwise
+ */
+- (BOOL)performOnFilesInArchive:(void(^)(URKFileInfo *fileInfo, BOOL *stop))action
+                          error:(NSError **)error;
 
 /**
  *  Extracts each file in the archive into memory, allowing you to perform an action on it

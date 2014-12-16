@@ -622,7 +622,6 @@
     NSFileManager *fm = [NSFileManager defaultManager];
     
     for (NSString *testArchiveName in testArchives) {
-        NSLog(@"Testing extraction of data from archive %@", testArchiveName);
 
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
@@ -630,10 +629,12 @@
                               : nil);
         URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:password];
         
+        NSError *error = nil;
+        NSArray *fileInfos = [archive listFileInfo:&error];
+        XCTAssertNil(error, @"Error reading file info");
+
         for (NSInteger i = 0; i < expectedFiles.count; i++) {
             NSString *expectedFilename = expectedFiles[i];
-            
-            NSLog(@"Testing for file %@", expectedFilename);
             
             NSError *error = nil;
             NSData *extractedData = [archive extractDataFromFile:expectedFilename error:&error];
@@ -644,6 +645,12 @@
             
             XCTAssertNotNil(extractedData, @"No data extracted");
             XCTAssertTrue([expectedFileData isEqualToData:extractedData], @"Extracted data doesn't match original file");
+            
+            error = nil;
+            NSData *dataFromFileInfo = [archive extractData:fileInfos[i]
+                                                      error:&error];
+            XCTAssertNil(error, @"Error extracting data by file info");
+            XCTAssertTrue([expectedFileData isEqualToData:dataFromFileInfo], @"Extracted data from file info doesn't match original file");
         }
     }
 }
@@ -661,6 +668,10 @@
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
     URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
     
+    NSError *error = nil;
+    NSArray *fileInfos = [archive listFileInfo:&error];
+    XCTAssertNil(error, @"Error reading file info");
+    
     for (NSInteger i = 0; i < expectedFiles.count; i++) {
         NSString *expectedFilename = expectedFiles[i];
         
@@ -673,6 +684,12 @@
         
         XCTAssertNotNil(extractedData, @"No data extracted");
         XCTAssertTrue([expectedFileData isEqualToData:extractedData], @"Extracted data doesn't match original file");
+        
+        error = nil;
+        NSData *dataFromFileInfo = [archive extractData:fileInfos[i]
+                                                  error:&error];
+        XCTAssertNil(error, @"Error extracting data by file info");
+        XCTAssertTrue([expectedFileData isEqualToData:dataFromFileInfo], @"Extracted data from file info doesn't match original file");
     }
 }
 
@@ -682,7 +699,6 @@
                               @"Test Archive (Header Password).rar"];
     
     for (NSString *testArchiveName in testArchives) {
-        NSLog(@"Testing extraction of data from archive (no password given): %@", testArchiveName);
         URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[testArchiveName]];
         
         NSError *error = nil;
@@ -818,6 +834,138 @@
     
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
+}
+
+- (void)testPerformOnFiles
+{
+    NSArray *testArchives = @[@"Test Archive.rar",
+                              @"Test Archive (Password).rar",
+                              @"Test Archive (Header Password).rar"];
+    
+    NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
+        return ![key hasSuffix:@"rar"];
+    }];
+    
+    NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    for (NSString *testArchiveName in testArchives) {
+        NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+        NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
+                              ? @"password"
+                              : nil);
+        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:password];
+        
+        __block NSUInteger fileIndex = 0;
+        NSError *error = nil;
+        
+        [archive performOnFilesInArchive:
+         ^(URKFileInfo *fileInfo, BOOL *stop) {
+             NSString *expectedFilename = expectedFiles[fileIndex++];
+             XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
+         } error:&error];
+        
+        XCTAssertNil(error, @"Error iterating through files");
+        XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
+    }
+}
+
+- (void)testPerformOnFiles_Unicode
+{
+    NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
+        return ![key hasSuffix:@"rar"];
+    }];
+    
+    NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    
+    __block NSUInteger fileIndex = 0;
+    NSError *error = nil;
+    
+    [archive performOnFilesInArchive:
+     ^(URKFileInfo *fileInfo, BOOL *stop) {
+         NSString *expectedFilename = expectedFiles[fileIndex++];
+         XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
+     } error:&error];
+    
+    XCTAssertNil(error, @"Error iterating through files");
+    XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
+}
+
+- (void)testPerformOnData
+{
+    NSArray *testArchives = @[@"Test Archive.rar",
+                              @"Test Archive (Password).rar",
+                              @"Test Archive (Header Password).rar"];
+    
+    NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
+        return ![key hasSuffix:@"rar"];
+    }];
+    
+    NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    for (NSString *testArchiveName in testArchives) {
+        NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+        NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
+                              ? @"password"
+                              : nil);
+        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:password];
+        
+        __block NSUInteger fileIndex = 0;
+        NSError *error = nil;
+        
+        [archive performOnDataInArchive:
+         ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+             NSString *expectedFilename = expectedFiles[fileIndex++];
+             XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
+             
+             NSData *expectedFileData = [NSData dataWithContentsOfURL:self.testFileURLs[expectedFilename]];
+             
+             XCTAssertNotNil(fileData, @"No data extracted");
+             XCTAssertTrue([expectedFileData isEqualToData:fileData], @"File data doesn't match original file");
+         } error:&error];
+        
+        XCTAssertNil(error, @"Error iterating through files");
+        XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
+    }
+}
+
+- (void)testPerformOnData_Unicode
+{
+    NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
+        return ![key hasSuffix:@"rar"];
+    }];
+    
+    NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    
+    __block NSUInteger fileIndex = 0;
+    NSError *error = nil;
+    
+    [archive performOnDataInArchive:
+     ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+         NSString *expectedFilename = expectedFiles[fileIndex++];
+         XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
+         
+         NSData *expectedFileData = [NSData dataWithContentsOfURL:self.unicodeFileURLs[expectedFilename]];
+         
+         XCTAssertNotNil(fileData, @"No data extracted");
+         XCTAssertTrue([expectedFileData isEqualToData:fileData], @"File data doesn't match original file");
+     } error:&error];
+    
+    XCTAssertNil(error, @"Error iterating through files");
+    XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
 
 - (void)testFileDescriptorUsage
