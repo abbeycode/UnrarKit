@@ -125,6 +125,9 @@
 #pragma mark - Test Cases
 
 
+#pragma mark Archive File
+
+
 - (void)testFileURL {
     NSArray *testArchives = @[@"Large Archive.rar",
                               @"Test Archive.rar",
@@ -164,6 +167,11 @@
                       @"Resolved filename doesn't match original");
     }
 }
+
+
+#pragma mark List Filenames
+
+
 - (void)testListFilenames
 {
     NSArray *testArchives = @[@"Test Archive.rar", @"Test Archive (Password).rar"];
@@ -292,6 +300,10 @@
     XCTAssertNil(files, @"List returned for invalid archive");
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
 }
+
+
+#pragma mark List File Info
+
 
 - (void)testListFileInfo {
     URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test Archive.rar"]];
@@ -451,6 +463,10 @@
     XCTAssertNil(files, @"List returned for invalid archive");
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
 }
+
+
+#pragma mark Extract Files
+
 
 - (void)testExtractFiles
 {
@@ -624,6 +640,10 @@
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
     XCTAssertFalse(dirExists, @"Directory successfully created for invalid archive");
 }
+
+
+#pragma mark Extract Data
+
 
 - (void)testExtractData
 {
@@ -876,6 +896,10 @@
     XCTAssertNil(error, @"Error reading files: %@", error);
 }
 
+
+#pragma mark Perform on Files
+
+
 - (void)testPerformOnFiles
 {
     NSArray *testArchives = @[@"Test Archive.rar",
@@ -936,6 +960,10 @@
     XCTAssertNil(error, @"Error iterating through files");
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
+
+
+#pragma mark Perform on Data
+
 
 - (void)testPerformOnData
 {
@@ -1008,59 +1036,9 @@
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
 
-- (void)testFileDescriptorUsage
-{
-    NSInteger initialFileCount = [self numberOfOpenFileHandles];
-    
-    NSString *testArchiveName = @"Test Archive.rar";
-    NSURL *testArchiveOriginalURL = self.testFileURLs[testArchiveName];
-    NSFileManager *fm = [NSFileManager defaultManager];
 
-    for (NSInteger i = 0; i < 1000; i++) {
-        NSString *tempDir = [self randomDirectoryName];
-        NSURL *tempDirURL = [self.tempDirectory URLByAppendingPathComponent:tempDir];
-        NSURL *testArchiveCopyURL = [tempDirURL URLByAppendingPathComponent:testArchiveName];
-        
-        NSError *error = nil;
-        [fm createDirectoryAtURL:tempDirURL
-     withIntermediateDirectories:YES
-                      attributes:nil
-                           error:&error];
-        
-        XCTAssertNil(error, @"Error creating temp directory: %@", tempDirURL);
-        
-        [fm copyItemAtURL:testArchiveOriginalURL toURL:testArchiveCopyURL error:&error];
-        XCTAssertNil(error, @"Error copying test archive \n from: %@ \n\n   to: %@", testArchiveOriginalURL, testArchiveCopyURL);
+#pragma mark Is Password Protected
 
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveCopyURL];
-        
-        NSArray *fileList = [archive listFilenames:&error];
-        XCTAssertNotNil(fileList);
-        
-        for (NSString *fileName in fileList) {
-            NSData *fileData = [archive extractDataFromFile:fileName
-                                                   progress:^(CGFloat percentDecompressed) {
-                                                       NSLog(@"Extracting, %f%% complete", percentDecompressed);
-                                                   }
-                                                      error:&error];
-            XCTAssertNotNil(fileData);
-            XCTAssertNil(error);
-        }
-    }
-    
-    NSInteger finalFileCount = [self numberOfOpenFileHandles];
-    
-    XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
-}
-
-- (void)testErrorIsCorrect
-{
-    NSError *error = nil;
-    URKArchive *archive = [URKArchive rarArchiveAtURL:self.corruptArchive];
-    XCTAssertNil([archive listFilenames:&error], "Listing filenames in corrupt archive should return nil");
-    XCTAssertNotNil(error, @"An error should be returned when listing filenames in a corrupt archive");
-    XCTAssertNotNil(error.description, @"Error's description is nil");
-}
 
 - (void)testIsPasswordProtected_PasswordRequired
 {
@@ -1088,6 +1066,10 @@
     
     XCTAssertFalse(archive.isPasswordProtected, @"isPasswordProtected = YES for password-protected archive");
 }
+
+
+#pragma mark Validate Password
+
 
 - (void)testValidatePassword_PasswordRequired
 {
@@ -1129,6 +1111,64 @@
     
     archive.password = @"password";
     XCTAssertTrue(archive.validatePassword, @"validatePassword = NO when password supplied");
+}
+
+
+#pragma mark Various
+
+
+- (void)testFileDescriptorUsage
+{
+    NSInteger initialFileCount = [self numberOfOpenFileHandles];
+    
+    NSString *testArchiveName = @"Test Archive.rar";
+    NSURL *testArchiveOriginalURL = self.testFileURLs[testArchiveName];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    for (NSInteger i = 0; i < 1000; i++) {
+        NSString *tempDir = [self randomDirectoryName];
+        NSURL *tempDirURL = [self.tempDirectory URLByAppendingPathComponent:tempDir];
+        NSURL *testArchiveCopyURL = [tempDirURL URLByAppendingPathComponent:testArchiveName];
+        
+        NSError *error = nil;
+        [fm createDirectoryAtURL:tempDirURL
+     withIntermediateDirectories:YES
+                      attributes:nil
+                           error:&error];
+        
+        XCTAssertNil(error, @"Error creating temp directory: %@", tempDirURL);
+        
+        [fm copyItemAtURL:testArchiveOriginalURL toURL:testArchiveCopyURL error:&error];
+        XCTAssertNil(error, @"Error copying test archive \n from: %@ \n\n   to: %@", testArchiveOriginalURL, testArchiveCopyURL);
+        
+        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveCopyURL];
+        
+        NSArray *fileList = [archive listFilenames:&error];
+        XCTAssertNotNil(fileList);
+        
+        for (NSString *fileName in fileList) {
+            NSData *fileData = [archive extractDataFromFile:fileName
+                                                   progress:^(CGFloat percentDecompressed) {
+                                                       NSLog(@"Extracting, %f%% complete", percentDecompressed);
+                                                   }
+                                                      error:&error];
+            XCTAssertNotNil(fileData);
+            XCTAssertNil(error);
+        }
+    }
+    
+    NSInteger finalFileCount = [self numberOfOpenFileHandles];
+    
+    XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
+}
+
+- (void)testErrorIsCorrect
+{
+    NSError *error = nil;
+    URKArchive *archive = [URKArchive rarArchiveAtURL:self.corruptArchive];
+    XCTAssertNil([archive listFilenames:&error], "Listing filenames in corrupt archive should return nil");
+    XCTAssertNotNil(error, @"An error should be returned when listing filenames in a corrupt archive");
+    XCTAssertNotNil(error.description, @"Error's description is nil");
 }
 
 - (void)testUnicodeArchiveName
