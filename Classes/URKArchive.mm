@@ -13,6 +13,7 @@
 
 NSString *URKErrorDomain = @"URKErrorDomain";
 
+
 @interface URKArchive ()
 
 @property (strong) NSData *fileBookmark;
@@ -22,36 +23,6 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 
 
 @implementation URKArchive
-
-int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
-	UInt8 **buffer;
-	
-	switch(msg) {
-			
-		case UCM_CHANGEVOLUME:
-			break;
-		case UCM_PROCESSDATA:
-			buffer = (UInt8 **) UserData;
-			memcpy(*buffer, (UInt8 *)P1, P2);
-			// advance the buffer ptr, original m_buffer ptr is untouched
-			*buffer += P2;
-			break;
-		case UCM_NEEDPASSWORD:
-			break;
-	}
-	return(0);
-}
-
-int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2) {
-    URKArchive *refToSelf = (__bridge URKArchive *)(void *)UserData;
-    
-    if (msg == UCM_PROCESSDATA) {
-        NSData *dataChunk = [NSData dataWithBytesNoCopy:(UInt8 *)P1 length:P2 freeWhenDone:NO];
-        refToSelf.bufferedReadBlock(dataChunk);
-    }
-    
-    return 0;
-}
 
 
 
@@ -409,6 +380,71 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     return success;
 }
 
+- (BOOL)extractBufferedDataFromFile:(NSString *)filePath
+                              error:(NSError **)error
+                             action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
+{
+    NSError *innerError = nil;
+    
+    BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
+        int RHCode = 0, PFCode = 0;
+        URKFileInfo *fileInfo;
+
+        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
+            if ([self headerContainsErrors:error]) {
+                return;
+            }
+            
+            fileInfo = [URKFileInfo fileInfo:header];
+            
+            if ([fileInfo.filename isEqualToString:filePath]) {
+                break;
+            }
+            else {
+                if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                    [self assignError:error code:(NSInteger)PFCode];
+                    return;
+                }
+            }
+        }
+        
+        if (RHCode != ERAR_SUCCESS) {
+            [self assignError:error code:RHCode];
+            return;
+        }
+        
+        // Empty file, or a directory
+        if (fileInfo.uncompressedSize == 0) {
+            return;
+        }
+        
+        CGFloat totalBytes = fileInfo.uncompressedSize;
+        __block long long bytesRead = 0;
+
+        RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
+        self.bufferedReadBlock = ^void(NSData *dataChunk) {
+            bytesRead += dataChunk.length;
+            action(dataChunk, bytesRead / totalBytes);
+        };
+
+        PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        
+        if (PFCode != 0) {
+            [self assignError:error code:(NSInteger)PFCode];
+        }
+    } inMode:RAR_OM_EXTRACT error:&innerError];
+    
+    if (error) {
+        *error = innerError ? innerError : nil;
+        
+        if (innerError) {
+            NSLog(@"Error reading buffered data from file\nfilePath: %@\nerror: %@", filePath, innerError);
+        }
+    }
+    
+    return success && !innerError;
+}
+
 - (BOOL)isPasswordProtected
 {
     @try {
@@ -470,6 +506,43 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     } inMode:RAR_OM_EXTRACT error:&error];
     
     return success && result;
+}
+
+
+
+#pragma mark - Callback Functions
+
+
+int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
+    UInt8 **buffer;
+    
+    switch(msg) {
+        case UCM_CHANGEVOLUME:
+            break;
+            
+        case UCM_PROCESSDATA:
+            buffer = (UInt8 **) UserData;
+            memcpy(*buffer, (UInt8 *)P1, P2);
+            // advance the buffer ptr, original m_buffer ptr is untouched
+            *buffer += P2;
+            break;
+            
+        case UCM_NEEDPASSWORD:
+            break;
+    }
+    
+    return 0;
+}
+
+int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2) {
+    URKArchive *refToSelf = (__bridge URKArchive *)(void *)UserData;
+    
+    if (msg == UCM_PROCESSDATA) {
+        NSData *dataChunk = [NSData dataWithBytesNoCopy:(UInt8 *)P1 length:P2 freeWhenDone:NO];
+        refToSelf.bufferedReadBlock(dataChunk);
+    }
+    
+    return 0;
 }
 
 

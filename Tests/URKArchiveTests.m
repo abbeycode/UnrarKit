@@ -5,10 +5,13 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <UnrarKit/URKArchive.h>
+#import <DTPerformanceSession/DTSignalFlag.h>
 #import <zlib.h>
 
+#import <UnrarKit/URKArchive.h>
 #import "URKFileInfo.h"
+
+
 
 @interface URKArchiveTests : XCTestCase
 
@@ -42,7 +45,8 @@
                            @"Test Archive (Header Password).rar",
                            @"Test File A.txt",
                            @"Test File B.jpg",
-                           @"Test File C.m4a"];
+                           @"Test File C.m4a",
+                           @"bin/rar"];
     
     NSArray *unicodeFiles = @[@"Ⓣest Ⓐrchive.rar",
                               @"Test File Ⓐ.txt",
@@ -74,9 +78,17 @@
         BOOL testFileExists = [fm fileExistsAtPath:testFileURL.path];
         XCTAssertTrue(testFileExists, @"%@ not found", file);
         
-        NSURL *destinationURL = [self.tempDirectory URLByAppendingPathComponent:file];
+        NSURL *destinationURL = [self.tempDirectory URLByAppendingPathComponent:file isDirectory:NO];
         
         NSError *error = nil;
+        if (file.pathComponents.count > 1) {
+            [fm createDirectoryAtPath:destinationURL.URLByDeletingLastPathComponent.path
+          withIntermediateDirectories:YES
+                           attributes:nil
+                                error:&error];
+            XCTAssertNil(error, @"Failed to create directories for file %@", file);
+        }
+        
         [fm copyItemAtURL:testFileURL
                     toURL:destinationURL
                     error:&error];
@@ -1037,6 +1049,84 @@
 }
 
 
+#pragma mark Extract Buffered Data
+
+
+- (void)testExtractBufferedData
+{
+    NSURL *archiveURL = self.testFileURLs[@"Test Archive.rar"];
+    NSString *extractedFile = @"Test File B.jpg";
+    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    
+    NSError *error = nil;
+    NSMutableData *reconstructedFile = [NSMutableData data];
+    BOOL success = [archive extractBufferedDataFromFile:extractedFile
+                                                  error:&error
+                                                 action:
+                    ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                        NSLog(@"Decompressed: %f%%", percentDecompressed);
+                        [reconstructedFile appendBytes:dataChunk.bytes
+                                                length:dataChunk.length];
+                    }];
+    
+    XCTAssertTrue(success, @"Failed to read buffered data");
+    XCTAssertNil(error, @"Error reading buffered data");
+    XCTAssertGreaterThan(reconstructedFile.length, 0, @"No data returned");
+    
+    NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[extractedFile]];
+    XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
+                  @"File extracted in buffer not returned correctly");
+}
+
+- (void)testExtractBufferedData_VeryLarge
+{
+    DTSendSignalFlag("Begin creating text file", DT_START_SIGNAL, TRUE);
+    NSURL *largeTextFile = [self randomTextFieldOfLength:1000000]; // Increase for a more dramatic test
+    XCTAssertNotNil(largeTextFile, @"No large text file URL returned");
+    DTSendSignalFlag("End creating text file", DT_END_SIGNAL, TRUE);
+
+    DTSendSignalFlag("Begin archiving data", DT_START_SIGNAL, TRUE);
+    NSURL *archiveURL = [self archiveWithFiles:@[largeTextFile]];
+    XCTAssertNotNil(archiveURL, @"No archived large text file URL returned");
+    DTSendSignalFlag("Begin archiving data", DT_END_SIGNAL, TRUE);
+
+    NSURL *deflatedFileURL = [self.tempDirectory URLByAppendingPathComponent:@"DeflatedTextFile.txt"];
+    BOOL createSuccess = [[NSFileManager defaultManager] createFileAtPath:deflatedFileURL.path
+                                                                 contents:nil
+                                                               attributes:nil];
+    XCTAssertTrue(createSuccess, @"Failed to create empty deflate file");
+
+    NSError *handleError = nil;
+    NSFileHandle *deflated = [NSFileHandle fileHandleForWritingToURL:deflatedFileURL
+                                                               error:&handleError];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+
+    DTSendSignalFlag("Begin extracting buffered data", DT_START_SIGNAL, TRUE);
+
+    NSError *error = nil;
+    BOOL success = [archive extractBufferedDataFromFile:largeTextFile.lastPathComponent
+                                                  error:&error
+                                                 action:
+                    ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                        NSLog(@"Decompressed: %f%%", percentDecompressed);
+                        [deflated writeData:dataChunk];
+                    }];
+    
+    DTSendSignalFlag("End extracting buffered data", DT_END_SIGNAL, TRUE);
+    
+    XCTAssertTrue(success, @"Failed to read buffered data");
+    XCTAssertNil(error, @"Error reading buffered data");
+    
+    [deflated closeFile];
+
+    NSData *deflatedData = [NSData dataWithContentsOfURL:deflatedFileURL];
+    NSData *fileData = [NSData dataWithContentsOfURL:largeTextFile];
+    
+    XCTAssertTrue([fileData isEqualToData:deflatedData], @"Data didn't restore correctly");
+}
+
+
 #pragma mark Is Password Protected
 
 
@@ -1252,10 +1342,55 @@
     return [lsofOutput componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]].count;
 }
 
+- (NSURL *)randomTextFieldOfLength:(NSUInteger)numberOfCharacters {
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,?!\n";
+    NSUInteger letterCount = letters.length;
+    
+    NSMutableString *randomString = [NSMutableString stringWithCapacity:numberOfCharacters];
+    
+    for (NSUInteger i = 0; i < numberOfCharacters; i++) {
+        uint32_t charIndex = arc4random_uniform(letterCount);
+        [randomString appendFormat:@"%C", [letters characterAtIndex:charIndex]];
+    }
+    
+    NSURL *resultURL = [self.tempDirectory URLByAppendingPathComponent:
+                        [NSString stringWithFormat:@"%@.txt", [[NSProcessInfo processInfo] globallyUniqueString]]];
+
+    NSError *error = nil;
+    [randomString writeToURL:resultURL atomically:YES encoding:NSUTF16StringEncoding error:&error];
+    XCTAssertNil(error, @"Error opening file handle for text file creation: %@", error);
+    
+    return resultURL;
+}
+
+- (NSURL *)archiveWithFiles:(NSArray *)fileURLs {
+    NSString *uniqueString = [[NSProcessInfo processInfo] globallyUniqueString];
+    NSURL *rarExec = [[self.tempDirectory URLByAppendingPathComponent:@"bin"]
+                      URLByAppendingPathComponent:@"rar"];
+    NSURL *archiveURL = [[self.tempDirectory URLByAppendingPathComponent:uniqueString]
+                         URLByAppendingPathExtension:@"rar"];
+    
+    NSTask *task = [[NSTask alloc] init];
+    task.launchPath = rarExec.path;
+    task.arguments = [@[@"a", @"-ep", archiveURL.path] arrayByAddingObjectsFromArray:[fileURLs valueForKeyPath:@"path"]];
+    
+    [task launch];
+    [task waitUntilExit];
+    
+    if (task.terminationStatus != 0) {
+        NSLog(@"Failed to create RAR archive");
+        return nil;
+    }
+    
+    return archiveURL;
+}
+
 - (NSUInteger)crcOfTestFile:(NSString *)filename {
     NSURL *fileURL = [self urlOfTestFile:filename];
     NSData *fileContents = [[NSFileManager defaultManager] contentsAtPath:[fileURL path]];
     return crc32(0, fileContents.bytes, fileContents.length);
 }
+
+
 
 @end
