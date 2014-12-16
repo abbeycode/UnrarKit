@@ -17,7 +17,7 @@
 		28D7ACF80DDB3853001CB0EB /* UnrarExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* UnrarExampleViewController.m */; };
 		480F6005128A0C0B00A9B478 /* not_protected.cbr in Resources */ = {isa = PBXBuildFile; fileRef = 480F6002128A0C0B00A9B478 /* not_protected.cbr */; };
 		48BB62E31621B98300B424E2 /* protected.cbr in Resources */ = {isa = PBXBuildFile; fileRef = 48BB62E21621B98300B424E2 /* protected.cbr */; };
-		96BBCACF18DE82D900BE9B86 /* libUnrarKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96BBCACE18DE82D900BE9B86 /* libUnrarKit.a */; };
+        96DBF7FF1A3FE1620033B759 /* libUnrarKit iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96DBF7FE1A3FE1620033B759 /* libUnrarKit iOS.a */; };
 		96CD2C1A18D4D823002D004A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96CD2C1918D4D823002D004A /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +39,7 @@
 		8D1107310486CEB800E47090 /* UnrarExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "UnrarExample-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		96BBCACE18DE82D900BE9B86 /* libUnrarKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUnrarKit.a; path = "../build/Debug-iphoneos/libUnrarKit.a"; sourceTree = "<group>"; };
 		96CD2C1918D4D823002D004A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		96DBF7FE1A3FE1620033B759 /* libUnrarKit iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libUnrarKit iOS.a"; path = "../build/Debug-iphoneos/libUnrarKit iOS.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96BBCACF18DE82D900BE9B86 /* libUnrarKit.a in Frameworks */,
+				96DBF7FF1A3FE1620033B759 /* libUnrarKit iOS.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -112,6 +113,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				96DBF7FE1A3FE1620033B759 /* libUnrarKit iOS.a */,
 				96BBCACE18DE82D900BE9B86 /* libUnrarKit.a */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -213,6 +215,11 @@
 				);
 				INFOPLIST_FILE = "UnrarExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/Dov/Source,
+					"Code/UnrarKit/build/Debug-iphoneos",
+				);
 				PRODUCT_NAME = UnrarExample;
 			};
 			name = Debug;
@@ -232,6 +239,11 @@
 				);
 				INFOPLIST_FILE = "UnrarExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/Dov/Source,
+					"Code/UnrarKit/build/Debug-iphoneos",
+				);
 				PRODUCT_NAME = UnrarExample;
 				VALIDATE_PRODUCT = YES;
 			};
