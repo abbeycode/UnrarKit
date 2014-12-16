@@ -1032,7 +1032,8 @@
     BOOL success = [archive extractBufferedDataFromFile:extractedFile
                                                   error:&error
                                                  action:
-                    ^(NSData *dataChunk) {
+                    ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                        NSLog(@"Decompressed: %f%%", percentDecompressed);
                         [reconstructedFile appendBytes:dataChunk.bytes
                                                 length:dataChunk.length];
                     }];
@@ -1076,7 +1077,8 @@
     BOOL success = [archive extractBufferedDataFromFile:largeTextFile.lastPathComponent
                                                   error:&error
                                                  action:
-                    ^(NSData *dataChunk) {
+                    ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                        NSLog(@"Decompressed: %f%%", percentDecompressed);
                         [deflated writeData:dataChunk];
                     }];
     
