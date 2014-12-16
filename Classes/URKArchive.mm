@@ -16,6 +16,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 @interface URKArchive ()
 
 @property (strong) NSData *fileBookmark;
+@property (strong) void(^bufferedReadBlock)(NSData *dataChunk);
 
 @end
 
@@ -39,6 +40,17 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
 			break;
 	}
 	return(0);
+}
+
+int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2) {
+    URKArchive *refToSelf = (__bridge URKArchive *)(void *)UserData;
+    
+    if (msg == UCM_PROCESSDATA) {
+        NSData *dataChunk = [NSData dataWithBytesNoCopy:(UInt8 *)P1 length:P2 freeWhenDone:NO];
+        refToSelf.bufferedReadBlock(dataChunk);
+    }
+    
+    return 0;
 }
 
 
@@ -246,28 +258,31 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
     return success && result;
 }
 
-- (NSData *)extractData:(URKFileInfo *)fileInfo error:(NSError **)error
+- (NSData *)extractData:(URKFileInfo *)fileInfo
+               progress:(void (^)(CGFloat percentDecompressed))progress
+                  error:(NSError **)error
 {
-    return [self extractDataFromFile:fileInfo.filename error:error];
+    return [self extractDataFromFile:fileInfo.filename progress:progress error:error];
 }
 
-- (NSData *)extractDataFromFile:(NSString *)filePath error:(NSError **)error
+- (NSData *)extractDataFromFile:(NSString *)filePath
+                       progress:(void (^)(CGFloat percentDecompressed))progress
+                          error:(NSError **)error
 {
     __block NSData *result = nil;
     
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         int RHCode = 0, PFCode = 0;
-        
-        size_t length = 0;
+        URKFileInfo *fileInfo;
+
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:error]) {
                 return;
             }
             
-            NSString *filename = [NSString stringWithUnichars:header->FileNameW];
+            fileInfo = [URKFileInfo fileInfo:header];
 
-            if ([filename isEqualToString:filePath]) {
-                length = header->UnpSize;
+            if ([fileInfo.filename isEqualToString:filePath]) {
                 break;
             }
             else {
@@ -284,15 +299,29 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
         }
         
         // Empty file, or a directory
-        if (length == 0) {
+        if (fileInfo.uncompressedSize == 0) {
             result = [NSData data];
             return;
         }
         
-        UInt8 *buffer = (UInt8 *)malloc(length * sizeof(UInt8));
-        UInt8 *callBackBuffer = buffer;
+        NSMutableData *fileData = [NSMutableData dataWithCapacity:fileInfo.uncompressedSize];
+        CGFloat totalBytes = fileInfo.uncompressedSize;
+        __block long long bytesRead = 0;
         
-        RARSetCallback(_rarFile, CallbackProc, (long) &callBackBuffer);
+        if (progress) {
+            progress(0.0);
+        }
+        
+        RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
+        self.bufferedReadBlock = ^void(NSData *dataChunk) {
+            [fileData appendData:dataChunk];
+
+            bytesRead += dataChunk.length;
+
+            if (progress) {
+                progress(bytesRead / totalBytes);
+            }
+        };
         
         PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
         
@@ -301,7 +330,7 @@ int CALLBACK CallbackProc(UINT msg, long UserData, long P1, long P2) {
             return;
         }
         
-        result = [NSData dataWithBytesNoCopy:buffer length:length freeWhenDone:YES];
+        result = [NSData dataWithData:fileData];
     } inMode:RAR_OM_EXTRACT error:error];
     
     if (!success) {

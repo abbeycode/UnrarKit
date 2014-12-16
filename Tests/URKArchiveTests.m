@@ -655,7 +655,11 @@
             NSString *expectedFilename = expectedFiles[i];
             
             NSError *error = nil;
-            NSData *extractedData = [archive extractDataFromFile:expectedFilename error:&error];
+            NSData *extractedData = [archive extractDataFromFile:expectedFilename
+                                                        progress:^(CGFloat percentDecompressed) {
+                                                            NSLog(@"Extracting, %f%% complete", percentDecompressed);
+                                                        }
+                                                           error:&error];
             
             XCTAssertNil(error, @"Error in extractStream:error:");
             
@@ -666,6 +670,9 @@
             
             error = nil;
             NSData *dataFromFileInfo = [archive extractData:fileInfos[i]
+                                                   progress:^(CGFloat percentDecompressed) {
+                                                       NSLog(@"Extracting from file info, %f%% complete", percentDecompressed);
+                                                   }
                                                       error:&error];
             XCTAssertNil(error, @"Error extracting data by file info");
             XCTAssertTrue([expectedFileData isEqualToData:dataFromFileInfo], @"Extracted data from file info doesn't match original file");
@@ -694,7 +701,11 @@
         NSString *expectedFilename = expectedFiles[i];
         
         NSError *error = nil;
-        NSData *extractedData = [archive extractDataFromFile:expectedFilename error:&error];
+        NSData *extractedData = [archive extractDataFromFile:expectedFilename
+                                                    progress:^(CGFloat percentDecompressed) {
+                                                        NSLog(@"Extracting, %f%% complete", percentDecompressed);
+                                                    }
+                                                       error:&error];
         
         XCTAssertNil(error, @"Error in extractStream:error:");
         
@@ -705,6 +716,9 @@
         
         error = nil;
         NSData *dataFromFileInfo = [archive extractData:fileInfos[i]
+                                               progress:^(CGFloat percentDecompressed) {
+                                                   NSLog(@"Extracting from file info, %f%% complete", percentDecompressed);
+                                               }
                                                   error:&error];
         XCTAssertNil(error, @"Error extracting data by file info");
         XCTAssertTrue([expectedFileData isEqualToData:dataFromFileInfo], @"Extracted data from file info doesn't match original file");
@@ -720,7 +734,11 @@
         URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[testArchiveName]];
         
         NSError *error = nil;
-        NSData *data = [archive extractDataFromFile:@"Test File A.txt" error:&error];
+        NSData *data = [archive extractDataFromFile:@"Test File A.txt"
+                                           progress:^(CGFloat percentDecompressed) {
+                                               NSLog(@"Extracting, %f%% complete", percentDecompressed);
+                                           }
+                                              error:&error];
         
         XCTAssertNotNil(error, @"Extract data without password succeeded");
         XCTAssertNil(data, @"Data returned without password");
@@ -733,7 +751,11 @@
     URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
     
     NSError *error = nil;
-    NSData *data = [archive extractDataFromFile:@"Any file.txt" error:&error];
+    NSData *data = [archive extractDataFromFile:@"Any file.txt"
+                                       progress:^(CGFloat percentDecompressed) {
+                                           NSLog(@"Extracting, %f%% complete", percentDecompressed);
+                                       }
+                                          error:&error];
     
     XCTAssertNotNil(error, @"Extract data for invalid archive succeeded");
     XCTAssertNil(data, @"Data returned for invalid archive");
@@ -1016,7 +1038,11 @@
         XCTAssertNotNil(fileList);
         
         for (NSString *fileName in fileList) {
-            NSData *fileData = [archive extractDataFromFile:fileName error:&error];
+            NSData *fileData = [archive extractDataFromFile:fileName
+                                                   progress:^(CGFloat percentDecompressed) {
+                                                       NSLog(@"Extracting, %f%% complete", percentDecompressed);
+                                                   }
+                                                      error:&error];
             XCTAssertNotNil(fileData);
             XCTAssertNil(error);
         }
