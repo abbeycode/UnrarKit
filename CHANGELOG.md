@@ -3,7 +3,9 @@
 ## 2.3
 
 * Full Unicode support (Issue #11)
-* Better support for moving files during a decompression into memory by adding a new block-based method
+* Better support for moving files during a decompression into memory by adding a new block-based method that streams the file (Issue #4)
+* Added pervasive use of new [URKFileInfo](Classes/URKFileInfo.h) class, which exposes several metadata fields of each file, rather than relying on passing filenames around (Issue #7 - Thanks, @mmcdole!)
+* Added methods to test whether an archive is password-protected, and to test a given password (Issue #10 - Thanks, @scinfu!)
 
 
 ## 2.2.4
