@@ -6,6 +6,8 @@
 * Better support for moving files during a decompression into memory by adding a new block-based method that streams the file (Issue #4)
 * Added pervasive use of new [URKFileInfo](Classes/URKFileInfo.h) class, which exposes several metadata fields of each file, rather than relying on passing filenames around (Issue #7 - Thanks, @mmcdole!)
 * Added methods to test whether an archive is password-protected, and to test a given password (Issue #10 - Thanks, @scinfu!)
+* Added progress reporting callbacks to most methods (Issue #6)
+* Added several block-based methods that allow a guarantee of completing successfully, even if a file moves or gets deleted (Issue #5)
 
 
 ## 2.2.4
