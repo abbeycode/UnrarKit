@@ -340,22 +340,20 @@ NSString *URKErrorDomain = @"URKErrorDomain";
         
         BOOL stop = NO;
         
-        size_t length = 0;
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
             if (stop || [self headerContainsErrors:error]) {
                 return;
             }
             
             URKFileInfo *info = [URKFileInfo fileInfo:header];
-            length = header->UnpSize;
 
             // Empty file, or a directory
-            if (length == 0) {
+            if (info.uncompressedSize == 0) {
                 action(info, [NSData data], &stop);
                 break;
             }
             
-            UInt8 *buffer = (UInt8 *)malloc(length * sizeof(UInt8));
+            UInt8 *buffer = (UInt8 *)malloc(info.uncompressedSize * sizeof(UInt8));
             UInt8 *callBackBuffer = buffer;
             
             RARSetCallback(_rarFile, CallbackProc, (long) &callBackBuffer);
@@ -367,7 +365,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
                 return;
             }
             
-            NSData *data = [NSData dataWithBytesNoCopy:buffer length:length freeWhenDone:YES];
+            NSData *data = [NSData dataWithBytesNoCopy:buffer length:info.uncompressedSize freeWhenDone:YES];
             action(info, data, &stop);
         }
         
