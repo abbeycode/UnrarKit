@@ -4,6 +4,7 @@
 //
 //
 
+#import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
 #import "raros.hpp"
 #import "dll.hpp"
