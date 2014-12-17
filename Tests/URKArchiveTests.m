@@ -510,7 +510,9 @@
         BOOL success = [archive extractFilesTo:extractURL.path
                                      overwrite:NO
                                       progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
+#if DEBUG
                                           NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
+#endif
                                       }
                                          error:&error];
         
@@ -566,7 +568,9 @@
     BOOL success = [archive extractFilesTo:extractURL.path
                                  overwrite:NO
                                   progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
+#if DEBUG
                                       NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
+#endif
                                   }
                                      error:&error];
     
@@ -619,7 +623,9 @@
         BOOL success = [archive extractFilesTo:extractURL.path
                                      overwrite:NO
                                       progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
+#if DEBUG
                                           NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
+#endif
                                       }
                                          error:&error];
         BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
@@ -643,7 +649,9 @@
     BOOL success = [archive extractFilesTo:extractURL.path
                                  overwrite:NO
                                   progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
+#if DEBUG
                                       NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
+#endif
                                   }
                                      error:&error];
     BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
@@ -689,7 +697,9 @@
             NSError *error = nil;
             NSData *extractedData = [archive extractDataFromFile:expectedFilename
                                                         progress:^(CGFloat percentDecompressed) {
+#if DEBUG
                                                             NSLog(@"Extracting, %f%% complete", percentDecompressed);
+#endif
                                                         }
                                                            error:&error];
             
@@ -703,7 +713,9 @@
             error = nil;
             NSData *dataFromFileInfo = [archive extractData:fileInfos[i]
                                                    progress:^(CGFloat percentDecompressed) {
+#if DEBUG
                                                        NSLog(@"Extracting from file info, %f%% complete", percentDecompressed);
+#endif
                                                    }
                                                       error:&error];
             XCTAssertNil(error, @"Error extracting data by file info");
@@ -735,7 +747,9 @@
         NSError *error = nil;
         NSData *extractedData = [archive extractDataFromFile:expectedFilename
                                                     progress:^(CGFloat percentDecompressed) {
+#if DEBUG
                                                         NSLog(@"Extracting, %f%% complete", percentDecompressed);
+#endif
                                                     }
                                                        error:&error];
         
@@ -749,7 +763,9 @@
         error = nil;
         NSData *dataFromFileInfo = [archive extractData:fileInfos[i]
                                                progress:^(CGFloat percentDecompressed) {
+#if DEBUG
                                                    NSLog(@"Extracting from file info, %f%% complete", percentDecompressed);
+#endif
                                                }
                                                   error:&error];
         XCTAssertNil(error, @"Error extracting data by file info");
@@ -768,7 +784,9 @@
         NSError *error = nil;
         NSData *data = [archive extractDataFromFile:@"Test File A.txt"
                                            progress:^(CGFloat percentDecompressed) {
+#if DEBUG
                                                NSLog(@"Extracting, %f%% complete", percentDecompressed);
+#endif
                                            }
                                               error:&error];
         
@@ -785,7 +803,9 @@
     NSError *error = nil;
     NSData *data = [archive extractDataFromFile:@"Any file.txt"
                                        progress:^(CGFloat percentDecompressed) {
+#if DEBUG
                                            NSLog(@"Extracting, %f%% complete", percentDecompressed);
+#endif
                                        }
                                           error:&error];
     
@@ -1236,7 +1256,9 @@
         for (NSString *fileName in fileList) {
             NSData *fileData = [archive extractDataFromFile:fileName
                                                    progress:^(CGFloat percentDecompressed) {
+#if DEBUG
                                                        NSLog(@"Extracting, %f%% complete", percentDecompressed);
+#endif
                                                    }
                                                       error:&error];
             XCTAssertNotNil(fileData);
@@ -1294,15 +1316,15 @@
 #pragma mark - Helper Methods
 
 
-- (NSURL *)urlOfTestFile:(NSString *)fileName
+- (NSURL *)urlOfTestFile:(NSString *)filename
 {
-    NSString *name = [fileName stringByDeletingPathExtension];
-    NSString *extension = [fileName pathExtension];
+    NSString *baseDirectory = @"Test Data";
+    NSString *subPath = filename.stringByDeletingLastPathComponent;
+    NSString *bundleSubdir = [baseDirectory stringByAppendingPathComponent:subPath];
     
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:name
-                                                                      ofType:extension
-                                                                 inDirectory:@"Test Data"];
-    return [NSURL fileURLWithPath:path];
+    return [[NSBundle bundleForClass:[self class]] URLForResource:filename.lastPathComponent
+                                                    withExtension:nil
+                                                     subdirectory:bundleSubdir];
 }
 
 - (NSString *)randomDirectoryName
