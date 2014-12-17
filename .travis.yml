@@ -1,5 +1,5 @@
 language: objective-c
 script:
-  - xctool -workspace UnrarKit.xcworkspace -scheme UnrarKit build
+  - xctool -workspace UnrarKit.xcworkspace -scheme UnrarKit build test
   - xctool -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator build
   - ./Scripts/cocoapod-validate.sh
