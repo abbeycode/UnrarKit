@@ -16,6 +16,8 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 
 @interface URKArchive ()
 
+- (id)initWithFile:(NSURL *)fileURL NS_DESIGNATED_INITIALIZER;
+
 @property (strong) NSData *fileBookmark;
 @property (strong) void(^bufferedReadBlock)(NSData *dataChunk);
 
@@ -70,7 +72,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
     }
     
 	return self;
-}
+};
 
 - (id)initWithFile:(NSURL *)fileURL password:(NSString*)password
 {
