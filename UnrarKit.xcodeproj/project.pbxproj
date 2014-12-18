@@ -1296,7 +1296,6 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = macosx;
-				WARNING_CFLAGS = "-Wno-error=unused-command-line-argument";
 			};
 			name = Release;
 		};
@@ -1373,6 +1372,7 @@
 					"-Wno-return-type",
 					"-Wno-unused-variable",
 					"-Wno-switch",
+					"-Wno-error=unused-command-line-argument",
 				);
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1470,6 +1470,7 @@
 					"-Wno-shorten-64-to-32",
 					"-Wno-unused-function",
 					"-Wno-conditional-uninitialized",
+					"-Wno-error=unused-command-line-argument",
 				);
 			};
 			name = Release;
@@ -1568,6 +1569,7 @@
 					"-Wno-shorten-64-to-32",
 					"-Wno-unused-function",
 					"-Wno-conditional-uninitialized",
+					"-Wno-error=unused-command-line-argument",
 				);
 			};
 			name = Release;
