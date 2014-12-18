@@ -1296,6 +1296,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = macosx;
+				WARNING_CFLAGS = "-Wno-error=unused-command-line-argument";
 			};
 			name = Release;
 		};
