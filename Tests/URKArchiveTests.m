@@ -203,7 +203,7 @@
         NSError *error = nil;
         NSArray *filesInArchive = [archive listFilenames:&error];
         
-        XCTAssertNil(error, @"Error returned by unrarListFiles");
+        XCTAssertNil(error, @"Error returned by listFilenames");
         XCTAssertNotNil(filesInArchive, @"No list of files returned");
         XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
                        @"Incorrect number of files listed in archive");
@@ -233,7 +233,7 @@
     NSError *error = nil;
     NSArray *filesInArchive = [archive listFilenames:&error];
     
-    XCTAssertNil(error, @"Error returned by unrarListFiles");
+    XCTAssertNil(error, @"Error returned by listFilenames");
     XCTAssertNotNil(filesInArchive, @"No list of files returned");
     XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
                    @"Incorrect number of files listed in archive");
@@ -265,7 +265,7 @@
         NSError *error = nil;
         NSArray *filesInArchive = [archiveNoPassword listFilenames:&error];
         
-        XCTAssertNotNil(error, @"No error returned by unrarListFiles (no password given)");
+        XCTAssertNotNil(error, @"No error returned by listFilenames (no password given)");
         XCTAssertNil(filesInArchive, @"List of files returned (no password given)");
         
         URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:@"password"];
@@ -274,7 +274,7 @@
         error = nil;
         filesInArchive = [archive listFilenames:&error];
         
-        XCTAssertNil(error, @"Error returned by unrarListFiles");
+        XCTAssertNil(error, @"Error returned by listFilenames");
         XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
                        @"Incorrect number of files listed in archive");
         
@@ -399,7 +399,7 @@
     NSError *error = nil;
     NSArray *filesInArchive = [archive listFileInfo:&error];
     
-    XCTAssertNil(error, @"Error returned by unrarListFiles");
+    XCTAssertNil(error, @"Error returned by listFileInfo");
     XCTAssertNotNil(filesInArchive, @"No list of files returned");
     XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
                    @"Incorrect number of files listed in archive");
@@ -430,7 +430,7 @@
         NSError *error = nil;
         NSArray *filesInArchive = [archiveNoPassword listFileInfo:&error];
         
-        XCTAssertNotNil(error, @"No error returned by unrarListFiles (no password given)");
+        XCTAssertNotNil(error, @"No error returned by listFileInfo (no password given)");
         XCTAssertNil(filesInArchive, @"List of files returned (no password given)");
         
         URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:@"password"];
@@ -439,7 +439,7 @@
         error = nil;
         filesInArchive = [archive listFileInfo:&error];
         
-        XCTAssertNil(error, @"Error returned by unrarListFiles");
+        XCTAssertNil(error, @"Error returned by listFileInfo");
         XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
                        @"Incorrect number of files listed in archive");
         
@@ -677,8 +677,6 @@
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
     
-    NSFileManager *fm = [NSFileManager defaultManager];
-    
     for (NSString *testArchiveName in testArchives) {
 
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
@@ -703,7 +701,7 @@
                                                         }
                                                            error:&error];
             
-            XCTAssertNil(error, @"Error in extractStream:error:");
+            XCTAssertNil(error, @"Error in extractData:error:");
             
             NSData *expectedFileData = [NSData dataWithContentsOfURL:self.testFileURLs[expectedFilename]];
             
@@ -732,8 +730,6 @@
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
     
-    NSFileManager *fm = [NSFileManager defaultManager];
-    
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
     URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
     
@@ -753,7 +749,7 @@
                                                     }
                                                        error:&error];
         
-        XCTAssertNil(error, @"Error in extractStream:error:");
+        XCTAssertNil(error, @"Error in extractData:error:");
         
         NSData *expectedFileData = [NSData dataWithContentsOfURL:self.unicodeFileURLs[expectedFilename]];
         
@@ -830,8 +826,6 @@
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
     
-    NSFileManager *fm = [NSFileManager defaultManager];
-    
     for (NSString *testArchiveName in testArchives) {
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
@@ -860,8 +854,6 @@
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
-    NSFileManager *fm = [NSFileManager defaultManager];
     
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
     URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
@@ -894,8 +886,6 @@
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
-    NSFileManager *fm = [NSFileManager defaultManager];
     
     for (NSString *testArchiveName in testArchives) {
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
@@ -930,8 +920,6 @@
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
-    NSFileManager *fm = [NSFileManager defaultManager];
     
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
     URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
@@ -973,7 +961,7 @@
         NSError *renameError = nil;
         NSFileManager *fm = [NSFileManager defaultManager];
         [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
-        XCTAssertNil(error, @"Error renaming file: %@", renameError);
+        XCTAssertNil(renameError, @"Error renaming file: %@", renameError);
     });
     
     __block NSUInteger fileCount = 0;
@@ -1010,7 +998,7 @@
         NSError *removeError = nil;
         NSFileManager *fm = [NSFileManager defaultManager];
         [fm removeItemAtURL:largeArchiveURL error:&removeError];
-        XCTAssertNil(error, @"Error removing file: %@", removeError);
+        XCTAssertNil(removeError, @"Error removing file: %@", removeError);
     });
     
     __block NSUInteger fileCount = 0;
@@ -1046,7 +1034,7 @@
     NSError *renameError = nil;
     NSFileManager *fm = [NSFileManager defaultManager];
     [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
-    XCTAssertNil(error, @"Error renaming file: %@", renameError);
+    XCTAssertNil(renameError, @"Error renaming file: %@", renameError);
     
     __block NSUInteger fileCount = 0;
     
@@ -1098,7 +1086,7 @@
 - (void)testExtractBufferedData_VeryLarge
 {
     DTSendSignalFlag("Begin creating text file", DT_START_SIGNAL, TRUE);
-    NSURL *largeTextFile = [self randomTextFieldOfLength:1000000]; // Increase for a more dramatic test
+    NSURL *largeTextFile = [self randomTextFileOfLength:1000000]; // Increase for a more dramatic test
     XCTAssertNotNil(largeTextFile, @"No large text file URL returned");
     DTSendSignalFlag("End creating text file", DT_END_SIGNAL, TRUE);
 
@@ -1116,7 +1104,8 @@
     NSError *handleError = nil;
     NSFileHandle *deflated = [NSFileHandle fileHandleForWritingToURL:deflatedFileURL
                                                                error:&handleError];
-    
+    XCTAssertNil(handleError, @"Error creating a file handle");
+
     URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
 
     DTSendSignalFlag("Begin extracting buffered data", DT_START_SIGNAL, TRUE);
@@ -1361,7 +1350,7 @@
     return [lsofOutput componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]].count;
 }
 
-- (NSURL *)randomTextFieldOfLength:(NSUInteger)numberOfCharacters {
+- (NSURL *)randomTextFileOfLength:(NSUInteger)numberOfCharacters {
     NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,?!\n";
     NSUInteger letterCount = letters.length;
     
