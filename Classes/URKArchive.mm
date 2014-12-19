@@ -16,7 +16,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 
 @interface URKArchive ()
 
-- (id)initWithFile:(NSURL *)fileURL NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password NS_DESIGNATED_INITIALIZER;
 
 @property (strong) NSData *fileBookmark;
 @property (strong) void(^bufferedReadBlock)(NSData *dataChunk);
@@ -57,7 +57,12 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 #pragma mark - Initializers
 
 
-- (id)initWithFile:(NSURL *)fileURL
+- (instancetype)initWithFile:(NSURL *)fileURL
+{
+    return [self initWithFile:fileURL password:nil];
+}
+
+- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password
 {
     if ((self = [super init])) {
         NSError *error = nil;
@@ -65,19 +70,11 @@ NSString *URKErrorDomain = @"URKErrorDomain";
                               includingResourceValuesForKeys:@[]
                                                relativeToURL:nil
                                                        error:&error];
-        
+        self.password = password;
+
         if (error) {
             NSLog(@"Error creating bookmark to RAR archive: %@", error);
         }
-    }
-    
-	return self;
-};
-
-- (id)initWithFile:(NSURL *)fileURL password:(NSString*)password
-{
-	if ((self = [self initWithFile:fileURL])) {
-        self.password = password;
     }
     
     return self;
