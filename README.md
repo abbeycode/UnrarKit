@@ -16,15 +16,20 @@ URKArchive *archive = [URKArchive rarArchiveAtPath:@"An Archive.rar"];
 
 NSError *error = nil;
 
-NSArray *filesInArchive = [archive listFiles:&error];
+NSArray *filesInArchive = [archive listFilenames:&error];
 BOOL extractFilesSuccessful = [archive extractFilesTo:@"some/directory"
                                             overWrite:NO
+                                             progress:
+    ^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
+        NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
+    }
                                                 error:&error];
 NSData *extractedData = [archive extractDataFromFile:@"a file in the archive.jpg"
+                                            progress:^(CGFloat percentDecompressed) {
+                                                         NSLog(@"Extracting, %f%% complete", percentDecompressed);
+                                            }
                                                error:&error];
 ```
-
-UnrarKit is a CocoaPods project, which is the recommended way to install it. If you're not familiar with [CocoaPods](http://cocoapods.org), you can start with their [Getting Started guide](http://guides.cocoapods.org/using/getting-started.html).
 
 
 # Installation
