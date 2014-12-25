@@ -3,3 +3,6 @@ script:
   - xctool -workspace UnrarKit.xcworkspace -scheme UnrarKit -configuration Release analyze test
   - xctool -workspace UnrarKit.xcworkspace -scheme UnrarExample -configuration Release -sdk iphonesimulator analyze
   - ./Scripts/cocoapod-validate.sh
+
+# Turn on Docker, container-based infrastructure
+sudo: false
