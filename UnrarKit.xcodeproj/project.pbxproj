@@ -281,6 +281,8 @@
 		969BDA1E19EDE88E002CE755 /* unpack.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F7B18DB722E00B5651B /* unpack.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		969BDA1F19EDE88E002CE755 /* version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F8118DB722F00B5651B /* version.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		969BDA2019EDE88E002CE755 /* volume.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F8318DB722F00B5651B /* volume.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		969F17371A6029E000665453 /* UnrarKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 969F17361A60297700665453 /* UnrarKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		969F17381A6029E700665453 /* UnrarKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 969F17361A60297700665453 /* UnrarKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96DBF7F91A3F72800033B759 /* NSString+UnrarKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */; };
 		96DBF7FA1A3F72800033B759 /* NSString+UnrarKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */; };
 		96DBF7FB1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
@@ -289,8 +291,8 @@
 		96E5D345198B333200A74340 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
 		96E5D347198B334500A74340 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
-		F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; };
-		F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; };
+		F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F3FCD46D1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
 		F3FCD46E1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
 		F3FCD46F1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
@@ -505,6 +507,7 @@
 		96853F8518DB722F00B5651B /* win32stm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = win32stm.cpp; sourceTree = "<group>"; };
 		9685411018DBA06000B5651B /* libUnrarKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnrarKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		969BDA2419EDE88E002CE755 /* libUnrarKit iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libUnrarKit iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		969F17361A60297700665453 /* UnrarKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnrarKit.h; sourceTree = "<group>"; };
 		96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+UnrarKit.h"; path = "Categories/NSString+UnrarKit.h"; sourceTree = "<group>"; };
 		96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSString+UnrarKit.mm"; path = "Categories/NSString+UnrarKit.mm"; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* UnrarKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKit_Prefix.pch; sourceTree = "<group>"; };
@@ -583,6 +586,7 @@
 			isa = PBXGroup;
 			children = (
 				96DBF7F61A3F72370033B759 /* Categories */,
+				969F17361A60297700665453 /* UnrarKit.h */,
 				489CFA0E128B5169005DCC2A /* URKArchive.h */,
 				489CFA0F128B5169005DCC2A /* URKArchive.mm */,
 				F3FCD4691A3262E5003612BF /* URKFileInfo.h */,
@@ -819,6 +823,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9685417018DBA43A00B5651B /* URKArchive.h in Headers */,
+				F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */,
+				969F17371A6029E000665453 /* UnrarKit.h in Headers */,
 				9685417118DBA58F00B5651B /* archive.hpp in Headers */,
 				9685417218DBA58F00B5651B /* array.hpp in Headers */,
 				9685417318DBA58F00B5651B /* cmddata.hpp in Headers */,
@@ -855,7 +861,6 @@
 				9685419218DBA58F00B5651B /* raros.hpp in Headers */,
 				9685419318DBA58F00B5651B /* rartypes.hpp in Headers */,
 				9685419418DBA58F00B5651B /* rarvm.hpp in Headers */,
-				F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */,
 				9685419518DBA58F00B5651B /* rawread.hpp in Headers */,
 				9685419618DBA58F00B5651B /* rdwrfn.hpp in Headers */,
 				9685419718DBA58F00B5651B /* recvol.hpp in Headers */,
@@ -886,6 +891,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				969BD9E719EDE88E002CE755 /* URKArchive.h in Headers */,
+				F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */,
+				969F17381A6029E700665453 /* UnrarKit.h in Headers */,
 				969BD9E819EDE88E002CE755 /* archive.hpp in Headers */,
 				969BD9E919EDE88E002CE755 /* array.hpp in Headers */,
 				969BD9EA19EDE88E002CE755 /* cmddata.hpp in Headers */,
@@ -922,7 +929,6 @@
 				969BDA0919EDE88E002CE755 /* raros.hpp in Headers */,
 				969BDA0A19EDE88E002CE755 /* rartypes.hpp in Headers */,
 				969BDA0B19EDE88E002CE755 /* rarvm.hpp in Headers */,
-				F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */,
 				969BDA0C19EDE88E002CE755 /* rawread.hpp in Headers */,
 				969BDA0D19EDE88E002CE755 /* rdwrfn.hpp in Headers */,
 				969BDA0E19EDE88E002CE755 /* recvol.hpp in Headers */,

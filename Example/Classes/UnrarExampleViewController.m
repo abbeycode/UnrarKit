@@ -5,7 +5,7 @@
 //
 
 #import "UnrarExampleViewController.h"
-#import <UnrarKit/URKArchive.h>
+#import <UnrarKit/UnrarKit.h>
 
 @implementation UnrarExampleViewController
 
