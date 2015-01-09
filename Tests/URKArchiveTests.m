@@ -871,6 +871,36 @@
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
 
+- (void)testPerformOnFiles_Ordering
+{
+    NSArray *testFilenames = @[@"AAA.txt",
+                               @"BBB.txt",
+                               @"CCC.txt"];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+
+    NSMutableArray *testFileURLs = [NSMutableArray array];
+
+    // Touch test files
+    [testFilenames enumerateObjectsUsingBlock:^(NSString *filename, NSUInteger idx, BOOL *stop) {
+        NSURL *outputURL = [self.tempDirectory URLByAppendingPathComponent:filename];
+        XCTAssertTrue([fm createFileAtPath:outputURL.path contents:nil attributes:nil], @"Failed to create test file: %@", filename);
+        [testFileURLs addObject:outputURL];
+    }];
+    
+    // Create RAR archive with test files, reversed
+    NSURL *reversedArchiveURL = [self archiveWithFiles:testFileURLs.reverseObjectEnumerator.allObjects];
+
+    NSError *error = nil;
+    __block NSUInteger index = 0;
+
+    URKArchive *archive = [URKArchive rarArchiveAtURL:reversedArchiveURL];
+    [archive performOnFilesInArchive:^(URKFileInfo *fileInfo, BOOL *stop) {
+        NSString *expectedFilename = testFilenames[index++];
+        XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Archive files not iterated through in correct order");
+    } error:&error];
+}
+
 
 #pragma mark Perform on Data
 

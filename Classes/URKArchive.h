@@ -220,7 +220,7 @@ extern NSString *URKErrorDomain;
                           error:(NSError **)error;
 
 /**
- *  Loops through each file in the archive into memory, allowing you to perform an action using its info
+ *  Loops through each file in the archive in alphabetical order, allowing you to perform an action using its info
  *
  *  @param action The action to perform using the data
  *
@@ -235,7 +235,7 @@ extern NSString *URKErrorDomain;
                           error:(NSError **)error;
 
 /**
- *  Extracts each file in the archive into memory, allowing you to perform an action on it
+ *  Extracts each file in the archive into memory, allowing you to perform an action on it (not sorted)
  *
  *  @param action The action to perform using the data
  *
