@@ -17,7 +17,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 @interface URKArchive ()
 
 - (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password
-#if TARGET_OS_IPHONE || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_9
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_7_0 || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_9
 NS_DESIGNATED_INITIALIZER
 #endif
 ;
