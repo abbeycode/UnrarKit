@@ -16,7 +16,11 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 
 @interface URKArchive ()
 
-- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password
+#if TARGET_OS_IPHONE || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_9
+NS_DESIGNATED_INITIALIZER
+#endif
+;
 
 @property (strong) NSData *fileBookmark;
 @property (strong) void(^bufferedReadBlock)(NSData *dataChunk);
