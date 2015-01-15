@@ -1,10 +1,33 @@
 language: objective-c
+
+xcode_workspace: UnrarKit.xcworkspace
+
+xcode_scheme:
+- UnrarKit
+- UnrarExample
+
+xcode_sdk:
+  - macosx
+  - macosx10.9
+  - iphonesimulator
+  - iphonesimulator7.0
+
 script:
-  - xctool -workspace UnrarKit.xcworkspace -scheme UnrarKit -configuration Release analyze test
-  - xctool -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx10.9
-  - xctool -workspace UnrarKit.xcworkspace -scheme UnrarExample -configuration Release -sdk iphonesimulator analyze
-  - xctool -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator7.0
+  - xctool -workspace $TRAVIS_XCODE_WORKSPACE -scheme $TRAVIS_XCODE_SCHEME -sdk $TRAVIS_XCODE_SDK -configuration Release analyze test
+
+after_script:
   - ./Scripts/cocoapod-validate.sh
+
+matrix:
+  exclude:
+    - xcode_scheme: UnrarKit
+      xcode_sdk: iphonesimulator
+    - xcode_scheme: UnrarKit
+      xcode_sdk: iphonesimulator7.0
+    - xcode_scheme: UnrarExample
+      xcode_sdk: macosx
+    - xcode_scheme: UnrarExample
+      xcode_sdk: macosx10.9
 
 # Turn on Docker, container-based infrastructure
 sudo: false
