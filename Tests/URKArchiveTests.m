@@ -43,6 +43,7 @@
                            @"Test Archive.rar",
                            @"Test Archive (Password).rar",
                            @"Test Archive (Header Password).rar",
+                           @"Folder Archive.rar",
                            @"Test File A.txt",
                            @"Test File B.jpg",
                            @"Test File C.m4a",
@@ -1081,6 +1082,26 @@
     XCTAssertEqual(fileCount, 38, @"Not all files read");
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
+}
+
+- (void)testPerformOnData_Folder
+{
+    NSURL *testArchiveURL = self.testFileURLs[@"Folder Archive.rar"];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    
+    NSArray *expectedFiles = @[@"G070-Cliff", @"G070-Cliff/image.jpg"];
+    
+    __block NSUInteger fileIndex = 0;
+    NSError *error = nil;
+    
+    [archive performOnDataInArchive:
+     ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+         NSString *expectedFilename = expectedFiles[fileIndex++];
+         XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
+     } error:&error];
+    
+    XCTAssertNil(error, @"Error iterating through files");
+    XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
 
 

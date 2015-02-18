@@ -355,7 +355,7 @@ NS_DESIGNATED_INITIALIZER
             // Empty file, or a directory
             if (info.uncompressedSize == 0) {
                 action(info, [NSData data], &stop);
-                break;
+                continue;
             }
             
             UInt8 *buffer = (UInt8 *)malloc(info.uncompressedSize * sizeof(UInt8));
