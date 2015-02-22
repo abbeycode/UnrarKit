@@ -25,6 +25,8 @@ NS_DESIGNATED_INITIALIZER
 @property (strong) NSData *fileBookmark;
 @property (strong) void(^bufferedReadBlock)(NSData *dataChunk);
 
+@property (strong) NSObject *threadLock;
+
 @end
 
 
@@ -70,11 +72,12 @@ NS_DESIGNATED_INITIALIZER
 {
     if ((self = [super init])) {
         NSError *error = nil;
-        self.fileBookmark = [fileURL bookmarkDataWithOptions:0
-                              includingResourceValuesForKeys:@[]
-                                               relativeToURL:nil
-                                                       error:&error];
-        self.password = password;
+        _fileBookmark = [fileURL bookmarkDataWithOptions:0
+                          includingResourceValuesForKeys:@[]
+                                           relativeToURL:nil
+                                                   error:&error];
+        _password = password;
+        _threadLock = [[NSObject alloc] init];
 
         if (error) {
             NSLog(@"Error creating bookmark to RAR archive: %@", error);
@@ -557,25 +560,27 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
                               inMode:(NSInteger)mode
                                error:(NSError **)error
 {
-    if (error) {
-        *error = nil;
+    @synchronized(self.threadLock) {
+        if (error) {
+            *error = nil;
+        }
+        
+        if (![self _unrarOpenFile:self.filename
+                           inMode:mode
+                     withPassword:self.password
+                            error:error]) {
+            return NO;
+        }
+        
+        @try {
+            action(error);
+        }
+        @finally {
+            [self closeFile];
+        }
+        
+        return !error || !*error;
     }
-    
-    if (![self _unrarOpenFile:self.filename
-                       inMode:mode
-                 withPassword:self.password
-                        error:error]) {
-        return NO;
-    }
-    
-    @try {
-        action(error);
-    }
-    @finally {
-        [self closeFile];
-    }
-    
-    return !error || !*error;
 }
 
 - (BOOL)_unrarOpenFile:(NSString *)rarFile inMode:(NSInteger)mode withPassword:(NSString *)aPassword error:(NSError **)error

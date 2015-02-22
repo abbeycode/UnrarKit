@@ -1311,6 +1311,190 @@
     XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
 }
 
+- (void)testMultiThreading {
+    NSURL *largeArchiveURL_A = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL_B = [largeArchiveURL_A.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive 2.rar"];
+    NSURL *largeArchiveURL_C = [largeArchiveURL_A.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive 3.rar"];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSError *archiveBCopyError = nil;
+    XCTAssertTrue([fm copyItemAtURL:largeArchiveURL_A toURL:largeArchiveURL_B error:&archiveBCopyError], @"Failed to copy archive B");
+    XCTAssertNil(archiveBCopyError, @"Error copying archive B");
+    
+    NSError *archiveCCopyError = nil;
+    XCTAssertTrue([fm copyItemAtURL:largeArchiveURL_A toURL:largeArchiveURL_C error:&archiveCCopyError], @"Failed to copy archive C");
+    XCTAssertNil(archiveCCopyError, @"Error copying archive C");
+    
+    URKArchive *largeArchiveA = [URKArchive rarArchiveAtURL:largeArchiveURL_A];
+    URKArchive *largeArchiveB = [URKArchive rarArchiveAtURL:largeArchiveURL_B];
+    URKArchive *largeArchiveC = [URKArchive rarArchiveAtURL:largeArchiveURL_C];
+    
+    XCTestExpectation *expectationA = [self expectationWithDescription:@"A finished"];
+    XCTestExpectation *expectationB = [self expectationWithDescription:@"B finished"];
+    XCTestExpectation *expectationC = [self expectationWithDescription:@"C finished"];
+    
+    NSBlockOperation *enumerateA = [NSBlockOperation blockOperationWithBlock:^{
+        NSError *error = nil;
+        [largeArchiveA performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+            NSLog(@"File name: %@", fileInfo.filename);
+        } error:&error];
+        
+        XCTAssertNil(error);
+        [expectationA fulfill];
+    }];
+    
+    NSBlockOperation *enumerateB = [NSBlockOperation blockOperationWithBlock:^{
+        NSError *error = nil;
+        [largeArchiveB performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+            NSLog(@"File name: %@", fileInfo.filename);
+        } error:&error];
+        
+        XCTAssertNil(error);
+        [expectationB fulfill];
+    }];
+    
+    NSBlockOperation *enumerateC = [NSBlockOperation blockOperationWithBlock:^{
+        NSError *error = nil;
+        [largeArchiveC performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+            NSLog(@"File name: %@", fileInfo.filename);
+        } error:&error];
+        
+        XCTAssertNil(error);
+        [expectationC fulfill];
+    }];
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 3;
+    queue.suspended = YES;
+    
+    [queue addOperation:enumerateA];
+    [queue addOperation:enumerateB];
+    [queue addOperation:enumerateC];
+    
+    queue.suspended = NO;
+    
+    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+        if (error) {
+            NSLog(@"Error while waiting for expectations: %@", error);
+        }
+    }];
+}
+
+- (void)testMultiThreading_SingleFile {
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    
+    URKArchive *largeArchiveA = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    URKArchive *largeArchiveB = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    URKArchive *largeArchiveC = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    
+    XCTestExpectation *expectationA = [self expectationWithDescription:@"A finished"];
+    XCTestExpectation *expectationB = [self expectationWithDescription:@"B finished"];
+    XCTestExpectation *expectationC = [self expectationWithDescription:@"C finished"];
+    
+    NSBlockOperation *enumerateA = [NSBlockOperation blockOperationWithBlock:^{
+        NSError *error = nil;
+        [largeArchiveA performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+            NSLog(@"File name: %@", fileInfo.filename);
+        } error:&error];
+        
+        XCTAssertNil(error);
+        [expectationA fulfill];
+    }];
+    
+    NSBlockOperation *enumerateB = [NSBlockOperation blockOperationWithBlock:^{
+        NSError *error = nil;
+        [largeArchiveB performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+            NSLog(@"File name: %@", fileInfo.filename);
+        } error:&error];
+        
+        XCTAssertNil(error);
+        [expectationB fulfill];
+    }];
+    
+    NSBlockOperation *enumerateC = [NSBlockOperation blockOperationWithBlock:^{
+        NSError *error = nil;
+        [largeArchiveC performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+            NSLog(@"File name: %@", fileInfo.filename);
+        } error:&error];
+        
+        XCTAssertNil(error);
+        [expectationC fulfill];
+    }];
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 3;
+    queue.suspended = YES;
+    
+    [queue addOperation:enumerateA];
+    [queue addOperation:enumerateB];
+    [queue addOperation:enumerateC];
+    
+    queue.suspended = NO;
+    
+    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+        if (error) {
+            NSLog(@"Error while waiting for expectations: %@", error);
+        }
+    }];
+}
+
+- (void)testMultiThreading_SingleArchiveObject {
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    
+    URKArchive *largeArchive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    
+    XCTestExpectation *expectationA = [self expectationWithDescription:@"A finished"];
+    XCTestExpectation *expectationB = [self expectationWithDescription:@"B finished"];
+    XCTestExpectation *expectationC = [self expectationWithDescription:@"C finished"];
+    
+    NSBlockOperation *enumerateA = [NSBlockOperation blockOperationWithBlock:^{
+        NSError *error = nil;
+        [largeArchive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+            NSLog(@"File name: %@", fileInfo.filename);
+        } error:&error];
+        
+        XCTAssertNil(error);
+        [expectationA fulfill];
+    }];
+    
+    NSBlockOperation *enumerateB = [NSBlockOperation blockOperationWithBlock:^{
+        NSError *error = nil;
+        [largeArchive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+            NSLog(@"File name: %@", fileInfo.filename);
+        } error:&error];
+        
+        XCTAssertNil(error);
+        [expectationB fulfill];
+    }];
+    
+    NSBlockOperation *enumerateC = [NSBlockOperation blockOperationWithBlock:^{
+        NSError *error = nil;
+        [largeArchive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+            NSLog(@"File name: %@", fileInfo.filename);
+        } error:&error];
+        
+        XCTAssertNil(error);
+        [expectationC fulfill];
+    }];
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 3;
+    queue.suspended = YES;
+    
+    [queue addOperation:enumerateA];
+    [queue addOperation:enumerateB];
+    [queue addOperation:enumerateC];
+    
+    queue.suspended = NO;
+    
+    [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
+        if (error) {
+            NSLog(@"Error while waiting for expectations: %@", error);
+        }
+    }];
+}
+
 - (void)testErrorIsCorrect
 {
     NSError *error = nil;
