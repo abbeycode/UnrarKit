@@ -134,6 +134,65 @@ NS_DESIGNATED_INITIALIZER
 
 
 
+#pragma mark - Zip file detection
+
+
++ (BOOL)pathIsARAR:(NSString *)filePath
+{
+    NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:filePath];
+    
+    if (!handle) {
+        return NO;
+    }
+    
+    @try {
+        NSData *fileData = [handle readDataOfLength:8];
+        
+        if (fileData.length < 8) {
+            return NO;
+        }
+        
+        const unsigned char *dataBytes = (const unsigned char *)fileData.bytes;
+        
+        // Check the magic numbers for all versions (Rar!..)
+        if (dataBytes[0] != 0x52 ||
+            dataBytes[1] != 0x61 ||
+            dataBytes[2] != 0x72 ||
+            dataBytes[3] != 0x21 ||
+            dataBytes[4] != 0x1A ||
+            dataBytes[5] != 0x07) {
+            return NO;
+        }
+        
+        // Check for v1.5 and on
+        if (dataBytes[6] == 0x00) {
+            return YES;
+        }
+        
+        // Check for v5.0
+        if (dataBytes[6] == 0x01 &&
+            dataBytes[7] == 0x00) {
+            return YES;
+        }
+    }
+    @finally {
+        [handle closeFile];
+    }
+    
+    return NO;
+}
+
++ (BOOL)urlIsARAR:(NSURL *)fileURL
+{
+    if (!fileURL || !fileURL.path) {
+        return NO;
+    }
+    
+    return [URKArchive pathIsARAR:fileURL.path];
+}
+
+
+
 #pragma mark - Public Methods
 
 

@@ -182,6 +182,121 @@
 }
 
 
+#pragma mark - RAR file Detection
+
+#pragma By Path
+
+- (void)testPathIsARAR
+{
+    NSURL *url = self.testFileURLs[@"Test Archive.rar"];
+    NSString *path = url.path;
+    BOOL pathIsRAR = [URKArchive pathIsARAR:path];
+    XCTAssertTrue(pathIsRAR, @"RAR file is not reported as a RAR");
+}
+
+- (void)testPathIsARAR_NotARAR
+{
+    NSURL *url = self.testFileURLs[@"Test File B.jpg"];
+    NSString *path = url.path;
+    BOOL pathIsRAR = [URKArchive pathIsARAR:path];
+    XCTAssertFalse(pathIsRAR, @"JPG file is reported as a RAR");
+}
+
+- (void)testPathIsARAR_SmallFile
+{
+    NSURL *url = [self randomTextFileOfLength:1];
+    NSString *path = url.path;
+    BOOL pathIsRAR = [URKArchive pathIsARAR:path];
+    XCTAssertFalse(pathIsRAR, @"Small non-RAR file is reported as a RAR");
+}
+
+- (void)testPathIsARAR_MissingFile
+{
+    NSURL *url = [self.testFileURLs[@"Test Archive.rar"] URLByAppendingPathExtension:@"missing"];
+    NSString *path = url.path;
+    BOOL pathIsRAR = [URKArchive pathIsARAR:path];
+    XCTAssertFalse(pathIsRAR, @"Missing file is reported as a RAR");
+}
+
+- (void)testPathIsARAR_FileHandleLeaks
+{
+    NSURL *smallFileURL = [self randomTextFileOfLength:1];
+    NSURL *jpgURL = self.testFileURLs[@"Test File B.jpg"];
+    
+    NSInteger initialFileCount = [self numberOfOpenFileHandles];
+    
+    for (NSInteger i = 0; i < 10000; i++) {
+        BOOL smallFileIsZip = [URKArchive pathIsARAR:smallFileURL.path];
+        XCTAssertFalse(smallFileIsZip, @"Small non-RAR file is reported as a RAR");
+        
+        BOOL jpgIsZip = [URKArchive pathIsARAR:jpgURL.path];
+        XCTAssertFalse(jpgIsZip, @"JPG file is reported as a RAR");
+        
+        NSURL *zipURL = self.testFileURLs[@"Test Archive.rar"];
+        BOOL zipFileIsZip = [URKArchive pathIsARAR:zipURL.path];
+        XCTAssertTrue(zipFileIsZip, @"RAR file is not reported as a RAR");
+    }
+    
+    NSInteger finalFileCount = [self numberOfOpenFileHandles];
+    
+    XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
+}
+
+#pragma By URL
+
+- (void)testurlIsARAR
+{
+    NSURL *url = self.testFileURLs[@"Test Archive.rar"];
+    BOOL urlIsRAR = [URKArchive urlIsARAR:url];
+    XCTAssertTrue(urlIsRAR, @"RAR file is not reported as a RAR");
+}
+
+- (void)testurlIsARAR_NotARAR
+{
+    NSURL *url = self.testFileURLs[@"Test File B.jpg"];
+    BOOL urlIsRAR = [URKArchive urlIsARAR:url];
+    XCTAssertFalse(urlIsRAR, @"JPG file is reported as a RAR");
+}
+
+- (void)testurlIsARAR_SmallFile
+{
+    NSURL *url = [self randomTextFileOfLength:1];
+    BOOL urlIsRAR = [URKArchive urlIsARAR:url];
+    XCTAssertFalse(urlIsRAR, @"Small non-RAR file is reported as a RAR");
+}
+
+- (void)testurlIsARAR_MissingFile
+{
+    NSURL *url = [self.testFileURLs[@"Test Archive.rar"] URLByAppendingPathExtension:@"missing"];
+    BOOL urlIsRAR = [URKArchive urlIsARAR:url];
+    XCTAssertFalse(urlIsRAR, @"Missing file is reported as a RAR");
+}
+
+- (void)testurlIsARAR_FileHandleLeaks
+{
+    NSURL *smallFileURL = [self randomTextFileOfLength:1];
+    NSURL *jpgURL = self.testFileURLs[@"Test File B.jpg"];
+    
+    NSInteger initialFileCount = [self numberOfOpenFileHandles];
+    
+    for (NSInteger i = 0; i < 10000; i++) {
+        BOOL smallFileIsZip = [URKArchive urlIsARAR:smallFileURL];
+        XCTAssertFalse(smallFileIsZip, @"Small non-RAR file is reported as a RAR");
+        
+        BOOL jpgIsZip = [URKArchive urlIsARAR:jpgURL];
+        XCTAssertFalse(jpgIsZip, @"JPG file is reported as a RAR");
+        
+        NSURL *zipURL = self.testFileURLs[@"Test Archive.rar"];
+        BOOL zipFileIsZip = [URKArchive urlIsARAR:zipURL];
+        XCTAssertTrue(zipFileIsZip, @"RAR file is not reported as a RAR");
+    }
+    
+    NSInteger finalFileCount = [self numberOfOpenFileHandles];
+    
+    XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
+}
+
+
 #pragma mark List Filenames
 
 

@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.4
+
+Added methods to detect whether a file is a RAR archive (Issue #17)
+
+
 ## 2.3
 
 * Full Unicode support (Issue #11)

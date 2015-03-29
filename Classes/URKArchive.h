@@ -151,6 +151,24 @@ extern NSString *URKErrorDomain;
 
 
 /**
+ *  Determines whether a file is a RAR archive by reading the signature
+ *
+ *  @param filePath Path to the file being checked
+ *
+ *  @return YES if the file exists and contains a signature indicating it is a RAR archive
+ */
++ (BOOL)pathIsARAR:(NSString *)filePath;
+
+/**
+ *  Determines whether a file is a RAR archive by reading the signature
+ *
+ *  @param fileURL URL of the file being checked
+ *
+ *  @return YES if the file exists and contains a signature indicating it is a RAR archive
+ */
++ (BOOL)urlIsARAR:(NSURL *)fileURL;
+
+/**
  *  Lists the names of the files in the archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive
