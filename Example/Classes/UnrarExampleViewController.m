@@ -44,8 +44,7 @@
 */
 
 - (IBAction)decompress:(id)sender {
-	//NSString *filePath = [[NSBundle mainBundle] pathForResource:@"not_protected" ofType:@"cbr"]; 
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"protected" ofType:@"cbr"]; 
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Test Archive (Password)" ofType:@"rar"];
 
 	URKArchive *archive = [URKArchive rarArchiveAtPath:filePath];
     NSError *error = nil;

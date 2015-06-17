@@ -417,6 +417,17 @@
     XCTAssertEqual(error.code, URKErrorCodeMissingPassword, @"Unexpected error code returned");
 }
 
+- (void)testListFilenames_NoFilePasswordGiven
+{
+    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test Archive (Password).rar"]];
+    
+    NSError *error = nil;
+    NSArray *files = [archive listFilenames:&error];
+    
+    XCTAssertNil(error, @"List without password succeeded");
+    XCTAssertNotNil(files, @"List returned without password");
+}
+
 - (void)testListFilenames_InvalidArchive
 {
     URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
