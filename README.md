@@ -63,6 +63,19 @@ NSData *extractedData = [archive extractDataFromFile:@"a file in the archive.jpg
                                                error:&error];
 ```
 
+## Streaming a file
+
+For large files, you may not want the whole contents in memory at once. You can handle it one "chunk" at a time, like so:
+
+```Objective-C
+BOOL success = [archive extractBufferedDataFromFile:@"a file in the archive.jpg"
+                                              error:&error
+                                             action:
+                ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                    NSLog(@"Decompressed: %f%%", percentDecompressed);
+                    // Do something with the NSData chunk
+                }];
+```
 
 # Installation
 
