@@ -13,10 +13,38 @@ I'm always open to improvements, so please submit your pull requests, or [create
 
 ```Objective-C
 URKArchive *archive = [URKArchive rarArchiveAtPath:@"An Archive.rar"];
-
 NSError *error = nil;
+```
 
+## Listing the file names in an archive
+```Objective-C
 NSArray *filesInArchive = [archive listFilenames:&error];
+for (NSString *name in filesInArchive) {
+    NSLog(@"Archived file: %@", name);
+}
+```
+
+## Listing the file details in an archive
+```Objective-C
+NSArray *fileInfosInArchive = [archive listFileInfo:&error];
+for (URKFileInfo *info in fileInfosInArchive) {
+    NSLog(@"Archive name: %@ | File name: %@ | Size: %lld", info.archiveName, info.filename, info.uncompressedSize);
+}
+```
+
+## Working with passwords
+```Objective-C
+NSArray *fileInfosInArchive = [archive listFileInfo:&error];
+if (archive.isPasswordProtected) {
+    NSString *givenPassword = // prompt user
+    archive.password = givenPassword
+}
+
+// You can now extract the files
+```
+
+## Extracting files to a directory
+```Objective-C
 BOOL extractFilesSuccessful = [archive extractFilesTo:@"some/directory"
                                             overWrite:NO
                                              progress:
@@ -24,6 +52,10 @@ BOOL extractFilesSuccessful = [archive extractFilesTo:@"some/directory"
         NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
     }
                                                 error:&error];
+```
+
+## Extracting a file into memory
+```Objective-C
 NSData *extractedData = [archive extractDataFromFile:@"a file in the archive.jpg"
                                             progress:^(CGFloat percentDecompressed) {
                                                          NSLog(@"Extracting, %f%% complete", percentDecompressed);
@@ -31,6 +63,19 @@ NSData *extractedData = [archive extractDataFromFile:@"a file in the archive.jpg
                                                error:&error];
 ```
 
+## Streaming a file
+
+For large files, you may not want the whole contents in memory at once. You can handle it one "chunk" at a time, like so:
+
+```Objective-C
+BOOL success = [archive extractBufferedDataFromFile:@"a file in the archive.jpg"
+                                              error:&error
+                                             action:
+                ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                    NSLog(@"Decompressed: %f%%", percentDecompressed);
+                    // Do something with the NSData chunk
+                }];
+```
 
 # Installation
 
