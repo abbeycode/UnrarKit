@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.4.1
+
+Decreased size of library, by removing large sample archives (Issue #18), and added more information to the readme file
+
+
 ## 2.4
 
 Added methods to detect whether a file is a RAR archive (Issue #17)
