@@ -25,7 +25,7 @@
 @end
 
 
-static NSURL *largeArchiveURL;
+static NSURL *originalLargeArchiveURL;
 
 
 @implementation URKArchiveTests
@@ -118,16 +118,18 @@ static NSURL *largeArchiveURL;
         NSError *largeArchiveError = nil;
         
         NSURL *largeArchiveURLRandomName = [self archiveWithFiles:largeTextFiles];
-        largeArchiveURL = [largeArchiveURLRandomName.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive.rar"];
-        [fm moveItemAtURL:largeArchiveURLRandomName toURL:largeArchiveURL error:&largeArchiveError];
+        originalLargeArchiveURL = [largeArchiveURLRandomName.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive (Original).rar"];
+        [fm moveItemAtURL:largeArchiveURLRandomName toURL:originalLargeArchiveURL error:&largeArchiveError];
         
-        XCTAssertNil(largeArchiveError, @"Error renaming large archive: %@", largeArchiveError);
-        
-        NSFileHandle *handle = [NSFileHandle fileHandleForReadingFromURL:largeArchiveURL error:&largeArchiveError];
-        XCTAssertNil(largeArchiveError, @"Error opening file handle for large archive: %@", largeArchiveError);
+        XCTAssertNil(largeArchiveError, @"Error renaming original large archive: %@", largeArchiveError);
     });
     
-    self.testFileURLs[@"Large Archive.rar"] = largeArchiveURL;
+    NSString *largeArchiveName = @"Large Archive.rar";
+    NSURL *destinationURL = [self.tempDirectory URLByAppendingPathComponent:largeArchiveName isDirectory:NO];
+    [fm copyItemAtURL:originalLargeArchiveURL toURL:destinationURL error:&error];
+    XCTAssertNil(error, @"Failed to copy the Large Archive");
+    
+    self.testFileURLs[largeArchiveName] = destinationURL;
     
     // Make a "corrupt" rar file
     NSURL *m4aFileURL = [self urlOfTestFile:@"Test File C.m4a"];
@@ -141,7 +143,8 @@ static NSURL *largeArchiveURL;
 
 - (void)tearDown
 {
-    BOOL tempDirContainsLargeArchive = [largeArchiveURL.path.stringByDeletingLastPathComponent isEqualToString:self.tempDirectory.path];
+    NSString *largeArchiveDirectory = originalLargeArchiveURL.path.stringByDeletingLastPathComponent;
+    BOOL tempDirContainsLargeArchive = [largeArchiveDirectory isEqualToString:self.tempDirectory.path];
     if (!self.testFailed && !tempDirContainsLargeArchive) {
         NSError *error = nil;
         [[NSFileManager defaultManager] removeItemAtURL:self.tempDirectory error:&error];
@@ -1126,15 +1129,11 @@ static NSURL *largeArchiveURL;
 
 - (void)testPerformOnData_FileMoved
 {
-    NSURL *largeArchiveOriginalURL = self.testFileURLs[@"Large Archive.rar"];
-    NSURL *largeArchiveCopyURL = [largeArchiveOriginalURL.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive To Move.rar"];
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
 
-    NSError *error = nil;
-    [[NSFileManager defaultManager] copyItemAtURL:largeArchiveOriginalURL toURL:largeArchiveCopyURL error:&error];
-    XCTAssertNil(error, @"Error copying Large Archive: %@", error);
-
-    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveCopyURL];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
     
+    NSError *error = nil;
     NSArray *archiveFiles = [archive listFilenames:&error];
     
     XCTAssertNil(error, @"Error listing files in test archive: %@", error);
@@ -1142,11 +1141,11 @@ static NSURL *largeArchiveURL;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [NSThread sleepForTimeInterval:1];
         
-        NSURL *movedURL = [largeArchiveCopyURL URLByAppendingPathExtension:@"FileMoved"];
+        NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"FileMoved"];
         
         NSError *renameError = nil;
         NSFileManager *fm = [NSFileManager defaultManager];
-        [fm moveItemAtURL:largeArchiveCopyURL toURL:movedURL error:&renameError];
+        [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
         XCTAssertNil(renameError, @"Error renaming file: %@", renameError);
     });
     
@@ -1169,15 +1168,11 @@ static NSURL *largeArchiveURL;
 
 - (void)testPerformOnData_FileDeleted
 {
-    NSURL *largeArchiveOriginalURL = self.testFileURLs[@"Large Archive.rar"];
-    NSURL *largeArchiveCopyURL = [largeArchiveOriginalURL.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive To Delete.rar"];
-
-    NSError *error = nil;
-    [[NSFileManager defaultManager] copyItemAtURL:largeArchiveOriginalURL toURL:largeArchiveCopyURL error:&error];
-    XCTAssertNil(error, @"Error copying Large Archive: %@", error);
-
-    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveCopyURL];
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
     
+    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    
+    NSError *error = nil;
     NSArray *archiveFiles = [archive listFilenames:&error];
     
     XCTAssertNil(error, @"Error listing files in test archive: %@", error);
@@ -1187,7 +1182,7 @@ static NSURL *largeArchiveURL;
         
         NSError *removeError = nil;
         NSFileManager *fm = [NSFileManager defaultManager];
-        [fm removeItemAtURL:largeArchiveCopyURL error:&removeError];
+        [fm removeItemAtURL:largeArchiveURL error:&removeError];
         XCTAssertNil(removeError, @"Error removing file: %@", removeError);
     });
     
@@ -1210,24 +1205,20 @@ static NSURL *largeArchiveURL;
 
 - (void)testPerformOnData_FileMovedBeforeBegin
 {
-    NSURL *largeArchiveOriginalURL = self.testFileURLs[@"Large Archive.rar"];
-    NSURL *largeArchiveCopyURL = [largeArchiveOriginalURL.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive To Move Before Begin.rar"];
+    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
     
     NSError *error = nil;
-    [[NSFileManager defaultManager] copyItemAtURL:largeArchiveOriginalURL toURL:largeArchiveCopyURL error:&error];
-    XCTAssertNil(error, @"Error copying Large Archive: %@", error);
-    
-    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveCopyURL];
-
     NSArray *archiveFiles = [archive listFilenames:&error];
     
     XCTAssertNil(error, @"Error listing files in test archive: %@", error);
     
-    NSURL *movedURL = [largeArchiveCopyURL URLByAppendingPathExtension:@"FileMovedBeforeBegin"];
+    NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"FileMovedBeforeBegin"];
     
     NSError *renameError = nil;
     NSFileManager *fm = [NSFileManager defaultManager];
-    [fm moveItemAtURL:largeArchiveCopyURL toURL:movedURL error:&renameError];
+    [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
     XCTAssertNil(renameError, @"Error renaming file: %@", renameError);
     
     __block NSUInteger fileCount = 0;
