@@ -32,6 +32,17 @@ for (URKFileInfo *info in fileInfosInArchive) {
 }
 ```
 
+## Working with passwords
+```Objective-C
+NSArray *fileInfosInArchive = [archive listFileInfo:&error];
+if (archive.isPasswordProtected) {
+    NSString *givenPassword = // prompt user
+    archive.password = givenPassword
+}
+
+// You can now extract the files
+```
+
 ## Extracting files to a directory
 ```Objective-C
 BOOL extractFilesSuccessful = [archive extractFilesTo:@"some/directory"
