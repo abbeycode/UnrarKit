@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.4.2
+
+Fixed bug causing validatePassword to return NO for valid passwords in RAR5 archives (Issue #19)
+
+
 ## 2.4.1
 
 Decreased size of library, by removing large sample archives (Issue #18), and added more information to the readme file
