@@ -70,6 +70,7 @@
 		96370FE919ED932900DAF8F1 /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		96370FEA19ED933100DAF8F1 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks"; }; };
 		96370FEB19ED934B00DAF8F1 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks"; }; };
+		964547D21B384F7D00202B28 /* URKArchiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 964547D11B384F7D00202B28 /* URKArchiveTestCase.m */; };
 		964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABC18D28EE000AD7321 /* XCTest.framework */; };
 		964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
@@ -376,6 +377,8 @@
 		96370FDC19ED8CAE00DAF8F1 /* unpack50mt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpack50mt.cpp; sourceTree = "<group>"; };
 		96370FDD19ED8CAE00DAF8F1 /* unpackinline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unpackinline.cpp; sourceTree = "<group>"; };
 		96370FDE19ED8CBF00DAF8F1 /* win32lnk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = win32lnk.cpp; sourceTree = "<group>"; };
+		964547D01B384F7D00202B28 /* URKArchiveTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URKArchiveTestCase.h; sourceTree = "<group>"; };
+		964547D11B384F7D00202B28 /* URKArchiveTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URKArchiveTestCase.m; sourceTree = "<group>"; };
 		964C8ABB18D28EE000AD7321 /* UnrarKit Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "UnrarKit Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		964C8ABC18D28EE000AD7321 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		964C8ABE18D28EE000AD7321 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -608,6 +611,8 @@
 			isa = PBXGroup;
 			children = (
 				964C8AD018D28F1600AD7321 /* Test Data */,
+				964547D01B384F7D00202B28 /* URKArchiveTestCase.h */,
+				964547D11B384F7D00202B28 /* URKArchiveTestCase.m */,
 				964C8AC818D28EE000AD7321 /* URKArchiveTests.m */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
 			);
@@ -1103,6 +1108,7 @@
 				960F669719EDDC2600512951 /* extract.cpp in Sources */,
 				960F669819EDDC2600512951 /* volume.cpp in Sources */,
 				960F669919EDDC2600512951 /* list.cpp in Sources */,
+				964547D21B384F7D00202B28 /* URKArchiveTestCase.m in Sources */,
 				960F669A19EDDC2600512951 /* find.cpp in Sources */,
 				960F669B19EDDC2600512951 /* unpack.cpp in Sources */,
 				960F669C19EDDC2600512951 /* headers.cpp in Sources */,
