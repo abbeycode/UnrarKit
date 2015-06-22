@@ -531,8 +531,11 @@ NS_DESIGNATED_INITIALIZER
         int PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
         
         if ([self headerContainsErrors:&error]) {
+            if (error.code == ERAR_MISSING_PASSWORD) {
+                return YES;
+            }
+
             NSLog(@"Errors in header while checking for password: %@", error);
-            return error.code == ERAR_MISSING_PASSWORD;
         }
         
         if (RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD)
@@ -787,6 +790,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 }
 
 static wchar_t *unicharsFromString(NSString *string) {
-    return (wchar_t *)[string cStringUsingEncoding:NSUTF32LittleEndianStringEncoding];}
+    return (wchar_t *)[string cStringUsingEncoding:NSUTF32LittleEndianStringEncoding];
+}
 
 @end

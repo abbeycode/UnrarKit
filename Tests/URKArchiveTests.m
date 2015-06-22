@@ -623,6 +623,24 @@
     }
 }
 
+- (void)testPerformOnData_Issue21
+{
+    NSURL *testArchiveURL = self.testFileURLs[@"DreamCalc.Professional.v4.9.3_p30download.com.rar"];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:@"www.p30download.com"];
+    
+    __block NSUInteger fileIndex = 0;
+    NSError *error = nil;
+    
+    [archive performOnDataInArchive:
+     ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+         XCTAssertNotNil(fileData, @"No data extracted (%@)", fileInfo.filename);
+         fileIndex++;
+     } error:&error];
+    
+    XCTAssertNil(error, @"Error iterating through files");
+    XCTAssertEqual(fileIndex, 11, @"Incorrect number of files encountered");
+}
+
 - (void)testPerformOnData_Unicode
 {
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
