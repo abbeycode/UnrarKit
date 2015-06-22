@@ -1,0 +1,58 @@
+//
+//  ValidatePasswordTests.m
+//  UnrarKit
+//
+//  Created by Dov Frankel on 6/22/15.
+//
+//
+
+#import <Cocoa/Cocoa.h>
+#import "URKArchiveTestCase.h"
+
+@interface ValidatePasswordTests : URKArchiveTestCase @end
+
+@implementation ValidatePasswordTests
+
+- (void)testValidatePassword_PasswordRequired
+{
+    NSURL *archiveURL = self.testFileURLs[@"Test Archive (Password).rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    
+    XCTAssertFalse(archive.validatePassword, @"validatePassword = YES when no password supplied");
+    
+    archive.password = @"wrong";
+    XCTAssertFalse(archive.validatePassword, @"validatePassword = YES when wrong password supplied");
+    
+    archive.password = @"password";
+    XCTAssertTrue(archive.validatePassword, @"validatePassword = NO when correct password supplied");
+}
+
+- (void)testValidatePassword_HeaderPasswordRequired
+{
+    NSURL *archiveURL = self.testFileURLs[@"Test Archive (Header Password).rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    
+    XCTAssertFalse(archive.validatePassword, @"validatePassword = YES when no password supplied");
+    
+    archive.password = @"wrong";
+    XCTAssertFalse(archive.validatePassword, @"validatePassword = YES when wrong password supplied");
+    
+    archive.password = @"password";
+    XCTAssertTrue(archive.validatePassword, @"validatePassword = NO when correct password supplied");
+}
+
+- (void)testValidatePassword_PasswordNotRequired
+{
+    NSURL *archiveURL = self.testFileURLs[@"Test Archive.rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    
+    XCTAssertTrue(archive.validatePassword, @"validatePassword = NO when no password supplied");
+    
+    archive.password = @"password";
+    XCTAssertTrue(archive.validatePassword, @"validatePassword = NO when password supplied");
+}
+
+@end

@@ -7,6 +7,8 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <UnrarKit/UnrarKit.h>
+
 
 @interface URKArchiveTestCase : XCTestCase
 
