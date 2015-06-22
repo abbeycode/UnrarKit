@@ -78,6 +78,30 @@
     }
 }
 
+- (void)testListFilenames_RAR5
+{
+    NSArray *expectedFiles = @[@"yohoho_ws.txt",
+                               @"nopw.txt"];
+    
+    NSURL *testArchiveURL = self.testFileURLs[@"Test Archive (RAR5).rar"];
+    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    
+    NSError *error = nil;
+    NSArray *filesInArchive = [archive listFilenames:&error];
+    
+    XCTAssertNil(error, @"Error returned by listFilenames");
+    XCTAssertNotNil(filesInArchive, @"No list of files returned");
+    XCTAssertEqual(filesInArchive.count, expectedFiles.count,
+                   @"Incorrect number of files listed in archive");
+    
+    for (NSInteger i = 0; i < filesInArchive.count; i++) {
+        NSString *archiveFilename = filesInArchive[i];
+        NSString *expectedFilename = expectedFiles[i];
+        
+        XCTAssertEqualObjects(archiveFilename, expectedFilename, @"Incorrect filename listed");
+    }
+}
+
 - (void)testListFilenames_HeaderPassword
 {
     NSArray *testArchives = @[@"Test Archive (Header Password).rar"];

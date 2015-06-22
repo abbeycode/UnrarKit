@@ -81,6 +81,54 @@
     }
 }
 
+- (void)testExtractFiles_RAR5
+{
+    NSArray *expectedFiles = @[@"nopw.txt",
+                               @"yohoho_ws.txt"];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSString *testArchiveName = @"Test Archive (RAR5).rar";
+    
+    NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:testArchiveName.stringByDeletingPathExtension];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    
+    NSError *error = nil;
+    BOOL success = [archive extractFilesTo:extractURL.path
+                                 overwrite:NO
+                                  progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
+#if DEBUG
+                                      NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
+#endif
+                                  }
+                                     error:&error];
+    
+    XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
+    XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
+    
+    error = nil;
+    NSArray *extractedFiles = [fm contentsOfDirectoryAtPath:extractURL.path
+                                                      error:&error];
+    
+    XCTAssertNil(error, @"Failed to list contents of extract directory: %@", extractURL);
+    
+    XCTAssertNotNil(extractedFiles, @"No list of files returned");
+    XCTAssertEqual(extractedFiles.count, expectedFiles.count,
+                   @"Incorrect number of files listed in archive");
+    
+    for (NSInteger i = 0; i < extractedFiles.count; i++) {
+        NSString *extractedFilename = extractedFiles[i];
+        NSString *expectedFilename = expectedFiles[i];
+        
+        XCTAssertEqualObjects(extractedFilename, expectedFilename, @"Incorrect filename listed");
+        
+        NSURL *extractedFileURL = [extractURL URLByAppendingPathComponent:extractedFilename];
+        XCTAssertTrue([fm fileExistsAtPath:extractedFileURL.path], @"No file extracted");
+    }
+}
+
 - (void)testExtractFiles_Unicode
 {
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
