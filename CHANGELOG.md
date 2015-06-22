@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.4.3
+
+Tweaked isPasswordProtected so it doesn't log an error message when an archive has a header password (Issue #21)
+
+
 ## 2.4.2
 
 Fixed bug causing validatePassword to return NO for valid passwords in RAR5 archives (Issue #19)
