@@ -564,7 +564,12 @@ NS_DESIGNATED_INITIALIZER
             return;
         }
         
-        if (RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD || RHCode == ERAR_BAD_DATA || PFCode == ERAR_BAD_DATA)
+        if (RHCode == ERAR_MISSING_PASSWORD
+            || PFCode == ERAR_MISSING_PASSWORD
+            || RHCode == ERAR_BAD_DATA
+            || PFCode == ERAR_BAD_DATA
+            || RHCode == ERAR_BAD_PASSWORD
+            || PFCode == ERAR_BAD_PASSWORD)
             return;
         
         result = YES;

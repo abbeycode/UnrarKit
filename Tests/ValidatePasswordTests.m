@@ -55,4 +55,20 @@
     XCTAssertTrue(archive.validatePassword, @"validatePassword = NO when password supplied");
 }
 
+- (void)testValidatePassword_RAR5
+{
+    NSURL *archiveURL = self.testFileURLs[@"Test Archive (RAR5, Password).rar"];
+    
+    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    
+    XCTAssertFalse(archive.validatePassword, @"validatePassword = YES when no password supplied");
+    
+    archive.password = @"wrong";
+    XCTAssertFalse(archive.validatePassword, @"validatePassword = YES when wrong password supplied");
+    
+    archive.password = @"123";
+    XCTAssertTrue(archive.validatePassword, @"validatePassword = NO when correct password supplied");
+}
+
+
 @end
