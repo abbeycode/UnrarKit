@@ -1191,36 +1191,6 @@
 }
 
 
-#pragma mark Is Password Protected
-
-
-- (void)testIsPasswordProtected_PasswordRequired
-{
-    NSURL *archiveURL = self.testFileURLs[@"Test Archive (Password).rar"];
-    
-    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
-    
-    XCTAssertTrue(archive.isPasswordProtected, @"isPasswordProtected = NO for password-protected archive");
-}
-
-- (void)testIsPasswordProtected_HeaderPasswordRequired
-{
-    NSURL *archiveURL = self.testFileURLs[@"Test Archive (Header Password).rar"];
-    
-    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
-    
-    XCTAssertTrue(archive.isPasswordProtected, @"isPasswordProtected = NO for password-protected archive");
-}
-
-- (void)testIsPasswordProtected_PasswordNotRequired
-{
-    NSURL *archiveURL = self.testFileURLs[@"Test Archive.rar"];
-    
-    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
-    
-    XCTAssertFalse(archive.isPasswordProtected, @"isPasswordProtected = YES for password-protected archive");
-}
-
 
 #pragma mark Various
 
