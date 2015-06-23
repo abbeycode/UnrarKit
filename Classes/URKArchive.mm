@@ -272,7 +272,6 @@ NS_DESIGNATED_INITIALIZER
             }
             
             if ((PFCode = RARProcessFileW(_rarFile, RAR_EXTRACT, unicharsFromString(filePath), NULL)) != 0) {
-//            if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *) filePath.UTF8String, NULL)) != 0) {
                 [self assignError:error code:(NSInteger)PFCode];
                 result = NO;
                 return;
@@ -341,7 +340,7 @@ NS_DESIGNATED_INITIALIZER
             return;
         }
         
-        NSMutableData *fileData = [NSMutableData dataWithCapacity:fileInfo.uncompressedSize];
+        NSMutableData *fileData = [NSMutableData dataWithCapacity:(NSUInteger)fileInfo.uncompressedSize];
         CGFloat totalBytes = fileInfo.uncompressedSize;
         __block long long bytesRead = 0;
         
@@ -423,7 +422,7 @@ NS_DESIGNATED_INITIALIZER
                 continue;
             }
             
-            UInt8 *buffer = (UInt8 *)malloc(info.uncompressedSize * sizeof(UInt8));
+            UInt8 *buffer = (UInt8 *)malloc((size_t)info.uncompressedSize * sizeof(UInt8));
             UInt8 *callBackBuffer = buffer;
             
             RARSetCallback(_rarFile, CallbackProc, (long) &callBackBuffer);
@@ -435,7 +434,7 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
             
-            NSData *data = [NSData dataWithBytesNoCopy:buffer length:info.uncompressedSize freeWhenDone:YES];
+            NSData *data = [NSData dataWithBytesNoCopy:buffer length:(NSUInteger)info.uncompressedSize freeWhenDone:YES];
             action(info, data, &stop);
         }
         

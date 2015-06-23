@@ -295,7 +295,6 @@
 		96F5BBB71B39A65F00ACB162 /* libUnrarKit iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 969BDA2419EDE88E002CE755 /* libUnrarKit iOS.a */; };
 		96F5BBBD1B39A68600ACB162 /* URKArchiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 964547D11B384F7D00202B28 /* URKArchiveTestCase.m */; };
 		96F5BBBF1B39AD3000ACB162 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
-		96F5BBC01B39AD6B00ACB162 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 		96F5BBC11B39AEBC00ACB162 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		96F5BBC21B39AF2300ACB162 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
 		96F5BBC31B39B18B00ACB162 /* ExtractFilesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F4507A1B385BCD00679597 /* ExtractFilesTests.m */; };
@@ -1294,7 +1293,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				96F5BBBD1B39A68600ACB162 /* URKArchiveTestCase.m in Sources */,
-				96F5BBC01B39AD6B00ACB162 /* URKArchive.mm in Sources */,
 				96F5BBC21B39AF2300ACB162 /* NSString+UnrarKit.mm in Sources */,
 				96F5BBC31B39B18B00ACB162 /* ExtractFilesTests.m in Sources */,
 			);
@@ -1773,6 +1771,7 @@
 				96F5BBBB1B39A65F00ACB162 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
