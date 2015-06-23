@@ -389,7 +389,7 @@ NS_DESIGNATED_INITIALIZER
             *error = listError;
         }
         
-        return;
+        return NO;
     }
     
     NSArray *sortedFileInfo = [fileInfo sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"filename" ascending:YES]]];
@@ -397,6 +397,8 @@ NS_DESIGNATED_INITIALIZER
     [sortedFileInfo enumerateObjectsUsingBlock:^(URKFileInfo *info, NSUInteger idx, BOOL *stop) {
         action(info, stop);
     }];
+    
+    return YES;
 }
 
 - (BOOL)performOnDataInArchive:(void (^)(URKFileInfo *, NSData *, BOOL *))action
@@ -666,7 +668,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 	const char *filenameData = (const char *) [rarFile UTF8String];
 	flags->ArcName = new char[strlen(filenameData) + 1];
 	strcpy(flags->ArcName, filenameData);
-	flags->OpenMode = mode;
+	flags->OpenMode = (uint)mode;
 	
 	_rarFile = RAROpenArchiveEx(flags);
 	if (_rarFile == 0 || flags->OpenResult != 0) {

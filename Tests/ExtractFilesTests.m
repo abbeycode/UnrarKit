@@ -6,7 +6,6 @@
 //
 //
 
-#import <Cocoa/Cocoa.h>
 #import "URKArchiveTestCase.h"
 
 @interface ExtractFilesTests : URKArchiveTestCase
@@ -83,6 +82,13 @@
 
 - (void)testExtractFiles_RAR5
 {
+#if !TARGET_OS_IPHONE
+    NSURL *extractRootDirectory = self.tempDirectory;
+#else
+    NSURL *extractRootDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                                          inDomains:NSUserDomainMask] firstObject];
+    NSLog(@"Documents directory: %@", extractRootDirectory.path);
+#endif
     NSArray *expectedFiles = @[@"nopw.txt",
                                @"yohoho_ws.txt"];
     
@@ -91,41 +97,41 @@
     NSString *testArchiveName = @"Test Archive (RAR5).rar";
     
     NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
-    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:testArchiveName.stringByDeletingPathExtension];
     
-    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
-    
-    NSError *error = nil;
-    BOOL success = [archive extractFilesTo:extractURL.path
-                                 overwrite:NO
-                                  progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
-#if DEBUG
-                                      NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
-#endif
-                                  }
-                                     error:&error];
-    
-    XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
-    XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
-    
-    error = nil;
-    NSArray *extractedFiles = [fm contentsOfDirectoryAtPath:extractURL.path
-                                                      error:&error];
-    
-    XCTAssertNil(error, @"Failed to list contents of extract directory: %@", extractURL);
-    
-    XCTAssertNotNil(extractedFiles, @"No list of files returned");
-    XCTAssertEqual(extractedFiles.count, expectedFiles.count,
-                   @"Incorrect number of files listed in archive");
-    
-    for (NSInteger i = 0; i < extractedFiles.count; i++) {
-        NSString *extractedFilename = extractedFiles[i];
-        NSString *expectedFilename = expectedFiles[i];
+    for (NSInteger i = 0; i < 500; i++) {
+        NSString *extractDir = [self.randomDirectoryName stringByAppendingString:testArchiveName.stringByDeletingPathExtension];
+        NSURL *extractURL = [extractRootDirectory URLByAppendingPathComponent:extractDir];
         
-        XCTAssertEqualObjects(extractedFilename, expectedFilename, @"Incorrect filename listed");
+        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
         
-        NSURL *extractedFileURL = [extractURL URLByAppendingPathComponent:extractedFilename];
-        XCTAssertTrue([fm fileExistsAtPath:extractedFileURL.path], @"No file extracted");
+        NSError *error = nil;
+        BOOL success = [archive extractFilesTo:extractURL.path
+                                     overwrite:NO
+                                      progress:nil
+                                         error:&error];
+        
+        XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
+        XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
+        
+        error = nil;
+        NSArray *extractedFiles = [fm contentsOfDirectoryAtPath:extractURL.path
+                                                          error:&error];
+        
+        XCTAssertNil(error, @"Failed to list contents of extract directory: %@", extractURL);
+        
+        XCTAssertNotNil(extractedFiles, @"No list of files returned");
+        XCTAssertEqual(extractedFiles.count, expectedFiles.count,
+                       @"Incorrect number of files listed in archive");
+        
+        for (NSInteger x = 0; x < extractedFiles.count; x++) {
+            NSString *extractedFilename = extractedFiles[x];
+            NSString *expectedFilename = expectedFiles[x];
+            
+            XCTAssertEqualObjects(extractedFilename, expectedFilename, @"Incorrect filename listed");
+            
+            NSURL *extractedFileURL = [extractURL URLByAppendingPathComponent:extractedFilename];
+            XCTAssertTrue([fm fileExistsAtPath:extractedFileURL.path], @"No file extracted");
+        }
     }
 }
 

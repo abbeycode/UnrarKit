@@ -23,9 +23,14 @@
 - (NSURL *)urlOfTestFile:(NSString *)filename;
 - (NSString *)randomDirectoryName;
 - (NSString *)randomDirectoryWithPrefix:(NSString *)prefix;
-- (NSInteger)numberOfOpenFileHandles;
 - (NSURL *)randomTextFileOfLength:(NSUInteger)numberOfCharacters;
-- (NSURL *)archiveWithFiles:(NSArray *)fileURLs;
 - (NSUInteger)crcOfTestFile:(NSString *)filename;
+
+// Mac Only
+
+#if !TARGET_OS_IPHONE
+- (NSInteger)numberOfOpenFileHandles;
+- (NSURL *)archiveWithFiles:(NSArray *)fileURLs;
+#endif
 
 @end

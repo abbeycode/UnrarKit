@@ -71,11 +71,8 @@
 		96370FEA19ED933100DAF8F1 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks"; }; };
 		96370FEB19ED934B00DAF8F1 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks"; }; };
 		964547D21B384F7D00202B28 /* URKArchiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 964547D11B384F7D00202B28 /* URKArchiveTestCase.m */; };
-		964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABC18D28EE000AD7321 /* XCTest.framework */; };
-		964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
-		9685411118DBA06000B5651B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		9685413218DBA13200B5651B /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 		9685413318DBA16300B5651B /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0818DB722E00B5651B /* archive.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9685413418DBA16300B5651B /* arcread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0A18DB722E00B5651B /* arcread.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -223,7 +220,6 @@
 		969BD9E019EDE88E002CE755 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		969BD9E119EDE88E002CE755 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		969BD9E219EDE88E002CE755 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
-		969BD9E419EDE88E002CE755 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 964C8ABE18D28EE000AD7321 /* Foundation.framework */; };
 		969BD9E719EDE88E002CE755 /* URKArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 489CFA0E128B5169005DCC2A /* URKArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		969BD9E819EDE88E002CE755 /* archive.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F0918DB722E00B5651B /* archive.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		969BD9E919EDE88E002CE755 /* array.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F0B18DB722E00B5651B /* array.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -296,6 +292,13 @@
 		96F450771B38552200679597 /* IsPasswordProtectedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450761B38552200679597 /* IsPasswordProtectedTests.m */; };
 		96F450791B385AF800679597 /* ListFilenamesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450781B385AF800679597 /* ListFilenamesTests.m */; };
 		96F4507B1B385BCD00679597 /* ExtractFilesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F4507A1B385BCD00679597 /* ExtractFilesTests.m */; };
+		96F5BBB71B39A65F00ACB162 /* libUnrarKit iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 969BDA2419EDE88E002CE755 /* libUnrarKit iOS.a */; };
+		96F5BBBD1B39A68600ACB162 /* URKArchiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 964547D11B384F7D00202B28 /* URKArchiveTestCase.m */; };
+		96F5BBBF1B39AD3000ACB162 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
+		96F5BBC01B39AD6B00ACB162 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
+		96F5BBC11B39AEBC00ACB162 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
+		96F5BBC21B39AF2300ACB162 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
+		96F5BBC31B39B18B00ACB162 /* ExtractFilesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F4507A1B385BCD00679597 /* ExtractFilesTests.m */; };
 		F3FCD46B1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F3FCD46C1A3262E5003612BF /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F3FCD46D1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
@@ -310,6 +313,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 9685410F18DBA06000B5651B;
 			remoteInfo = UnrarKit;
+		};
+		96F5BBB81B39A65F00ACB162 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 969BD9AE19EDE88E002CE755;
+			remoteInfo = "UnrarKit iOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -384,9 +394,6 @@
 		964547D01B384F7D00202B28 /* URKArchiveTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URKArchiveTestCase.h; sourceTree = "<group>"; };
 		964547D11B384F7D00202B28 /* URKArchiveTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URKArchiveTestCase.m; sourceTree = "<group>"; };
 		964C8ABB18D28EE000AD7321 /* UnrarKit Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "UnrarKit Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		964C8ABC18D28EE000AD7321 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		964C8ABE18D28EE000AD7321 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		964C8AC018D28EE000AD7321 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		964C8AC418D28EE000AD7321 /* UnrarKit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnrarKit Tests-Info.plist"; sourceTree = "<group>"; };
 		964C8AC618D28EE000AD7321 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		964C8AC818D28EE000AD7321 /* URKArchiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URKArchiveTests.m; sourceTree = "<group>"; };
@@ -394,10 +401,6 @@
 		964C8AD018D28F1600AD7321 /* Test Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Test Data"; sourceTree = "<group>"; };
 		9660D7AE1A3F4FF90059AC1E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		96853ED418DB707000B5651B /* UnrarKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnrarKit-Info.plist"; sourceTree = "<group>"; };
-		96853EDC18DB71CD00B5651B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		96853EDF18DB71CD00B5651B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		96853EE018DB71CD00B5651B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		96853EE118DB71CD00B5651B /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		96853F0718DB722E00B5651B /* arccmt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = arccmt.cpp; sourceTree = "<group>"; };
 		96853F0818DB722E00B5651B /* archive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = archive.cpp; sourceTree = "<group>"; };
 		96853F0918DB722E00B5651B /* archive.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = archive.hpp; sourceTree = "<group>"; };
@@ -521,6 +524,7 @@
 		96F450761B38552200679597 /* IsPasswordProtectedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IsPasswordProtectedTests.m; sourceTree = "<group>"; };
 		96F450781B385AF800679597 /* ListFilenamesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListFilenamesTests.m; sourceTree = "<group>"; };
 		96F4507A1B385BCD00679597 /* ExtractFilesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtractFilesTests.m; sourceTree = "<group>"; };
+		96F5BBB11B39A65F00ACB162 /* UnrarKit iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "UnrarKit iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA747D9E0F9514B9006C5449 /* UnrarKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKit_Prefix.pch; sourceTree = "<group>"; };
 		F3FCD4691A3262E5003612BF /* URKFileInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URKFileInfo.h; sourceTree = "<group>"; };
 		F3FCD46A1A3262E5003612BF /* URKFileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URKFileInfo.m; sourceTree = "<group>"; };
@@ -532,8 +536,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */,
-				964C8ABD18D28EE000AD7321 /* XCTest.framework in Frameworks */,
-				964C8ABF18D28EE000AD7321 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -541,7 +543,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9685411118DBA06000B5651B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,7 +550,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				969BD9E419EDE88E002CE755 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96F5BBAE1B39A65F00ACB162 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96F5BBBF1B39AD3000ACB162 /* libz.dylib in Frameworks */,
+				96F5BBB71B39A65F00ACB162 /* libUnrarKit iOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -562,6 +571,7 @@
 				9685411018DBA06000B5651B /* libUnrarKit.a */,
 				964C8ABB18D28EE000AD7321 /* UnrarKit Tests.xctest */,
 				969BDA2419EDE88E002CE755 /* libUnrarKit iOS.a */,
+				96F5BBB11B39A65F00ACB162 /* UnrarKit iOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -584,11 +594,6 @@
 			isa = PBXGroup;
 			children = (
 				9660D7AE1A3F4FF90059AC1E /* libz.dylib */,
-				964C8ABC18D28EE000AD7321 /* XCTest.framework */,
-				964C8ABE18D28EE000AD7321 /* Foundation.framework */,
-				964C8AC018D28EE000AD7321 /* UIKit.framework */,
-				96853EDC18DB71CD00B5651B /* Cocoa.framework */,
-				96853EDE18DB71CD00B5651B /* Other Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -648,16 +653,6 @@
 			);
 			path = Resources;
 			sourceTree = SOURCE_ROOT;
-		};
-		96853EDE18DB71CD00B5651B /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				96853EDF18DB71CD00B5651B /* Foundation.framework */,
-				96853EE018DB71CD00B5651B /* CoreData.framework */,
-				96853EE118DB71CD00B5651B /* AppKit.framework */,
-			);
-			name = "Other Frameworks";
-			sourceTree = "<group>";
 		};
 		96853F0418DB722E00B5651B /* Libraries */ = {
 			isa = PBXGroup;
@@ -1029,6 +1024,24 @@
 			productReference = 969BDA2419EDE88E002CE755 /* libUnrarKit iOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		96F5BBB01B39A65F00ACB162 /* UnrarKit iOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 96F5BBBC1B39A65F00ACB162 /* Build configuration list for PBXNativeTarget "UnrarKit iOS Tests" */;
+			buildPhases = (
+				96F5BBAD1B39A65F00ACB162 /* Sources */,
+				96F5BBAE1B39A65F00ACB162 /* Frameworks */,
+				96F5BBAF1B39A65F00ACB162 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				96F5BBB91B39A65F00ACB162 /* PBXTargetDependency */,
+			);
+			name = "UnrarKit iOS Tests";
+			productName = "UnrarKit iOS Tests";
+			productReference = 96F5BBB11B39A65F00ACB162 /* UnrarKit iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1039,6 +1052,9 @@
 				TargetAttributes = {
 					964C8ABA18D28EE000AD7321 = {
 						TestTargetID = 96853EDA18DB71CD00B5651B;
+					};
+					96F5BBB01B39A65F00ACB162 = {
+						CreatedOnToolsVersion = 6.3.2;
 					};
 				};
 			};
@@ -1061,6 +1077,7 @@
 				9685410F18DBA06000B5651B /* UnrarKit */,
 				964C8ABA18D28EE000AD7321 /* UnrarKit Tests */,
 				969BD9AE19EDE88E002CE755 /* UnrarKit iOS */,
+				96F5BBB01B39A65F00ACB162 /* UnrarKit iOS Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -1072,6 +1089,14 @@
 			files = (
 				964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */,
 				96E5D345198B333200A74340 /* Test Data in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		96F5BBAF1B39A65F00ACB162 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96F5BBC11B39AEBC00ACB162 /* Test Data in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1264,6 +1289,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		96F5BBAD1B39A65F00ACB162 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96F5BBBD1B39A68600ACB162 /* URKArchiveTestCase.m in Sources */,
+				96F5BBC01B39AD6B00ACB162 /* URKArchive.mm in Sources */,
+				96F5BBC21B39AF2300ACB162 /* NSString+UnrarKit.mm in Sources */,
+				96F5BBC31B39B18B00ACB162 /* ExtractFilesTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1271,6 +1307,11 @@
 			isa = PBXTargetDependency;
 			target = 9685410F18DBA06000B5651B /* UnrarKit */;
 			targetProxy = 968541D818DC81F500B5651B /* PBXContainerItemProxy */;
+		};
+		96F5BBB91B39A65F00ACB162 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 969BD9AE19EDE88E002CE755 /* UnrarKit iOS */;
+			targetProxy = 96F5BBB81B39A65F00ACB162 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1606,6 +1647,86 @@
 			};
 			name = Release;
 		};
+		96F5BBBA1B39A65F00ACB162 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "Tests/UnrarKit Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		96F5BBBB1B39A65F00ACB162 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "Tests/UnrarKit Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1644,6 +1765,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		96F5BBBC1B39A65F00ACB162 /* Build configuration list for PBXNativeTarget "UnrarKit iOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				96F5BBBA1B39A65F00ACB162 /* Debug */,
+				96F5BBBB1B39A65F00ACB162 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

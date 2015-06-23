@@ -96,6 +96,8 @@ static NSURL *originalLargeArchiveURL;
         }
     }
     
+    
+#if !TARGET_OS_IPHONE
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableArray *largeTextFiles = [NSMutableArray array];
@@ -118,6 +120,7 @@ static NSURL *originalLargeArchiveURL;
     XCTAssertNil(error, @"Failed to copy the Large Archive");
     
     self.testFileURLs[largeArchiveName] = destinationURL;
+#endif
     
     // Make a "corrupt" rar file
     NSURL *m4aFileURL = [self urlOfTestFile:@"Test File C.m4a"];
@@ -177,6 +180,39 @@ static NSURL *originalLargeArchiveURL;
     return [NSString stringWithFormat:@"%@ %@", prefix, [self randomDirectoryName]];
 }
 
+- (NSURL *)randomTextFileOfLength:(NSUInteger)numberOfCharacters {
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,?!\n";
+    NSUInteger letterCount = letters.length;
+    
+    NSMutableString *randomString = [NSMutableString stringWithCapacity:numberOfCharacters];
+    
+    for (NSUInteger i = 0; i < numberOfCharacters; i++) {
+        uint32_t charIndex = arc4random_uniform((uint32_t)letterCount);
+        [randomString appendFormat:@"%C", [letters characterAtIndex:charIndex]];
+    }
+    
+    NSURL *resultURL = [self.tempDirectory URLByAppendingPathComponent:
+                        [NSString stringWithFormat:@"%@.txt", [[NSProcessInfo processInfo] globallyUniqueString]]];
+    
+    NSError *error = nil;
+    [randomString writeToURL:resultURL atomically:YES encoding:NSUTF16StringEncoding error:&error];
+    XCTAssertNil(error, @"Error opening file handle for text file creation: %@", error);
+    
+    return resultURL;
+}
+
+- (NSUInteger)crcOfTestFile:(NSString *)filename {
+    NSURL *fileURL = [self urlOfTestFile:filename];
+    NSData *fileContents = [[NSFileManager defaultManager] contentsAtPath:[fileURL path]];
+    return crc32(0, fileContents.bytes, (uint)fileContents.length);
+}
+
+
+
+#pragma mark - Mac Only
+
+
+#if !TARGET_OS_IPHONE
 - (NSInteger)numberOfOpenFileHandles {
     int pid = [[NSProcessInfo processInfo] processIdentifier];
     NSPipe *pipe = [NSPipe pipe];
@@ -197,27 +233,6 @@ static NSURL *originalLargeArchiveURL;
     //    NSLog(@"LSOF:\n%@", lsofOutput);
     
     return [lsofOutput componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]].count;
-}
-
-- (NSURL *)randomTextFileOfLength:(NSUInteger)numberOfCharacters {
-    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,?!\n";
-    NSUInteger letterCount = letters.length;
-    
-    NSMutableString *randomString = [NSMutableString stringWithCapacity:numberOfCharacters];
-    
-    for (NSUInteger i = 0; i < numberOfCharacters; i++) {
-        uint32_t charIndex = arc4random_uniform(letterCount);
-        [randomString appendFormat:@"%C", [letters characterAtIndex:charIndex]];
-    }
-    
-    NSURL *resultURL = [self.tempDirectory URLByAppendingPathComponent:
-                        [NSString stringWithFormat:@"%@.txt", [[NSProcessInfo processInfo] globallyUniqueString]]];
-    
-    NSError *error = nil;
-    [randomString writeToURL:resultURL atomically:YES encoding:NSUTF16StringEncoding error:&error];
-    XCTAssertNil(error, @"Error opening file handle for text file creation: %@", error);
-    
-    return resultURL;
 }
 
 - (NSURL *)archiveWithFiles:(NSArray *)fileURLs {
@@ -241,12 +256,7 @@ static NSURL *originalLargeArchiveURL;
     
     return archiveURL;
 }
-
-- (NSUInteger)crcOfTestFile:(NSString *)filename {
-    NSURL *fileURL = [self urlOfTestFile:filename];
-    NSData *fileContents = [[NSFileManager defaultManager] contentsAtPath:[fileURL path]];
-    return crc32(0, fileContents.bytes, fileContents.length);
-}
+#endif
 
 
 
