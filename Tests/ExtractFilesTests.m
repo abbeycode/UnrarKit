@@ -82,24 +82,32 @@
 
 - (void)testExtractFiles_RAR5
 {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
 #if !TARGET_OS_IPHONE
     NSURL *extractRootDirectory = self.tempDirectory;
 #else
     NSURL *extractRootDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                                           inDomains:NSUserDomainMask] firstObject];
+    extractRootDirectory = [extractRootDirectory URLByAppendingPathComponent:@"testExtractFiles_RAR5"];
     NSLog(@"Documents directory: %@", extractRootDirectory.path);
+
+    if ([fm fileExistsAtPath:extractRootDirectory.path]) {
+        NSError *clearDirError = nil;
+        XCTAssertTrue([fm removeItemAtURL:extractRootDirectory error:&clearDirError], @"Failed to clear out documents directory");
+        XCTAssertNil(clearDirError, @"Error while clearing out documents directory");
+    }
+
 #endif
     NSArray *expectedFiles = @[@"nopw.txt",
                                @"yohoho_ws.txt"];
-    
-    NSFileManager *fm = [NSFileManager defaultManager];
     
     NSString *testArchiveName = @"Test Archive (RAR5).rar";
     
     NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
     
-    for (NSInteger i = 0; i < 500; i++) {
-        NSString *extractDir = [self.randomDirectoryName stringByAppendingString:testArchiveName.stringByDeletingPathExtension];
+    for (NSInteger i = 0; i < 10; i++) {
+        NSString *extractDir = [NSString stringWithFormat:@"%ld_%@", i, testArchiveName.stringByDeletingPathExtension];
         NSURL *extractURL = [extractRootDirectory URLByAppendingPathComponent:extractDir];
         
         URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
