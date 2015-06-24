@@ -271,7 +271,7 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
             
-            if ((PFCode = RARProcessFileW(_rarFile, RAR_EXTRACT, unicharsFromString(filePath), NULL)) != 0) {
+            if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *) filePath.UTF8String, NULL)) != 0) {
                 [self assignError:error code:(NSInteger)PFCode];
                 result = NO;
                 return;
@@ -789,10 +789,6 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     }
     
     return NO;
-}
-
-static wchar_t *unicharsFromString(NSString *string) {
-    return (wchar_t *)[string cStringUsingEncoding:NSUTF32LittleEndianStringEncoding];
 }
 
 @end
