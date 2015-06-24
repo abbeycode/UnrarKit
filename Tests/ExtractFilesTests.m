@@ -107,7 +107,7 @@
     NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
     
     for (NSInteger i = 0; i < 10; i++) {
-        NSString *extractDir = [NSString stringWithFormat:@"%ld_%@", i, testArchiveName.stringByDeletingPathExtension];
+        NSString *extractDir = [NSString stringWithFormat:@"%ld_%@", (long)i, testArchiveName.stringByDeletingPathExtension];
         NSURL *extractURL = [extractRootDirectory URLByAppendingPathComponent:extractDir];
         
         URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];

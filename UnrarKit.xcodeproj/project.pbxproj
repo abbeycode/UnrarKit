@@ -316,6 +316,13 @@
 			remoteGlobalIDString = 9685410F18DBA06000B5651B;
 			remoteInfo = UnrarKit;
 		};
+		96EA53541B3B691B00F79DC6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 96EA532D1B3B462D00F79DC6;
+			remoteInfo = iOSUnitTestHostApp;
+		};
 		96F5BBB81B39A65F00ACB162 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -1088,6 +1095,7 @@
 			);
 			dependencies = (
 				96F5BBB91B39A65F00ACB162 /* PBXTargetDependency */,
+				96EA53551B3B691B00F79DC6 /* PBXTargetDependency */,
 			);
 			name = "UnrarKit iOS Tests";
 			productName = "UnrarKit iOS Tests";
@@ -1110,7 +1118,7 @@
 					};
 					96F5BBB01B39A65F00ACB162 = {
 						CreatedOnToolsVersion = 6.3.2;
-						TestTargetID = 96EA53011B3B455000F79DC6;
+						TestTargetID = 96EA532D1B3B462D00F79DC6;
 					};
 				};
 			};
@@ -1381,6 +1389,11 @@
 			isa = PBXTargetDependency;
 			target = 9685410F18DBA06000B5651B /* UnrarKit */;
 			targetProxy = 968541D818DC81F500B5651B /* PBXContainerItemProxy */;
+		};
+		96EA53551B3B691B00F79DC6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 96EA532D1B3B462D00F79DC6 /* iOSUnitTestHostApp */;
+			targetProxy = 96EA53541B3B691B00F79DC6 /* PBXContainerItemProxy */;
 		};
 		96F5BBB91B39A65F00ACB162 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1950,6 +1963,7 @@
 				96EA534C1B3B462D00F79DC6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		96F5BBBC1B39A65F00ACB162 /* Build configuration list for PBXNativeTarget "UnrarKit iOS Tests" */ = {
 			isa = XCConfigurationList;
