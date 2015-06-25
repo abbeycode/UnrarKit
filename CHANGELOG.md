@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.5
+
+Fixed bug in -extractFilesTo:overwrite:progress:error: that would sometimes cause garbage characters in the extracted files' names (Issue #20)
+
+
 ## 2.4.3
 
 Tweaked isPasswordProtected so it doesn't log an error message when an archive has a header password (Issue #21)
