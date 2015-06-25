@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "969BD9AE19EDE88E002CE755"
-               BuildableName = "libUnrarKit iOS.a"
+               BlueprintIdentifier = "9699F9D91B3CB83100B6D373"
+               BuildableName = "UnrarKit.framework"
                BlueprintName = "UnrarKit iOS"
-               ReferencedContainer = "container:UnrarKit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "96F5BBB01B39A65F00ACB162"
-               BuildableName = "UnrarKit iOS Tests.xctest"
-               BlueprintName = "UnrarKit iOS Tests"
                ReferencedContainer = "container:UnrarKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -56,8 +42,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "969BD9AE19EDE88E002CE755"
-            BuildableName = "libUnrarKit iOS.a"
+            BlueprintIdentifier = "9699F9D91B3CB83100B6D373"
+            BuildableName = "UnrarKit.framework"
             BlueprintName = "UnrarKit iOS"
             ReferencedContainer = "container:UnrarKit.xcodeproj">
          </BuildableReference>
@@ -75,8 +61,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "969BD9AE19EDE88E002CE755"
-            BuildableName = "libUnrarKit iOS.a"
+            BlueprintIdentifier = "9699F9D91B3CB83100B6D373"
+            BuildableName = "UnrarKit.framework"
             BlueprintName = "UnrarKit iOS"
             ReferencedContainer = "container:UnrarKit.xcodeproj">
          </BuildableReference>
@@ -93,15 +79,15 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "969BD9AE19EDE88E002CE755"
-            BuildableName = "libUnrarKit iOS.a"
+            BlueprintIdentifier = "9699F9D91B3CB83100B6D373"
+            BuildableName = "UnrarKit.framework"
             BlueprintName = "UnrarKit iOS"
             ReferencedContainer = "container:UnrarKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Release">
+      buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
