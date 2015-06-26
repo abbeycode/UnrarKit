@@ -7,57 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		960F667519EDDC2600512951 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4A18DB722E00B5651B /* rar.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F667619EDDC2600512951 /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6D18DB722E00B5651B /* strlist.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F667719EDDC2600512951 /* strfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6B18DB722E00B5651B /* strfn.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F667819EDDC2600512951 /* pathfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4818DB722E00B5651B /* pathfn.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F667919EDDC2600512951 /* smallfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6918DB722E00B5651B /* smallfn.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F667A19EDDC2600512951 /* global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3018DB722E00B5651B /* global.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F667B19EDDC2600512951 /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2618DB722E00B5651B /* file.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F667C19EDDC2600512951 /* filefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2818DB722E00B5651B /* filefn.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F667D19EDDC2600512951 /* filcreat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2418DB722E00B5651B /* filcreat.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F667E19EDDC2600512951 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0818DB722E00B5651B /* archive.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F667F19EDDC2600512951 /* arcread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0A18DB722E00B5651B /* arcread.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668019EDDC2600512951 /* unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7718DB722E00B5651B /* unicode.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668119EDDC2600512951 /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7118DB722E00B5651B /* system.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668219EDDC2600512951 /* isnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3318DB722E00B5651B /* isnt.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668319EDDC2600512951 /* crypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1618DB722E00B5651B /* crypt.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668419EDDC2600512951 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1418DB722E00B5651B /* crc.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668519EDDC2600512951 /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5418DB722E00B5651B /* rawread.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668619EDDC2600512951 /* encname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1C18DB722E00B5651B /* encname.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668719EDDC2600512951 /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5B18DB722E00B5651B /* resource.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668819EDDC2600512951 /* match.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3F18DB722E00B5651B /* match.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668919EDDC2600512951 /* timefn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7318DB722E00B5651B /* timefn.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668A19EDDC2600512951 /* rdwrfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5618DB722E00B5651B /* rdwrfn.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668B19EDDC2600512951 /* consio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1218DB722E00B5651B /* consio.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668C19EDDC2600512951 /* options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4418DB722E00B5651B /* options.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668D19EDDC2600512951 /* errhnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1E18DB722E00B5651B /* errhnd.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668E19EDDC2600512951 /* rarvm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5118DB722E00B5651B /* rarvm.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F668F19EDDC2600512951 /* secpassword.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6518DB722E00B5651B /* secpassword.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669019EDDC2600512951 /* rijndael.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5D18DB722E00B5651B /* rijndael.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669119EDDC2600512951 /* getbits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2E18DB722E00B5651B /* getbits.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669219EDDC2600512951 /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6718DB722E00B5651B /* sha1.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669319EDDC2600512951 /* sha256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCF19ED8BB200DAF8F1 /* sha256.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669419EDDC2600512951 /* blake2s.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FB419ED8A8200DAF8F1 /* blake2s.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669519EDDC2600512951 /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC419ED8B0400DAF8F1 /* hash.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669619EDDC2600512951 /* extinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2018DB722E00B5651B /* extinfo.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669719EDDC2600512951 /* extract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2218DB722E00B5651B /* extract.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669819EDDC2600512951 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669919EDDC2600512951 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3618DB722E00B5651B /* list.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669A19EDDC2600512951 /* find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2C18DB722E00B5651B /* find.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669B19EDDC2600512951 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669C19EDDC2600512951 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669D19EDDC2600512951 /* threadpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD219ED8C6100DAF8F1 /* threadpool.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669E19EDDC2600512951 /* rs16.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCD19ED8B9700DAF8F1 /* rs16.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F669F19EDDC2600512951 /* cmddata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0D18DB722E00B5651B /* cmddata.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F66A019EDDC2600512951 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD419ED8C8000DAF8F1 /* ui.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F66A119EDDC2600512951 /* filestr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2A18DB722E00B5651B /* filestr.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F66A219EDDC2600512951 /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5918DB722E00B5651B /* recvol.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F66A319EDDC2600512951 /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5F18DB722E00B5651B /* rs.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F66A419EDDC2600512951 /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F66A519EDDC2600512951 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		960F66A619EDDC2600512951 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		964547D21B384F7D00202B28 /* URKArchiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 964547D11B384F7D00202B28 /* URKArchiveTestCase.m */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		9699F91D1B3CB4D000B6D373 /* URKArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 489CFA0E128B5169005DCC2A /* URKArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -181,6 +130,13 @@
 		9699FA641B3CBB1400B6D373 /* version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F8118DB722F00B5651B /* version.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		9699FA651B3CBB1400B6D373 /* volume.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F8318DB722F00B5651B /* volume.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		9699FA691B3CBD1000B6D373 /* UnrarKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9699F9DA1B3CB83100B6D373 /* UnrarKit.framework */; };
+		9699FA6A1B3CE95D00B6D373 /* UnrarKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96EA535B1B3CB04300F79DC6 /* UnrarKit.framework */; };
+		9699FA891B3D9B5700B6D373 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
+		9699FA8A1B3D9B6F00B6D373 /* URKArchiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 964547D11B384F7D00202B28 /* URKArchiveTestCase.m */; };
+		9699FA8B1B3D9B6F00B6D373 /* ExtractFilesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F4507A1B385BCD00679597 /* ExtractFilesTests.m */; };
+		9699FA8C1B3D9B6F00B6D373 /* IsPasswordProtectedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450761B38552200679597 /* IsPasswordProtectedTests.m */; };
+		9699FA8D1B3D9B6F00B6D373 /* ListFilenamesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450781B385AF800679597 /* ListFilenamesTests.m */; };
+		9699FA8E1B3D9B6F00B6D373 /* ValidatePasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450741B38527100679597 /* ValidatePasswordTests.m */; };
 		969BD9B019EDE88E002CE755 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4A18DB722E00B5651B /* rar.cpp */; };
 		969BD9B119EDE88E002CE755 /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6D18DB722E00B5651B /* strlist.cpp */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		969BD9B219EDE88E002CE755 /* strfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6B18DB722E00B5651B /* strfn.cpp */; };
@@ -232,11 +188,8 @@
 		969BD9E019EDE88E002CE755 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		969BD9E119EDE88E002CE755 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		969BD9E219EDE88E002CE755 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
-		96DBF7FC1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
 		96DBF7FD1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
 		96E5D345198B333200A74340 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
-		96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 964C8AC818D28EE000AD7321 /* URKArchiveTests.m */; };
-		96E5D347198B334500A74340 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 		96EA53331B3B462D00F79DC6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EA53321B3B462D00F79DC6 /* AppDelegate.swift */; };
 		96EA53501B3B4A0500F79DC6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96EA53361B3B462D00F79DC6 /* Main.storyboard */; };
 		96EA53511B3B4A0800F79DC6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 96EA533B1B3B462D00F79DC6 /* LaunchScreen.xib */; };
@@ -293,16 +246,11 @@
 		96EA53AA1B3CB2C700F79DC6 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks"; }; };
 		96EA53AB1B3CB2C700F79DC6 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks"; }; };
 		96EA53AC1B3CB2C700F79DC6 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
-		96F450751B38527100679597 /* ValidatePasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450741B38527100679597 /* ValidatePasswordTests.m */; };
-		96F450771B38552200679597 /* IsPasswordProtectedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450761B38552200679597 /* IsPasswordProtectedTests.m */; };
-		96F450791B385AF800679597 /* ListFilenamesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450781B385AF800679597 /* ListFilenamesTests.m */; };
-		96F4507B1B385BCD00679597 /* ExtractFilesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F4507A1B385BCD00679597 /* ExtractFilesTests.m */; };
 		96F5BBBD1B39A68600ACB162 /* URKArchiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 964547D11B384F7D00202B28 /* URKArchiveTestCase.m */; };
 		96F5BBBF1B39AD3000ACB162 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		96F5BBC11B39AEBC00ACB162 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		96F5BBC21B39AF2300ACB162 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
 		96F5BBC31B39B18B00ACB162 /* ExtractFilesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F4507A1B385BCD00679597 /* ExtractFilesTests.m */; };
-		F3FCD46E1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
 		F3FCD46F1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
 /* End PBXBuildFile section */
 
@@ -515,6 +463,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */,
+				9699FA6A1B3CE95D00B6D373 /* UnrarKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1153,65 +1102,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				960F667519EDDC2600512951 /* rar.cpp in Sources */,
-				960F667619EDDC2600512951 /* strlist.cpp in Sources */,
-				960F667719EDDC2600512951 /* strfn.cpp in Sources */,
-				960F667819EDDC2600512951 /* pathfn.cpp in Sources */,
-				960F667919EDDC2600512951 /* smallfn.cpp in Sources */,
-				960F667A19EDDC2600512951 /* global.cpp in Sources */,
-				960F667B19EDDC2600512951 /* file.cpp in Sources */,
-				960F667C19EDDC2600512951 /* filefn.cpp in Sources */,
-				960F667D19EDDC2600512951 /* filcreat.cpp in Sources */,
-				960F667E19EDDC2600512951 /* archive.cpp in Sources */,
-				960F667F19EDDC2600512951 /* arcread.cpp in Sources */,
-				960F668019EDDC2600512951 /* unicode.cpp in Sources */,
-				960F668119EDDC2600512951 /* system.cpp in Sources */,
-				960F668219EDDC2600512951 /* isnt.cpp in Sources */,
-				960F668319EDDC2600512951 /* crypt.cpp in Sources */,
-				960F668419EDDC2600512951 /* crc.cpp in Sources */,
-				960F668519EDDC2600512951 /* rawread.cpp in Sources */,
-				960F668619EDDC2600512951 /* encname.cpp in Sources */,
-				960F668719EDDC2600512951 /* resource.cpp in Sources */,
-				960F668819EDDC2600512951 /* match.cpp in Sources */,
-				96F450771B38552200679597 /* IsPasswordProtectedTests.m in Sources */,
-				960F668919EDDC2600512951 /* timefn.cpp in Sources */,
-				960F668A19EDDC2600512951 /* rdwrfn.cpp in Sources */,
-				960F668B19EDDC2600512951 /* consio.cpp in Sources */,
-				960F668C19EDDC2600512951 /* options.cpp in Sources */,
-				960F668D19EDDC2600512951 /* errhnd.cpp in Sources */,
-				960F668E19EDDC2600512951 /* rarvm.cpp in Sources */,
-				960F668F19EDDC2600512951 /* secpassword.cpp in Sources */,
-				960F669019EDDC2600512951 /* rijndael.cpp in Sources */,
-				960F669119EDDC2600512951 /* getbits.cpp in Sources */,
-				960F669219EDDC2600512951 /* sha1.cpp in Sources */,
-				960F669319EDDC2600512951 /* sha256.cpp in Sources */,
-				F3FCD46E1A3262E5003612BF /* URKFileInfo.m in Sources */,
-				960F669419EDDC2600512951 /* blake2s.cpp in Sources */,
-				960F669519EDDC2600512951 /* hash.cpp in Sources */,
-				96F450751B38527100679597 /* ValidatePasswordTests.m in Sources */,
-				960F669619EDDC2600512951 /* extinfo.cpp in Sources */,
-				960F669719EDDC2600512951 /* extract.cpp in Sources */,
-				960F669819EDDC2600512951 /* volume.cpp in Sources */,
-				960F669919EDDC2600512951 /* list.cpp in Sources */,
-				964547D21B384F7D00202B28 /* URKArchiveTestCase.m in Sources */,
-				960F669A19EDDC2600512951 /* find.cpp in Sources */,
-				960F669B19EDDC2600512951 /* unpack.cpp in Sources */,
-				960F669C19EDDC2600512951 /* headers.cpp in Sources */,
-				96F4507B1B385BCD00679597 /* ExtractFilesTests.m in Sources */,
-				960F669D19EDDC2600512951 /* threadpool.cpp in Sources */,
-				960F669E19EDDC2600512951 /* rs16.cpp in Sources */,
-				96F450791B385AF800679597 /* ListFilenamesTests.m in Sources */,
-				960F669F19EDDC2600512951 /* cmddata.cpp in Sources */,
-				960F66A019EDDC2600512951 /* ui.cpp in Sources */,
-				96DBF7FC1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */,
-				960F66A119EDDC2600512951 /* filestr.cpp in Sources */,
-				960F66A219EDDC2600512951 /* recvol.cpp in Sources */,
-				960F66A319EDDC2600512951 /* rs.cpp in Sources */,
-				960F66A419EDDC2600512951 /* scantree.cpp in Sources */,
-				960F66A519EDDC2600512951 /* qopen.cpp in Sources */,
-				960F66A619EDDC2600512951 /* dll.cpp in Sources */,
-				96E5D347198B334500A74340 /* URKArchive.mm in Sources */,
-				96E5D346198B333500A74340 /* URKArchiveTests.m in Sources */,
+				9699FA891B3D9B5700B6D373 /* URKArchiveTests.m in Sources */,
+				9699FA8C1B3D9B6F00B6D373 /* IsPasswordProtectedTests.m in Sources */,
+				9699FA8E1B3D9B6F00B6D373 /* ValidatePasswordTests.m in Sources */,
+				9699FA8B1B3D9B6F00B6D373 /* ExtractFilesTests.m in Sources */,
+				9699FA8A1B3D9B6F00B6D373 /* URKArchiveTestCase.m in Sources */,
+				9699FA8D1B3D9B6F00B6D373 /* ListFilenamesTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1461,6 +1357,7 @@
 				);
 				INFOPLIST_FILE = "Tests/UnrarKit Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -1498,6 +1395,7 @@
 				);
 				INFOPLIST_FILE = "Tests/UnrarKit Tests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUNDLE_LOADER)";
