@@ -137,6 +137,7 @@
 		9699FA8C1B3D9B6F00B6D373 /* IsPasswordProtectedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450761B38552200679597 /* IsPasswordProtectedTests.m */; };
 		9699FA8D1B3D9B6F00B6D373 /* ListFilenamesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450781B385AF800679597 /* ListFilenamesTests.m */; };
 		9699FA8E1B3D9B6F00B6D373 /* ValidatePasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450741B38527100679597 /* ValidatePasswordTests.m */; };
+		9699FA8F1B3DA4C400B6D373 /* UnrarKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9699F9DA1B3CB83100B6D373 /* UnrarKit.framework */; };
 		969BD9B019EDE88E002CE755 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4A18DB722E00B5651B /* rar.cpp */; };
 		969BD9B119EDE88E002CE755 /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6D18DB722E00B5651B /* strlist.cpp */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks"; }; };
 		969BD9B219EDE88E002CE755 /* strfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6B18DB722E00B5651B /* strfn.cpp */; };
@@ -478,6 +479,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9699FA8F1B3DA4C400B6D373 /* UnrarKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1367,6 +1369,7 @@
 					"-Wno-return-type",
 					"-Wno-unused-variable",
 					"-Wno-switch",
+					"-Wno-error=unused-command-line-argument",
 				);
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1754,6 +1757,14 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOSUnitTestHostApp.app/iOSUnitTestHostApp";
+				WARNING_CFLAGS = (
+					"-Wno-dangling-else",
+					"-Wno-parentheses",
+					"-Wno-return-type",
+					"-Wno-unused-variable",
+					"-Wno-switch",
+					"-Wno-error=unused-command-line-argument",
+				);
 			};
 			name = Debug;
 		};
@@ -1794,6 +1805,14 @@
 				SDKROOT = iphoneos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOSUnitTestHostApp.app/iOSUnitTestHostApp";
 				VALIDATE_PRODUCT = YES;
+				WARNING_CFLAGS = (
+					"-Wno-dangling-else",
+					"-Wno-parentheses",
+					"-Wno-return-type",
+					"-Wno-unused-variable",
+					"-Wno-switch",
+					"-Wno-error=unused-command-line-argument",
+				);
 			};
 			name = Release;
 		};
