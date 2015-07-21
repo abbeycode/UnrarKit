@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z ${TRAVIS+x} ]; then
-    TRAVIS_BUILD_DIR="file:///Users/Dov/Source Code/UnrarKit"
+    TRAVIS_BUILD_DIR="/Users/Dov/Source Code/UnrarKit"
     TRAVIS_BRANCH=carthage
 fi
 
@@ -17,7 +17,7 @@ rm -rf Carthage
 
 echo "git \"$TRAVIS_BUILD_DIR\" \"$TRAVIS_BRANCH\"" > Cartfile
 
-carthage bootstrap --configuration Debug --verbose --simulator-only
+carthage bootstrap --configuration Debug --verbose
 EXIT_CODE=$?
 
 echo "Checking for build products..."
