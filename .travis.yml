@@ -2,6 +2,7 @@ language: objective-c
 osx_image: beta-xcode6.3
 before_install:
     - brew update
+    - brew install carthage
     - brew upgrade xctool
 
 xcode_workspace: UnrarKit.xcworkspace
