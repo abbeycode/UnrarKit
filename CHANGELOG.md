@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.5.1
+
+Improved performance of the `-isPasswordProtected` method (Issue #24)
+
+
 ## 2.5
 
 Fixed bug in -extractFilesTo:overwrite:progress:error: that would sometimes cause garbage characters in the extracted files' names (Issue #20)
