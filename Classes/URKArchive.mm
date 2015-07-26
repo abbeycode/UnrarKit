@@ -530,7 +530,7 @@ NS_DESIGNATED_INITIALIZER
         }
         
         int RHCode = RARReadHeaderEx(_rarFile, header);
-        int PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
         
         if ([self headerContainsErrors:&error]) {
             if (error.code == ERAR_MISSING_PASSWORD) {
