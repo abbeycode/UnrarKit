@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = "UnrarKit"
-  s.version       = "2.5.1"
+  s.version       = "2.5.2"
   s.summary       = "UnrarKit is here to enable Mac and iOS Cocoa apps to easily work with RAR files for read-only operations"
   s.license       = "BSD"
   s.homepage      = "https://github.com/abbeycode/UnrarKit"
@@ -89,9 +89,9 @@ Pod::Spec.new do |s|
                         "Libraries/unrar/unpackinline.cpp",
                         "Libraries/unrar/uowners.cpp",
                         "Libraries/unrar/win32stm.cpp"
-    ss.xcconfig = { "OTHER_LDFLAGS" => "$(inherited) -lc++",
-                    "OTHER_CFLAGS" => "$(inherited) -Wno-return-type -Wno-logical-op-parentheses -Wno-conversion -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-switch -Wno-unused-command-line-argument",
-                    "OTHER_CPLUSPLUSFLAGS" => "$(inherited) -DSILENT -DRARDLL $(OTHER_CFLAGS)" }
+    ss.pod_target_xcconfig  = { "OTHER_LDFLAGS" => "$(inherited) -lc++",
+                                "OTHER_CFLAGS" => "$(inherited) -Wno-return-type -Wno-logical-op-parentheses -Wno-conversion -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-switch -Wno-unused-command-line-argument",
+                                "OTHER_CPLUSPLUSFLAGS" => "$(inherited) -DSILENT -DRARDLL $(OTHER_CFLAGS)" }
     ss.compiler_flags = "-Xanalyzer -analyzer-disable-all-checks"
   end
 end

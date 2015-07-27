@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.5.2
+
+Moved off of deprecated `xcconfig` attribute in podspec (Issue #25)
+
+
 ## 2.5.1
 
 Improved performance of the `-isPasswordProtected` method (Issue #24)
