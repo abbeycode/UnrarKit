@@ -8,13 +8,10 @@
 
 @class UnrarExampleViewController;
 
-@interface UnrarExampleAppDelegate : NSObject <UIApplicationDelegate> {
-    UIWindow *window;
-    UnrarExampleViewController *viewController;
-}
+@interface UnrarExampleAppDelegate : NSObject <UIApplicationDelegate>
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UnrarExampleViewController *viewController;
+@property (nonatomic, strong) IBOutlet UIWindow *window;
+@property (nonatomic, strong) IBOutlet UnrarExampleViewController *viewController;
 
 @end
 
