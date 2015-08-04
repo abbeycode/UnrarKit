@@ -153,6 +153,11 @@ extern NSString *URKErrorDomain;
 
 
 /**
+ *  Do not use the default initializer
+ */
+- (instancetype)init NS_UNAVAILABLE;
+
+/**
  *  Creates and returns an archive at the given path
  *
  *  @param filePath A path to the archive file
