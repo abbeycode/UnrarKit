@@ -61,6 +61,12 @@ NS_DESIGNATED_INITIALIZER
 
 #pragma mark - Initializers
 
+- (instancetype)init {
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:@"-init is not a valid initializer for the class URKArchive"
+                                 userInfo:nil];
+    return [self initWithFile:nil password:nil error:nil];
+}
 
 - (instancetype)initWithPath:(NSString *)filePath error:(NSError **)error
 {
@@ -89,6 +95,10 @@ NS_DESIGNATED_INITIALIZER
 
 - (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password error:(NSError **)error
 {
+    if (!fileURL) {
+        return nil;
+    }
+    
     if ((self = [super init])) {
         if (error) {
             *error = nil;
@@ -108,6 +118,8 @@ NS_DESIGNATED_INITIALIZER
             if (error) {
                 *error = bookmarkError;
             }
+            
+            return nil;
         }
     }
     
