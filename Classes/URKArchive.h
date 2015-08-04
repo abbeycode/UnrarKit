@@ -90,6 +90,8 @@ typedef NS_ENUM(NSInteger, URKErrorCode) {
 
 #define ERAR_ARCHIVE_NOT_FOUND  101
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *URKErrorDomain;
 
 /**
@@ -106,17 +108,17 @@ extern NSString *URKErrorDomain;
 /**
  *  The URL of the archive
  */
-@property(weak, readonly) NSURL *fileURL;
+@property(nullable, weak, readonly) NSURL *fileURL;
 
 /**
  *  The filename of the archive
  */
-@property(weak, readonly) NSString *filename;
+@property(nullable, weak, readonly) NSString *filename;
 
 /**
  *  The password of the archive
  */
-@property(nonatomic, strong) NSString *password;
+@property(nullable, nonatomic, strong) NSString *password;
 
 
 /**
@@ -124,14 +126,14 @@ extern NSString *URKErrorDomain;
  *
  *  @param filePath A path to the archive file
  */
-+ (instancetype)rarArchiveAtPath:(NSString *)filePath;
++ (nullable instancetype)rarArchiveAtPath:(NSString *)filePath __deprecated_msg("Use -initWithPath:error: instead");
 
 /**
  *  Creates and returns an archive at the given URL
  *
  *  @param fileURL The URL of the archive file
  */
-+ (instancetype)rarArchiveAtURL:(NSURL *)fileURL;
++ (nullable instancetype)rarArchiveAtURL:(NSURL *)fileURL __deprecated_msg("Use -initWithURL:error: instead");
 
 /**
  *  Creates and returns an archive at the given path, with a given password
@@ -139,7 +141,7 @@ extern NSString *URKErrorDomain;
  *  @param filePath A path to the archive file
  *  @param password The passowrd of the given archive
  */
-+ (instancetype)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password;
++ (nullable instancetype)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password __deprecated_msg("Use -initWithPath:password:error: instead");
 
 /**
  *  Creates and returns an archive at the given URL, with a given password
@@ -147,7 +149,50 @@ extern NSString *URKErrorDomain;
  *  @param fileURL  The URL of the archive file
  *  @param password The passowrd of the given archive
  */
-+ (instancetype)rarArchiveAtURL:(NSURL *)fileURL password:(NSString *)password;
++ (nullable instancetype)rarArchiveAtURL:(NSURL *)fileURL password:(NSString *)password __deprecated_msg("Use -initWithURL:password:error: instead");
+
+
+/**
+ *  Creates and returns an archive at the given path
+ *
+ *  @param filePath A path to the archive file
+ *  @param error    Contains any error during initialization
+ *
+ *  @return Returns an initialized URKArchive, unless there's a problem creating a bookmark to the path
+ */
+- (nullable instancetype)initWithPath:(NSString *)filePath error:(NSError **)error;
+
+/**
+ *  Creates and returns an archive at the given URL
+ *
+ *  @param fileURL The URL of the archive file
+ *  @param error   Contains any error during initialization
+ *
+ *  @return Returns an initialized URKArchive, unless there's a problem creating a bookmark to the URL
+ */
+- (nullable instancetype)initWithURL:(NSURL *)fileURL error:(NSError **)error;
+
+/**
+ *  Creates and returns an archive at the given path, with a given password
+ *
+ *  @param filePath A path to the archive file
+ *  @param password The passowrd of the given archive
+ *  @param error    Contains any error during initialization
+ *
+ *  @return Returns an initialized URKArchive, unless there's a problem creating a bookmark to the path
+ */
+- (nullable instancetype)initWithPath:(NSString *)filePath password:(NSString *)password error:(NSError **)error;
+
+/**
+ *  Creates and returns an archive at the given URL, with a given password
+ *
+ *  @param fileURL  The URL of the archive file
+ *  @param password The passowrd of the given archive
+ *  @param error    Contains any error during initialization
+ *
+ *  @return Returns an initialized URKArchive, unless there's a problem creating a bookmark to the URL
+ */
+- (nullable instancetype)initWithURL:(NSURL *)fileURL password:(NSString *)password error:(NSError **)error;
 
 
 /**
@@ -175,7 +220,7 @@ extern NSString *URKErrorDomain;
  *
  *  @return Returns a list of NSString containing the paths within the archive's contents, or nil if an error was encountered
  */
-- (NSArray *)listFilenames:(NSError **)error;
+- (nullable NSArray *)listFilenames:(NSError **)error;
 
 /**
  *  Lists the various attributes of each file in the archive
@@ -184,7 +229,7 @@ extern NSString *URKErrorDomain;
  *
  *  @return Returns a list of URKFileInfo objects, which contain metadata about the archive's files, or nil if an error was encountered
  */
-- (NSArray *)listFileInfo:(NSError **)error;
+- (nullable NSArray *)listFileInfo:(NSError **)error;
 
 /**
  *  Writes all files in the archive to the given path
@@ -202,7 +247,7 @@ extern NSString *URKErrorDomain;
  */
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
-              progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progress
+              progress:(nullable void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progress
                  error:(NSError **)error;
 
 /**
@@ -218,7 +263,7 @@ extern NSString *URKErrorDomain;
  *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
  */
 - (NSData *)extractData:(URKFileInfo *)fileInfo
-               progress:(void (^)(CGFloat percentDecompressed))progress
+               progress:(nullable void (^)(CGFloat percentDecompressed))progress
                   error:(NSError **)error;
 
 /**
@@ -234,7 +279,7 @@ extern NSString *URKErrorDomain;
  *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
  */
 - (NSData *)extractDataFromFile:(NSString *)filePath
-                       progress:(void (^)(CGFloat percentDecompressed))progress
+                       progress:(nullable void (^)(CGFloat percentDecompressed))progress
                           error:(NSError **)error;
 
 /**
@@ -298,3 +343,4 @@ extern NSString *URKErrorDomain;
 
 
 @end
+NS_ASSUME_NONNULL_END

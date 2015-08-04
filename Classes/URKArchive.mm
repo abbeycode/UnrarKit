@@ -16,7 +16,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 
 @interface URKArchive ()
 
-- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password
+- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password error:(NSError **)error
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_7_0 || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_9
 NS_DESIGNATED_INITIALIZER
 #endif
@@ -34,28 +34,27 @@ NS_DESIGNATED_INITIALIZER
 
 
 
-#pragma mark - Convenience Methods
+#pragma mark - Deprecated Convenience Methods
 
 
 + (URKArchive *)rarArchiveAtPath:(NSString *)filePath
 {
-    return [[URKArchive alloc] initWithFile:[NSURL fileURLWithPath:filePath]];
+    return [[URKArchive alloc] initWithPath:filePath error:nil];
 }
 
 + (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL
 {
-    return [[URKArchive alloc] initWithFile:fileURL];
+    return [[URKArchive alloc] initWithURL:fileURL error:nil];
 }
 
 + (URKArchive *)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password
 {
-    return [[URKArchive alloc] initWithFile:[NSURL fileURLWithPath:filePath]
-                                   password:password];
+    return [[URKArchive alloc] initWithPath:filePath password:password error:nil];
 }
 
 + (URKArchive *)rarArchiveAtURL:(NSURL *)fileURL password:(NSString *)password
 {
-    return [[URKArchive alloc] initWithFile:fileURL password:password];
+    return [[URKArchive alloc] initWithURL:fileURL password:password error:nil];
 }
 
 
@@ -63,24 +62,52 @@ NS_DESIGNATED_INITIALIZER
 #pragma mark - Initializers
 
 
-- (instancetype)initWithFile:(NSURL *)fileURL
+- (instancetype)initWithPath:(NSString *)filePath error:(NSError **)error
 {
-    return [self initWithFile:fileURL password:nil];
+    return [self initWithFile:[NSURL fileURLWithPath:filePath] error:error];
 }
 
-- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password
+- (instancetype)initWithURL:(NSURL *)fileURL error:(NSError **)error
+{
+    return [self initWithFile:fileURL error:error];
+}
+
+- (instancetype)initWithPath:(NSString *)filePath password:(NSString *)password error:(NSError **)error
+{
+    return [self initWithFile:[NSURL fileURLWithPath:filePath] password:password error:error];
+}
+
+- (instancetype)initWithURL:(NSURL *)fileURL password:(NSString *)password error:(NSError **)error
+{
+    return [self initWithFile:fileURL password:password error:error];
+}
+
+- (instancetype)initWithFile:(NSURL *)fileURL error:(NSError **)error
+{
+    return [self initWithFile:fileURL password:nil error:error];
+}
+
+- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password error:(NSError **)error
 {
     if ((self = [super init])) {
-        NSError *error = nil;
+        if (error) {
+            *error = nil;
+        }
+        
+        NSError *bookmarkError = nil;
         _fileBookmark = [fileURL bookmarkDataWithOptions:0
                           includingResourceValuesForKeys:@[]
                                            relativeToURL:nil
-                                                   error:&error];
+                                                   error:&bookmarkError];
         _password = password;
         _threadLock = [[NSObject alloc] init];
 
-        if (error) {
-            NSLog(@"Error creating bookmark to RAR archive: %@", error);
+        if (bookmarkError) {
+            NSLog(@"Error creating bookmark to RAR archive: %@", bookmarkError);
+            
+            if (error) {
+                *error = bookmarkError;
+            }
         }
     }
     

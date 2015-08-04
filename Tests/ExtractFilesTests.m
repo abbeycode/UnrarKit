@@ -38,7 +38,7 @@
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
                               ? @"password"
                               : nil);
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:password];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
         
         NSError *error = nil;
         BOOL success = [archive extractFilesTo:extractURL.path
@@ -110,7 +110,7 @@
         NSString *extractDir = [NSString stringWithFormat:@"%ld_%@", (long)i, testArchiveName.stringByDeletingPathExtension];
         NSURL *extractURL = [extractRootDirectory URLByAppendingPathComponent:extractDir];
         
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
         
         NSError *error = nil;
         BOOL success = [archive extractFilesTo:extractURL.path
@@ -159,7 +159,7 @@
                                   [testArchiveName stringByDeletingPathExtension]];
     NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
     
-    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     NSError *error = nil;
     BOOL success = [archive extractFilesTo:extractURL.path
@@ -209,7 +209,7 @@
     
     for (NSString *testArchiveName in testArchives) {
         NSLog(@"Testing extraction archive (no password given): %@", testArchiveName);
-        URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[testArchiveName]];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[testArchiveName] error:nil];
         
         NSString *extractDirectory = [self randomDirectoryWithPrefix:
                                       [testArchiveName stringByDeletingPathExtension]];
@@ -237,7 +237,7 @@
 {
     NSFileManager *fm = [NSFileManager defaultManager];
     
-    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test File A.txt"] error:nil];
     
     NSString *extractDirectory = [self randomDirectoryWithPrefix:@"ExtractInvalidArchive"];
     NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];

@@ -1366,14 +1366,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WARNING_CFLAGS = (
-					"-Wno-dangling-else",
-					"-Wno-parentheses",
-					"-Wno-return-type",
-					"-Wno-unused-variable",
-					"-Wno-switch",
-					"-Wno-error=unused-command-line-argument",
-				);
+				WARNING_CFLAGS = "";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -1406,14 +1399,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WARNING_CFLAGS = (
-					"-Wno-dangling-else",
-					"-Wno-parentheses",
-					"-Wno-return-type",
-					"-Wno-unused-variable",
-					"-Wno-switch",
-					"-Wno-error=unused-command-line-argument",
-				);
+				WARNING_CFLAGS = "";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
