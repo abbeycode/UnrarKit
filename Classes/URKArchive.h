@@ -220,7 +220,7 @@ extern NSString *URKErrorDomain;
  *
  *  @return Returns a list of NSString containing the paths within the archive's contents, or nil if an error was encountered
  */
-- (nullable NSArray *)listFilenames:(NSError **)error;
+- (nullable NSArray<NSString*> *)listFilenames:(NSError **)error;
 
 /**
  *  Lists the various attributes of each file in the archive
@@ -229,7 +229,7 @@ extern NSString *URKErrorDomain;
  *
  *  @return Returns a list of URKFileInfo objects, which contain metadata about the archive's files, or nil if an error was encountered
  */
-- (nullable NSArray *)listFileInfo:(NSError **)error;
+- (nullable NSArray<URKFileInfo*> *)listFileInfo:(NSError **)error;
 
 /**
  *  Writes all files in the archive to the given path

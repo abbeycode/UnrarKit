@@ -223,13 +223,13 @@ NS_DESIGNATED_INITIALIZER
 #pragma mark - Public Methods
 
 
-- (NSArray *)listFilenames:(NSError **)error
+- (NSArray<NSString*> *)listFilenames:(NSError **)error
 {
     NSArray *files = [self listFileInfo:error];
     return [files valueForKey:@"filename"];
 }
 
-- (NSArray *)listFileInfo:(NSError **)error
+- (NSArray<URKFileInfo*> *)listFileInfo:(NSError **)error
 {
     __block NSMutableArray *fileInfos = [NSMutableArray array];
     
