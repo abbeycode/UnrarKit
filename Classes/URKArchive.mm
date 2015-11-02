@@ -22,6 +22,8 @@ NS_DESIGNATED_INITIALIZER
 #endif
 ;
 
+- (instancetype)init NS_UNAVAILABLE;
+
 @property (strong) NSData *fileBookmark;
 @property (strong) void(^bufferedReadBlock)(NSData *dataChunk);
 
@@ -62,6 +64,14 @@ NS_DESIGNATED_INITIALIZER
 
 #pragma mark - Initializers
 
+
+- (instancetype)init {
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:@"-init is not a valid initializer for the class URKArchive"
+                                 userInfo:nil];
+
+    return nil;
+}
 
 - (instancetype)initWithFile:(NSURL *)fileURL
 {
