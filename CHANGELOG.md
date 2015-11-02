@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.5.3
+
+Fixed Podspec bug causing build errors when building as a framework with CocoaPods (Issue #28)
+
+
 ## 2.5.2
 
 Moved off of deprecated `xcconfig` attribute in podspec (Issue #25)
