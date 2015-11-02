@@ -5,7 +5,7 @@
 //
 
 #import "UnrarExampleViewController.h"
-#import <UnrarKit/UnrarKit.h>
+@import UnrarKit;
 
 @implementation UnrarExampleViewController
 
@@ -13,7 +13,7 @@
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Test Archive (Password)" ofType:@"rar"];
 
     NSError *archiveError = nil;
-	URKArchive *archive = [[URKArchive alloc] initWithPath:filePath error:&archiveError];
+    URKArchive *archive = [[URKArchive alloc] initWithPath:filePath error:&archiveError];
     
     if (!archive) {
         UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Failed to create archive"
