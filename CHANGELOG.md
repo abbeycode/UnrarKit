@@ -1,5 +1,11 @@
 # UnrarKit CHANGELOG
 
+## 2.6
+
+* Added full support for Carthage (Issue #22)
+* Added annotations for nullability, improving compatibility with Xcode 7 and Swift
+
+
 ## 2.5.3
 
 Fixed Podspec bug causing build errors when building as a framework with CocoaPods (Issue #28)
