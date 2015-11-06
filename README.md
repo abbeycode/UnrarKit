@@ -12,13 +12,14 @@ I'm always open to improvements, so please submit your pull requests, or [create
 # Example Usage
 
 ```Objective-C
-URKArchive *archive = [URKArchive rarArchiveAtPath:@"An Archive.rar"];
+NSError *archiveError = nil;
+URKArchive *archive = [[URKArchive alloc] initWithPath:@"An Archive.rar" error:&archiveError];
 NSError *error = nil;
 ```
 
 ## Listing the file names in an archive
 ```Objective-C
-NSArray *filesInArchive = [archive listFilenames:&error];
+NSArray<String*> *filesInArchive = [archive listFilenames:&error];
 for (NSString *name in filesInArchive) {
     NSLog(@"Archived file: %@", name);
 }
@@ -26,7 +27,7 @@ for (NSString *name in filesInArchive) {
 
 ## Listing the file details in an archive
 ```Objective-C
-NSArray *fileInfosInArchive = [archive listFileInfo:&error];
+NSArray<URKFileInfo*> *fileInfosInArchive = [archive listFileInfo:&error];
 for (URKFileInfo *info in fileInfosInArchive) {
     NSLog(@"Archive name: %@ | File name: %@ | Size: %lld", info.archiveName, info.filename, info.uncompressedSize);
 }
@@ -34,7 +35,7 @@ for (URKFileInfo *info in fileInfosInArchive) {
 
 ## Working with passwords
 ```Objective-C
-NSArray *fileInfosInArchive = [archive listFileInfo:&error];
+NSArray<URKFileInfo*> *fileInfosInArchive = [archive listFileInfo:&error];
 if (archive.isPasswordProtected) {
     NSString *givenPassword = // prompt user
     archive.password = givenPassword

@@ -16,8 +16,8 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D7ACF80DDB3853001CB0EB /* UnrarExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* UnrarExampleViewController.m */; };
 		964547CB1B32026700202B28 /* Test Archive (Password).rar in Resources */ = {isa = PBXBuildFile; fileRef = 964547CA1B32026700202B28 /* Test Archive (Password).rar */; };
+		9690E9D91B5EB553008FB6DA /* UnrarKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9690E9D51B5EAF9E008FB6DA /* UnrarKit.framework */; };
 		96CD2C1A18D4D823002D004A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96CD2C1918D4D823002D004A /* Default-568h@2x.png */; };
-		96DBF7FF1A3FE1620033B759 /* libUnrarKit iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96DBF7FE1A3FE1620033B759 /* libUnrarKit iOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,9 +35,8 @@
 		32CA4F630368D1EE00C91783 /* UnrarExample_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarExample_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* UnrarExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "UnrarExample-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		964547CA1B32026700202B28 /* Test Archive (Password).rar */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Test Archive (Password).rar"; path = "../Tests/Test Data/Test Archive (Password).rar"; sourceTree = "<group>"; };
-		96BBCACE18DE82D900BE9B86 /* libUnrarKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUnrarKit.a; path = "../build/Debug-iphoneos/libUnrarKit.a"; sourceTree = "<group>"; };
+		9690E9D51B5EAF9E008FB6DA /* UnrarKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UnrarKit.framework; path = "../../../Library/Developer/Xcode/DerivedData/UnrarKit-gzvaaqxmnbebtugiflrvekbllxhn/Build/Products/Debug/UnrarKit.framework"; sourceTree = "<group>"; };
 		96CD2C1918D4D823002D004A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		96DBF7FE1A3FE1620033B759 /* libUnrarKit iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libUnrarKit iOS.a"; path = "../build/Debug-iphoneos/libUnrarKit iOS.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96DBF7FF1A3FE1620033B759 /* libUnrarKit iOS.a in Frameworks */,
+				9690E9D91B5EB553008FB6DA /* UnrarKit.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -110,8 +109,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				96DBF7FE1A3FE1620033B759 /* libUnrarKit iOS.a */,
-				96BBCACE18DE82D900BE9B86 /* libUnrarKit.a */,
+				9690E9D51B5EAF9E008FB6DA /* UnrarKit.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
@@ -145,7 +143,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0700;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "UnrarExample" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -198,6 +196,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -210,7 +209,9 @@
 					"$(BUILT_PRODUCTS_DIR)/../../Headers",
 				);
 				INFOPLIST_FILE = "UnrarExample-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_CFLAGS = "-DTARGET_OS_IPHONE";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = UnrarExample;
 			};
 			name = Debug;
@@ -219,6 +220,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -229,7 +231,12 @@
 					"$(BUILT_PRODUCTS_DIR)/../../Headers",
 				);
 				INFOPLIST_FILE = "UnrarExample-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_CFLAGS = (
+					"-DTARGET_OS_IPHONE",
+					"-DNS_BLOCK_ASSERTIONS=1",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = UnrarExample;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -239,6 +246,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

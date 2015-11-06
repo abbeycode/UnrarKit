@@ -1,6 +1,10 @@
 language: objective-c
+osx_image: xcode7.1
 
-osx_image: beta-xcode6.3
+before_install:
+    - brew update
+    - brew install carthage
+    - brew upgrade xctool
 
 xcode_workspace: UnrarKit.xcworkspace
 
@@ -14,18 +18,13 @@ matrix:
       xcode_sdk: iphonesimulator
       env: NAME=iOSTests
 
-    - xcode_scheme: UnrarKit
-      xcode_sdk: macosx10.9
-      env: NAME=Mavericks
-
     - xcode_scheme: UnrarExample
       xcode_sdk: iphonesimulator
       env: NAME=ExampleAppBuild
 
 script:
   - xctool -workspace $TRAVIS_XCODE_WORKSPACE -scheme "$TRAVIS_XCODE_SCHEME" -sdk $TRAVIS_XCODE_SDK -configuration Release analyze test
-
-after_script:
+  - ./Scripts/carthage-validate.sh
   - ./Scripts/cocoapod-validate.sh
 
 # Turn on Docker, container-based infrastructure
