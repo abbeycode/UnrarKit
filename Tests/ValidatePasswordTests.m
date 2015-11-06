@@ -17,7 +17,7 @@
 {
     NSURL *archiveURL = self.testFileURLs[@"Test Archive (Password).rar"];
     
-    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
     
     XCTAssertFalse(archive.validatePassword, @"validatePassword = YES when no password supplied");
     
@@ -32,7 +32,7 @@
 {
     NSURL *archiveURL = self.testFileURLs[@"Test Archive (Header Password).rar"];
     
-    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
     
     XCTAssertFalse(archive.validatePassword, @"validatePassword = YES when no password supplied");
     
@@ -47,7 +47,7 @@
 {
     NSURL *archiveURL = self.testFileURLs[@"Test Archive.rar"];
     
-    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
     
     XCTAssertTrue(archive.validatePassword, @"validatePassword = NO when no password supplied");
     
@@ -59,7 +59,7 @@
 {
     NSURL *archiveURL = self.testFileURLs[@"Test Archive (RAR5, Password).rar"];
     
-    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
     
     XCTAssertFalse(archive.validatePassword, @"validatePassword = YES when no password supplied");
     

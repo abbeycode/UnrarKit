@@ -32,7 +32,7 @@
         NSLog(@"Testing fileURL of archive %@", testArchiveName);
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
         
         NSURL *resolvedURL = archive.fileURL.URLByResolvingSymlinksInPath;
         XCTAssertNotNil(resolvedURL, @"Nil URL returned for valid archive");
@@ -50,7 +50,7 @@
         NSLog(@"Testing filename of archive %@", testArchiveName);
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
         
         NSString *resolvedFilename = archive.filename;
         XCTAssertNotNil(resolvedFilename, @"Nil filename returned for valid archive");
@@ -183,7 +183,7 @@
 
 
 - (void)testListFileInfo {
-    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test Archive.rar"]];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test Archive.rar"] error:nil];
     
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
         return ![key hasSuffix:@"rar"];
@@ -259,7 +259,7 @@
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
     
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
-    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     NSError *error = nil;
     NSArray *filesInArchive = [archive listFileInfo:&error];
@@ -290,7 +290,7 @@
     for (NSString *testArchiveName in testArchives) {
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         
-        URKArchive *archiveNoPassword = [URKArchive rarArchiveAtURL:testArchiveURL];
+        URKArchive *archiveNoPassword = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
         
         NSError *error = nil;
         NSArray *filesInArchive = [archiveNoPassword listFileInfo:&error];
@@ -298,7 +298,7 @@
         XCTAssertNotNil(error, @"No error returned by listFileInfo (no password given)");
         XCTAssertNil(filesInArchive, @"List of files returned (no password given)");
         
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:@"password"];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:@"password" error:nil];
         
         filesInArchive = nil;
         error = nil;
@@ -319,7 +319,7 @@
 }
 
 - (void)testListFileInfo_NoHeaderPasswordGiven {
-    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test Archive (Header Password).rar"]];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test Archive (Header Password).rar"] error:nil];
     
     NSError *error = nil;
     NSArray *files = [archive listFileInfo:&error];
@@ -331,7 +331,7 @@
 
 - (void)testListFileInfo_InvalidArchive
 {
-    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test File A.txt"] error:nil];
     
     NSError *error = nil;
     NSArray *files = [archive listFileInfo:&error];
@@ -363,7 +363,7 @@
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
                               ? @"password"
                               : nil);
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:password];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
         
         NSError *error = nil;
         NSArray *fileInfos = [archive listFileInfo:&error];
@@ -411,7 +411,7 @@
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
     
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
-    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     NSError *error = nil;
     NSArray *fileInfos = [archive listFileInfo:&error];
@@ -455,7 +455,7 @@
                               @"Test Archive (Header Password).rar"];
     
     for (NSString *testArchiveName in testArchives) {
-        URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[testArchiveName]];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[testArchiveName] error:nil];
         
         NSError *error = nil;
         NSData *data = [archive extractDataFromFile:@"Test File A.txt"
@@ -474,7 +474,7 @@
 
 - (void)testExtractData_InvalidArchive
 {
-    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test File A.txt"] error:nil];
     
     NSError *error = nil;
     NSData *data = [archive extractDataFromFile:@"Any file.txt"
@@ -511,7 +511,7 @@
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
                               ? @"password"
                               : nil);
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:password];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
         
         __block NSUInteger fileIndex = 0;
         NSError *error = nil;
@@ -536,7 +536,7 @@
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
     
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
-    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     __block NSUInteger fileIndex = 0;
     NSError *error = nil;
@@ -574,7 +574,7 @@
     NSError *error = nil;
     __block NSUInteger index = 0;
 
-    URKArchive *archive = [URKArchive rarArchiveAtURL:reversedArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:reversedArchiveURL error:nil];
     [archive performOnFilesInArchive:^(URKFileInfo *fileInfo, BOOL *stop) {
         NSString *expectedFilename = testFilenames[index++];
         XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Archive files not iterated through in correct order");
@@ -602,7 +602,7 @@
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
                               ? @"password"
                               : nil);
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:password];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
         
         __block NSUInteger fileIndex = 0;
         NSError *error = nil;
@@ -632,7 +632,7 @@
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
     
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
-    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     __block NSUInteger fileIndex = 0;
     NSError *error = nil;
@@ -656,11 +656,12 @@
 {
     NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
 
-    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
     NSError *error = nil;
     NSArray *archiveFiles = [archive listFilenames:&error];
     
+    XCTAssertNotNil(archiveFiles, @"No filenames listed from test archive");
     XCTAssertNil(error, @"Error listing files in test archive: %@", error);
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -695,11 +696,12 @@
 {
     NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
     
-    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
     NSError *error = nil;
     NSArray *archiveFiles = [archive listFilenames:&error];
     
+    XCTAssertNotNil(archiveFiles, @"No filenames listed from test archive");
     XCTAssertNil(error, @"Error listing files in test archive: %@", error);
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -732,11 +734,12 @@
 {
     NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
     
-    URKArchive *archive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
     NSError *error = nil;
     NSArray *archiveFiles = [archive listFilenames:&error];
     
+    XCTAssertNotNil(archiveFiles, @"No filenames listed from test archive");
     XCTAssertNil(error, @"Error listing files in test archive: %@", error);
     
     NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"FileMovedBeforeBegin"];
@@ -766,7 +769,7 @@
 - (void)testPerformOnData_Folder
 {
     NSURL *testArchiveURL = self.testFileURLs[@"Folder Archive.rar"];
-    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     NSArray *expectedFiles = @[@"G070-Cliff", @"G070-Cliff/image.jpg"];
     
@@ -791,7 +794,7 @@
 {
     NSURL *archiveURL = self.testFileURLs[@"Test Archive.rar"];
     NSString *extractedFile = @"Test File B.jpg";
-    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
     
     NSError *error = nil;
     NSMutableData *reconstructedFile = [NSMutableData data];
@@ -836,7 +839,7 @@
                                                                error:&handleError];
     XCTAssertNil(handleError, @"Error creating a file handle");
 
-    URKArchive *archive = [URKArchive rarArchiveAtURL:archiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
 
     DTSendSignalFlag("Begin extracting buffered data", DT_START_SIGNAL, TRUE);
 
@@ -891,7 +894,7 @@
         [fm copyItemAtURL:testArchiveOriginalURL toURL:testArchiveCopyURL error:&error];
         XCTAssertNil(error, @"Error copying test archive \n from: %@ \n\n   to: %@", testArchiveOriginalURL, testArchiveCopyURL);
         
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveCopyURL];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveCopyURL error:nil];
         
         NSArray *fileList = [archive listFilenames:&error];
         XCTAssertNotNil(fileList);
@@ -929,9 +932,9 @@
     XCTAssertTrue([fm copyItemAtURL:largeArchiveURL_A toURL:largeArchiveURL_C error:&archiveCCopyError], @"Failed to copy archive C");
     XCTAssertNil(archiveCCopyError, @"Error copying archive C");
     
-    URKArchive *largeArchiveA = [URKArchive rarArchiveAtURL:largeArchiveURL_A];
-    URKArchive *largeArchiveB = [URKArchive rarArchiveAtURL:largeArchiveURL_B];
-    URKArchive *largeArchiveC = [URKArchive rarArchiveAtURL:largeArchiveURL_C];
+    URKArchive *largeArchiveA = [[URKArchive alloc] initWithURL:largeArchiveURL_A error:nil];
+    URKArchive *largeArchiveB = [[URKArchive alloc] initWithURL:largeArchiveURL_B error:nil];
+    URKArchive *largeArchiveC = [[URKArchive alloc] initWithURL:largeArchiveURL_C error:nil];
     
     XCTestExpectation *expectationA = [self expectationWithDescription:@"A finished"];
     XCTestExpectation *expectationB = [self expectationWithDescription:@"B finished"];
@@ -987,9 +990,9 @@
 - (void)testMultiThreading_SingleFile {
     NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
     
-    URKArchive *largeArchiveA = [URKArchive rarArchiveAtURL:largeArchiveURL];
-    URKArchive *largeArchiveB = [URKArchive rarArchiveAtURL:largeArchiveURL];
-    URKArchive *largeArchiveC = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    URKArchive *largeArchiveA = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
+    URKArchive *largeArchiveB = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
+    URKArchive *largeArchiveC = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
     XCTestExpectation *expectationA = [self expectationWithDescription:@"A finished"];
     XCTestExpectation *expectationB = [self expectationWithDescription:@"B finished"];
@@ -1045,7 +1048,7 @@
 - (void)testMultiThreading_SingleArchiveObject {
     NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
     
-    URKArchive *largeArchive = [URKArchive rarArchiveAtURL:largeArchiveURL];
+    URKArchive *largeArchive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
     XCTestExpectation *expectationA = [self expectationWithDescription:@"A finished"];
     XCTestExpectation *expectationB = [self expectationWithDescription:@"B finished"];
@@ -1101,7 +1104,7 @@
 - (void)testErrorIsCorrect
 {
     NSError *error = nil;
-    URKArchive *archive = [URKArchive rarArchiveAtURL:self.corruptArchive];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.corruptArchive error:nil];
     XCTAssertNil([archive listFilenames:&error], "Listing filenames in corrupt archive should return nil");
     XCTAssertNotNil(error, @"An error should be returned when listing filenames in a corrupt archive");
     XCTAssertNotNil(error.description, @"Error's description is nil");
@@ -1128,7 +1131,7 @@
     NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
 
     NSError *extractFilesError = nil;
-    URKArchive *unicodeNamedArchive = [URKArchive rarArchiveAtURL:newArchiveURL];
+    URKArchive *unicodeNamedArchive = [[URKArchive alloc] initWithURL:newArchiveURL error:nil];
     BOOL extractSuccess = [unicodeNamedArchive extractFilesTo:extractURL.path
                                                     overwrite:NO
                                                      progress:nil

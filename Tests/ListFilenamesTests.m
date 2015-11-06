@@ -30,7 +30,7 @@
         NSLog(@"Testing list files of archive %@", testArchiveName);
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
         
         NSError *error = nil;
         NSArray *filesInArchive = [archive listFilenames:&error];
@@ -60,7 +60,7 @@
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
     
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
-    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     NSError *error = nil;
     NSArray *filesInArchive = [archive listFilenames:&error];
@@ -84,7 +84,7 @@
                                @"nopw.txt"];
     
     NSURL *testArchiveURL = self.testFileURLs[@"Test Archive (RAR5).rar"];
-    URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     NSError *error = nil;
     NSArray *filesInArchive = [archive listFilenames:&error];
@@ -116,7 +116,7 @@
         NSLog(@"Testing list files of archive %@", testArchiveName);
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         
-        URKArchive *archiveNoPassword = [URKArchive rarArchiveAtURL:testArchiveURL];
+        URKArchive *archiveNoPassword = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
         
         NSError *error = nil;
         NSArray *filesInArchive = [archiveNoPassword listFilenames:&error];
@@ -124,7 +124,7 @@
         XCTAssertNotNil(error, @"No error returned by listFilenames (no password given)");
         XCTAssertNil(filesInArchive, @"List of files returned (no password given)");
         
-        URKArchive *archive = [URKArchive rarArchiveAtURL:testArchiveURL password:@"password"];
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:@"password" error:nil];
         
         filesInArchive = nil;
         error = nil;
@@ -147,7 +147,7 @@
 
 - (void)testListFilenames_NoHeaderPasswordGiven
 {
-    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test Archive (Header Password).rar"]];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test Archive (Header Password).rar"] error:nil];
     
     NSError *error = nil;
     NSArray *files = [archive listFilenames:&error];
@@ -159,7 +159,7 @@
 
 - (void)testListFilenames_NoFilePasswordGiven
 {
-    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test Archive (Password).rar"]];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test Archive (Password).rar"] error:nil];
     
     NSError *error = nil;
     NSArray *files = [archive listFilenames:&error];
@@ -170,7 +170,7 @@
 
 - (void)testListFilenames_InvalidArchive
 {
-    URKArchive *archive = [URKArchive rarArchiveAtURL:self.testFileURLs[@"Test File A.txt"]];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test File A.txt"] error:nil];
     
     NSError *error = nil;
     NSArray *files = [archive listFilenames:&error];
