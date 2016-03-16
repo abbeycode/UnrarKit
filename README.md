@@ -5,10 +5,22 @@
 
 UnrarKit is here to enable Mac and iOS apps to easily work with RAR files for read-only operations. It is currently based on version 5.2.1 of the [UnRAR library](http://www.rarlab.com/rar/unrarsrc-5.2.1.tar.gz).
 
-There is a main project, with unit tests, and a basic iOS example project, which demonstrates how to use the library.
+There is a main project, with unit tests, and a basic iOS example project, which demonstrates how to use the library. To see all of these, open the main workspace file.
 
 I'm always open to improvements, so please submit your pull requests, or [create issues](https://github.com/abbeycode/UnrarKit/issues) for someone else to implement.
 
+
+# Installation
+
+UnrarKit supports both [CocoaPods](https://cocoapods.org/) and [Carthage](https://github.com/Carthage/Carthage). CocoaPods does not support dynamic framework targets (as of v0.39.0), so in that case, please use Carthage.
+
+Cartfile:
+
+    github "abbeycode/UnrarKit"
+
+Podfile:
+
+    pod "UnrarKit"
 
 # Example Usage
 
@@ -78,15 +90,6 @@ BOOL success = [archive extractBufferedDataFromFile:@"a file in the archive.jpg"
                     // Do something with the NSData chunk
                 }];
 ```
-
-# Installation
-
-UnrarKit is a CocoaPods project, which is the recommended way to install it. If you're not familiar with [CocoaPods](http://cocoapods.org), you can start with their [Getting Started guide](http://guides.cocoapods.org/using/getting-started.html).
-
-I've included a sample [`podfile`](Example/Podfile) in the Example directory along with the sample project. Everything should install with the single command:
-
-    pod install
-
 
 # Notes
 
