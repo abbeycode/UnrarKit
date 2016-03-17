@@ -52,6 +52,7 @@ void CommandData::ParseCommandLine(bool Preprocess,int argc, char *argv[])
   // In Windows we may prefer to implement our own command line parser
   // to avoid replacing \" by " in standard parser. Such replacing corrupts
   // destination paths like "dest path\" in extraction commands.
+  // Also our own parser is Unicode compatible.
   const wchar *CmdLine=GetCommandLine();
 
   wchar *Par;
@@ -616,6 +617,8 @@ void CommandData::ProcessSwitch(const wchar *Switch)
 #ifdef SAVE_LINKS
         case 'L':
           SaveSymLinks=true;
+          if (toupperw(Switch[2])=='A')
+            AbsoluteLinks=true;
           break;
 #endif
         case 'R':
@@ -763,6 +766,9 @@ void CommandData::ProcessSwitch(const wchar *Switch)
                         break;
                       case 'L':
                         FilelistCharset=rch;
+                        break;
+                      case 'R':
+                        RedirectCharset=rch;
                         break;
                       default:
                         BadSwitch(Switch);
@@ -958,7 +964,7 @@ void CommandData::OutHelp(RAR_EXIT ExitCode)
     MCHelpSwCm,MCHelpSwCFGm,MCHelpSwCL,MCHelpSwCU,
     MCHelpSwDH,MCHelpSwEP,MCHelpSwEP3,MCHelpSwF,MCHelpSwIDP,MCHelpSwIERR,
     MCHelpSwINUL,MCHelpSwIOFF,MCHelpSwKB,MCHelpSwN,MCHelpSwNa,MCHelpSwNal,
-    MCHelpSwO,MCHelpSwOC,MCHelpSwOR,MCHelpSwOW,MCHelpSwP,
+    MCHelpSwO,MCHelpSwOC,MCHelpSwOL,MCHelpSwOR,MCHelpSwOW,MCHelpSwP,
     MCHelpSwPm,MCHelpSwR,MCHelpSwRI,MCHelpSwSC,MCHelpSwSL,MCHelpSwSM,
     MCHelpSwTA,MCHelpSwTB,MCHelpSwTN,MCHelpSwTO,MCHelpSwTS,MCHelpSwU,
     MCHelpSwVUnr,MCHelpSwVER,MCHelpSwVP,MCHelpSwX,MCHelpSwXa,MCHelpSwXal,
@@ -1017,17 +1023,17 @@ void CommandData::OutHelp(RAR_EXIT ExitCode)
 // the include list created with -n switch.
 bool CommandData::ExclCheck(const wchar *CheckName,bool Dir,bool CheckFullPath,bool CheckInclList)
 {
-  if (ExclCheckArgs(&ExclArgs,Dir,CheckName,CheckFullPath,MATCH_WILDSUBPATH))
+  if (CheckArgs(&ExclArgs,Dir,CheckName,CheckFullPath,MATCH_WILDSUBPATH))
     return true;
   if (!CheckInclList || InclArgs.ItemsCount()==0)
     return false;
-  if (ExclCheckArgs(&InclArgs,Dir,CheckName,CheckFullPath,MATCH_WILDSUBPATH))
+  if (CheckArgs(&InclArgs,Dir,CheckName,CheckFullPath,MATCH_WILDSUBPATH))
     return false;
   return true;
 }
 
 
-bool CommandData::ExclCheckArgs(StringList *Args,bool Dir,const wchar *CheckName,bool CheckFullPath,int MatchMode)
+bool CommandData::CheckArgs(StringList *Args,bool Dir,const wchar *CheckName,bool CheckFullPath,int MatchMode)
 {
   wchar *Name=ConvertPath(CheckName,NULL);
   wchar FullName[NM];
@@ -1062,9 +1068,9 @@ bool CommandData::ExclCheckArgs(StringList *Args,bool Dir,const wchar *CheckName
     {
       // If we process a file inside of directory excluded by "dirmask\".
       // we want to exclude such file too. So we convert "dirmask\" to
-      // "dirmask\*". It is important for operations other than archiving.
-      // When archiving, directory matched by "dirmask\" is excluded
-      // from further scanning.
+      // "dirmask\*". It is important for operations other than archiving
+      // with -x. When archiving with -x, directory matched by "dirmask\"
+      // is excluded from further scanning.
 
       if (DirMask)
         wcscat(CurMask,L"*");
@@ -1088,7 +1094,12 @@ bool CommandData::ExclCheckArgs(StringList *Args,bool Dir,const wchar *CheckName
 #endif
     {
       wchar NewName[NM+2],*CurName=Name;
-      if (CurMask[0]=='*' && IsPathDiv(CurMask[1]))
+
+      // Important to convert before "*\" check below, so masks like
+      // d:*\something are processed properly.
+      wchar *CmpMask=ConvertPath(CurMask,NULL);
+
+      if (CmpMask[0]=='*' && IsPathDiv(CmpMask[1]))
       {
         // We want "*\name" to match 'name' not only in subdirectories,
         // but also in the current directory. We convert the name
@@ -1100,7 +1111,7 @@ bool CommandData::ExclCheckArgs(StringList *Args,bool Dir,const wchar *CheckName
         CurName=NewName;
       }
 
-      if (CmpName(ConvertPath(CurMask,NULL),CurName,MatchMode))
+      if (CmpName(CmpMask,CurName,MatchMode))
         return true;
     }
   }
@@ -1157,8 +1168,11 @@ bool CommandData::SizeCheck(int64 Size)
 
 
 
-int CommandData::IsProcessFile(FileHeader &FileHead,bool *ExactMatch,int MatchType)
+int CommandData::IsProcessFile(FileHeader &FileHead,bool *ExactMatch,int MatchType,
+                               wchar *MatchedArg,uint MatchedArgSize)
 {
+  if (MatchedArg!=NULL && MatchedArgSize>0)
+    *MatchedArg=0;
   if (wcslen(FileHead.FileName)>=NM)
     return 0;
   bool Dir=FileHead.Dir;
@@ -1179,6 +1193,8 @@ int CommandData::IsProcessFile(FileHeader &FileHead,bool *ExactMatch,int MatchTy
     {
       if (ExactMatch!=NULL)
         *ExactMatch=wcsicompc(ArgName,FileHead.FileName)==0;
+      if (MatchedArg!=NULL)
+        wcsncpyz(MatchedArg,ArgName,MatchedArgSize);
       return StringCount;
     }
   return 0;

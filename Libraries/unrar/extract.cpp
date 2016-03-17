@@ -50,6 +50,10 @@ void CmdExtract::DoExtract()
       DataIO.ProcessedArcSize+=FD.Size;
   }
 
+  // Clean user entered password. Not really required, just for extra safety.
+  if (Cmd->ManualPassword)
+    Cmd->Password.Clean();
+
   if (TotalFileCount==0 && Cmd->Command[0]!='I' && 
       ErrHandler.GetErrorCode()!=RARX_BADPWD) // Not in case of wrong archive password.
   {
@@ -85,7 +89,7 @@ void CmdExtract::ExtractArchiveInit(Archive &Arc)
 
   DataIO.UnpVolume=false;
 
-  PrevExtracted=false;
+  PrevProcessed=false;
   AllMatchesExact=true;
   ReconstructDone=false;
   AnySolidDataUnpackedWell=false;
@@ -202,6 +206,18 @@ EXTRACT_ARC_CODE CmdExtract::ExtractArchive()
 
 bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
 {
+  // We can get negative sizes in corrupt archive and it is unacceptable
+  // for size comparisons in CmdExtract::UnstoreFile and ComprDataIO::UnpRead,
+  // where we cast sizes to size_t and can exceed another read or available
+  // size. We could fix it when reading an archive. But we prefer to do it
+  // here, because this function is called directly in unrar.dll, so we fix
+  // bad parameters passed to dll. Also we want to see real negative sizes
+  // in the listing of corrupt archive.
+  if (Arc.FileHead.PackSize<0)
+    Arc.FileHead.PackSize=0;
+  if (Arc.FileHead.UnpSize<0)
+    Arc.FileHead.UnpSize=0;
+
   wchar Command=Cmd->Command[0];
   if (HeaderSize==0)
     if (DataIO.UnpVolume)
@@ -209,6 +225,8 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
 #ifdef NOVOLUME
       return false;
 #else
+      // Supposing we unpack an old RAR volume without end of archive record
+      // and last file is not split between volumes.
       if (!MergeArchive(Arc,&DataIO,false,Command))
       {
         ErrHandler.SetErrorCode(RARX_WARNING);
@@ -222,10 +240,10 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
   if (HeaderType!=HEAD_FILE)
   {
 #ifndef SFX_MODULE
-    if (HeaderType==HEAD3_OLDSERVICE && PrevExtracted)
+    if (HeaderType==HEAD3_OLDSERVICE && PrevProcessed)
       SetExtraInfo20(Cmd,Arc,DestFileName);
 #endif
-    if (HeaderType==HEAD_SERVICE && PrevExtracted)
+    if (HeaderType==HEAD_SERVICE && PrevProcessed)
       SetExtraInfo(Cmd,Arc,DestFileName);
     if (HeaderType==HEAD_ENDARC)
       if (Arc.EndArcHead.NextVolume)
@@ -245,7 +263,7 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
     Arc.SeekToNext();
     return true;
   }
-  PrevExtracted=false;
+  PrevProcessed=false;
 
   if (!Cmd->Recurse && MatchedArgs>=Cmd->FileArgs.ItemsCount() && AllMatchesExact)
     return false;
@@ -253,21 +271,19 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
   int MatchType=MATCH_WILDSUBPATH;
 
   bool EqualNames=false;
-  int MatchNumber=Cmd->IsProcessFile(Arc.FileHead,&EqualNames,MatchType);
-  bool ExactMatch=MatchNumber!=0;
+  wchar MatchedArg[NM];
+  int MatchNumber=Cmd->IsProcessFile(Arc.FileHead,&EqualNames,MatchType,MatchedArg,ASIZE(MatchedArg));
+  bool MatchFound=MatchNumber!=0;
 #ifndef SFX_MODULE
-  if (*Cmd->ArcPath==0 && Cmd->ExclPath==EXCL_BASEPATH)
+  if (Cmd->ExclPath==EXCL_BASEPATH)
   {
-    *Cmd->ArcPath=0;
-    if (ExactMatch)
-    {
-      Cmd->FileArgs.Rewind();
-      if (Cmd->FileArgs.GetString(Cmd->ArcPath,ASIZE(Cmd->ArcPath),MatchNumber-1))
-        *PointToName(Cmd->ArcPath)=0;
-    }
+    wcsncpyz(Cmd->ArcPath,MatchedArg,ASIZE(Cmd->ArcPath));
+    *PointToName(Cmd->ArcPath)=0;
+    if (IsWildcard(Cmd->ArcPath)) // Cannot correctly process path*\* masks here.
+      *Cmd->ArcPath=0;
   }
 #endif
-  if (ExactMatch && !EqualNames)
+  if (MatchFound && !EqualNames)
     AllMatchesExact=false;
 
   Arc.ConvertAttributes();
@@ -309,17 +325,17 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
     if (Cmd->VersionControl!=1 && !EqualNames)
     {
       if (Cmd->VersionControl==0)
-        ExactMatch=false;
+        MatchFound=false;
       int Version=ParseVersionFileName(ArcFileName,false);
       if (Cmd->VersionControl-1==Version)
         ParseVersionFileName(ArcFileName,true);
       else
-        ExactMatch=false;
+        MatchFound=false;
     }
   }
   else
     if (!Arc.IsArcDir() && Cmd->VersionControl>1)
-      ExactMatch=false;
+      MatchFound=false;
 
   DataIO.UnpVolume=Arc.FileHead.SplitAfter;
   DataIO.NextVolumeMissing=false;
@@ -330,9 +346,9 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
   bool SkipSolid=false;
 
 #ifndef SFX_MODULE
-  if (FirstFile && (ExactMatch || Arc.Solid) && Arc.FileHead.SplitBefore)
+  if (FirstFile && (MatchFound || Arc.Solid) && Arc.FileHead.SplitBefore)
   {
-    if (ExactMatch)
+    if (MatchFound)
     {
       uiMsg(UIERROR_NEEDPREVVOL,Arc.FileName,ArcFileName);
 #ifdef RARDLL
@@ -340,13 +356,13 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
 #endif
       ErrHandler.SetErrorCode(RARX_OPEN);
     }
-    ExactMatch=false;
+    MatchFound=false;
   }
 
   FirstFile=false;
 #endif
 
-  if (ExactMatch || (SkipSolid=Arc.Solid)!=0)
+  if (MatchFound || (SkipSolid=Arc.Solid)!=0)
   {
     // First common call of uiStartFileExtract. It is done before overwrite
     // prompts, so if SkipSolid state is changed below, we'll need to make
@@ -383,9 +399,13 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
 
     if (Arc.FileHead.Encrypted)
     {
+      // Stop archive extracting if user cancelled a password prompt.
 #ifdef RARDLL
       if (!ExtrDllGetPassword())
+      {
+        Cmd->DllError=ERAR_MISSING_PASSWORD;
         return false;
+      }
 #else
       if (!ExtrGetPassword(Arc,ArcFileName))
       {
@@ -394,6 +414,9 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
       }
 #endif
       // Skip only the current encrypted file if empty password is entered.
+      // Actually our "cancel" code above intercepts empty passwords too now,
+      // so we keep the code below just in case we'll decide process empty
+      // and cancelled passwords differently sometimes.
       if (!Cmd->Password.IsSet())
       {
         ErrHandler.SetErrorCode(RARX_WARNING);
@@ -406,21 +429,47 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
 
 #ifdef RARDLL
     if (*Cmd->DllDestName!=0)
-    {
       wcsncpyz(DestFileName,Cmd->DllDestName,ASIZE(DestFileName));
-
-//      Do we need this code?
-//      if (Cmd->DllOpMode!=RAR_EXTRACT)
-//        ExtrFile=false;
-    }
 #endif
 
     if (!CheckUnpVer(Arc,ArcFileName))
     {
-      ExtrFile=false;
       ErrHandler.SetErrorCode(RARX_FATAL);
 #ifdef RARDLL
       Cmd->DllError=ERAR_UNKNOWN_FORMAT;
+#endif
+      Arc.SeekToNext();
+      return !Arc.Solid; // Can try extracting next file only in non-solid archive.
+    }
+
+
+    // Set a password before creating the file, so we can skip creating
+    // in case of wrong password.
+    SecPassword FilePassword=Cmd->Password;
+#if defined(_WIN_ALL) && !defined(SFX_MODULE)
+    ConvertDosPassword(Arc,FilePassword);
+#endif
+
+    byte PswCheck[SIZE_PSWCHECK];
+    DataIO.SetEncryption(false,Arc.FileHead.CryptMethod,&FilePassword,
+           Arc.FileHead.SaltSet ? Arc.FileHead.Salt:NULL,
+           Arc.FileHead.InitV,Arc.FileHead.Lg2Count,
+           Arc.FileHead.HashKey,PswCheck);
+
+    // If header is damaged, we cannot rely on password check value,
+    // because it can be damaged too.
+    if (Arc.FileHead.Encrypted && Arc.FileHead.UsePswCheck &&
+        memcmp(Arc.FileHead.PswCheck,PswCheck,SIZE_PSWCHECK)!=0 &&
+        !Arc.BrokenHeader)
+    {
+      uiMsg(UIERROR_BADPSW,Arc.FileName);
+      ErrHandler.SetErrorCode(RARX_BADPWD);
+      ExtrFile=false;
+#ifdef RARDLL
+      // If we already have ERAR_EOPEN as result of missing volume,
+      // we should not replace it with less precise ERAR_BAD_DATA.
+      if (Cmd->DllError!=ERAR_EOPEN)
+        Cmd->DllError=ERAR_BAD_PASSWORD;
 #endif
     }
 
@@ -467,6 +516,11 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
     }
     if (ExtrFile)
     {
+      // Set it in test mode, so we also test subheaders such as NTFS streams
+      // after tested file.
+      if (Cmd->Test)
+        PrevProcessed=true;
+
       bool TestMode=Cmd->Test || SkipSolid; // Unpack to memory, not to disk.
 
       if (!SkipSolid)
@@ -503,28 +557,6 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
         mprintf(L"     ");
 #endif
 
-      SecPassword FilePassword=Cmd->Password;
-#if defined(_WIN_ALL) && !defined(SFX_MODULE)
-      ConvertDosPassword(Arc,FilePassword);
-#endif
-
-      byte PswCheck[SIZE_PSWCHECK];
-      DataIO.SetEncryption(false,Arc.FileHead.CryptMethod,&FilePassword,
-             Arc.FileHead.SaltSet ? Arc.FileHead.Salt:NULL,
-             Arc.FileHead.InitV,Arc.FileHead.Lg2Count,
-             PswCheck,Arc.FileHead.HashKey);
-      bool WrongPassword=false;
-
-      // If header is damaged, we cannot rely on password check value,
-      // because it can be damaged too.
-      if (Arc.FileHead.Encrypted && Arc.FileHead.UsePswCheck &&
-          memcmp(Arc.FileHead.PswCheck,PswCheck,SIZE_PSWCHECK)!=0 &&
-          !Arc.BrokenHeader)
-      {
-        uiMsg(UIERROR_BADPSW,Arc.FileName);
-        ErrHandler.SetErrorCode(RARX_BADPWD);
-        WrongPassword=true;
-      }
       DataIO.CurUnpRead=0;
       DataIO.CurUnpWrite=0;
       DataIO.UnpHash.Init(Arc.FileHead.FileHash.Type,Cmd->Threads);
@@ -535,7 +567,7 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
       DataIO.SetSkipUnpCRC(SkipSolid);
 
 #if defined(_WIN_ALL) && !defined(SFX_MODULE) && !defined(SILENT)
-      if (!TestMode && !WrongPassword && !Arc.BrokenHeader &&
+      if (!TestMode && !Arc.BrokenHeader &&
           Arc.FileHead.UnpSize>0xffffffff && (Fat32 || !NotFat32))
       {
         if (!Fat32) // Not detected yet.
@@ -545,7 +577,7 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
       }
 #endif
 
-      if (!TestMode && !WrongPassword && !Arc.BrokenHeader &&
+      if (!TestMode && !Arc.BrokenHeader &&
           (Arc.FileHead.PackSize<<11)>Arc.FileHead.UnpSize &&
           (Arc.FileHead.UnpSize<100000000 || Arc.FileLength()>Arc.FileHead.PackSize))
         CurFile.Prealloc(Arc.FileHead.UnpSize);
@@ -591,10 +623,10 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
             // but not when testing an archive.
             ShowChecksum=false;
           }
-          PrevExtracted=FileCreateMode && LinkSuccess;
+          PrevProcessed=FileCreateMode && LinkSuccess;
       }
       else
-        if (!Arc.FileHead.SplitBefore && !WrongPassword)
+        if (!Arc.FileHead.SplitBefore)
           if (Arc.FileHead.Method==0)
             UnstoreFile(DataIO,Arc.FileHead.UnpSize);
           else
@@ -641,7 +673,7 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
       // Checksum is not calculated in skip solid mode for performance reason.
       if (!SkipSolid && ShowChecksum)
       {
-        if (!WrongPassword && ValidCRC)
+        if (ValidCRC)
         {
 #ifndef GUI
           if (Command!='P' && Command!='I')
@@ -651,19 +683,19 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
         }
         else
         {
-          if (!WrongPassword)
-            if (Arc.FileHead.Encrypted && (!Arc.FileHead.UsePswCheck || 
-                Arc.BrokenHeader) && !AnySolidDataUnpackedWell)
-              uiMsg(UIERROR_CHECKSUMENC,Arc.FileName,ArcFileName);
-            else
-              uiMsg(UIERROR_CHECKSUM,Arc.FileName,ArcFileName);
+          if (Arc.FileHead.Encrypted && (!Arc.FileHead.UsePswCheck || 
+              Arc.BrokenHeader) && !AnySolidDataUnpackedWell)
+            uiMsg(UIERROR_CHECKSUMENC,Arc.FileName,ArcFileName);
+          else
+            uiMsg(UIERROR_CHECKSUM,Arc.FileName,ArcFileName);
           BrokenFile=true;
           ErrHandler.SetErrorCode(RARX_CRC);
 #ifdef RARDLL
-          // If we already have ERAR_EOPEN as result of missing volume,
+          // If we already have ERAR_EOPEN as result of missing volume
+          // or ERAR_BAD_PASSWORD for RAR5 wrong password,
           // we should not replace it with less precise ERAR_BAD_DATA.
-          if (Cmd->DllError!=ERAR_EOPEN)
-            Cmd->DllError=WrongPassword ? ERAR_BAD_PASSWORD : ERAR_BAD_DATA;
+          if (Cmd->DllError!=ERAR_EOPEN && Cmd->DllError!=ERAR_BAD_PASSWORD)
+            Cmd->DllError=ERAR_BAD_DATA;
 #endif
         }
       }
@@ -672,7 +704,7 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
         mprintf(L"\b\b\b\b\b     ");
 #endif
 
-      if (!TestMode && !WrongPassword && (Command=='X' || Command=='E') &&
+      if (!TestMode && (Command=='X' || Command=='E') &&
           (!LinkEntry || Arc.FileHead.RedirType==FSREDIR_FILECOPY && LinkSuccess) && 
           (!BrokenFile || Cmd->KeepBroken))
       {
@@ -707,11 +739,11 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
         if (!Cmd->IgnoreGeneralAttr && !SetFileAttr(CurFile.FileName,Arc.FileHead.FileAttr))
           uiMsg(UIERROR_FILEATTR,Arc.FileName,CurFile.FileName);
 
-        PrevExtracted=true;
+        PrevProcessed=true;
       }
     }
   }
-  if (ExactMatch)
+  if (MatchFound)
     MatchedArgs++;
   if (DataIO.NextVolumeMissing)
     return false;
@@ -780,12 +812,17 @@ void CmdExtract::ExtrPrepareName(Archive &Arc,const wchar *ArcFileName,wchar *De
 {
   wcsncpyz(DestName,Cmd->ExtrPath,DestSize);
 
-  // We need IsPathDiv check here to correctly handle Unix forward slash
-  // in the end of destination path in Windows: rar x arc dest/
-  if (*Cmd->ExtrPath!=0 && !IsPathDiv(*PointToLastChar(Cmd->ExtrPath)))
+  if (*Cmd->ExtrPath!=0)
   {
-    // Destination path can be without trailing slash if it come from GUI shell.
-    AddEndSlash(DestName,DestSize);
+     wchar LastChar=*PointToLastChar(Cmd->ExtrPath);
+    // We need IsPathDiv check here to correctly handle Unix forward slash
+    // in the end of destination path in Windows: rar x arc dest/
+    // IsDriveDiv is needed for current drive dir: rar x arc d:
+    if (!IsPathDiv(LastChar) && !IsDriveDiv(LastChar))
+    {
+      // Destination path can be without trailing slash if it come from GUI shell.
+      AddEndSlash(DestName,DestSize);
+    }
   }
 
 #ifndef SFX_MODULE
@@ -882,8 +919,10 @@ bool CmdExtract::ExtrGetPassword(Archive &Arc,const wchar *ArcFileName)
 {
   if (!Cmd->Password.IsSet())
   {
-    if (!uiGetPassword(UIPASSWORD_FILE,ArcFileName,&Cmd->Password))
+    if (!uiGetPassword(UIPASSWORD_FILE,ArcFileName,&Cmd->Password) || !Cmd->Password.IsSet())
     {
+      // Suppress "test is ok" message in GUI if user entered
+      // an empty password or cancelled a password prompt.
       uiMsg(UIERROR_INCERRCOUNT);
 
       return false;
@@ -983,14 +1022,14 @@ void CmdExtract::ExtrCreateDir(Archive &Arc,const wchar *ArcFileName)
     mprintf(St(MCreatDir),DestFileName);
     mprintf(L" %s",St(MOk));
 #endif
-    PrevExtracted=true;
+    PrevProcessed=true;
   }
   else
     if (DirExist)
     {
       if (!Cmd->IgnoreGeneralAttr)
         SetFileAttr(DestFileName,Arc.FileHead.FileAttr);
-      PrevExtracted=true;
+      PrevProcessed=true;
     }
     else
     {
@@ -1001,7 +1040,7 @@ void CmdExtract::ExtrCreateDir(Archive &Arc,const wchar *ArcFileName)
 #endif
       ErrHandler.SetErrorCode(RARX_CREATE);
     }
-  if (PrevExtracted)
+  if (PrevProcessed)
   {
 #if defined(_WIN_ALL) && !defined(SFX_MODULE)
     if (Cmd->SetCompressedAttr &&

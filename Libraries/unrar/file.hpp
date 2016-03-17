@@ -7,13 +7,13 @@
 
 #ifdef _WIN_ALL
   typedef HANDLE FileHandle;
-  #define BAD_HANDLE INVALID_HANDLE_VALUE
+  #define FILE_BAD_HANDLE INVALID_HANDLE_VALUE
 #elif defined(FILE_USE_OPEN)
   typedef off_t FileHandle;
-  #define BAD_HANDLE -1
+  #define FILE_BAD_HANDLE -1
 #else
   typedef FILE* FileHandle;
-  #define BAD_HANDLE NULL
+  #define FILE_BAD_HANDLE NULL
 #endif
 
 class RAROptions;
@@ -80,7 +80,7 @@ class File
     bool Close();
     bool Delete();
     bool Rename(const wchar *NewName);
-    void Write(const void *Data,size_t Size);
+    bool Write(const void *Data,size_t Size);
     virtual int Read(void *Data,size_t Size);
     int DirectRead(void *Data,size_t Size);
     virtual void Seek(int64 Offset,int Method);
@@ -90,11 +90,12 @@ class File
     byte GetByte();
     void PutByte(byte Byte);
     bool Truncate();
+    void Flush();
     void SetOpenFileTime(RarTime *ftm,RarTime *ftc=NULL,RarTime *fta=NULL);
     void SetCloseFileTime(RarTime *ftm,RarTime *fta=NULL);
     static void SetCloseFileTimeByName(const wchar *Name,RarTime *ftm,RarTime *fta);
     void GetOpenFileTime(RarTime *ft);
-    bool IsOpened() {return hFile!=BAD_HANDLE;};
+    bool IsOpened() {return hFile!=FILE_BAD_HANDLE;};
     int64 FileLength();
     void SetHandleType(FILE_HANDLETYPE Type) {HandleType=Type;}
     FILE_HANDLETYPE GetHandleType() {return HandleType;}

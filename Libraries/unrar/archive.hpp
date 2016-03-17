@@ -61,7 +61,7 @@ class Archive:public File
   public:
     Archive(RAROptions *InitCmd=NULL);
     ~Archive();
-    RARFORMAT IsSignature(const byte *D,size_t Size);
+    static RARFORMAT IsSignature(const byte *D,size_t Size);
     bool IsArchive(bool EnableBroken);
     size_t SearchBlock(HEADER_TYPE HeaderType);
     size_t SearchSubBlock(const wchar *Type);
@@ -85,8 +85,8 @@ class Archive:public File
     void AddSubData(byte *SrcData,uint64 DataSize,File *SrcFile,
          const wchar *Name,uint Flags);
     bool ReadSubData(Array<byte> *UnpData,File *DestFile);
-    HEADER_TYPE GetHeaderType() {return(CurHeaderType);};
-    RAROptions* GetRAROptions() {return(Cmd);}
+    HEADER_TYPE GetHeaderType() {return CurHeaderType;};
+    RAROptions* GetRAROptions() {return Cmd;}
     void SetSilentOpen(bool Mode) {SilentOpen=Mode;}
 #ifdef USE_QOPEN
     bool Open(const wchar *Name,uint Mode=FMF_READ);

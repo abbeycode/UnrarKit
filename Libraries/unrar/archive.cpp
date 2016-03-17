@@ -109,9 +109,9 @@ RARFORMAT Archive::IsSignature(const byte *D,size_t Size)
 #endif
       if (Size>=7 && D[1]==0x61 && D[2]==0x72 && D[3]==0x21 && D[4]==0x1a && D[5]==0x07)
       {
-        // We check for non-zero last signature byte, so we can return
-        // a sensible warning in case we'll want to change the archive
-        // format sometimes in the future.
+        // We check the last signature byte, so we can return a sensible
+        // warning in case we'll want to change the archive format
+        // sometimes in the future.
         if (D[6]==0)
           Type=RARFMT15;
         else
@@ -234,22 +234,33 @@ bool Archive::IsArchive(bool EnableBroken)
   {
     SaveFilePos SavePos(*this);
     int64 SaveCurBlockPos=CurBlockPos,SaveNextBlockPos=NextBlockPos;
+    HEADER_TYPE SaveCurHeaderType=CurHeaderType;
 
     while (ReadHeader()!=0)
     {
       HEADER_TYPE HeaderType=GetHeaderType();
       if (HeaderType==HEAD_SERVICE)
+      {
+        // If we have a split service headers, it surely indicates non-first
+        // volume. But not split service header does not guarantee the first
+        // volume, because we can have split file after non-split archive
+        // comment. So we do not quit from loop here.
         FirstVolume=Volume && !SubHead.SplitBefore;
+      }
       else
         if (HeaderType==HEAD_FILE)
         {
           FirstVolume=Volume && !FileHead.SplitBefore;
           break;
         }
+        else
+          if (HeaderType==HEAD_ENDARC) // Might happen if archive contains only a split service header.
+            break;
       SeekToNext();
     }
     CurBlockPos=SaveCurBlockPos;
     NextBlockPos=SaveNextBlockPos;
+    CurHeaderType=SaveCurHeaderType;
   }
   if (!Volume || FirstVolume)
     wcscpy(FirstVolumeName,FileName);

@@ -29,7 +29,7 @@ wchar* ConvertPath(const wchar *SrcPath,wchar *DestPath)
   while (*DestPtr!=0)
   {
     const wchar *s=DestPtr;
-    if (s[0] && IsDriveDiv(s[1]))
+    if (s[0]!=0 && IsDriveDiv(s[1]))
       s+=2;
     if (s[0]=='\\' && s[1]=='\\')
     {
@@ -144,9 +144,16 @@ bool IsDriveDiv(int Ch)
 }
 
 
+bool IsDriveLetter(const wchar *Path)
+{
+  wchar Letter=etoupperw(Path[0]);
+  return Letter>='A' && Letter<='Z' && IsDriveDiv(Path[1]);
+}
+
+
 int GetPathDisk(const wchar *Path)
 {
-  if (IsDiskLetter(Path))
+  if (IsDriveLetter(Path))
     return etoupperw(*Path)-'A';
   else
     return -1;
@@ -534,24 +541,23 @@ bool IsFullPath(const wchar *Path)
     return true;
 */
 #if defined(_WIN_ALL) || defined(_EMX)
-  return Path[0]=='\\' && Path[1]=='\\' || IsDiskLetter(Path) && IsPathDiv(Path[2]);
+  return Path[0]=='\\' && Path[1]=='\\' || IsDriveLetter(Path) && IsPathDiv(Path[2]);
 #else
   return IsPathDiv(Path[0]);
 #endif
 }
 
 
-bool IsDiskLetter(const wchar *Path)
+bool IsFullRootPath(const wchar *Path)
 {
-  wchar Letter=etoupperw(Path[0]);
-  return Letter>='A' && Letter<='Z' && IsDriveDiv(Path[1]);
+  return IsFullPath(Path) || IsPathDiv(Path[0]);
 }
 
 
 void GetPathRoot(const wchar *Path,wchar *Root,size_t MaxSize)
 {
   *Root=0;
-  if (IsDiskLetter(Path))
+  if (IsDriveLetter(Path))
     swprintf(Root,MaxSize,L"%c:\\",*Path);
   else
     if (Path[0]=='\\' && Path[1]=='\\')
@@ -881,11 +887,11 @@ bool GetWinLongPath(const wchar *Src,wchar *Dest,size_t MaxSize)
     return false;
   const wchar *Prefix=L"\\\\?\\";
   const size_t PrefixLength=4;
-  bool FullPath=IsDiskLetter(Src) && IsPathDiv(Src[2]);
+  bool FullPath=IsDriveLetter(Src) && IsPathDiv(Src[2]);
   size_t SrcLength=wcslen(Src);
   if (IsFullPath(Src)) // Paths in d:\path\name format.
   {
-    if (IsDiskLetter(Src))
+    if (IsDriveLetter(Src))
     {
       if (MaxSize<=PrefixLength+SrcLength)
         return false;
@@ -938,5 +944,18 @@ bool GetWinLongPath(const wchar *Src,wchar *Dest,size_t MaxSize)
     }
   }
   return false;
+}
+
+
+// Convert Unix, OS X and Android decomposed chracters to Windows precomposed.
+void ConvertToPrecomposed(wchar *Name,size_t NameSize)
+{
+  wchar FileName[NM];
+  if (WinNT()>=WNT_VISTA && // MAP_PRECOMPOSED is not supported in XP.
+      FoldString(MAP_PRECOMPOSED,Name,-1,FileName,ASIZE(FileName))!=0)
+  {
+    FileName[ASIZE(FileName)-1]=0;
+    wcsncpyz(Name,FileName,NameSize);
+  }
 }
 #endif
