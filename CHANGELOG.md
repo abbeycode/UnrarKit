@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.7
+
+Updated to the latest version of the UnRAR library (v5.3.11)
+
+
 ## 2.6
 
 * Added full support for Carthage (Issue #22)
