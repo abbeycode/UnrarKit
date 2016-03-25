@@ -1,10 +1,12 @@
 language: objective-c
-osx_image: xcode7.1
+osx_image: xcode7.3
 
 before_install:
+# Fixing an issue with xctool 0.2.8 in conjunction with Xcode 7.3
     - brew update
-    - brew install carthage
-    - brew upgrade xctool
+    - brew uninstall --force xctool && brew install --HEAD xctool
+# Used to allow pushing to CocoaPods only after all matrixed builds have succeeded
+    - npm install --save-dev travis-after-all
 
 xcode_workspace: UnrarKit.xcworkspace
 
@@ -12,20 +14,27 @@ matrix:
   include:
     - xcode_scheme: UnrarKit
       xcode_sdk: macosx
-      env: NAME=Mac
+      env:
+      - NAME=Mac
+      - secure: YTWr9wh/Ud39iWSN7uYojg2DkIDOGUhlNwguX3p6e7hrW3qMTzTceWHVFAGTmUnEiiVQf6f0QZlZEXUPHPE6ymgiY6TFZYe3/ptGpK8TRDwX1lQCujMuEpaCxtT5p+f+NjVnJlWywZnUU2R//EYNj154mWADFMDsK+rWJBaBa/U=
+      - secure: MEDKuebBqo7LnL1VXtxDvU8pY1Ml531J4mrRILTdi+5ik50eH+EWr1fTJ8uIVc39CBGbkzoWq8Hng0bDfv8GioTn97tTeZQlurhmao8J8VR1GoUAS2t/9LQfDFXiHbGA3ouCOzXhoNEKrFCbmtBp4u8pDYQDHAxq0ZkFPzc/pXU=
 
     - xcode_scheme: UnrarKit iOS
       xcode_sdk: iphonesimulator
-      env: NAME=iOSTests
+      env: NAME=iOS
 
     - xcode_scheme: UnrarExample
       xcode_sdk: iphonesimulator
       env: NAME=ExampleAppBuild
 
 script:
+  - xctool --version
   - xctool -workspace $TRAVIS_XCODE_WORKSPACE -scheme "$TRAVIS_XCODE_SCHEME" -sdk $TRAVIS_XCODE_SDK -configuration Release analyze test
   - ./Scripts/carthage-validate.sh
   - ./Scripts/cocoapod-validate.sh
+
+after_script:
+  - ./Scripts/push-output.sh
 
 # Turn on Docker, container-based infrastructure
 sudo: false

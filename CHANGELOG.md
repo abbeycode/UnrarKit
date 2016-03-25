@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.7.1
+
+* Pushing tagged builds to CocoaPods from Travis
+* Adding release notes to GitHub
+
 ## 2.7
 
 Updated to the latest version of the UnRAR library (v5.3.11)

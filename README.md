@@ -99,8 +99,42 @@ To open in Xcode, use the [UnrarKit.xcworkspace](UnrarKit.xcworkspace) file, whi
 
 Full documentation for the project is available on [CocoaDocs](http://cocoadocs.org/docsets/UnrarKit).
 
+# Pushing a new CocoaPods version
+
+New tagged builds (in any branch) get pushed to CocoaPods automatically, provided they meet the following criteria:
+
+1. All builds and tests succeed
+2. The library builds successfully for CocoaPods and for Carthage
+3. The build is tagged with something resembling a version number (`#.#.#(-beta#)`, e.g. **2.9** or **2.9-beta5**)
+4. `pod spec lint` passes, making sure the CocoaPod is 100% valid
+
+Before pushing a build, you must:
+
+1. Add the release notes to the [CHANGELOG.md](CHANGELOG.md), and commit
+2. Run [set-version](Scripts/set-version.sh), like so:
+     
+    `./Scripts/set-version.sh <version number>`
+    
+    This does the following:
+    
+    1. Updates the [UnrarKit-Info.plist](Resources/UnrarKit-Info.plist) file to indicate the new version number, and commits it
+
+    2. Makes an annotated tag whose message contains the release notes entered in Step 1
+
+Once that's done, you can call `git push --follow-tags` [<sup id=a1>1</sup>](#f1), and let [Travis CI](https://travis-ci.org/abbeycode/UnrarKit/builds) take care of the rest. 
+
 # Credits
 
 * Dov Frankel (dov@abbey-code.com)
 * Rogerio Pereira Araujo (rogerio.araujo@gmail.com)
 * Vicent Scott (vkan388@gmail.com)
+
+
+
+<hr>
+
+<span id="f1">1</span>: Or set `followTags = true` in your git config to always get this behavior:
+
+    git config --global push.followTags true
+
+[↩](#a1)
