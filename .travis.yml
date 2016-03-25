@@ -16,7 +16,9 @@ matrix:
       xcode_sdk: macosx
       env:
       - NAME=Mac
+      # COCOAPODS_TRUNK_TOKEN
       - secure: YTWr9wh/Ud39iWSN7uYojg2DkIDOGUhlNwguX3p6e7hrW3qMTzTceWHVFAGTmUnEiiVQf6f0QZlZEXUPHPE6ymgiY6TFZYe3/ptGpK8TRDwX1lQCujMuEpaCxtT5p+f+NjVnJlWywZnUU2R//EYNj154mWADFMDsK+rWJBaBa/U=
+      # GITHUB_RELEASE_API_TOKEN
       - secure: MEDKuebBqo7LnL1VXtxDvU8pY1Ml531J4mrRILTdi+5ik50eH+EWr1fTJ8uIVc39CBGbkzoWq8Hng0bDfv8GioTn97tTeZQlurhmao8J8VR1GoUAS2t/9LQfDFXiHbGA3ouCOzXhoNEKrFCbmtBp4u8pDYQDHAxq0ZkFPzc/pXU=
 
     - xcode_scheme: UnrarKit iOS
