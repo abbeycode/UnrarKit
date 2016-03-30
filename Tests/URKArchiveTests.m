@@ -62,6 +62,46 @@
     }
 }
 
+- (void)testUncompressedSize {
+    NSURL *testArchiveURL = self.testFileURLs[@"Test Archive.rar"];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    NSNumber *size = archive.uncompressedSize;
+    
+    XCTAssertNotNil(size, @"Nil size returned");
+    XCTAssertEqual(size.integerValue, 104714, @"Wrong uncompressed size returned");
+}
+
+- (void)testUncompressedSize_InvalidArchive {
+    NSURL *testArchiveURL = self.testFileURLs[@"Test File A.txt"];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    NSNumber *size = archive.uncompressedSize;
+    
+    XCTAssertNil(size, @"Uncompressed size of invalid archive should be nil");
+}
+
+- (void)testCompressedSize {
+    NSURL *testArchiveURL = self.testFileURLs[@"Test Archive.rar"];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    NSNumber *size = archive.compressedSize;
+    
+    XCTAssertNotNil(size, @"Nil size returned");
+    XCTAssertEqual(size.integerValue, 89069, @"Wrong uncompressed size returned");
+}
+
+- (void)testCompressedSize_ArchiveMissing {
+    NSURL *testArchiveURL = self.testFileURLs[@"Test Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    [[NSFileManager defaultManager] removeItemAtURL:testArchiveURL error:nil];
+    
+    NSNumber *size = archive.compressedSize;
+    
+    XCTAssertNil(size, @"Compressed size of an archive with no path should be nil");
+}
+
 
 #pragma mark - RAR file Detection
 

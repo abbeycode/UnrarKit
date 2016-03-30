@@ -120,6 +120,16 @@ extern NSString *URKErrorDomain;
  */
 @property(nullable, nonatomic, strong) NSString *password;
 
+/**
+ *  The total uncompressed size (in bytes) of all files in the archive. Returns nil on errors
+ */
+@property(nullable, readonly) NSNumber *uncompressedSize;
+
+/**
+ *  The total compressed size (in bytes) of the archive. Returns nil on errors
+ */
+@property(nullable, readonly) NSNumber *compressedSize;
+
 
 /**
  *  Creates and returns an archive at the given path

@@ -172,6 +172,44 @@ NS_DESIGNATED_INITIALIZER
     return url.path;
 }
 
+- (NSNumber *)uncompressedSize
+{
+    NSError *listError = nil;
+    NSArray *fileInfo = [self listFileInfo:&listError];
+    
+    if (!fileInfo) {
+        NSLog(@"Error getting uncompressed size: %@", listError);
+        return nil;
+    }
+    
+    if (fileInfo.count == 0) {
+        return 0;
+    }
+        
+    return [fileInfo valueForKeyPath:@"@sum.uncompressedSize"];
+}
+
+- (NSNumber *)compressedSize
+{
+    NSString *filePath = self.filename;
+    
+    if (!filePath) {
+        NSLog(@"Can't get compressed size, since a file path can't be resolved");
+        return nil;
+    }
+    
+    NSError *attributesError = nil;
+    NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath
+                                                                                error:&attributesError];
+    
+    if (!attributes) {
+        NSLog(@"Error getting compressed size of %@: %@", filePath, attributesError);
+        return nil;
+    }
+    
+    return [NSNumber numberWithUnsignedLongLong:attributes.fileSize];
+}
+
 
 
 #pragma mark - Zip file detection
