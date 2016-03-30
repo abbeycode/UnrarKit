@@ -1,5 +1,9 @@
 # UnrarKit CHANGELOG
 
+## 2.8
+
+Add fields for total compressed and uncompressed sizes of archive (Issue #32 - Thanks to @gerchicov-bp for the suggestion!)
+
 ## 2.7.1
 
 * Pushing tagged builds to CocoaPods from Travis
