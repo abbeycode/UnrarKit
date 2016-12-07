@@ -273,6 +273,22 @@ NS_DESIGNATED_INITIALIZER
 
 #pragma mark - Public Methods
 
+- (NSArray<NSString*> *)listVolumePaths:(NSError **)error
+{
+    __block NSMutableArray<NSString*> *volumePaths = [NSMutableArray new];
+    
+    NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
+    
+    if (listFileInfo == nil)
+        return nil;
+    
+    for (URKFileInfo* info in listFileInfo) {
+        if (![volumePaths containsObject:info.archiveName])
+            [volumePaths addObject:info.archiveName];
+    }
+    
+    return [NSArray arrayWithArray:volumePaths];
+}
 
 - (NSArray<NSString*> *)listFilenames:(NSError **)error
 {

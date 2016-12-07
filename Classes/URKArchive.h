@@ -229,6 +229,15 @@ extern NSString *URKErrorDomain;
 + (BOOL)urlIsARAR:(NSURL *)fileURL;
 
 /**
+ *  Lists the names/paths of the volume parts
+ *
+ *  @param error Contains an NSError object when there was an error reading the archive
+ *
+ *  @return Returns a list of NSString containing the paths of the volume parts, or nil if an error was encountered
+ */
+- (NSArray<NSString*> *)listVolumePaths:(NSError **)error;
+
+/**
  *  Lists the names of the files in the archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive
