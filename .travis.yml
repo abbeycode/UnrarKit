@@ -32,7 +32,7 @@ matrix:
 script:
   - xctool --version
   # Calling via script until a bug in travis_wait is fixed: https://github.com/travis-ci/travis-ci/issues/7020
-  - travis_wait 20 Scripts/build.sh
+  - travis_wait 25 Scripts/build.sh
   - ./Scripts/carthage-validate.sh
   - ./Scripts/cocoapod-validate.sh
 
