@@ -21,7 +21,7 @@ matrix:
       # GITHUB_RELEASE_API_TOKEN
       - secure: MEDKuebBqo7LnL1VXtxDvU8pY1Ml531J4mrRILTdi+5ik50eH+EWr1fTJ8uIVc39CBGbkzoWq8Hng0bDfv8GioTn97tTeZQlurhmao8J8VR1GoUAS2t/9LQfDFXiHbGA3ouCOzXhoNEKrFCbmtBp4u8pDYQDHAxq0ZkFPzc/pXU=
 
-    - xcode_scheme: UnrarKit iOS
+    - xcode_scheme: "UnrarKit iOS"
       xcode_sdk: iphonesimulator
       env: NAME=iOS
 
@@ -31,7 +31,7 @@ matrix:
 
 script:
   - xctool --version
-  - travis_wait 20 xctool -workspace $TRAVIS_XCODE_WORKSPACE -scheme "$TRAVIS_XCODE_SCHEME" -sdk $TRAVIS_XCODE_SDK -configuration Release analyze test
+  - travis_wait 20 xctool -workspace $TRAVIS_XCODE_WORKSPACE -scheme $TRAVIS_XCODE_SCHEME -sdk $TRAVIS_XCODE_SDK -configuration Release analyze test
   - ./Scripts/carthage-validate.sh
   - ./Scripts/cocoapod-validate.sh
 
