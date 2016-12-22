@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Abbey Code. All rights reserved.
 //
 
+#import <TargetConditionals.h>
+
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
 #else
