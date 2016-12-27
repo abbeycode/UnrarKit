@@ -2,7 +2,9 @@
 
 ## 2.8
 
-Add fields for total compressed and uncompressed sizes of archive (Issue #32 - Thanks to @gerchicov-bp for the suggestion!)
+* Add fields for total compressed and uncompressed sizes of archive (Issue #32 - Thanks to @gerchicov-bp for the suggestion!)
+* Upgraded to UnRAR library v5.4.5 (PR #36 - Thanks to @aonez for the suggestion!)
+* Began importing `Foundation` instead of `UIKit` or `Cocoa` in `UnrarKit.h` (PR #37 - Thanks to @amosavian for the suggestion!)
 
 ## 2.7.1
 
