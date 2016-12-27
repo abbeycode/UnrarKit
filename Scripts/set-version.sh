@@ -33,6 +33,12 @@ if [ -z "$RELEASE_NOTES" ]; then
     exit 1
 fi
 
+# Require agvtool for updating the plist versions. Exit if not installed
+if ! [ -x "$(command -v agvtool)" ]; then
+    echo -e "${RED}agvtool not found. Are you running on a Mac?$COLOR_OFF"
+    exit 2
+fi
+
 echo -e "${GREEN}Updating version numbers in plist to '$1'..$COLOR_OFF"
 agvtool new-version -all "$1" # CFBundleVersion
 agvtool new-marketing-version "$1" # CFBundleShortVersionString
