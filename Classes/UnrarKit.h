@@ -6,11 +6,7 @@
 //  Copyright (c) 2015 Abbey Code. All rights reserved.
 //
 
-#if TARGET_OS_IPHONE
-#import <UIKit/UIKit.h>
-#else
-#import <Cocoa/Cocoa.h>
-#endif
+#import <Foundation/Foundation.h>
 
 //! Project version number for UnrarKit.
 FOUNDATION_EXPORT double UnrarKitVersionNumber;
