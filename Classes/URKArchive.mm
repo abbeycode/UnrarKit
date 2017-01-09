@@ -333,6 +333,93 @@ NS_DESIGNATED_INITIALIZER
 
 #pragma mark - Public Methods
 
+-(BOOL)isVolume
+{
+    return [self isVolume:self.fileURL];
+}
+
+- (BOOL)isVolume:(NSURL *)fileURL
+{
+    @try {
+        NSError *error = nil;
+        if (![self _unrarOpenFile:fileURL.path
+                           inMode:RAR_OM_EXTRACT
+                     withPassword:nil
+                            error:&error])
+        {
+            return NO;
+        }
+        
+        if (error) {
+            NSLog(@"Error checking for volume properties: %@", error);
+            return NO;
+        }
+        
+        RARReadHeaderEx(_rarFile, header);
+        bool isVolume = (header->Flags & MHD_VOLUME) != 0;
+        
+        return isVolume;
+    }
+    @finally {
+        [self closeFile];
+    }
+    
+    return NO;
+}
+
+- (NSString *)firstVolumePath
+{
+    return [self firstVolumePath:self.filename];
+}
+
+- (NSString *)firstVolumePath:(NSString *)filePath
+{
+    __block NSString *volumePath = filePath;
+    
+    if (filePath.length)
+    {
+        // Current volume scheme
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@".part[0-9]+.rar$" options:NSRegularExpressionCaseInsensitive error:nil];
+        [regex enumerateMatchesInString:filePath options:0 range:NSMakeRange(0, [filePath length]) usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop)
+         {
+             int volumeNumber = 1;
+             volumePath = [[filePath stringByDeletingPathExtension] stringByDeletingPathExtension];
+             volumePath = [volumePath stringByAppendingString:[NSString stringWithFormat:@".part%i.rar", volumeNumber]];
+         }];
+        
+        if (volumePath != filePath)
+            return volumePath;
+        
+        // Old volume scheme
+        regex = [NSRegularExpression regularExpressionWithPattern:@".r[0-9]+$" options:NSRegularExpressionCaseInsensitive error:nil];
+        [regex enumerateMatchesInString:filePath options:0 range:NSMakeRange(0, [filePath length]) usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop)
+         {
+             NSString *volumeExtension = @"ar";
+             volumePath = [filePath stringByDeletingPathExtension];
+             volumePath = [volumePath stringByAppendingString:[NSString stringWithFormat:@".r%@", volumeExtension]];
+         }];
+
+    }
+
+    return volumePath;
+}
+
+- (NSArray<NSString*> *)listVolumePaths:(NSError **)error
+{
+    __block NSMutableArray<NSString*> *volumePaths = [NSMutableArray new];
+    
+    NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
+    
+    if (listFileInfo == nil)
+        return nil;
+    
+    for (URKFileInfo* info in listFileInfo) {
+        if (![volumePaths containsObject:info.archiveName])
+            [volumePaths addObject:info.archiveName];
+    }
+    
+    return [NSArray arrayWithArray:volumePaths];
+}
 
 - (NSArray<NSString*> *)listFilenames:(NSError **)error
 {

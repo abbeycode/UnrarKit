@@ -269,6 +269,47 @@ extern NSString *URKErrorDomain;
 + (BOOL)urlIsARAR:(NSURL *)fileURL;
 
 /**
+ *  Determines whether the current file is a RAR volume part
+ *
+ *  @return YES if the file exists, is a RAR archive and is a volume part
+ */
+- (BOOL)isVolume;
+
+/**
+ *  Determines whether a file is a RAR volume part
+ *
+ *  @param fileURL URL of the file being checked
+ *
+ *  @return YES if the file exists, is a RAR archive and is a volume part
+ */
+- (BOOL)isVolume:(NSURL *)fileURL;
+
+/**
+ *  Determines the first volume path for the current RAR volume part
+ *
+ *  @return the path of the first volume path, the path of the current file if not found or is the first itself
+ */
+- (NSString *)firstVolumePath;
+
+/**
+ *  Determines the first volume path for a RAR volume part
+ *
+ *  @param filePath path of the file beig of the file being checked
+ *
+ *  @return the path of the first volume path, the path of the filePath passed if not found or is the first itself
+ */
+- (NSString *)firstVolumePath:(NSString *)filePath;
+
+/**
+ *  Lists the names/paths of the volume parts
+ *
+ *  @param error Contains an NSError object when there was an error reading the archive
+ *
+ *  @return Returns a list of NSString containing the paths of the volume parts, or nil if an error was encountered
+ */
+- (NSArray<NSString*> *)listVolumePaths:(NSError **)error;
+
+/**
  *  Lists the names of the files in the archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive
