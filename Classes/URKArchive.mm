@@ -379,12 +379,10 @@ NS_DESIGNATED_INITIALIZER
     if (filePath.length)
     {
         // Current volume scheme
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@".part[0-9]+.rar$" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.part[0-9]+)(.*\\.rar$)" options:NSRegularExpressionCaseInsensitive error:nil];
         [regex enumerateMatchesInString:filePath options:0 range:NSMakeRange(0, [filePath length]) usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop)
          {
-             int volumeNumber = 1;
-             volumePath = [[filePath stringByDeletingPathExtension] stringByDeletingPathExtension];
-             volumePath = [volumePath stringByAppendingString:[NSString stringWithFormat:@".part%i.rar", volumeNumber]];
+             volumePath = [regex stringByReplacingMatchesInString:filePath options:0 range:NSMakeRange(0, filePath.length) withTemplate:@".part1$2"];
          }];
         
         if (volumePath != filePath)
