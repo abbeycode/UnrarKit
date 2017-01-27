@@ -5,7 +5,22 @@
 //
 
 #import "URKArchiveTestCase.h"
-#import <DTPerformanceSession/DTSignalFlag.h>
+
+
+#import <sys/kdebug_signpost.h>
+enum SignPostCode: uint {   // Use to reference in Instruments (http://stackoverflow.com/a/39416673/105717)
+    SignPostCodeCreateTextFile = 0,
+    SignPostCodeArchiveData = 1,
+    SignPostCodeExtractData = 2,
+};
+
+enum SignPostColor: uint {  // standard color scheme for signposts in Instruments
+    SignPostColorBlue = 0,
+    SignPostColorGreen = 1,
+    SignPostColorPurple = 2,
+    SignPostColorOrange = 3,
+    SignPostColorRed = 4,
+};
 
 
 
@@ -858,15 +873,15 @@
 
 - (void)testExtractBufferedData_VeryLarge
 {
-    DTSendSignalFlag("Begin creating text file", DT_START_SIGNAL, TRUE);
+    kdebug_signpost_start(SignPostCodeCreateTextFile, 0, 0, 0, SignPostColorBlue);
     NSURL *largeTextFile = [self randomTextFileOfLength:1000000]; // Increase for a more dramatic test
     XCTAssertNotNil(largeTextFile, @"No large text file URL returned");
-    DTSendSignalFlag("End creating text file", DT_END_SIGNAL, TRUE);
+    kdebug_signpost_end(SignPostCodeCreateTextFile, 0, 0, 0, SignPostColorBlue);
 
-    DTSendSignalFlag("Begin archiving data", DT_START_SIGNAL, TRUE);
+    kdebug_signpost_start(SignPostCodeArchiveData, 0, 0, 0, SignPostColorGreen);
     NSURL *archiveURL = [self archiveWithFiles:@[largeTextFile]];
     XCTAssertNotNil(archiveURL, @"No archived large text file URL returned");
-    DTSendSignalFlag("Begin archiving data", DT_END_SIGNAL, TRUE);
+    kdebug_signpost_end(SignPostCodeArchiveData, 0, 0, 0, SignPostColorGreen);
 
     NSURL *deflatedFileURL = [self.tempDirectory URLByAppendingPathComponent:@"DeflatedTextFile.txt"];
     BOOL createSuccess = [[NSFileManager defaultManager] createFileAtPath:deflatedFileURL.path
@@ -881,7 +896,7 @@
 
     URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
 
-    DTSendSignalFlag("Begin extracting buffered data", DT_START_SIGNAL, TRUE);
+    kdebug_signpost_start(SignPostCodeExtractData, 0, 0, 0, SignPostColorPurple);
 
     NSError *error = nil;
     BOOL success = [archive extractBufferedDataFromFile:largeTextFile.lastPathComponent
@@ -892,7 +907,7 @@
                         [deflated writeData:dataChunk];
                     }];
     
-    DTSendSignalFlag("End extracting buffered data", DT_END_SIGNAL, TRUE);
+    kdebug_signpost_end(SignPostCodeExtractData, 0, 0, 0, SignPostColorPurple);
     
     XCTAssertTrue(success, @"Failed to read buffered data");
     XCTAssertNil(error, @"Error reading buffered data");

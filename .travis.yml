@@ -1,10 +1,7 @@
 language: objective-c
-osx_image: xcode7.3
+osx_image: xcode8.2
 
 before_install:
-# Fixing an issue with xctool 0.2.8 in conjunction with Xcode 7.3
-    - brew update
-    - brew uninstall --force xctool && brew install --HEAD xctool
 # Used to allow pushing to CocoaPods only after all matrixed builds have succeeded
     - npm install --save-dev travis-after-all
 
@@ -30,7 +27,6 @@ matrix:
       env: NAME=ExampleAppBuild
 
 script:
-  - xctool --version
   # Calling via script until a bug in travis_wait is fixed: https://github.com/travis-ci/travis-ci/issues/7020
   - travis_wait 15 Scripts/build.sh
   - ./Scripts/carthage-validate.sh
