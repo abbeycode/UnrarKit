@@ -1014,6 +1014,7 @@
 				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					964C8ABA18D28EE000AD7321 = {
+						LastSwiftMigration = 0820;
 						TestTargetID = 96853EDA18DB71CD00B5651B;
 					};
 					9699F9D91B3CB83100B6D373 = {
@@ -1024,6 +1025,7 @@
 					};
 					96EA535A1B3CB04300F79DC6 = {
 						CreatedOnToolsVersion = 6.3.2;
+						LastSwiftMigration = 0820;
 					};
 					96F5BBB01B39A65F00ACB162 = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -1365,6 +1367,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1397,6 +1400,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1622,6 +1626,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				WARNING_CFLAGS = "-Wno-shorten-64-to-32";
 			};
 			name = Debug;
@@ -1665,6 +1670,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 				WARNING_CFLAGS = "-Wno-shorten-64-to-32";
 			};
