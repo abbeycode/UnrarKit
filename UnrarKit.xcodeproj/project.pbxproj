@@ -1329,6 +1329,7 @@
 				);
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1368,6 +1369,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

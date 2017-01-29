@@ -9,28 +9,24 @@ xcode_workspace: UnrarKit.xcworkspace
 
 matrix:
   include:
-    - xcode_scheme: UnrarKit
-      xcode_sdk: macosx
-      env:
-      - NAME=Mac
-      # COCOAPODS_TRUNK_TOKEN
-      - secure: YTWr9wh/Ud39iWSN7uYojg2DkIDOGUhlNwguX3p6e7hrW3qMTzTceWHVFAGTmUnEiiVQf6f0QZlZEXUPHPE6ymgiY6TFZYe3/ptGpK8TRDwX1lQCujMuEpaCxtT5p+f+NjVnJlWywZnUU2R//EYNj154mWADFMDsK+rWJBaBa/U=
-      # GITHUB_RELEASE_API_TOKEN
-      - secure: MEDKuebBqo7LnL1VXtxDvU8pY1Ml531J4mrRILTdi+5ik50eH+EWr1fTJ8uIVc39CBGbkzoWq8Hng0bDfv8GioTn97tTeZQlurhmao8J8VR1GoUAS2t/9LQfDFXiHbGA3ouCOzXhoNEKrFCbmtBp4u8pDYQDHAxq0ZkFPzc/pXU=
+    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release analyze test
+      env: Name=Mac
 
-    - xcode_scheme: UnrarKit iOS
-      xcode_sdk: iphonesimulator
-      env: NAME=iOS
+    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme "UnrarKit iOS" -destination 'platform=iOS Simulator,id=E40727B3-41FB-4D6E-B4CB-BFA87109EB12,OS=latest' -configuration Release analyze test
+      env: Name=iOS
 
-    - xcode_scheme: UnrarExample
-      xcode_sdk: iphonesimulator
-      env: NAME=ExampleAppBuild
+    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator -configuration Release analyze
+      env: Name=ExampleAppBuild
 
-script:
+    - script: ./Scripts/cocoapod-validate.sh
+      env: Name=CocoaPods
+
+    - script: ./Scripts/carthage-validate.sh
+      env: Name=Carthage
+
+#script:
   # Calling via script until a bug in travis_wait is fixed: https://github.com/travis-ci/travis-ci/issues/7020
-  - travis_wait 15 Scripts/build.sh
-  - ./Scripts/carthage-validate.sh
-  - ./Scripts/cocoapod-validate.sh
+#  - travis_wait 15 Scripts/build.sh
 
 after_script:
   - ./Scripts/push-output.sh
