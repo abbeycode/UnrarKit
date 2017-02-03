@@ -9,13 +9,16 @@ xcode_workspace: UnrarKit.xcworkspace
 
 matrix:
   include:
-    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release analyze test
+      # The CLANG arguments and find command fail the build on analyzer errors
+    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
       env: Name=Mac
 
-    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme "UnrarKit iOS" -destination 'platform=iOS Simulator,id=E40727B3-41FB-4D6E-B4CB-BFA87109EB12,OS=latest' -configuration Release analyze test
+      # The CLANG arguments and find command fail the build on analyzer errors
+    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme "UnrarKit iOS" -destination 'platform=iOS Simulator,id=E40727B3-41FB-4D6E-B4CB-BFA87109EB12,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
       env: Name=iOS
 
-    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator -configuration Release analyze
+      # The CLANG arguments and find command fail the build on analyzer errors
+    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator -configuration Release analyze CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
       env: Name=ExampleAppBuild
 
     - script: ./Scripts/cocoapod-validate.sh
