@@ -1,3 +1,8 @@
+# blocklist
+branches:
+  except:
+  - multivolume
+
 language: objective-c
 <<<<<<< HEAD
 osx_image: xcode9
