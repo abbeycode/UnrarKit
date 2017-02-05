@@ -402,7 +402,7 @@ NS_DESIGNATED_INITIALIZER
     return volumePath;
 }
 
-- (NSArray<NSString*> *)listVolumePaths:(NSError **)error
+- (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error
 {
     __block NSMutableArray<NSString*> *volumePaths = [NSMutableArray new];
     

@@ -307,7 +307,7 @@ extern NSString *URKErrorDomain;
  *
  *  @return Returns a list of NSString containing the paths of the volume parts, or nil if an error was encountered
  */
-- (NSArray<NSString*> *)listVolumePaths:(NSError **)error;
+- (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error;
 
 /**
  *  Lists the names of the files in the archive
