@@ -130,6 +130,11 @@ extern NSString *URKErrorDomain;
  */
 @property(nullable, readonly) NSNumber *compressedSize;
 
+/**
+ *  True if the file is one volume of a multi-part archive
+ */
+@property(readonly) BOOL hasMultipleVolumes;
+
 
 /**
  *  Creates and returns an archive at the given path
@@ -245,6 +250,38 @@ extern NSString *URKErrorDomain;
  *  @return Returns a list of URKFileInfo objects, which contain metadata about the archive's files, or nil if an error was encountered
  */
 - (nullable NSArray<URKFileInfo*> *)listFileInfo:(NSError **)error;
+
+/**
+ *  Gets the path of the first volume in a multi-volume archive, or the only volume in a single-volume one
+ *
+ *  @return Returns the path, or nil if there was an error
+ */
+- (nullable NSString *)firstVolumePath;
+
+/**
+ *  Gets the URL of the first volume in a multi-volume archive, or the only volume in a single-volume one
+ *
+ *  @return Returns the URL, or nil if there was an error
+ */
+- (nullable NSURL *)firstVolumeURL;
+
+/**
+ *  Lists the paths of volumes in a single- or multi-volume archive
+ *
+ *  @param error Contains an NSError object when there was an error reading the archive
+ *
+ *  @return Returns the list of paths of all volumes of the archive
+ */
+- (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error;
+
+/**
+ *  Lists the URLs of volumes in a single- or multi-volume archive
+ *
+ *  @param error Contains an NSError object when there was an error reading the archive
+ *
+ *  @return Returns the list of URLs of all volumes of the archive
+ */
+- (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error;
 
 /**
  *  Writes all files in the archive to the given path
