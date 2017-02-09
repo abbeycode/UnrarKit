@@ -158,6 +158,7 @@ extern NSString *URKErrorDomain;
  */
 @property(readonly) BOOL hasMultipleVolumes;
 
+
 /**
  *  Can be used for progress reporting, but it's not necessary. You can also use
  *  implicit progress reporting. If you don't use it, one will still be created,
