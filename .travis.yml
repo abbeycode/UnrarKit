@@ -5,26 +5,29 @@ branches:
 
 language: objective-c
 <<<<<<< HEAD
+<<<<<<< HEAD
 osx_image: xcode9
 =======
 osx_image: xcode8.3
 >>>>>>> Switched from Travis-After-All to the officially supported Build Stages (Issue #42)
+=======
+osx_image: xcode8.3
+>>>>>>> Updated Travis build to Xcode 8.3
+
+before_install:
+# Used to allow pushing to CocoaPods only after all matrixed builds have succeeded
+    - npm install --save-dev travis-after-all
 
 xcode_workspace: UnrarKit.xcworkspace
 
-before_script:
-    # Make log level less verbose. Temporarily undo if more info is needed
-    - sudo log config --mode "level:default" --subsystem com.abbey-code.UnrarKit
-
 matrix:
   include:
-    - stage: Test
       # The CLANG arguments and find command fail the build on analyzer errors
-      script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
       env: Name=Mac
 
-    - stage: Test
       # The CLANG arguments and find command fail the build on analyzer errors
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -42,21 +45,22 @@ matrix:
 =======
       script: xcodebuild -workspace UnrarKit.xcworkspace -scheme "UnrarKit iOS" -destination 'platform=iOS Simulator,name=iPhone 7,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 >>>>>>> Revert "Trying with .travis.yml from master"
+=======
+    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme "UnrarKit iOS" -destination 'platform=iOS Simulator,id=E40727B3-41FB-4D6E-B4CB-BFA87109EB12,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+>>>>>>> Updated Travis build to Xcode 8.3
       env: Name=iOS
 
-    - stage: Test
       # The CLANG arguments and find command fail the build on analyzer errors
-      script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator -configuration Release analyze CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator -configuration Release analyze CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
       env: Name=ExampleAppBuild
 
-    - stage: Validate
-      script: ./Scripts/cocoapod-validate.sh
+    - script: ./Scripts/cocoapod-validate.sh
       env: Name=CocoaPods
 
-    - stage: Validate
-      script: ./Scripts/carthage-validate.sh
+    - script: ./Scripts/carthage-validate.sh
       env: Name=Carthage
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     - stage: Release
@@ -66,17 +70,22 @@ matrix:
 >>>>>>> Switched from Travis-After-All to the officially supported Build Stages (Issue #42)
       script: ./Scripts/push-output.sh
 =======
+=======
+>>>>>>> Updated Travis build to Xcode 8.3
 #script:
   # Calling via script until a bug in travis_wait is fixed: https://github.com/travis-ci/travis-ci/issues/7020
 #  - travis_wait 15 Scripts/build.sh
 
 after_script:
   - ./Scripts/push-output.sh
+<<<<<<< HEAD
 >>>>>>> Trying with .travis.yml from master
 =======
     - stage: Release
       script: ./Scripts/push-output.sh
 >>>>>>> Revert "Trying with .travis.yml from master"
+=======
+>>>>>>> Updated Travis build to Xcode 8.3
 
 # Turn on Docker, container-based infrastructure
 sudo: false
