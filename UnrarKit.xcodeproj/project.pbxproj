@@ -174,7 +174,7 @@
 		969BD9D319EDE88E002CE755 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; settings = {COMPILER_FLAGS = "-Wno-logical-op-parentheses"; }; };
 		969BD9D419EDE88E002CE755 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3618DB722E00B5651B /* list.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses -Wno-switch -Wno-unused-function"; }; };
 		969BD9D519EDE88E002CE755 /* find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2C18DB722E00B5651B /* find.cpp */; };
-		969BD9D619EDE88E002CE755 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses -Wno-conditional-uninitialized"; }; };
+		969BD9D619EDE88E002CE755 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses -Wno-conditional-uninitialized -Wno-unused-variable"; }; };
 		969BD9D719EDE88E002CE755 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; };
 		969BD9D819EDE88E002CE755 /* threadpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD219ED8C6100DAF8F1 /* threadpool.cpp */; };
 		969BD9D919EDE88E002CE755 /* rs16.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCD19ED8B9700DAF8F1 /* rs16.cpp */; settings = {COMPILER_FLAGS = "-Wno-unused-variable"; }; };
@@ -232,7 +232,7 @@
 		96EA539D1B3CB2C700F79DC6 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-logical-op-parentheses"; }; };
 		96EA539E1B3CB2C700F79DC6 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3618DB722E00B5651B /* list.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses -Wno-switch -Wno-unused-function"; }; };
 		96EA539F1B3CB2C700F79DC6 /* find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2C18DB722E00B5651B /* find.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		96EA53A01B3CB2C700F79DC6 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses -Wno-conditional-uninitialized"; }; };
+		96EA53A01B3CB2C700F79DC6 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses -Wno-conditional-uninitialized -Wno-unused-variable"; }; };
 		96EA53A11B3CB2C700F79DC6 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		96EA53A21B3CB2C700F79DC6 /* threadpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD219ED8C6100DAF8F1 /* threadpool.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		96EA53A31B3CB2C700F79DC6 /* rs16.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCD19ED8B9700DAF8F1 /* rs16.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-unused-variable"; }; };
