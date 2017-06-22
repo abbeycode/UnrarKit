@@ -1,5 +1,9 @@
 # UnrarKit CHANGELOG
 
+## 2.8.1
+
+Updated to UnRAR library v 5.4.5 (Issue #43 - Thanks to [@Jegge](https://github.com/Jegge) for the suggestion!)
+
 ## 2.8
 
 * Add fields for total compressed and uncompressed sizes of archive (Issue #32 - Thanks to @gerchicov-bp for the suggestion!)
