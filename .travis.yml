@@ -21,7 +21,11 @@ matrix:
 
     - stage: Test
       # The CLANG arguments and find command fail the build on analyzer errors
+<<<<<<< HEAD
       script: xcodebuild -workspace UnrarKit.xcworkspace -scheme "UnrarKit iOS" -destination 'platform=iOS Simulator,name=iPhone 7,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+=======
+    - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme "UnrarKit iOS" -destination 'platform=iOS Simulator,name=iPhone 7,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+>>>>>>> Replaced simulator ID with name, since duplicate simulators have been removed in the Xcode 8.3 image
       env: Name=iOS
 
     - stage: Test
