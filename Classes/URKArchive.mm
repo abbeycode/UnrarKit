@@ -21,8 +21,11 @@ os_log_t unrarkit_log;
 #endif
 #pragma clang diagnostic pop
 
+<<<<<<< HEAD
 static NSBundle *_resources = nil;
 
+=======
+>>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
 
 @interface URKArchive ()
 
@@ -75,6 +78,7 @@ NS_DESIGNATED_INITIALIZER
 + (void)initialize {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+<<<<<<< HEAD
         NSBundle *mainBundle = [NSBundle mainBundle];
         NSURL *resourcesURL = [mainBundle URLForResource:@"UnrarKitResources" withExtension:@"bundle"];
         
@@ -82,6 +86,8 @@ NS_DESIGNATED_INITIALIZER
                       ? [NSBundle bundleWithURL:resourcesURL]
                       : mainBundle);
         
+=======
+>>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
         URKLogInit();
     });
 }
@@ -545,7 +551,11 @@ NS_DESIGNATED_INITIALIZER
     NSError *listError = nil;
     NSArray *fileInfos = [self listFileInfo:&listError];
 
+<<<<<<< HEAD
     if (!fileInfos || listError) {
+=======
+    if (!fileInfo || listError) {
+>>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
         URKLogError("Error listing contents of archive: %{public}@", listError);
 
         if (error) {
@@ -1026,8 +1036,16 @@ NS_DESIGNATED_INITIALIZER
             return NO;
         }
 
+<<<<<<< HEAD
         URKLogDebug("Reading header and starting processing...");
         
+=======
+        if (error) {
+            URKLogError("Error checking for password: %{public}@", error);
+            return NO;
+        }
+
+>>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
         int RHCode = RARReadHeaderEx(_rarFile, header);
         int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
 
@@ -1062,13 +1080,21 @@ NS_DESIGNATED_INITIALIZER
     __block BOOL passwordIsGood = YES;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
+<<<<<<< HEAD
         URKCreateActivity("Performing action");
+=======
+        if (error) {
+            URKLogError("Error validating password: %{public}@", error);
+            return;
+        }
+>>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
 
         URKLogDebug("Opening and processing archive...");
         
         int RHCode = RARReadHeaderEx(_rarFile, header);
         int PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
 
+<<<<<<< HEAD
         if ([self headerContainsErrors:innerError]) {
             if (error.code == ERAR_MISSING_PASSWORD) {
                 URKLogDebug("Password invalidated by header");
@@ -1078,6 +1104,10 @@ NS_DESIGNATED_INITIALIZER
                 URKLogError("Errors in header while validating password: %{public}@", error);
             }
 
+=======
+        if ([self headerContainsErrors:&error] && error.code == ERAR_MISSING_PASSWORD) {
+            URKLogError("Errors in header while validating password: %{public}@", error);
+>>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
             return;
         }
 
