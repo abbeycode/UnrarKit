@@ -4,7 +4,11 @@ branches:
   - multivolume
 
 language: objective-c
+<<<<<<< HEAD
 osx_image: xcode9
+=======
+osx_image: xcode8.3
+>>>>>>> Switched from Travis-After-All to the officially supported Build Stages (Issue #42)
 
 xcode_workspace: UnrarKit.xcworkspace
 
@@ -22,10 +26,14 @@ matrix:
     - stage: Test
       # The CLANG arguments and find command fail the build on analyzer errors
 <<<<<<< HEAD
+<<<<<<< HEAD
       script: xcodebuild -workspace UnrarKit.xcworkspace -scheme "UnrarKit iOS" -destination 'platform=iOS Simulator,name=iPhone 7,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 =======
     - script: xcodebuild -workspace UnrarKit.xcworkspace -scheme "UnrarKit iOS" -destination 'platform=iOS Simulator,name=iPhone 7,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 >>>>>>> Replaced simulator ID with name, since duplicate simulators have been removed in the Xcode 8.3 image
+=======
+      script: xcodebuild -workspace UnrarKit.xcworkspace -scheme "UnrarKit iOS" -destination 'platform=iOS Simulator,name=iPhone 7,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+>>>>>>> Switched from Travis-After-All to the officially supported Build Stages (Issue #42)
       env: Name=iOS
 
     - stage: Test
@@ -42,7 +50,10 @@ matrix:
       env: Name=Carthage
 
     - stage: Release
+<<<<<<< HEAD
       if: tag IS present
+=======
+>>>>>>> Switched from Travis-After-All to the officially supported Build Stages (Issue #42)
       script: ./Scripts/push-output.sh
 
 # Turn on Docker, container-based infrastructure
