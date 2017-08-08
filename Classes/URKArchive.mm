@@ -6,12 +6,20 @@
 
 #import "URKArchive.h"
 #import "URKFileInfo.h"
+#import "UnrarKitMacros.h"
 #import "NSString+UnrarKit.h"
 
 #import "rar.hpp"
 
 
 NSString *URKErrorDomain = @"URKErrorDomain";
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundef"
+#if UNIFIED_LOGGING_SUPPORTED
+os_log_t unrarkit_log;
+#endif
+#pragma clang diagnostic pop
 
 
 @interface URKArchive ()
@@ -61,6 +69,13 @@ NS_DESIGNATED_INITIALIZER
 
 #pragma mark - Initializers
 
+
++ (void)initialize {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        URKLogInit();
+    });
+}
 
 - (instancetype)init {
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
@@ -114,7 +129,7 @@ NS_DESIGNATED_INITIALIZER
         _threadLock = [[NSObject alloc] init];
 
         if (bookmarkError) {
-            NSLog(@"Error creating bookmark to RAR archive: %@", bookmarkError);
+            URKLog("Error creating bookmark to RAR archive: %@", bookmarkError);
 
             if (error) {
                 *error = bookmarkError;
@@ -143,7 +158,7 @@ NS_DESIGNATED_INITIALIZER
                                                 error:&error];
 
     if (error) {
-        NSLog(@"Error resolving bookmark to RAR archive: %@", error);
+        URKLogFault("Error resolving bookmark to RAR archive: %{public}@", error);
         return nil;
     }
 
@@ -154,7 +169,7 @@ NS_DESIGNATED_INITIALIZER
                                                       error:&error];
 
         if (error) {
-            NSLog(@"Error creating fresh bookmark to RAR archive: %@", error);
+            URKLogFault("Error creating fresh bookmark to RAR archive: %{public}@", error);
         }
   }
 
@@ -178,7 +193,7 @@ NS_DESIGNATED_INITIALIZER
     NSArray *fileInfo = [self listFileInfo:&listError];
     
     if (!fileInfo) {
-        NSLog(@"Error getting uncompressed size: %@", listError);
+        URKLogError("Error getting uncompressed size: %{public}@", listError);
         return nil;
     }
     
@@ -194,7 +209,7 @@ NS_DESIGNATED_INITIALIZER
     NSString *filePath = self.filename;
     
     if (!filePath) {
-        NSLog(@"Can't get compressed size, since a file path can't be resolved");
+        URKLogError("Can't get compressed size, since a file path can't be resolved");
         return nil;
     }
     
@@ -203,7 +218,7 @@ NS_DESIGNATED_INITIALIZER
                                                                                 error:&attributesError];
     
     if (!attributes) {
-        NSLog(@"Error getting compressed size of %@: %@", filePath, attributesError);
+        URKLogError("Error getting compressed size of %{public}@: %{public}@", filePath, attributesError);
         return nil;
     }
     
@@ -321,7 +336,7 @@ NS_DESIGNATED_INITIALIZER
     NSArray *fileInfo = [self listFileInfo:&listError];
 
     if (!fileInfo || listError) {
-        NSLog(@"Error listing contents of archive: %@", listError);
+        URKLogError("Error listing contents of archive: %{public}@", listError);
 
         if (error) {
             *error = listError;
@@ -461,7 +476,7 @@ NS_DESIGNATED_INITIALIZER
     NSArray *fileInfo = [self listFileInfo:&listError];
 
     if (listError || !fileInfo) {
-        NSLog(@"Failed to list the files in the archive");
+        URKLogError("Failed to list the files in the archive: %{public}@", listError);
 
         if (error) {
             *error = listError;
@@ -583,7 +598,7 @@ NS_DESIGNATED_INITIALIZER
         *error = innerError ? innerError : nil;
 
         if (innerError) {
-            NSLog(@"Error reading buffered data from file\nfilePath: %@\nerror: %@", filePath, innerError);
+            URKLogError("Error reading buffered data from file\nfilePath: %{public}@\nerror: %{public}@", filePath, innerError);
         }
     }
 
@@ -603,7 +618,7 @@ NS_DESIGNATED_INITIALIZER
         }
 
         if (error) {
-            NSLog(@"Error checking for password: %@", error);
+            URKLogError("Error checking for password: %{public}@", error);
             return NO;
         }
 
@@ -615,7 +630,7 @@ NS_DESIGNATED_INITIALIZER
                 return YES;
             }
 
-            NSLog(@"Errors in header while checking for password: %@", error);
+            URKLogError("Errors in header while checking for password: %{public}@", error);
         }
 
         if (RHCode == ERAR_MISSING_PASSWORD || PFCode == ERAR_MISSING_PASSWORD)
@@ -635,7 +650,7 @@ NS_DESIGNATED_INITIALIZER
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         if (error) {
-            NSLog(@"Error validating password: %@", error);
+            URKLogError("Error validating password: %{public}@", error);
             return;
         }
 
@@ -643,7 +658,7 @@ NS_DESIGNATED_INITIALIZER
         int PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
 
         if ([self headerContainsErrors:&error] && error.code == ERAR_MISSING_PASSWORD) {
-            NSLog(@"Errors in header while validating password: %@", error);
+            URKLogError("Errors in header while validating password: %{public}@", error);
             return;
         }
 
