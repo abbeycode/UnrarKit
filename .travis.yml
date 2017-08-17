@@ -1,8 +1,3 @@
-# blocklist
-branches:
-  except:
-  - multivolume
-
 language: objective-c
 osx_image: xcode8.3
 
