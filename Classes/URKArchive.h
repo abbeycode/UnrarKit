@@ -153,11 +153,6 @@ extern NSString *URKErrorDomain;
  */
 @property(nullable, readonly) NSNumber *compressedSize;
 
-/**
- *  True if the file is one volume of a multi-part archive
- */
-@property(readonly) BOOL hasMultipleVolumes;
-
 
 /**
  *  Can be used for progress reporting, but it's not necessary. You can also use
@@ -270,22 +265,6 @@ extern NSString *URKErrorDomain;
 + (BOOL)urlIsARAR:(NSURL *)fileURL;
 
 /**
- *  Determines whether the current file is a RAR volume part
- *
- *  @return YES if the file exists, is a RAR archive and is a volume part
- */
-- (BOOL)isVolume;
-
-/**
- *  Determines whether a file is a RAR volume part
- *
- *  @param fileURL URL of the file being checked
- *
- *  @return YES if the file exists, is a RAR archive and is a volume part
- */
-- (BOOL)isVolume:(NSURL *)fileURL;
-
-/**
  *  Lists the names of the files in the archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive
@@ -304,6 +283,7 @@ extern NSString *URKErrorDomain;
 - (nullable NSArray<URKFileInfo*> *)listFileInfo:(NSError **)error;
 
 /**
+<<<<<<< HEAD
  *  Gets the path of the first volume in a multi-volume archive, or the only volume in a single-volume one
  *
  *  @return Returns the path, or nil if there was an error
@@ -340,6 +320,9 @@ extern NSString *URKErrorDomain;
  *  allows cancellation in the middle of extraction. Use the progress property (as explained in the README) to
  *  retrieve more detailed information, such as the current file being extracted, number of files extracted,
  *  and the URKFileInfo instance being extracted
+=======
+ *  Writes all files in the archive to the given path
+>>>>>>> Rebased to multivolume branch
  *
  *  @param filePath  The destination path of the unarchived files
  *  @param overwrite YES to overwrite files in the destination directory, NO otherwise

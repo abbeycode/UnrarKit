@@ -253,11 +253,6 @@ NS_DESIGNATED_INITIALIZER
     return [NSNumber numberWithUnsignedLongLong:attributes.fileSize];
 }
 
-- (BOOL)hasMultipleVolumes
-{
-    return NO;
-}
-
 
 
 #pragma mark - Zip file detection
@@ -333,39 +328,6 @@ NS_DESIGNATED_INITIALIZER
 
 #pragma mark - Public Methods
 
--(BOOL)isVolume
-{
-    return [self isVolume:self.fileURL];
-}
-
-- (BOOL)isVolume:(NSURL *)fileURL
-{
-    @try {
-        NSError *error = nil;
-        if (![self _unrarOpenFile:fileURL.path
-                           inMode:RAR_OM_EXTRACT
-                     withPassword:nil
-                            error:&error])
-        {
-            return NO;
-        }
-        
-        if (error) {
-            NSLog(@"Error checking for volume properties: %@", error);
-            return NO;
-        }
-        
-        RARReadHeaderEx(_rarFile, header);
-        bool isVolume = (header->Flags & MHD_VOLUME) != 0;
-        
-        return isVolume;
-    }
-    @finally {
-        [self closeFile];
-    }
-    
-    return NO;
-}
 
 - (NSArray<NSString*> *)listFilenames:(NSError **)error
 {
@@ -416,86 +378,6 @@ NS_DESIGNATED_INITIALIZER
 
     URKLogDebug("Found %lu files", fileInfos.count);
     return [NSArray arrayWithArray:fileInfos];
-}
-
-- (nullable NSString *)firstVolumePath:(NSString *)filePath
-{
-    __block NSString *volumePath = filePath;
-    
-    if (filePath.length)
-    {
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.part[0-9]+)(.*\\.rar$)" options:NSRegularExpressionCaseInsensitive error:nil];
-        [regex enumerateMatchesInString:filePath options:0 range:NSMakeRange(0, [filePath length]) usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop)
-         {
-             volumePath = [regex stringByReplacingMatchesInString:filePath options:0 range:NSMakeRange(0, filePath.length) withTemplate:@".part1$2"];
-         }];
-        
-        if (volumePath != filePath)
-            return volumePath;
-        
-        regex = [NSRegularExpression regularExpressionWithPattern:@".r[0-9]+$" options:NSRegularExpressionCaseInsensitive error:nil];
-        [regex enumerateMatchesInString:filePath options:0 range:NSMakeRange(0, [filePath length]) usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop)
-         {
-             NSString *volumeExtension = @"ar";
-             volumePath = [filePath stringByDeletingPathExtension];
-             volumePath = [volumePath stringByAppendingString:[NSString stringWithFormat:@".r%@", volumeExtension]];
-         }];
-    }
-    
-    return volumePath;
-}
-
-- (nullable NSString *)firstVolumePath {
-    return [self firstVolumePath:self.filename];
-}
-
-- (nullable NSURL *)firstVolumeURL {
-    NSString *path = [self firstVolumePath];
-    
-    if (![path length]) {
-        return nil;
-    }
-    
-    return [NSURL fileURLWithPath:path];
-}
-
-- (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error
-{
-    __block NSMutableArray<NSString*> *volumePaths = [NSMutableArray new];
-    
-    NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
-    
-    if (listFileInfo == nil)
-        return nil;
-    
-    for (URKFileInfo* info in listFileInfo) {
-        if (![volumePaths containsObject:info.archiveName])
-            [volumePaths addObject:info.archiveName];
-    }
-    
-    return [NSArray arrayWithArray:volumePaths];
-}
-
-- (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
-{
-    NSError *listPathsError = nil;
-    NSArray<NSString*> *volumePaths = [self listVolumePaths:&listPathsError];
-    
-    if (!volumePaths) {
-        if (error) {
-            *error = listPathsError;
-        }
-        
-        return nil;
-    }
-    
-    NSMutableArray<NSURL*> *volumeURLs = [NSMutableArray arrayWithCapacity:volumePaths.count];
-    
-    for (NSString *volumePath in volumePaths) {
-        [volumeURLs addObject:[NSURL fileURLWithPath:volumePath]];
-    }
-    
-    return [NSArray arrayWithArray:volumeURLs];
 }
 
 - (BOOL)extractFilesTo:(NSString *)filePath

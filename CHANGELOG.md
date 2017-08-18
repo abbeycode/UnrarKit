@@ -1,5 +1,6 @@
 # UnrarKit CHANGELOG
 
+<<<<<<< HEAD
 ## 2.9
 
 <<<<<<< HEAD
@@ -13,6 +14,8 @@
 >>>>>>> Added release note [ci skip]
 
 
+=======
+>>>>>>> Rebased to multivolume branch
 ## 2.8.1
 
 Updated to UnRAR library v 5.5.5 (Issue #43 - Thanks to [@Jegge](https://github.com/Jegge) for the suggestion!)
