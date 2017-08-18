@@ -261,6 +261,7 @@ NS_DESIGNATED_INITIALIZER
     return [NSNumber numberWithUnsignedLongLong:attributes.fileSize];
 }
 
+<<<<<<< HEAD
 - (BOOL)hasMultipleVolumes
 {
     NSError *listError = nil;
@@ -274,6 +275,8 @@ NS_DESIGNATED_INITIALIZER
     return (volumeURLs.count > 1);
 }
 
+=======
+>>>>>>> Rebased to multivolume branch
 
 
 #pragma mark - Zip file detection
@@ -401,6 +404,7 @@ NS_DESIGNATED_INITIALIZER
     return [NSArray arrayWithArray:fileInfos];
 }
 
+<<<<<<< HEAD
 - (nullable NSString *)firstVolumePath
 {
     __block NSString *volumePath = self.filename;
@@ -528,6 +532,8 @@ NS_DESIGNATED_INITIALIZER
     return [NSArray arrayWithArray:volumeURLs];
 }
 
+=======
+>>>>>>> Rebased to multivolume branch
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
 <<<<<<< HEAD

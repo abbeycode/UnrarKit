@@ -175,6 +175,7 @@ extern NSString *URKErrorDomain;
  */
 @property(nullable, readonly) NSNumber *compressedSize;
 
+<<<<<<< HEAD
 /**
 <<<<<<< HEAD
  *  True if the file is one volume of a multi-part archive
@@ -184,6 +185,8 @@ extern NSString *URKErrorDomain;
 =======
 =======
 
+=======
+>>>>>>> Rebased to multivolume branch
 
 /**
 >>>>>>> Fixed merge error
@@ -316,6 +319,7 @@ extern NSString *URKErrorDomain;
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
  *  Determines whether the current file is a RAR volume part
  *
@@ -334,6 +338,8 @@ extern NSString *URKErrorDomain;
 
 /**
 >>>>>>> Adapted to multivolume branch
+=======
+>>>>>>> Rebased to multivolume branch
  *  Lists the names of the files in the archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive
@@ -414,6 +420,7 @@ extern NSString *URKErrorDomain;
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  *  Writes all files in the archive to the given path. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction. Use the progress property (as explained in the README) to
  *  retrieve more detailed information, such as the current file being extracted, number of files extracted,
@@ -421,6 +428,8 @@ extern NSString *URKErrorDomain;
 =======
 =======
 >>>>>>> Was at master, merging branch…
+=======
+>>>>>>> Rebased to multivolume branch
  *  Writes all files in the archive to the given path
 <<<<<<< HEAD
 >>>>>>> Rebased to multivolume branch
@@ -428,7 +437,19 @@ extern NSString *URKErrorDomain;
 =======
  *  **DEPRECATED:** Writes all files in the archive to the given path
 >>>>>>> Updated documentation
+<<<<<<< HEAD
 >>>>>>> Updated documentation
+=======
+=======
+ *  Writes all files in the archive to the given path. Supports NSProgress for progress reporting, which also
+ *  allows cancellation in the middle of extraction. Use the progress property (as explained in the README) to
+ *  retrieve more detailed information, such as the current file being extracted, number of files extracted,
+ *  and the URKFileInfo instance being extracted
+=======
+ *  Writes all files in the archive to the given path
+>>>>>>> Rebased to multivolume branch
+>>>>>>> Rebased to multivolume branch
+>>>>>>> Rebased to multivolume branch
  *
  *  @param filePath  The destination path of the unarchived files
  *  @param overwrite YES to overwrite files in the destination directory, NO otherwise

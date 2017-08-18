@@ -24,7 +24,6 @@
 >>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
-		967872741E460FA70048A54C /* ListVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 967872731E460FA70048A54C /* ListVolumesTests.m */; };
 		9699F91D1B3CB4D000B6D373 /* URKArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 489CFA0E128B5169005DCC2A /* URKArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9699F91E1B3CB4D000B6D373 /* URKFileInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = F3FCD4691A3262E5003612BF /* URKFileInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9699F91F1B3CB4D000B6D373 /* UnrarKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 969F17361A60297700665453 /* UnrarKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -220,6 +219,7 @@
 		969BD9E219EDE88E002CE755 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		96BF58BB1F3A487100BC24E1 /* UnrarKitMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */; };
 		96BF58BC1F3A487100BC24E1 /* UnrarKitMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */; };
 		96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */; };
@@ -230,6 +230,8 @@
 		96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */; };
 		96A043E01E4D232F00BD7013 /* HasMultipleVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */; };
 >>>>>>> Was at master, merging branch…
+=======
+>>>>>>> Rebased to multivolume branch
 		96DBF7FD1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
 		96E5D345198B333200A74340 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		96EA53331B3B462D00F79DC6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EA53321B3B462D00F79DC6 /* AppDelegate.swift */; };
@@ -393,7 +395,6 @@
 		964C8ACA18D28EE000AD7321 /* UnrarKit Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnrarKit Tests-Prefix.pch"; sourceTree = "<group>"; };
 		964C8AD018D28F1600AD7321 /* Test Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Test Data"; sourceTree = "<group>"; };
 		9660D7AE1A3F4FF90059AC1E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		967872731E460FA70048A54C /* ListVolumesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListVolumesTests.m; sourceTree = "<group>"; };
 		96853ED418DB707000B5651B /* UnrarKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnrarKit-Info.plist"; sourceTree = "<group>"; };
 		96853F0718DB722E00B5651B /* arccmt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = arccmt.cpp; sourceTree = "<group>"; };
 		96853F0818DB722E00B5651B /* archive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = archive.cpp; sourceTree = "<group>"; };
@@ -511,6 +512,7 @@
 		969F17361A60297700665453 /* UnrarKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnrarKit.h; sourceTree = "<group>"; };
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKitMacros.h; sourceTree = "<group>"; };
 		96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstVolumeTests.m; sourceTree = "<group>"; };
 		96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HasMultipleVolumesTests.m; sourceTree = "<group>"; };
@@ -520,6 +522,8 @@
 		96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstVolumeTests.m; sourceTree = "<group>"; };
 		96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HasMultipleVolumesTests.m; sourceTree = "<group>"; };
 >>>>>>> Was at master, merging branch…
+=======
+>>>>>>> Rebased to multivolume branch
 		96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+UnrarKit.h"; path = "Categories/NSString+UnrarKit.h"; sourceTree = "<group>"; };
 		96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSString+UnrarKit.mm"; path = "Categories/NSString+UnrarKit.mm"; sourceTree = "<group>"; };
 		96EA532E1B3B462D00F79DC6 /* iOSUnitTestHostApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSUnitTestHostApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -636,10 +640,9 @@
 				964547D11B384F7D00202B28 /* URKArchiveTestCase.m */,
 				964C8AC818D28EE000AD7321 /* URKArchiveTests.m */,
 				96F4507A1B385BCD00679597 /* ExtractFilesTests.m */,
-				96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */,
-				96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */,
 				96F450761B38552200679597 /* IsPasswordProtectedTests.m */,
 				96F450781B385AF800679597 /* ListFilenamesTests.m */,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -651,6 +654,8 @@
 				967872731E460FA70048A54C /* ListVolumesTests.m */,
 >>>>>>> Was at master, merging branch…
 =======
+=======
+>>>>>>> Rebased to multivolume branch
 				967872731E460FA70048A54C /* ListVolumesTests.m */,
 <<<<<<< HEAD
 =======
@@ -662,6 +667,8 @@
 =======
 >>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 >>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
+=======
+>>>>>>> Rebased to multivolume branch
 				96F450741B38527100679597 /* ValidatePasswordTests.m */,
 				96EA532F1B3B462D00F79DC6 /* iOSUnitTestHostApp */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
@@ -1209,14 +1216,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */,
 				9699FA891B3D9B5700B6D373 /* URKArchiveTests.m in Sources */,
 				9699FA8C1B3D9B6F00B6D373 /* IsPasswordProtectedTests.m in Sources */,
 				9699FA8E1B3D9B6F00B6D373 /* ValidatePasswordTests.m in Sources */,
-				967872741E460FA70048A54C /* ListVolumesTests.m in Sources */,
 				9699FA8B1B3D9B6F00B6D373 /* ExtractFilesTests.m in Sources */,
 				9699FA8A1B3D9B6F00B6D373 /* URKArchiveTestCase.m in Sources */,
-				96A043E01E4D232F00BD7013 /* HasMultipleVolumesTests.m in Sources */,
 				9699FA8D1B3D9B6F00B6D373 /* ListFilenamesTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
