@@ -421,8 +421,44 @@ NS_DESIGNATED_INITIALIZER
     return [NSArray arrayWithArray:fileInfos];
 }
 
+- (nullable NSString *)firstVolumePath:(NSString *)filePath
+{
+    __block NSString *volumePath = filePath;
+    NSTextCheckingResult * match;
+
+    if (filePath.length)
+    {
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.part)([0-9]+)(.rar)$" options:NSRegularExpressionCaseInsensitive error:nil];
+        match = [regex firstMatchInString:filePath options:0 range:NSMakeRange(0, [filePath length])];
+        if (match)
+        {
+            int rangeLength = 10;
+            NSString * leadingZeros = @"";
+            while (rangeLength < match.range.length)
+            {
+                rangeLength++;
+                leadingZeros = [leadingZeros stringByAppendingString:@"0"];
+            }
+            NSString * regexTemplate = [NSString stringWithFormat:@"$1%@1$3", leadingZeros];
+            volumePath = [regex stringByReplacingMatchesInString:filePath options:0 range:NSMakeRange(0, filePath.length) withTemplate:regexTemplate];
+        }
+        else {
+            // After rXX, rar uses r-z and symbols like {}|~... so accepting anything but a number
+            regex = [NSRegularExpression regularExpressionWithPattern:@"(\.[^0-9])([0-9]+)$" options:NSRegularExpressionCaseInsensitive error:nil];
+            match = [regex firstMatchInString:filePath options:0 range:NSMakeRange(0, [filePath length])];
+            if (match)
+                volumePath = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
+        }
+    }
+    
+    if (match && ![[NSFileManager defaultManager] fileExistsAtPath:volumePath])
+        return nil;
+    
+    return volumePath;
+}
+
 - (nullable NSString *)firstVolumePath {
-    return @"";
+    return [self firstVolumePath:self.filename];
 }
 
 - (nullable NSURL *)firstVolumeURL {
