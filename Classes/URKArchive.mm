@@ -481,7 +481,7 @@ NS_DESIGNATED_INITIALIZER
     {
         NSError *firstVolumeURLError = nil;
         
-        URKArchive * dummy = [self initWithURL:firstVolumeURL error:&firstVolumeURLError];
+        dummy = [self initWithURL:firstVolumeURL error:&firstVolumeURLError];
         if (firstVolumeURLError != nil && error) {
             *error = firstVolumeURLError;
             return nil;
