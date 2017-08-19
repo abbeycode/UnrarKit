@@ -153,6 +153,11 @@ extern NSString *URKErrorDomain;
  */
 @property(nullable, readonly) NSNumber *compressedSize;
 
+/**
+ *  True if the file is one volume of a multi-part archive
+ */
+@property(readonly) BOOL hasMultipleVolumes;
+
 
 /**
  *  Can be used for progress reporting, but it's not necessary. You can also use
@@ -284,6 +289,9 @@ extern NSString *URKErrorDomain;
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Was at master, merging branch…
  *  Gets the path of the first volume in a multi-volume archive, or the only volume in a single-volume one
  *
  *  @return Returns the path, or nil if there was an error
@@ -316,11 +324,14 @@ extern NSString *URKErrorDomain;
 - (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error;
 
 /**
+<<<<<<< HEAD
  *  Writes all files in the archive to the given path. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction. Use the progress property (as explained in the README) to
  *  retrieve more detailed information, such as the current file being extracted, number of files extracted,
  *  and the URKFileInfo instance being extracted
 =======
+=======
+>>>>>>> Was at master, merging branch…
  *  Writes all files in the archive to the given path
 >>>>>>> Rebased to multivolume branch
  *

@@ -14,8 +14,12 @@
 >>>>>>> Added release note [ci skip]
 
 
+<<<<<<< HEAD
 =======
 >>>>>>> Rebased to multivolume branch
+=======
+
+>>>>>>> Was at master, merging branch…
 ## 2.8.1
 
 Updated to UnRAR library v 5.5.5 (Issue #43 - Thanks to [@Jegge](https://github.com/Jegge) for the suggestion!)

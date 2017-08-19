@@ -239,18 +239,59 @@ static NSURL *originalLargeArchiveURL;
 }
 
 - (NSURL *)archiveWithFiles:(NSArray *)fileURLs {
-    NSString *uniqueString = [[NSProcessInfo processInfo] globallyUniqueString];
+    return [self archiveWithFiles:fileURLs arguments:nil];
+}
+
+- (NSURL *)archiveWithFiles:(NSArray *)fileURLs arguments:(NSArray *)customArgs {
+    return [self archiveWithFiles:fileURLs arguments:customArgs commandOutput:NULL];
+}
+
+- (NSURL *)archiveWithFiles:(NSArray *)fileURLs arguments:(NSArray *)customArgs commandOutput:(NSString **)commandOutput {
+    return [self archiveWithFiles:fileURLs name:nil arguments:customArgs commandOutput:commandOutput];
+}
+
+- (NSURL *)archiveWithFiles:(NSArray *)fileURLs name:(NSString *)archiveName {
+    return [self archiveWithFiles:fileURLs name:archiveName arguments:nil];
+}
+
+- (NSURL *)archiveWithFiles:(NSArray *)fileURLs name:(NSString *)archiveName arguments:(NSArray *)customArgs {
+    return [self archiveWithFiles:fileURLs name:archiveName arguments:customArgs commandOutput:NULL];
+}
+
+- (NSURL *)archiveWithFiles:(NSArray *)fileURLs name:(NSString *)archiveName arguments:(NSArray *)customArgs commandOutput:(NSString **)commandOutput {
+    NSString *archiveFileName = archiveName;
+    if (![archiveFileName length]) {
+        NSString *uniqueString = [[NSProcessInfo processInfo] globallyUniqueString];
+        archiveFileName = [uniqueString stringByAppendingPathExtension:@"rar"];
+    }
+    
     NSURL *rarExec = [[self.tempDirectory URLByAppendingPathComponent:@"bin"]
                       URLByAppendingPathComponent:@"rar"];
-    NSURL *archiveURL = [[self.tempDirectory URLByAppendingPathComponent:uniqueString]
-                         URLByAppendingPathExtension:@"rar"];
+    NSURL *archiveURL = [self.tempDirectory URLByAppendingPathComponent:archiveFileName];
     
+    NSMutableArray *rarArguments = [NSMutableArray arrayWithArray:@[@"a", @"-ep", archiveURL.path]];
+    if (customArgs) {
+        [rarArguments addObjectsFromArray:customArgs];
+    }
+    [rarArguments addObjectsFromArray:[fileURLs valueForKeyPath:@"path"]];
+    
+    NSPipe *pipe = [NSPipe pipe];
+    NSFileHandle *file = pipe.fileHandleForReading;
+
     NSTask *task = [[NSTask alloc] init];
     task.launchPath = rarExec.path;
-    task.arguments = [@[@"a", @"-ep", archiveURL.path] arrayByAddingObjectsFromArray:[fileURLs valueForKeyPath:@"path"]];
+    task.arguments = rarArguments;
+    task.standardOutput = pipe;
     
     [task launch];
     [task waitUntilExit];
+
+    NSData *data = [file readDataToEndOfFile];
+    [file closeFile];
+    
+    if (commandOutput) {
+        *commandOutput = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
     
     if (task.terminationStatus != 0) {
         NSLog(@"Failed to create RAR archive");
@@ -259,8 +300,87 @@ static NSURL *originalLargeArchiveURL;
     
     return archiveURL;
 }
+
+- (NSArray<NSURL *> *)multiPartArchiveWithName:(NSString *)baseName
+{
+    NSURL *textFile = [self randomTextFileOfLength:100000];
+    
+    // Generate multi-volume archive, with parts no larger than 20 KB in size
+    NSString *commandOutputString = nil;
+    [self archiveWithFiles:@[textFile]
+                      name:baseName
+                 arguments:@[@"-v20k"]
+             commandOutput:&commandOutputString];
+    
+    NSMutableArray<NSString*> *volumePaths = [NSMutableArray arrayWithArray:
+                                              [commandOutputString regexMatches:@"Creating archive (.+)"]];
+    NSString *intendedFirstVolumePath = volumePaths.firstObject;
+    NSString *firstVolumeDir = [intendedFirstVolumePath stringByDeletingLastPathComponent];
+    NSString *actualFirstVolumePath = [firstVolumeDir stringByAppendingPathComponent:
+                                       [baseName stringByReplacingOccurrencesOfString:@"rar"
+                                                                           withString:@"part01.rar"]];
+    [volumePaths replaceObjectAtIndex:0 withObject:actualFirstVolumePath];
+    
+    NSMutableArray<NSURL*> *result = [NSMutableArray array];
+    for (NSString *path in volumePaths) {
+        [result addObject:[NSURL fileURLWithPath:path]];
+    }
+    
+    return result;
+}
+
+- (NSArray<NSURL *> *)multiPartArchiveOldSchemeWithName:(NSString *)baseName
+{
+    NSURL *textFile = [self randomTextFileOfLength:100000];
+    
+    // Generate multi-volume archive, with parts no larger than 20 KB in size
+    NSString *commandOutputString = nil;
+    [self archiveWithFiles:@[textFile]
+                      name:baseName
+                 arguments:@[@"-v20k", @"-vn"]
+             commandOutput:&commandOutputString];
+    
+    NSArray<NSString*> *volumePaths = [commandOutputString regexMatches:@"Creating archive (.+)"];
+
+    NSMutableArray<NSURL*> *result = [NSMutableArray array];
+    for (NSString *path in volumePaths) {
+        [result addObject:[NSURL fileURLWithPath:path]];
+    }
+    
+    return result;
+}
 #endif
 
 
+
+@end
+
+
+@implementation NSString (URKArchiveTestCaseExtensions)
+
+- (NSArray<NSString*> *)regexMatches:(NSString *)expression
+{
+    NSError *regexCreationError = nil;
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:expression
+                                                                           options:0
+                                                                             error:&regexCreationError];
+    
+    if (!regex) {
+        NSLog(@"Failed to create regex with pattern '%@': %@", expression, regexCreationError);
+        return @[];
+    }
+    
+    NSMutableArray<NSString*> *results = [NSMutableArray array];
+
+    [regex enumerateMatchesInString:self
+                            options:0
+                              range:NSMakeRange(0, self.length)
+                         usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
+                             [results addObject:[self substringWithRange:[result rangeAtIndex:1]]];
+                         }];
+    
+    return results;
+}
 
 @end

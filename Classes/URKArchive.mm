@@ -253,6 +253,11 @@ NS_DESIGNATED_INITIALIZER
     return [NSNumber numberWithUnsignedLongLong:attributes.fileSize];
 }
 
+- (BOOL)hasMultipleVolumes
+{
+    return NO;
+}
+
 
 
 #pragma mark - Zip file detection
@@ -378,6 +383,47 @@ NS_DESIGNATED_INITIALIZER
 
     URKLogDebug("Found %lu files", fileInfos.count);
     return [NSArray arrayWithArray:fileInfos];
+}
+
+- (nullable NSString *)firstVolumePath {
+    return @"";
+}
+
+- (nullable NSURL *)firstVolumeURL {
+    NSString *path = [self firstVolumePath];
+    
+    if (![path length]) {
+        return nil;
+    }
+    
+    return [NSURL fileURLWithPath:path];
+}
+
+- (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error
+{
+    return @[];
+}
+
+- (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
+{
+    NSError *listPathsError = nil;
+    NSArray<NSString*> *volumePaths = [self listVolumePaths:&listPathsError];
+    
+    if (!volumePaths) {
+        if (error) {
+            *error = listPathsError;
+        }
+        
+        return nil;
+    }
+    
+    NSMutableArray<NSURL*> *volumeURLs = [NSMutableArray arrayWithCapacity:volumePaths.count];
+    
+    for (NSString *volumePath in volumePaths) {
+        [volumeURLs addObject:[NSURL fileURLWithPath:volumePath]];
+    }
+    
+    return [NSArray arrayWithArray:volumeURLs];
 }
 
 - (BOOL)extractFilesTo:(NSString *)filePath
