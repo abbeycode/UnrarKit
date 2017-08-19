@@ -366,6 +366,7 @@ NS_DESIGNATED_INITIALIZER
     return [self isVolume:self.fileURL];
 }
 
+<<<<<<< HEAD
 - (BOOL)isVolume:(NSURL *)fileURL
 {
     @try {
@@ -395,6 +396,8 @@ NS_DESIGNATED_INITIALIZER
     return NO;
 }
 
+=======
+>>>>>>> isVolume method removed
 - (NSArray<NSString*> *)listFilenames:(NSError **)error
 {
     URKCreateActivity("Listing Filenames");
