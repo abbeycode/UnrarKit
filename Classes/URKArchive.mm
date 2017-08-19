@@ -361,6 +361,7 @@ NS_DESIGNATED_INITIALIZER
 #pragma mark - Public Methods
 
 
+<<<<<<< HEAD
 -(BOOL)isVolume
 {
     return [self isVolume:self.fileURL];
@@ -398,6 +399,8 @@ NS_DESIGNATED_INITIALIZER
 
 =======
 >>>>>>> isVolume method removed
+=======
+>>>>>>> Removing extra space
 - (NSArray<NSString*> *)listFilenames:(NSError **)error
 {
     URKCreateActivity("Listing Filenames");
