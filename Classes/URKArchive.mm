@@ -473,27 +473,58 @@ NS_DESIGNATED_INITIALIZER
 {
     NSMutableSet<NSString*> *volumePaths = [NSMutableSet new];
     
-    URKArchive * dummy = self;
     NSURL * firstVolumeURL = [self firstVolumeURL];
     if (firstVolumeURL != self.fileURL)
     {
-        NSError *firstVolumeURLError = nil;
-        
-        dummy = [self initWithURL:firstVolumeURL error:&firstVolumeURLError];
-        if (firstVolumeURLError != nil && error) {
-            *error = firstVolumeURLError;
-            return nil;
+        @try {
+            NSError *firstVolumeError = nil;
+            
+            if ([self _unrarOpenFile:firstVolumeURL.path
+                              inMode:RAR_OM_LIST_INCSPLIT
+                        withPassword:nil
+                               error:&firstVolumeError])
+            {
+                int RHCode = 0, PFCode = 0;
+                
+                while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+                    [volumePaths addObject:[URKFileInfo fileInfo:header].archiveName];
+                    
+                    if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                        [self assignError:error code:(NSInteger)PFCode];
+                        volumePaths = nil;
+                        return nil;
+                    }
+                }
+                
+                if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
+                    [self assignError:error code:RHCode];
+                    volumePaths = nil;
+                }
+                
+            }
+            else {
+                if (error) {
+                    *error = firstVolumeError;
+                }
+                return nil;
+            }
+        }
+        @finally {
+            [self closeFile];
         }
     }
-    
-    NSArray<URKFileInfo*> *listFileInfo = [dummy listFileInfo:error];
-    
-    if (listFileInfo == nil)
-        return nil;
-    
-    for (URKFileInfo* info in listFileInfo)
-        [volumePaths addObject:info.archiveName];
-    
+    else {
+        NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
+        
+        if (listFileInfo == nil) {
+            return nil;
+        }
+        
+        for (URKFileInfo* info in listFileInfo) {
+            [volumePaths addObject:info.archiveName];
+        }
+    }
+
     return [NSArray arrayWithArray:volumePaths.allObjects];
 }
 
