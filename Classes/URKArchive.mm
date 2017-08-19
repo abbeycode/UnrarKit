@@ -336,16 +336,12 @@ NS_DESIGNATED_INITIALIZER
 #pragma mark - Public Methods
 
 
--(BOOL)isVolume
-{
-    return [self isVolume:self.fileURL];
-}
 
-- (BOOL)isVolume:(NSURL *)fileURL
+- (BOOL)isVolume
 {
     @try {
         NSError *error = nil;
-        if (![self _unrarOpenFile:fileURL.path
+        if (![self _unrarOpenFile:self.fileURL.path
                            inMode:RAR_OM_EXTRACT
                      withPassword:nil
                             error:&error])
@@ -421,15 +417,15 @@ NS_DESIGNATED_INITIALIZER
     return [NSArray arrayWithArray:fileInfos];
 }
 
-- (nullable NSString *)firstVolumePath:(NSString *)filePath
+- (nullable NSString *)firstVolumePath
 {
-    __block NSString *volumePath = filePath;
+    __block NSString *volumePath = self.filename;
     NSTextCheckingResult * match;
 
-    if (filePath.length)
+    if (self.filename.length)
     {
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.part)([0-9]+)(.rar)$" options:NSRegularExpressionCaseInsensitive error:nil];
-        match = [regex firstMatchInString:filePath options:0 range:NSMakeRange(0, [filePath length])];
+        match = [regex firstMatchInString:self.filename options:0 range:NSMakeRange(0, self.filename.length)];
         if (match)
         {
             int rangeLength = 10;
@@ -440,14 +436,14 @@ NS_DESIGNATED_INITIALIZER
                 leadingZeros = [leadingZeros stringByAppendingString:@"0"];
             }
             NSString * regexTemplate = [NSString stringWithFormat:@"$1%@1$3", leadingZeros];
-            volumePath = [regex stringByReplacingMatchesInString:filePath options:0 range:NSMakeRange(0, filePath.length) withTemplate:regexTemplate];
+            volumePath = [regex stringByReplacingMatchesInString:self.filename options:0 range:NSMakeRange(0, self.filename.length) withTemplate:regexTemplate];
         }
         else {
             // After rXX, rar uses r-z and symbols like {}|~... so accepting anything but a number
             regex = [NSRegularExpression regularExpressionWithPattern:@"(\\.[^0-9])([0-9]+)$" options:NSRegularExpressionCaseInsensitive error:nil];
-            match = [regex firstMatchInString:filePath options:0 range:NSMakeRange(0, [filePath length])];
+            match = [regex firstMatchInString:self.filename options:0 range:NSMakeRange(0, self.filename.length)];
             if (match)
-                volumePath = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
+                volumePath = [[self.filename stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
         }
     }
     
@@ -455,10 +451,6 @@ NS_DESIGNATED_INITIALIZER
         return nil;
     
     return volumePath;
-}
-
-- (nullable NSString *)firstVolumePath {
-    return [self firstVolumePath:self.filename];
 }
 
 - (nullable NSURL *)firstVolumeURL {
