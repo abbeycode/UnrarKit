@@ -444,7 +444,7 @@ NS_DESIGNATED_INITIALIZER
         }
         else {
             // After rXX, rar uses r-z and symbols like {}|~... so accepting anything but a number
-            regex = [NSRegularExpression regularExpressionWithPattern:@"(\.[^0-9])([0-9]+)$" options:NSRegularExpressionCaseInsensitive error:nil];
+            regex = [NSRegularExpression regularExpressionWithPattern:@"(\\.[^0-9])([0-9]+)$" options:NSRegularExpressionCaseInsensitive error:nil];
             match = [regex firstMatchInString:filePath options:0 range:NSMakeRange(0, [filePath length])];
             if (match)
                 volumePath = [[filePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
