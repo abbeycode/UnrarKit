@@ -255,8 +255,14 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)hasMultipleVolumes
 {
-    NSError *listURLsError = nil;
-    NSArray<NSURL*> *volumeURLs = [self listVolumeURLs:&listURLsError];
+    NSError *listError = nil;
+    NSArray<NSURL*> *volumeURLs = [self listVolumeURLs:&listError];
+    
+    if (!volumeURLs) {
+        NSLog(@"Error getting file volumes list: %@", listError);
+        return false;
+    }
+    
     return (volumeURLs.count > 1);
 }
 
