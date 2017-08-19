@@ -328,7 +328,10 @@ extern NSString *URKErrorDomain;
 /**
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> Implementing isVolume methods
  *  Determines whether the current file is a RAR volume part
  *
  *  @return YES if the file exists, is a RAR archive and is a volume part
@@ -345,9 +348,12 @@ extern NSString *URKErrorDomain;
 - (BOOL)isVolume:(NSURL *)fileURL;
 
 /**
+<<<<<<< HEAD
 >>>>>>> Adapted to multivolume branch
 =======
 >>>>>>> Rebased to multivolume branch
+=======
+>>>>>>> Implementing isVolume methods
  *  Lists the names of the files in the archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive
