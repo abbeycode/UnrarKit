@@ -336,6 +336,40 @@ NS_DESIGNATED_INITIALIZER
 #pragma mark - Public Methods
 
 
+-(BOOL)isVolume
+{
+    return [self isVolume:self.fileURL];
+}
+
+- (BOOL)isVolume:(NSURL *)fileURL
+{
+    @try {
+        NSError *error = nil;
+        if (![self _unrarOpenFile:fileURL.path
+                           inMode:RAR_OM_EXTRACT
+                     withPassword:nil
+                            error:&error])
+        {
+            return NO;
+        }
+        
+        if (error) {
+            NSLog(@"Error checking for volume properties: %@", error);
+            return NO;
+        }
+        
+        RARReadHeaderEx(_rarFile, header);
+        bool isVolume = (header->Flags & MHD_VOLUME) != 0;
+        
+        return isVolume;
+    }
+    @finally {
+        [self closeFile];
+    }
+    
+    return NO;
+}
+
 - (NSArray<NSString*> *)listFilenames:(NSError **)error
 {
     URKCreateActivity("Listing Filenames");
