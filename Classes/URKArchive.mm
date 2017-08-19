@@ -485,12 +485,10 @@ NS_DESIGNATED_INITIALIZER
     if (listFileInfo == nil)
         return nil;
     
-    for (URKFileInfo* info in listFileInfo) {
-        if (![volumePaths containsObject:info.archiveName])
-            [volumePaths addObject:info.archiveName];
-    }
+    for (URKFileInfo* info in listFileInfo)
+        [volumePaths addObject:info.archiveName];
     
-    return [NSArray arrayWithArray:volumePaths];
+    return [NSArray arrayWithArray:volumePaths.allObjects];
 }
 
 - (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
