@@ -465,7 +465,7 @@ NS_DESIGNATED_INITIALIZER
 
 - (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error
 {
-    __block NSMutableArray<NSString*> *volumePaths = [NSMutableArray new];
+    NSMutableSet<NSString*> *volumePaths = [NSMutableSet new];
     
     URKArchive * dummy = self;
     NSURL * firstVolumeURL = [self firstVolumeURL];
