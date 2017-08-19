@@ -176,6 +176,7 @@ extern NSString *URKErrorDomain;
 @property(nullable, readonly) NSNumber *compressedSize;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /**
 <<<<<<< HEAD
  *  True if the file is one volume of a multi-part archive
@@ -187,6 +188,13 @@ extern NSString *URKErrorDomain;
 
 =======
 >>>>>>> Rebased to multivolume branch
+=======
+/**
+ *  True if the file is one volume of a multi-part archive
+ */
+@property(readonly) BOOL hasMultipleVolumes;
+
+>>>>>>> Was at master, merging branch…
 
 /**
 >>>>>>> Fixed merge error
@@ -361,10 +369,15 @@ extern NSString *URKErrorDomain;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> Was at master, merging branch…
 =======
 >>>>>>> Deprecated methods that take a progress block argument, and created versions without them
+=======
+=======
+>>>>>>> Was at master, merging branch…
+>>>>>>> Was at master, merging branch…
  *  Gets the path of the first volume in a multi-volume archive, or the only volume in a single-volume one
  *
  *  @return Returns the path, or nil if there was an error
@@ -421,6 +434,7 @@ extern NSString *URKErrorDomain;
 /**
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  *  Writes all files in the archive to the given path. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction. Use the progress property (as explained in the README) to
  *  retrieve more detailed information, such as the current file being extracted, number of files extracted,
@@ -430,6 +444,8 @@ extern NSString *URKErrorDomain;
 >>>>>>> Was at master, merging branch…
 =======
 >>>>>>> Rebased to multivolume branch
+=======
+>>>>>>> Was at master, merging branch…
  *  Writes all files in the archive to the given path
 <<<<<<< HEAD
 >>>>>>> Rebased to multivolume branch
@@ -441,11 +457,15 @@ extern NSString *URKErrorDomain;
 >>>>>>> Updated documentation
 =======
 =======
+=======
+>>>>>>> Was at master, merging branch…
  *  Writes all files in the archive to the given path. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction. Use the progress property (as explained in the README) to
  *  retrieve more detailed information, such as the current file being extracted, number of files extracted,
  *  and the URKFileInfo instance being extracted
 =======
+=======
+>>>>>>> Was at master, merging branch…
  *  Writes all files in the archive to the given path
 >>>>>>> Rebased to multivolume branch
 >>>>>>> Rebased to multivolume branch

@@ -262,6 +262,7 @@ NS_DESIGNATED_INITIALIZER
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 - (BOOL)hasMultipleVolumes
 {
     NSError *listError = nil;
@@ -277,6 +278,13 @@ NS_DESIGNATED_INITIALIZER
 
 =======
 >>>>>>> Rebased to multivolume branch
+=======
+- (BOOL)hasMultipleVolumes
+{
+    return NO;
+}
+
+>>>>>>> Was at master, merging branch…
 
 
 #pragma mark - Zip file detection
@@ -405,6 +413,7 @@ NS_DESIGNATED_INITIALIZER
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 - (nullable NSString *)firstVolumePath
 {
     __block NSString *volumePath = self.filename;
@@ -439,6 +448,10 @@ NS_DESIGNATED_INITIALIZER
         return nil;
     
     return volumePath;
+=======
+- (nullable NSString *)firstVolumePath {
+    return @"";
+>>>>>>> Was at master, merging branch…
 }
 
 - (nullable NSURL *)firstVolumeURL {
@@ -453,6 +466,7 @@ NS_DESIGNATED_INITIALIZER
 
 - (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error
 {
+<<<<<<< HEAD
     NSMutableSet<NSString*> *volumePaths = [NSMutableSet new];
     
     NSURL * firstVolumeURL = [self firstVolumeURL];
@@ -508,6 +522,9 @@ NS_DESIGNATED_INITIALIZER
     }
 
     return [NSArray arrayWithArray:volumePaths.allObjects];
+=======
+    return @[];
+>>>>>>> Was at master, merging branch…
 }
 
 - (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
@@ -532,8 +549,11 @@ NS_DESIGNATED_INITIALIZER
     return [NSArray arrayWithArray:volumeURLs];
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> Rebased to multivolume branch
+=======
+>>>>>>> Was at master, merging branch…
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
 <<<<<<< HEAD
