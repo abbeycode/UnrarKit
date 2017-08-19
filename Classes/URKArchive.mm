@@ -475,18 +475,20 @@ NS_DESIGNATED_INITIALIZER
 {
     __block NSMutableArray<NSString*> *volumePaths = [NSMutableArray new];
     
+    URKArchive * dummy = self;
     NSURL * firstVolumeURL = [self firstVolumeURL];
     if (firstVolumeURL != self.fileURL)
     {
         NSError *firstVolumeURLError = nil;
-        [self initWithURL:firstVolumeURL error:&firstVolumeURLError];
+        
+        URKArchive * dummy = [self initWithURL:firstVolumeURL error:&firstVolumeURLError];
         if (firstVolumeURLError != nil && error) {
             *error = firstVolumeURLError;
             return nil;
         }
     }
     
-    NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
+    NSArray<URKFileInfo*> *listFileInfo = [dummy listFileInfo:error];
     
     if (listFileInfo == nil)
         return nil;
