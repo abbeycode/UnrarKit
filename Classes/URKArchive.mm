@@ -342,7 +342,6 @@ NS_DESIGNATED_INITIALIZER
 #pragma mark - Public Methods
 
 
-
 - (NSArray<NSString*> *)listFilenames:(NSError **)error
 {
     URKCreateActivity("Listing Filenames");
