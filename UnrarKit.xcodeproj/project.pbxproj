@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A22B1F81F60A2D3004B8050 /* UnrarKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */; };
+		7A22B1FB1F60A39E004B8050 /* UnrarKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		9699F91D1B3CB4D000B6D373 /* URKArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 489CFA0E128B5169005DCC2A /* URKArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -280,6 +282,8 @@
 /* Begin PBXFileReference section */
 		489CFA0E128B5169005DCC2A /* URKArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = URKArchive.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		489CFA0F128B5169005DCC2A /* URKArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = URKArchive.mm; sourceTree = "<group>"; };
+		7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnrarKitResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A22B1F91F60A2D3004B8050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UnrarKit.strings; sourceTree = "<group>"; };
 		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
 		96370FB419ED8A8200DAF8F1 /* blake2s.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s.cpp; sourceTree = "<group>"; };
 		96370FB519ED8A8200DAF8F1 /* blake2s.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = blake2s.hpp; sourceTree = "<group>"; };
@@ -458,6 +462,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7A22B1E71F60A05F004B8050 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		964C8AB818D28EE000AD7321 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -509,6 +520,7 @@
 				9699F9DA1B3CB83100B6D373 /* UnrarKit.framework */,
 				96F5BBB11B39A65F00ACB162 /* UnrarKit iOS Tests.xctest */,
 				96EA532E1B3B462D00F79DC6 /* iOSUnitTestHostApp.app */,
+				7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -517,8 +529,8 @@
 			isa = PBXGroup;
 			children = (
 				08FB77AEFE84172EC02AAC07 /* Classes */,
-				96853ED318DB704900B5651B /* Resources */,
 				964C8AC218D28EE000AD7321 /* Tests */,
+				7A22B1EB1F60A05F004B8050 /* UnrarKitResources */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 				96853F0418DB722E00B5651B /* Libraries */,
@@ -548,6 +560,16 @@
 			path = Classes;
 			sourceTree = SOURCE_ROOT;
 		};
+		7A22B1EB1F60A05F004B8050 /* UnrarKitResources */ = {
+			isa = PBXGroup;
+			children = (
+				96853ED418DB707000B5651B /* UnrarKit-Info.plist */,
+				7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */,
+			);
+			name = UnrarKitResources;
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		964C8AC218D28EE000AD7321 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -574,14 +596,6 @@
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
-		};
-		96853ED318DB704900B5651B /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				96853ED418DB707000B5651B /* UnrarKit-Info.plist */,
-			);
-			path = Resources;
-			sourceTree = SOURCE_ROOT;
 		};
 		96853F0418DB722E00B5651B /* Libraries */ = {
 			isa = PBXGroup;
@@ -913,6 +927,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		7A22B1E91F60A05F004B8050 /* UnrarKitResources */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A22B1EF1F60A05F004B8050 /* Build configuration list for PBXNativeTarget "UnrarKitResources" */;
+			buildPhases = (
+				7A22B1E61F60A05F004B8050 /* Sources */,
+				7A22B1E71F60A05F004B8050 /* Frameworks */,
+				7A22B1E81F60A05F004B8050 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UnrarKitResources;
+			productName = UnrarKitResources;
+			productReference = 7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 		964C8ABA18D28EE000AD7321 /* UnrarKit Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "UnrarKit Tests" */;
@@ -1011,6 +1042,10 @@
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0820;
 				TargetAttributes = {
+					7A22B1E91F60A05F004B8050 = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+					};
 					964C8ABA18D28EE000AD7321 = {
 						LastSwiftMigration = 0820;
 						TestTargetID = 96853EDA18DB71CD00B5651B;
@@ -1052,12 +1087,21 @@
 				964C8ABA18D28EE000AD7321 /* UnrarKit Tests */,
 				9699F9D91B3CB83100B6D373 /* UnrarKit iOS */,
 				96F5BBB01B39A65F00ACB162 /* UnrarKit iOS Tests */,
+				7A22B1E91F60A05F004B8050 /* UnrarKitResources */,
 				96EA532D1B3B462D00F79DC6 /* iOSUnitTestHostApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7A22B1E81F60A05F004B8050 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A22B1F81F60A2D3004B8050 /* UnrarKit.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		964C8AB918D28EE000AD7321 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1087,6 +1131,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A22B1FB1F60A39E004B8050 /* UnrarKitResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1101,6 +1146,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7A22B1E61F60A05F004B8050 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		964C8AB718D28EE000AD7321 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1263,6 +1315,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A22B1F91F60A2D3004B8050 /* en */,
+			);
+			name = UnrarKit.strings;
+			path = Resources;
+			sourceTree = SOURCE_ROOT;
+		};
 		964C8AC518D28EE000AD7321 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1368,6 +1429,70 @@
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		7A22B1ED1F60A05F004B8050 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Resources/UnrarKit-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.UnrarKitResources";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		7A22B1EE1F60A05F004B8050 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Resources/UnrarKit-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.UnrarKitResources";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
@@ -1800,6 +1925,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		7A22B1EF1F60A05F004B8050 /* Build configuration list for PBXNativeTarget "UnrarKitResources" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A22B1ED1F60A05F004B8050 /* Debug */,
+				7A22B1EE1F60A05F004B8050 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "UnrarKit Tests" */ = {
 			isa = XCConfigurationList;
