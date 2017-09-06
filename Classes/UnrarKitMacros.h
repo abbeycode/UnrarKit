@@ -26,6 +26,7 @@ __IPHONE_OS_VERSION_MIN_REQUIRED >= 100000 \
 
 #if UNIFIED_LOGGING_SUPPORTED
 #import <os/log.h>
+#import <os/activity.h>
 
 // Called from +[UnrarKit initialize] and +[URKArchiveTestCase setUp]
 extern os_log_t unrarkit_log; // Declared in URKArchive.m
@@ -50,7 +51,9 @@ os_activity_scope(activity);
 
 
 // Only used below
-#define _removeLogFormatTokens(format) [@format stringByReplacingOccurrencesOfString:@"{public}" withString:@""]
+#define _removeLogFormatTokens(format) [[@format \
+    stringByReplacingOccurrencesOfString:@"{public}" withString:@""] \
+    stringByReplacingOccurrencesOfString:@"{iec-bytes}" withString:@""]
 #define _stringify(a) #a
 #define _nsLogWithoutWarnings(format, ...) \
 _Pragma( _stringify( clang diagnostic push ) ) \

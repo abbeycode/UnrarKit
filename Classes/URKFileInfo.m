@@ -4,6 +4,7 @@
 //
 
 #import "URKFileInfo.h"
+#import "UnrarKitMacros.h"
 
 #import "NSString+UnrarKit.h"
 
@@ -20,7 +21,11 @@
 
 - (instancetype)initWithFileHeader:(struct RARHeaderDataEx *)fileHeader
 {
+    URKCreateActivity("Init URKFileInfo");
+
     if ((self = [super init])) {
+        URKLogDebug("Setting file info fields");
+        
         _filename = [NSString stringWithUnichars:fileHeader->FileNameW];
         _archiveName = [NSString stringWithUnichars:fileHeader->ArcNameW];
         _uncompressedSize = (long long) fileHeader->UnpSizeHigh << 32 | fileHeader->UnpSize;
@@ -37,6 +42,7 @@
         
         _isDirectory = fileHeader->Flags & RHDF_DIRECTORY;
     }
+
     return self;
 }
 
@@ -47,7 +53,10 @@
 
 - (NSDate *)parseDOSDate:(NSUInteger)dosTime
 {
+    URKCreateActivity("-parseDOSDate:");
+
     if (dosTime == 0) {
+        URKLogDebug("DOS Time == 0");
         return nil;
     }
     
