@@ -1074,7 +1074,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
             break;
 
         default:
-            errorName = [NSString stringWithFormat:@"Unknown (%ld)", errorCode];
+            errorName = [NSString stringWithFormat:@"Unknown (%ld)", (long)errorCode];
             detail = [NSString localizedStringWithFormat:NSLocalizedStringFromTableInBundle(@"Unknown error encountered (code %ld)", @"UnrarKit", _resources, @"Error detail string"), errorCode];
             break;
     }
