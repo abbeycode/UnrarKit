@@ -1000,6 +1000,8 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
 - (NSString *)errorNameForErrorCode:(NSInteger)errorCode detail:(NSString **)errorDetail
 {
+    NSAssert(errorDetail != NULL, @"errorDetail out parameter not given");
+    
     NSString *errorName;
     NSString *detail = @"";
 
@@ -1079,6 +1081,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
             break;
     }
 
+    *errorDetail = detail;
     return errorName;
 }
 
