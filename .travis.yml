@@ -3,6 +3,10 @@ osx_image: xcode8.3
 
 xcode_workspace: UnrarKit.xcworkspace
 
+before_script:
+    # Make log level less verbose. Temporarily undo if more info is needed
+    - sudo log config --mode "level:default" --subsystem com.abbey-code.UnrarKit
+
 matrix:
   include:
     - stage: Test
