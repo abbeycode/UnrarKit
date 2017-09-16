@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [ -z ${TRAVIS+x} ]; then
-    TRAVIS_BUILD_DIR="/Users/Dov/Source Code/UnrarKit"
-    TRAVIS_BRANCH=carthage
+    TRAVIS_BUILD_DIR="`pwd`"
+    TRAVIS_BRANCH=`git branch | grep ^\* | cut -c 3-`
 fi
 
 if [ ! -d "CarthageValidation" ]; then

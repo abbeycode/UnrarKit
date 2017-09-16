@@ -99,6 +99,71 @@ To open in Xcode, use the [UnrarKit.xcworkspace](UnrarKit.xcworkspace) file, whi
 
 Full documentation for the project is available on [CocoaDocs](http://cocoadocs.org/docsets/UnrarKit).
 
+
+# Logging
+
+For all OS versions from 2016 onward (macOS 10.12, iOS 10, tvOS 10, watchOS 3), UnzipKit uses the new [Unified Logging framework](https://developer.apple.com/documentation/os/logging) for logging and Activity Tracing. You can view messages at the Info or Debug level to view more details of how UnzipKit is working, and use Activity Tracing to help pinpoint the code path that's causing a particular error.
+
+As a fallback, regular `NSLog` is used on older OSes, with all messages logged at the same level.
+
+When debugging your own code, if you'd like to decrease the verbosity of the UnrarKit framework, you can run the following command:
+
+    sudo log config --mode "level:default" --subsystem com.abbey-code.UnrarKit
+
+The available levels, in order of increasing verbosity, are `default`, `info`, `debug`, with `debug` being the default.
+
+## Logging guidelines
+
+These are the general rules governing the particulars of how activities and log messages are classified and written. They were written after the initial round of log messages were, so there may be some inconsistencies (such as an incorrect log level). If you think you spot one, open an issue or a pull request!
+
+### Logging
+
+Log messages should follow these conventions.
+
+1. Log messages don't have final punctuation (like these list items)
+1. Messages that note a C function is about to be called, rather than a higher level UnrarKit or Cocoa method, end with "...", since it's not expected for them to log any details of their own
+
+#### Default log level
+
+There should be no messages at this level, so that it's possible for a consumer of the API to turn off _all_ diagnostic logging from it, as detailed above. It's only possible to `log config --mode "level:off"` for a process, not a subsystem.
+
+#### Info log level
+
+Info level log statements serve the following specific purposes.
+
+1. Major action is taken, such as initializing an archive object, or deleting a file from an archive
+1. Noting each public method has been called, and the arguments with which it was called
+1. Signposting the major actions a public method takes
+1. Notifying that an atypical condition has occurred (such as an action causing an early stop in a block or a NO return value)
+1. Noting that a loop is about to occur, which will contain debug-level messages for each iteration
+
+#### Debug log level
+
+Most messages fall into this category, making it extremely verbose. All non-error messages that don't fall into either of the other two categories should be debug-level, with some examples of specific cases below.
+
+1. Any log message in a private method
+1. Noting variable and argument values in a method
+1. Indicating that everything is working as expected
+1. Indicating what happens during each iteration of a loop (or documenting that an iteration has happened at all)
+
+#### Error log level
+
+1. Every `NSError` generated should get logged with the same detail message as the `NSError` object itself
+1. `NSError` log messages should contain the string of the error code's enumeration value (e.g. `"URKErrorCodeArchiveNotFound"`) when it is known at design time
+1. Errors should reported everywhere they're encountered, making it easier to trace their flows through the call stack
+1. Early exits that result in desired work not being performed
+
+#### Fault log level
+
+So far, there is only one case that gets logged at Fault-level: when a Cocoa framework methods that come back with an error
+
+### Activities
+1. Public methods have an English activity names with spaces, and are title-case
+1. Private methods each have an activity with the method's name
+1. Sub-activities are created for significant scope changes, such as when inside an action block, but not if no significant work is done before entering that action
+1. Top-level activities within a method have variables named `activity`, with more specific labels given to sub-activities
+1. If a method is strictly an overload that calls out to another overload without doing anything else, it should not define its own activity
+
 # Pushing a new CocoaPods version
 
 New tagged builds (in any branch) get pushed to CocoaPods automatically, provided they meet the following criteria:

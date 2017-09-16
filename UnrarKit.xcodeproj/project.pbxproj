@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A22B1F81F60A2D3004B8050 /* UnrarKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */; };
+		7A22B1FB1F60A39E004B8050 /* UnrarKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		967872741E460FA70048A54C /* ListVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 967872731E460FA70048A54C /* ListVolumesTests.m */; };
@@ -188,6 +190,8 @@
 		969BD9E019EDE88E002CE755 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks -Wno-unused-variable"; }; };
 		969BD9E119EDE88E002CE755 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks -Wno-parentheses"; }; };
 		969BD9E219EDE88E002CE755 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
+		96BF58BB1F3A487100BC24E1 /* UnrarKitMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */; };
+		96BF58BC1F3A487100BC24E1 /* UnrarKitMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */; };
 		96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */; };
 		96A043E01E4D232F00BD7013 /* HasMultipleVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */; };
 		96DBF7FD1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
@@ -281,6 +285,8 @@
 /* Begin PBXFileReference section */
 		489CFA0E128B5169005DCC2A /* URKArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = URKArchive.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		489CFA0F128B5169005DCC2A /* URKArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = URKArchive.mm; sourceTree = "<group>"; };
+		7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnrarKitResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A22B1F91F60A2D3004B8050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UnrarKit.strings; sourceTree = "<group>"; };
 		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
 		96370FB419ED8A8200DAF8F1 /* blake2s.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s.cpp; sourceTree = "<group>"; };
 		96370FB519ED8A8200DAF8F1 /* blake2s.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = blake2s.hpp; sourceTree = "<group>"; };
@@ -441,6 +447,7 @@
 		96853F8518DB722F00B5651B /* win32stm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = win32stm.cpp; sourceTree = "<group>"; };
 		9699F9DA1B3CB83100B6D373 /* UnrarKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UnrarKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		969F17361A60297700665453 /* UnrarKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnrarKit.h; sourceTree = "<group>"; };
+		96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKitMacros.h; sourceTree = "<group>"; };
 		96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstVolumeTests.m; sourceTree = "<group>"; };
 		96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HasMultipleVolumesTests.m; sourceTree = "<group>"; };
 		96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+UnrarKit.h"; path = "Categories/NSString+UnrarKit.h"; sourceTree = "<group>"; };
@@ -461,6 +468,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7A22B1E71F60A05F004B8050 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		964C8AB818D28EE000AD7321 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -512,6 +526,7 @@
 				9699F9DA1B3CB83100B6D373 /* UnrarKit.framework */,
 				96F5BBB11B39A65F00ACB162 /* UnrarKit iOS Tests.xctest */,
 				96EA532E1B3B462D00F79DC6 /* iOSUnitTestHostApp.app */,
+				7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -520,8 +535,8 @@
 			isa = PBXGroup;
 			children = (
 				08FB77AEFE84172EC02AAC07 /* Classes */,
-				96853ED318DB704900B5651B /* Resources */,
 				964C8AC218D28EE000AD7321 /* Tests */,
+				7A22B1EB1F60A05F004B8050 /* UnrarKitResources */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 				96853F0418DB722E00B5651B /* Libraries */,
@@ -546,9 +561,20 @@
 				489CFA0F128B5169005DCC2A /* URKArchive.mm */,
 				F3FCD4691A3262E5003612BF /* URKFileInfo.h */,
 				F3FCD46A1A3262E5003612BF /* URKFileInfo.m */,
+				96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */,
 			);
 			path = Classes;
 			sourceTree = SOURCE_ROOT;
+		};
+		7A22B1EB1F60A05F004B8050 /* UnrarKitResources */ = {
+			isa = PBXGroup;
+			children = (
+				96853ED418DB707000B5651B /* UnrarKit-Info.plist */,
+				7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */,
+			);
+			name = UnrarKitResources;
+			path = Resources;
+			sourceTree = "<group>";
 		};
 		964C8AC218D28EE000AD7321 /* Tests */ = {
 			isa = PBXGroup;
@@ -579,14 +605,6 @@
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
-		};
-		96853ED318DB704900B5651B /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				96853ED418DB707000B5651B /* UnrarKit-Info.plist */,
-			);
-			path = Resources;
-			sourceTree = SOURCE_ROOT;
 		};
 		96853F0418DB722E00B5651B /* Libraries */ = {
 			isa = PBXGroup;
@@ -812,6 +830,7 @@
 				9699FA411B3CBB1400B6D373 /* headers.hpp in Headers */,
 				9699FA421B3CBB1400B6D373 /* isnt.hpp in Headers */,
 				9699FA431B3CBB1400B6D373 /* list.hpp in Headers */,
+				96BF58BC1F3A487100BC24E1 /* UnrarKitMacros.h in Headers */,
 				9699FA441B3CBB1400B6D373 /* loclang.hpp in Headers */,
 				9699FA451B3CBB1400B6D373 /* log.hpp in Headers */,
 				9699FA461B3CBB1400B6D373 /* match.hpp in Headers */,
@@ -878,6 +897,7 @@
 				9699F9341B3CB4D000B6D373 /* headers.hpp in Headers */,
 				9699F9351B3CB4D000B6D373 /* isnt.hpp in Headers */,
 				9699F9361B3CB4D000B6D373 /* list.hpp in Headers */,
+				96BF58BB1F3A487100BC24E1 /* UnrarKitMacros.h in Headers */,
 				9699F9371B3CB4D000B6D373 /* loclang.hpp in Headers */,
 				9699F9381B3CB4D000B6D373 /* log.hpp in Headers */,
 				9699F9391B3CB4D000B6D373 /* match.hpp in Headers */,
@@ -916,6 +936,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		7A22B1E91F60A05F004B8050 /* UnrarKitResources */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A22B1EF1F60A05F004B8050 /* Build configuration list for PBXNativeTarget "UnrarKitResources" */;
+			buildPhases = (
+				7A22B1E61F60A05F004B8050 /* Sources */,
+				7A22B1E71F60A05F004B8050 /* Frameworks */,
+				7A22B1E81F60A05F004B8050 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UnrarKitResources;
+			productName = UnrarKitResources;
+			productReference = 7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 		964C8ABA18D28EE000AD7321 /* UnrarKit Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "UnrarKit Tests" */;
@@ -1014,6 +1051,10 @@
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0820;
 				TargetAttributes = {
+					7A22B1E91F60A05F004B8050 = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+					};
 					964C8ABA18D28EE000AD7321 = {
 						LastSwiftMigration = 0820;
 						TestTargetID = 96853EDA18DB71CD00B5651B;
@@ -1055,12 +1096,21 @@
 				964C8ABA18D28EE000AD7321 /* UnrarKit Tests */,
 				9699F9D91B3CB83100B6D373 /* UnrarKit iOS */,
 				96F5BBB01B39A65F00ACB162 /* UnrarKit iOS Tests */,
+				7A22B1E91F60A05F004B8050 /* UnrarKitResources */,
 				96EA532D1B3B462D00F79DC6 /* iOSUnitTestHostApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7A22B1E81F60A05F004B8050 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A22B1F81F60A2D3004B8050 /* UnrarKit.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		964C8AB918D28EE000AD7321 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1090,6 +1140,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A22B1FB1F60A39E004B8050 /* UnrarKitResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1104,6 +1155,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7A22B1E61F60A05F004B8050 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		964C8AB718D28EE000AD7321 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1269,6 +1327,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A22B1F91F60A2D3004B8050 /* en */,
+			);
+			name = UnrarKit.strings;
+			path = Resources;
+			sourceTree = SOURCE_ROOT;
+		};
 		964C8AC518D28EE000AD7321 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1323,8 +1390,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-DSILENT",
@@ -1363,8 +1430,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-DSILENT",
 					"-DRARDLL",
@@ -1374,6 +1441,70 @@
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		7A22B1ED1F60A05F004B8050 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Resources/UnrarKit-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.UnrarKitResources";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		7A22B1EE1F60A05F004B8050 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Resources/UnrarKit-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.UnrarKitResources";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
@@ -1407,7 +1538,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -1440,7 +1570,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
@@ -1808,6 +1937,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		7A22B1EF1F60A05F004B8050 /* Build configuration list for PBXNativeTarget "UnrarKitResources" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A22B1ED1F60A05F004B8050 /* Debug */,
+				7A22B1EE1F60A05F004B8050 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "UnrarKit Tests" */ = {
 			isa = XCConfigurationList;

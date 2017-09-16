@@ -1,0 +1,42 @@
+﻿/* Error detail string */
+"An unknown error occurred" = "An unknown error occurred";
+
+/* Error detail string */
+"Archive has a corrupt header" = "Archive has a corrupt header";
+
+/* Error detail string */
+"Buffer too small to contain entire comments" = "Buffer too small to contain entire comments";
+
+/* Error detail string */
+"Error encountered while closing file" = "Error encountered while closing file";
+
+/* Error detail string */
+"Error encountered while creating file" = "Error encountered while creating file";
+
+/* Error detail string */
+"Error encountered while opening file" = "Error encountered while opening file";
+
+/* Error detail string */
+"Error encountered while reading file" = "Error encountered while reading file";
+
+/* Error detail string */
+"Error encountered while writing file" = "Error encountered while writing file";
+
+/* Error detail string */
+"File is not a valid RAR archive" = "File is not a valid RAR archive";
+
+/* Error detail string */
+"No password given to unlock a protected archive" = "No password given to unlock a protected archive";
+
+/* Error detail string */
+"Ran out of memory while reading archive" = "Ran out of memory while reading archive";
+
+/* Error detail string */
+"RAR headers encrypted in unknown format" = "RAR headers encrypted in unknown format";
+
+/* Error detail string */
+"Unable to find the archive" = "Unable to find the archive";
+
+/* Error detail string */
+"Unknown error encountered (code %ld)" = "Unknown error encountered (code %ld)";
+
