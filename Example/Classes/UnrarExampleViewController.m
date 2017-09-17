@@ -9,11 +9,12 @@
 
 @implementation UnrarExampleViewController
 
-- (IBAction)decompress:(id)sender {
+- (IBAction)listFiles:(id)sender {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Test Archive (Password)" ofType:@"rar"];
 
     NSError *archiveError = nil;
     URKArchive *archive = [[URKArchive alloc] initWithPath:filePath error:&archiveError];
+    archive.password = self.passwordField.text;
     
     if (!archive) {
         UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Failed to create archive"
@@ -28,28 +29,18 @@
     NSError *error = nil;
     NSArray *filenames = [archive listFilenames:&error];
     
-	if (error) {
-        NSLog(@"Error reading archive: %@", error);
+	if (!filenames) {
+        self.fileListTextView.text = error.localizedDescription;
         return;
     }
     
+    NSMutableString *fileList = [NSMutableString string];
+    
     for (NSString *filename in filenames) {
-        NSLog(@"File: %@", filename);
+        [fileList appendFormat:@"• %@\n", filename];
     }
     
-    // Extract a file into memory
-    NSData *data = [archive extractDataFromFile:filenames[0] progress:nil error:&error];
-
-    if (error) {
-        if (error.code == ERAR_MISSING_PASSWORD) {
-            NSLog(@"Password protected archive!");
-        }
-    }
-    
-    if (data != nil) {
-        UIImage *image = [UIImage imageWithData:data];
-        imageView.image = image;
-    }
+    self.fileListTextView.text = fileList;
 }
 
 
