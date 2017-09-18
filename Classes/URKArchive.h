@@ -81,14 +81,17 @@ typedef NS_ENUM(NSInteger, URKErrorCode) {
      *  A password was not given for a password-protected archive
      */
     URKErrorCodeMissingPassword = ERAR_MISSING_PASSWORD,
-
+    
     /**
      *  No data was returned from the archive
      */
     URKErrorCodeArchiveNotFound = 101,
+    
+    /**
+     *  User cancelled the operation
+     */
+    URKErrorCodeUserCancelled = 102,
 };
-
-#define ERAR_ARCHIVE_NOT_FOUND  101
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -247,11 +250,12 @@ extern NSString *URKErrorDomain;
 - (nullable NSArray<URKFileInfo*> *)listFileInfo:(NSError **)error;
 
 /**
- *  Writes all files in the archive to the given path
+ *  Writes all files in the archive to the given path. Supports NSProgress for progress reporting, which also
+ *  allows cancellation in the middle of extraction
  *
- *  @param filePath  The destination path of the unarchived files
- *  @param overwrite YES to overwrite files in the destination directory, NO otherwise
- *  @param progress  Called every so often to report the progress of the extraction
+ *  @param filePath   The destination path of the unarchived files
+ *  @param overwrite  YES to overwrite files in the destination directory, NO otherwise
+ *  @param progress   Called every so often to report the progress of the extraction
  *
  *       - *currentFile*                The info about the file that's being extracted
  *       - *percentArchiveDecompressed* The percentage of the archive that has been decompressed
@@ -262,11 +266,12 @@ extern NSString *URKErrorDomain;
  */
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
-              progress:(nullable void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progress
+              progress:(nullable void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
                  error:(NSError **)error;
 
 /**
- *  Unarchive a single file from the archive into memory
+ *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
+ *  allows cancellation in the middle of extraction
  *
  *  @param fileInfo The info of the file within the archive to be expanded. Only the filename property is used
  *  @param progress Called every so often to report the progress of the extraction
@@ -278,11 +283,12 @@ extern NSString *URKErrorDomain;
  *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
  */
 - (nullable NSData *)extractData:(URKFileInfo *)fileInfo
-                        progress:(nullable void (^)(CGFloat percentDecompressed))progress
+                        progress:(nullable void (^)(CGFloat percentDecompressed))progressBlock
                            error:(NSError **)error;
 
 /**
- *  Unarchive a single file from the archive into memory
+ *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
+ *  allows cancellation in the middle of extraction
  *
  *  @param filePath The path of the file within the archive to be expanded
  *  @param progress Called every so often to report the progress of the extraction
@@ -294,7 +300,7 @@ extern NSString *URKErrorDomain;
  *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
  */
 - (nullable NSData *)extractDataFromFile:(NSString *)filePath
-                                progress:(nullable void (^)(CGFloat percentDecompressed))progress
+                                progress:(nullable void (^)(CGFloat percentDecompressed))progressBlock
                                    error:(NSError **)error;
 
 /**

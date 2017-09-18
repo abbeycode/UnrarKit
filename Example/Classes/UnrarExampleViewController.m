@@ -10,8 +10,12 @@
 @interface UnrarExampleViewController ()
 
 @property (strong) NSURL *largeArchiveURL;
+@property (strong) NSProgress *currentExtractionProgress;
 
 @end
+
+static void *ProgressObserverContext = &ProgressObserverContext;
+
 
 @implementation UnrarExampleViewController
 
@@ -62,6 +66,13 @@
 }
 
 - (IBAction)extractLargeFile:(id)sender {
+    NSProgress *progress = [NSProgress progressWithTotalUnitCount:1];
+    self.currentExtractionProgress = progress;
+    [progress addObserver:self
+               forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
+                  options:NSKeyValueObservingOptionInitial
+                  context:ProgressObserverContext];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         [self updateExtractionStep:@"Creating large archive…"];
         
@@ -83,12 +94,19 @@
         }
 
         NSString *firstFile = [[archive listFilenames:nil] firstObject];
-        
+
+        [progress becomeCurrentWithPendingUnitCount:1];
+
         NSError *extractError = nil;
         NSData *data = [archive extractDataFromFile:firstFile
-                                           progress:^(CGFloat percentDecompressed) {
-                                               [self updateProgress:percentDecompressed];
-                                           } error:&extractError];
+                                           progress:nil
+                                              error:&extractError];
+        
+        self.currentExtractionProgress = nil;
+        [progress removeObserver:self
+                      forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
+                         context:ProgressObserverContext];
+        [progress resignCurrent];
         
         if (!data) {
             [self reportError:[NSString stringWithFormat:@"Failed to extract archive: %@", extractError.localizedDescription]];
@@ -97,26 +115,48 @@
 
         // On extraction completion:
         [self updateExtractionStep:[NSString stringWithFormat:@"Extracted %lub", data.length]];
-        
     });
+}
+
+- (IBAction)cancelExtraction:(id)sender {
+    if (self.currentExtractionProgress) {
+        [self.currentExtractionProgress cancel];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                       context:(void *)context
+{
+    if (context == ProgressObserverContext) {
+        NSProgress *progress = object;
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.extractionProgressView setProgress:progress.fractionCompleted
+                                            animated:YES];
+        }];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 - (void)reportError:(NSString *)message {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         self.fileListTextView.text = message;
-    });
+    }];
 }
 
 - (void)updateExtractionStep:(NSString *)message {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         self.extractionStepLabel.text = message;
-    });
+    }];
 }
 
 - (void)updateProgress:(float)progress {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [self.extractionProgressView setProgress:progress animated:YES];
-    });
+    }];
 }
 
 - (NSURL *)createLargeArchive {

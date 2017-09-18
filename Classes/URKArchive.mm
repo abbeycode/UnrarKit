@@ -33,7 +33,7 @@ NS_DESIGNATED_INITIALIZER
 ;
 
 @property (strong) NSData *fileBookmark;
-@property (strong) void(^bufferedReadBlock)(NSData *dataChunk);
+@property (strong) BOOL(^bufferedReadBlock)(NSData *dataChunk);
 
 @property (strong) NSObject *threadLock;
 
@@ -382,7 +382,7 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
-              progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progress
+              progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
                  error:(NSError **)error
 {
     URKCreateActivity("Extracting Files to Directory");
@@ -405,6 +405,10 @@ NS_DESIGNATED_INITIALIZER
     NSNumber *totalSize = [fileInfo valueForKeyPath:@"@sum.uncompressedSize"];
     __block long long bytesDecompressed = 0;
 
+    NSProgress *eachFileProgress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
+    eachFileProgress.cancellable = YES;
+    eachFileProgress.pausable = NO;
+    
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing File Extraction");
 
@@ -416,12 +420,16 @@ NS_DESIGNATED_INITIALIZER
             fileInfo = [URKFileInfo fileInfo:header];
             URKLogDebug("Extracting %{public}@", fileInfo.filename);
             
-            if (progress) {
-                progress(fileInfo, bytesDecompressed / totalSize.floatValue);
-            }
-
             if ([self headerContainsErrors:error]) {
                 URKLogError("Header contains an error")
+                result = NO;
+                return;
+            }
+            
+            if (eachFileProgress.isCancelled) {
+                NSString *errorName = nil;
+                [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+                URKLogInfo("Halted file extraction due to user cancellation: %@", errorName);
                 result = NO;
                 return;
             }
@@ -432,6 +440,12 @@ NS_DESIGNATED_INITIALIZER
                 URKLogError("Error extracting file: %@ (%d)", errorName, PFCode);
                 result = NO;
                 return;
+            }
+            
+            eachFileProgress.totalUnitCount += fileInfo.uncompressedSize;
+            
+            if (progressBlock) {
+                progressBlock(fileInfo, bytesDecompressed / totalSize.floatValue);
             }
 
             bytesDecompressed += fileInfo.uncompressedSize;
@@ -444,8 +458,10 @@ NS_DESIGNATED_INITIALIZER
             result = NO;
         }
 
-        if (progress) {
-            progress(fileInfo, 1.0);
+        eachFileProgress.totalUnitCount = totalSize.longLongValue;
+        
+        if (progressBlock) {
+            progressBlock(fileInfo, 1.0);
         }
 
     } inMode:RAR_OM_EXTRACT error:error];
@@ -454,19 +470,23 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (NSData *)extractData:(URKFileInfo *)fileInfo
-               progress:(void (^)(CGFloat percentDecompressed))progress
+               progress:(void (^)(CGFloat percentDecompressed))progressBlock
                   error:(NSError **)error
 {
-    return [self extractDataFromFile:fileInfo.filename progress:progress error:error];
+    return [self extractDataFromFile:fileInfo.filename progress:progressBlock error:error];
 }
 
 - (NSData *)extractDataFromFile:(NSString *)filePath
-                       progress:(void (^)(CGFloat percentDecompressed))progress
+                       progress:(void (^)(CGFloat percentDecompressed))progressBlock
                           error:(NSError **)error
 {
     URKCreateActivity("Extracting Data from File");
-
+    
     __block NSData *result = nil;
+    NSProgress *progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
+                                                     userInfo:nil];
+    progress.cancellable = YES;
+    progress.pausable = NO;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing Extraction");
@@ -514,26 +534,42 @@ NS_DESIGNATED_INITIALIZER
 
         NSMutableData *fileData = [NSMutableData dataWithCapacity:(NSUInteger)fileInfo.uncompressedSize];
         CGFloat totalBytes = fileInfo.uncompressedSize;
+        progress.totalUnitCount = totalBytes;
         __block long long bytesRead = 0;
 
-        if (progress) {
-            progress(0.0);
+        if (progressBlock) {
+            progressBlock(0.0);
         }
 
         RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
-        self.bufferedReadBlock = ^void(NSData *dataChunk) {
+        self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
             URKLogDebug("Appending buffered data (%lu bytes)", dataChunk.length);
             [fileData appendData:dataChunk];
+            progress.completedUnitCount += dataChunk.length;
 
             bytesRead += dataChunk.length;
 
-            if (progress) {
-                progress(bytesRead / totalBytes);
+            if (progressBlock) {
+                progressBlock(bytesRead / totalBytes);
             }
+            
+            if (progress.isCancelled) {
+                URKLogInfo("Cancellation initiated");
+                return NO;
+            }
+            
+            return YES;
         };
-
+        
         URKLogInfo("Processing file...");
         PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        
+        if (progress.isCancelled) {
+            NSString *errorName = nil;
+            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+            URKLogInfo("Returning nil data from extraction due to user cancellation: %@", errorName);
+            return;
+        }
 
         if (PFCode != 0) {
             NSString *errorName = nil;
@@ -715,11 +751,12 @@ NS_DESIGNATED_INITIALIZER
         URKLogDebug("Uncompressed size: %{iec-bytes}lld (%lld bytes) in file", (long long)totalBytes, (long long)totalBytes);
 
         RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
-        self.bufferedReadBlock = ^void(NSData *dataChunk) {
+        self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
             bytesRead += dataChunk.length;
             CGFloat progress = bytesRead / totalBytes;
             URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progress * 100);
             action(dataChunk, progress);
+            return YES;
         };
 
         URKLogDebug("Processing file...");
@@ -871,7 +908,10 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     if (msg == UCM_PROCESSDATA) {
         URKLogDebug("msg: UCM_PROCESSDATA; Copying data chunk and calling read block");
         NSData *dataChunk = [NSData dataWithBytesNoCopy:(UInt8 *)P1 length:P2 freeWhenDone:NO];
-        refToSelf.bufferedReadBlock(dataChunk);
+        BOOL cancelRequested = !refToSelf.bufferedReadBlock(dataChunk);
+        if (cancelRequested) {
+            return -1;
+        }
     }
 
     return 0;
@@ -1006,74 +1046,79 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     NSString *detail = @"";
 
     switch (errorCode) {
-        case ERAR_END_ARCHIVE:
+        case URKErrorCodeEndOfArchive:
             errorName = @"ERAR_END_ARCHIVE";
             break;
 
-        case ERAR_NO_MEMORY:
+        case URKErrorCodeNoMemory:
             errorName = @"ERAR_NO_MEMORY";
             detail = NSLocalizedStringFromTableInBundle(@"Ran out of memory while reading archive", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_BAD_DATA:
+        case URKErrorCodeBadData:
             errorName = @"ERAR_BAD_DATA";
             detail = NSLocalizedStringFromTableInBundle(@"Archive has a corrupt header", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_BAD_ARCHIVE:
+        case URKErrorCodeBadArchive:
             errorName = @"ERAR_BAD_ARCHIVE";
             detail = NSLocalizedStringFromTableInBundle(@"File is not a valid RAR archive", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_UNKNOWN_FORMAT:
+        case URKErrorCodeUnknownFormat:
             errorName = @"ERAR_UNKNOWN_FORMAT";
             detail = NSLocalizedStringFromTableInBundle(@"RAR headers encrypted in unknown format", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_EOPEN:
+        case URKErrorCodeOpen:
             errorName = @"ERAR_EOPEN";
-            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while opening file", @"UnrarKit", _resources, @"Error detail string");
+            detail = NSLocalizedStringFromTableInBundle(@"Failed to open a reference to the file", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_ECREATE:
+        case URKErrorCodeCreate:
             errorName = @"ERAR_ECREATE";
-            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while creating file", @"UnrarKit", _resources, @"Error detail string");
+            detail = NSLocalizedStringFromTableInBundle(@"Failed to create the target directory for extraction", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_ECLOSE:
+        case URKErrorCodeClose:
             errorName = @"ERAR_ECLOSE";
-            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while closing file", @"UnrarKit", _resources, @"Error detail string");
+            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while closing the archive", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_EREAD:
+        case URKErrorCodeRead:
             errorName = @"ERAR_EREAD";
-            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while reading file", @"UnrarKit", _resources, @"Error detail string");
+            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while reading the archive", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_EWRITE:
+        case URKErrorCodeWrite:
             errorName = @"ERAR_EWRITE";
-            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while writing file", @"UnrarKit", _resources, @"Error detail string");
+            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while writing a file to disk", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_SMALL_BUF:
+        case URKErrorCodeSmall:
             errorName = @"ERAR_SMALL_BUF";
             detail = NSLocalizedStringFromTableInBundle(@"Buffer too small to contain entire comments", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_UNKNOWN:
+        case URKErrorCodeUnknown:
             errorName = @"ERAR_UNKNOWN";
             detail = NSLocalizedStringFromTableInBundle(@"An unknown error occurred", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_MISSING_PASSWORD:
+        case URKErrorCodeMissingPassword:
             errorName = @"ERAR_MISSING_PASSWORD";
             detail = NSLocalizedStringFromTableInBundle(@"No password given to unlock a protected archive", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_ARCHIVE_NOT_FOUND:
+        case URKErrorCodeArchiveNotFound:
             errorName = @"ERAR_ARCHIVE_NOT_FOUND";
             detail = NSLocalizedStringFromTableInBundle(@"Unable to find the archive", @"UnrarKit", _resources, @"Error detail string");
             break;
+            
+        case URKErrorCodeUserCancelled:
+            errorName = @"ERAR_USER_CANCELLED";
+            detail = NSLocalizedStringFromTableInBundle(@"User cancelled the operation in progress", @"UnrarKit", _resources, @"Error detail string");
+   break;
 
         default:
             errorName = [NSString stringWithFormat:@"Unknown (%ld)", (long)errorCode];
@@ -1095,7 +1140,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:
                                          @{NSLocalizedFailureReasonErrorKey: *outErrorName,
-                                           NSLocalizedDescriptionKey: *outErrorName,
+                                           NSLocalizedDescriptionKey: errorDetail,
                                            NSLocalizedRecoverySuggestionErrorKey: errorDetail}];
         
         if (self.fileURL) {

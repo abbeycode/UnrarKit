@@ -18,6 +18,7 @@
 
 - (IBAction)listFiles:(id)sender;
 - (IBAction)extractLargeFile:(id)sender;
+- (IBAction)cancelExtraction:(id)sender;
 
 @end
 

@@ -24,7 +24,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="top" axis="vertical" distribution="fillProportionally" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="Qo2-0E-LW8">
-                    <rect key="frame" x="20" y="20" width="280" height="219.5"/>
+                    <rect key="frame" x="20" y="20" width="280" height="255.5"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="9dM-Pq-DzR">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="55.5"/>
@@ -84,6 +84,15 @@
                         <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FKt-fY-izn">
                             <rect key="frame" x="20" y="217.5" width="240" height="2"/>
                         </progressView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uYP-xC-BVV">
+                            <rect key="frame" x="116" y="225.5" width="48" height="30"/>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" red="1" green="0.14954377690000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </state>
+                            <connections>
+                                <action selector="cancelExtraction:" destination="-1" eventType="touchUpInside" id="Dhv-rL-fP0"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="FKt-fY-izn" secondAttribute="trailing" constant="20" symbolic="YES" id="FgC-aj-W9R"/>
