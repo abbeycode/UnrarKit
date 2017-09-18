@@ -405,9 +405,9 @@ NS_DESIGNATED_INITIALIZER
     NSNumber *totalSize = [fileInfo valueForKeyPath:@"@sum.uncompressedSize"];
     __block long long bytesDecompressed = 0;
 
-    NSProgress *eachFileProgress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
-    eachFileProgress.cancellable = YES;
-    eachFileProgress.pausable = NO;
+    NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
+    progress.cancellable = YES;
+    progress.pausable = NO;
     
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing File Extraction");
@@ -426,7 +426,7 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
             
-            if (eachFileProgress.isCancelled) {
+            if (progress.isCancelled) {
                 NSString *errorName = nil;
                 [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
                 URKLogInfo("Halted file extraction due to user cancellation: %@", errorName);
@@ -442,7 +442,7 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
             
-            eachFileProgress.totalUnitCount += fileInfo.uncompressedSize;
+            progress.completedUnitCount += fileInfo.uncompressedSize;
             
             if (progressBlock) {
                 progressBlock(fileInfo, bytesDecompressed / totalSize.floatValue);
@@ -458,7 +458,7 @@ NS_DESIGNATED_INITIALIZER
             result = NO;
         }
 
-        eachFileProgress.totalUnitCount = totalSize.longLongValue;
+        progress.completedUnitCount = progress.totalUnitCount;
         
         if (progressBlock) {
             progressBlock(fileInfo, 1.0);
@@ -607,6 +607,10 @@ NS_DESIGNATED_INITIALIZER
 
         return NO;
     }
+    
+    NSProgress *progress = [NSProgress progressWithTotalUnitCount:fileInfo.count];
+    progress.cancellable = YES;
+    progress.pausable = NO;
 
     URKLogInfo("Sorting file info by name/path");
     
@@ -618,9 +622,16 @@ NS_DESIGNATED_INITIALIZER
         [sortedFileInfo enumerateObjectsUsingBlock:^(URKFileInfo *info, NSUInteger idx, BOOL *stop) {
             URKLogDebug("Performing action on %{public}@", info.filename);
             action(info, stop);
+            progress.completedUnitCount += 1;
             
             if (*stop) {
                 URKLogInfo("Action dictated an early stop");
+                progress.completedUnitCount = progress.totalUnitCount;
+            }
+            
+            if (progress.isCancelled) {
+                URKLogInfo("File info iteration was cancelled");
+                *stop = YES;
             }
         }];
     }
@@ -699,13 +710,18 @@ NS_DESIGNATED_INITIALIZER
 
     NSError *innerError = nil;
 
+    NSProgress *progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
+                                                     userInfo:nil];
+    progress.cancellable = YES;
+    progress.pausable = NO;
+    
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
 
         int RHCode = 0, PFCode = 0;
         URKFileInfo *fileInfo;
 
-        URKLogInfo("Looping through files, looking for %@...", fileInfo.filename);
+        URKLogInfo("Looping through files, looking for %@...", filePath);
         
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:error]) {
@@ -730,7 +746,10 @@ NS_DESIGNATED_INITIALIZER
                 }
             }
         }
-
+        
+        CGFloat totalBytes = fileInfo.uncompressedSize;
+        progress.totalUnitCount = totalBytes;
+        
         if (RHCode != ERAR_SUCCESS) {
             NSString *errorName = nil;
             [self assignError:error code:RHCode errorName:&errorName];
@@ -739,12 +758,11 @@ NS_DESIGNATED_INITIALIZER
         }
 
         // Empty file, or a directory
-        if (fileInfo.uncompressedSize == 0) {
+        if (totalBytes == 0) {
             URKLogInfo("File is empty or a directory");
             return;
         }
 
-        CGFloat totalBytes = fileInfo.uncompressedSize;
         __block long long bytesRead = 0;
 
         // Repeating the argument instead of using positional specifiers, because they don't work with the {} formatters
@@ -752,6 +770,12 @@ NS_DESIGNATED_INITIALIZER
 
         RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
         self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
+            if (progress.isCancelled) {
+                URKLogInfo("Buffered data read cancelled");
+                return NO;
+            }
+            
+            progress.completedUnitCount += dataChunk.length;
             bytesRead += dataChunk.length;
             CGFloat progress = bytesRead / totalBytes;
             URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progress * 100);
@@ -762,6 +786,13 @@ NS_DESIGNATED_INITIALIZER
         URKLogDebug("Processing file...");
         PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
 
+        if (progress.isCancelled) {
+            NSString *errorName = nil;
+            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+            URKLogError("Buffered data extraction has been cancelled: %@", errorName);
+            return;
+        }
+        
         if (PFCode != 0) {
             NSString *errorName = nil;
             [self assignError:error code:(NSInteger)PFCode errorName:&errorName];

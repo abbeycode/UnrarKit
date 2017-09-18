@@ -304,7 +304,9 @@ extern NSString *URKErrorDomain;
                                    error:(NSError **)error;
 
 /**
- *  Loops through each file in the archive in alphabetical order, allowing you to perform an action using its info
+ *  Loops through each file in the archive in alphabetical order, allowing you to perform an
+ *  action using its info. Supports NSProgress for progress reporting, which also allows
+ *  cancellation of the operation in the middle
  *
  *  @param action The action to perform using the data
  *
@@ -335,7 +337,8 @@ extern NSString *URKErrorDomain;
                          error:(NSError **)error;
 
 /**
- *  Unarchive a single file from the archive into memory
+ *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
+ *  allows cancellation in the middle of extraction
  *
  *  @param filePath   The path of the file within the archive to be expanded
  *  @param error      Contains an NSError object when there was an error reading the archive
