@@ -7,7 +7,25 @@
 #import "UnrarExampleViewController.h"
 @import UnrarKit;
 
+@interface UnrarExampleViewController ()
+
+@property (strong) NSURL *largeArchiveURL;
+
+@end
+
 @implementation UnrarExampleViewController
+
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    
+    self.extractionStepLabel.text = @"";
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSURL *docsDir = [[fm URLsForDirectory:NSDocumentDirectory
+                                 inDomains:NSUserDomainMask] firstObject];
+    self.largeArchiveURL = [docsDir URLByAppendingPathComponent:@"large-archive.rar"];
+}
 
 - (IBAction)listFiles:(id)sender {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Test Archive (Password)" ofType:@"rar"];
@@ -41,6 +59,133 @@
     }
     
     self.fileListTextView.text = fileList;
+}
+
+- (IBAction)extractLargeFile:(id)sender {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        [self updateExtractionStep:@"Creating large archive…"];
+        
+        NSURL *archiveURL = [self createLargeArchive];
+        
+        if (!archiveURL) {
+            return;
+        }
+        
+        [self updateExtractionStep:@"Extracting archive…"];
+        
+        NSError *initError = nil;
+        URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL
+                                                        error:&initError];
+        
+        if (!archive) {
+            [self reportError:[NSString stringWithFormat:@"Failed to create URKArchive: %@", initError.localizedDescription]];
+            return;
+        }
+
+        NSString *firstFile = [[archive listFilenames:nil] firstObject];
+        
+        NSError *extractError = nil;
+        NSData *data = [archive extractDataFromFile:firstFile
+                                           progress:^(CGFloat percentDecompressed) {
+                                               [self updateProgress:percentDecompressed];
+                                           } error:&extractError];
+        
+        if (!data) {
+            [self reportError:[NSString stringWithFormat:@"Failed to extract archive: %@", extractError.localizedDescription]];
+            return;
+        }
+
+        // On extraction completion:
+        [self updateExtractionStep:[NSString stringWithFormat:@"Extracted %lub", data.length]];
+        
+    });
+}
+
+- (void)reportError:(NSString *)message {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.fileListTextView.text = message;
+    });
+}
+
+- (void)updateExtractionStep:(NSString *)message {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.extractionStepLabel.text = message;
+    });
+}
+
+- (void)updateProgress:(float)progress {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.extractionProgressView setProgress:progress animated:YES];
+    });
+}
+
+- (NSURL *)createLargeArchive {
+    [self reportError:@""];
+    [self updateExtractionStep:@"Creating large text file…"];
+
+    [self updateProgress:0];
+    
+    NSURL *largeFile = [self randomTextFileOfLength:100000000];
+    
+    if (!largeFile) {
+        [self reportError:@"Failed to create large text file"];
+        return nil;
+    }
+    
+    [self updateProgress:0];
+    
+    [self updateExtractionStep:@"Compressing large text file…"];
+
+    // Create archive
+    NSURL *archiveURL = self.largeArchiveURL;
+    
+    if (![archiveURL checkResourceIsReachableAndReturnError:nil]) {
+        [self updateExtractionStep:@"No archive"];
+        [self reportError:
+         @"The large archive has not been created yet. A Terminal command "
+         "has been copied to the clipboard. Press ⌘C to copy it out "
+         "of the Simulator. From a prompt at the UnrarKit/Example "
+         "directory, paste it and run"];
+        
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = largeFile.path;
+
+        return nil;
+    }
+    
+    return archiveURL;
+}
+
+- (NSURL *)randomTextFileOfLength:(NSUInteger)numberOfCharacters {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSURL *docsDir = [[fm URLsForDirectory:NSDocumentDirectory
+                                 inDomains:NSUserDomainMask] firstObject];
+    NSString *filename = [NSString stringWithFormat:@"long-random-str-%lu.txt", numberOfCharacters];
+    NSURL *fileURL = [docsDir URLByAppendingPathComponent:filename];
+    
+    if ([fileURL checkResourceIsReachableAndReturnError:nil]) {
+        return fileURL;
+    }
+    
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,?!\n";
+    NSUInteger letterCount = letters.length;
+    
+    NSMutableString *randomString = [NSMutableString stringWithCapacity:numberOfCharacters];
+    
+    for (NSUInteger i = 0; i < numberOfCharacters; i++) {
+        uint32_t charIndex = arc4random_uniform((uint32_t)letterCount);
+        [randomString appendFormat:@"%C", [letters characterAtIndex:charIndex]];
+    
+        float progress = i / (float)numberOfCharacters;
+        [self updateProgress:progress];
+    }
+    
+    NSError *error = nil;
+    if (![randomString writeToURL:fileURL atomically:YES encoding:NSUTF16StringEncoding error:&error]) {
+        return nil;
+    }
+    
+    return fileURL;
 }
 
 

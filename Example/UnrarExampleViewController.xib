@@ -11,6 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UnrarExampleViewController">
             <connections>
+                <outlet property="extractionProgressView" destination="FKt-fY-izn" id="zfU-mP-XeF"/>
+                <outlet property="extractionStepLabel" destination="HtN-oQ-gQ9" id="coy-VE-WAY"/>
                 <outlet property="fileListTextView" destination="6AC-gl-pCL" id="SCr-Nd-vAV"/>
                 <outlet property="passwordField" destination="8Xu-mg-Uaz" id="O3A-Ca-TAX"/>
                 <outlet property="view" destination="6" id="7"/>
@@ -22,18 +24,18 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="top" axis="vertical" distribution="fillProportionally" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="Qo2-0E-LW8">
-                    <rect key="frame" x="20" y="20" width="280" height="234.5"/>
+                    <rect key="frame" x="20" y="20" width="280" height="219.5"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="9dM-Pq-DzR">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="55.5"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fMf-Tr-sFn">
-                                    <rect key="frame" x="0.0" y="0.0" width="74" height="20.5"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fMf-Tr-sFn">
+                                    <rect key="frame" x="0.0" y="0.0" width="77.5" height="20.5"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" placeholderIntrinsicWidth="280" placeholderIntrinsicHeight="20" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="password" borderStyle="roundedRect" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Xu-mg-Uaz">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" placeholderIntrinsicWidth="280" placeholderIntrinsicHeight="20" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="password" borderStyle="roundedRect" textAlignment="natural" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Xu-mg-Uaz">
                                     <rect key="frame" x="0.0" y="25.5" width="280" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="49D-oP-sqR"/>
@@ -56,25 +58,43 @@
                                 <action selector="listFiles:" destination="-1" eventType="touchUpInside" id="Kig-ls-bUH"/>
                             </connections>
                         </button>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="1000" editable="NO" text="File List" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6AC-gl-pCL">
-                            <rect key="frame" x="20" y="106.5" width="240" height="128"/>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" scrollEnabled="NO" editable="NO" text="File List" textAlignment="natural" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6AC-gl-pCL">
+                            <rect key="frame" x="20" y="106.5" width="240" height="38"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="128" id="4T5-pF-siF"/>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="750" constant="128" id="4T5-pF-siF"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tvb-e7-xLA">
+                            <rect key="frame" x="55.5" y="150.5" width="169" height="39"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                            <state key="normal" title="Extract Large File"/>
+                            <connections>
+                                <action selector="extractLargeFile:" destination="-1" eventType="touchUpInside" id="swx-4O-NCV"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtN-oQ-gQ9">
+                            <rect key="frame" x="126" y="195.5" width="28" height="16"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FKt-fY-izn">
+                            <rect key="frame" x="20" y="217.5" width="240" height="2"/>
+                        </progressView>
                     </subviews>
                     <constraints>
+                        <constraint firstAttribute="trailing" secondItem="FKt-fY-izn" secondAttribute="trailing" constant="20" symbolic="YES" id="FgC-aj-W9R"/>
                         <constraint firstAttribute="trailing" secondItem="6AC-gl-pCL" secondAttribute="trailing" constant="20" symbolic="YES" id="LYP-fM-d6B"/>
                         <constraint firstAttribute="trailing" secondItem="9dM-Pq-DzR" secondAttribute="trailing" id="YeV-Jv-WR6"/>
+                        <constraint firstItem="FKt-fY-izn" firstAttribute="leading" secondItem="Qo2-0E-LW8" secondAttribute="leading" constant="20" symbolic="YES" id="dk7-TA-Cif"/>
                         <constraint firstItem="6AC-gl-pCL" firstAttribute="leading" secondItem="Qo2-0E-LW8" secondAttribute="leading" constant="20" symbolic="YES" id="pUa-SF-ddl"/>
                         <constraint firstItem="9dM-Pq-DzR" firstAttribute="leading" secondItem="Qo2-0E-LW8" secondAttribute="leading" id="tC8-Iw-Kru"/>
                     </constraints>
                 </stackView>
             </subviews>
-            <color key="backgroundColor" red="0.75" green="0.75" blue="0.75" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="Qo2-0E-LW8" firstAttribute="top" secondItem="6" secondAttribute="top" constant="20" symbolic="YES" id="eTH-oM-Oz5"/>
                 <constraint firstItem="Qo2-0E-LW8" firstAttribute="leading" secondItem="6" secondAttribute="leading" constant="20" symbolic="YES" id="faG-ft-UwF"/>
