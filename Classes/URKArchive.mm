@@ -528,6 +528,7 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
+<<<<<<< HEAD
                  error:(NSError **)error
 {
 #pragma clang diagnostic push
@@ -541,6 +542,8 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
+=======
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
               progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
                  error:(NSError **)error
 {
@@ -568,9 +571,16 @@ NS_DESIGNATED_INITIALIZER
     NSNumber *totalSize = [fileInfos valueForKeyPath:@"@sum.uncompressedSize"];
     __block long long bytesDecompressed = 0;
 
+<<<<<<< HEAD
     NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
     progress.kind = NSProgressKindFile;
 	
+=======
+    NSProgress *eachFileProgress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
+    eachFileProgress.cancellable = YES;
+    eachFileProgress.pausable = NO;
+    
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing File Extraction");
 
@@ -587,15 +597,25 @@ NS_DESIGNATED_INITIALIZER
             [progress setUserInfoObject:fileInfo
                                  forKey:URKProgressInfoKeyFileInfoExtracting];
             
+<<<<<<< HEAD
             if ([self headerContainsErrors:innerError]) {
+=======
+            if ([self headerContainsErrors:error]) {
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
                 URKLogError("Header contains an error")
                 result = NO;
                 return;
             }
             
+<<<<<<< HEAD
             if (progress.isCancelled) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
+=======
+            if (eachFileProgress.isCancelled) {
+                NSString *errorName = nil;
+                [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
                 URKLogInfo("Halted file extraction due to user cancellation: %@", errorName);
                 result = NO;
                 return;
@@ -609,11 +629,15 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
             
+<<<<<<< HEAD
             [progress setUserInfoObject:@(++filesExtracted)
                                  forKey:NSProgressFileCompletedCountKey];
             [progress setUserInfoObject:@(fileInfos.count)
                                  forKey:NSProgressFileTotalCountKey];
             progress.completedUnitCount += fileInfo.uncompressedSize;
+=======
+            eachFileProgress.totalUnitCount += fileInfo.uncompressedSize;
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
             
             if (progressBlock) {
                 progressBlock(fileInfo, bytesDecompressed / totalSize.floatValue);
@@ -629,6 +653,11 @@ NS_DESIGNATED_INITIALIZER
             result = NO;
         }
 
+<<<<<<< HEAD
+=======
+        eachFileProgress.totalUnitCount = totalSize.longLongValue;
+        
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
         if (progressBlock) {
             progressBlock(fileInfo, 1.0);
         }
@@ -639,6 +668,7 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (NSData *)extractData:(URKFileInfo *)fileInfo
+<<<<<<< HEAD
                   error:(NSError **)error
 {
 #pragma clang diagnostic push
@@ -651,10 +681,16 @@ NS_DESIGNATED_INITIALIZER
                progress:(void (^)(CGFloat percentDecompressed))progressBlock
                   error:(NSError **)error
 {
+=======
+               progress:(void (^)(CGFloat percentDecompressed))progressBlock
+                  error:(NSError **)error
+{
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
     return [self extractDataFromFile:fileInfo.filename progress:progressBlock error:error];
 }
 
 - (NSData *)extractDataFromFile:(NSString *)filePath
+<<<<<<< HEAD
                           error:(NSError **)error
 {
 #pragma clang diagnostic push
@@ -664,14 +700,23 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (NSData *)extractDataFromFile:(NSString *)filePath
+=======
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
                        progress:(void (^)(CGFloat percentDecompressed))progressBlock
                           error:(NSError **)error
 {
     URKCreateActivity("Extracting Data from File");
     
+<<<<<<< HEAD
     NSProgress *progress = [self beginProgressOperation:0];
 
+=======
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
     __block NSData *result = nil;
+    NSProgress *progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
+                                                     userInfo:nil];
+    progress.cancellable = YES;
+    progress.pausable = NO;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing Extraction");
@@ -751,7 +796,11 @@ NS_DESIGNATED_INITIALIZER
         
         if (progress.isCancelled) {
             NSString *errorName = nil;
+<<<<<<< HEAD
             [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
+=======
+            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
             URKLogInfo("Returning nil data from extraction due to user cancellation: %@", errorName);
             return;
         }
@@ -977,6 +1026,7 @@ NS_DESIGNATED_INITIALIZER
 
         RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
         self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
+<<<<<<< HEAD
             if (progress.isCancelled) {
                 URKLogInfo("Buffered data read cancelled");
                 return NO;
@@ -988,6 +1038,12 @@ NS_DESIGNATED_INITIALIZER
             CGFloat progressPercent = bytesRead / totalBytes;
             URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progressPercent * 100);
             action(dataChunk, progressPercent);
+=======
+            bytesRead += dataChunk.length;
+            CGFloat progress = bytesRead / totalBytes;
+            URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progress * 100);
+            action(dataChunk, progress);
+>>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
             return YES;
         };
 
