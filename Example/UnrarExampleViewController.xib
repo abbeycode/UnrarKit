@@ -41,7 +41,7 @@
                                         <constraint firstAttribute="height" constant="30" id="49D-oP-sqR"/>
                                     </constraints>
                                     <nil key="textColor"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
                             </subviews>
@@ -86,6 +86,7 @@
                         </progressView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uYP-xC-BVV">
                             <rect key="frame" x="116" y="225.5" width="48" height="30"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                             <state key="normal" title="Cancel">
                                 <color key="titleColor" red="1" green="0.14954377690000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </state>
