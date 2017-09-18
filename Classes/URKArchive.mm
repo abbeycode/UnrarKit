@@ -619,7 +619,7 @@ NS_DESIGNATED_INITIALIZER
             URKLogDebug("Performing action on %{public}@", info.filename);
             action(info, stop);
             
-            if (stop) {
+            if (*stop) {
                 URKLogInfo("Action dictated an early stop");
             }
         }];
