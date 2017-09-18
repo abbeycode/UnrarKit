@@ -408,6 +408,7 @@ extern NSString *URKErrorDomain;
                                    error:(NSError **)error;
 
 /**
+<<<<<<< HEAD
  *  **DEPRECATED:** Unarchive a single file from the archive into memory
  *
  *  @param filePath      The path of the file within the archive to be expanded
@@ -424,6 +425,8 @@ extern NSString *URKErrorDomain;
                                    error:(NSError **)error __deprecated_msg("Use extractDataFromFile:error: instead, and if using the progress block, replace with NSProgress as described in the README");
 
 /**
+=======
+>>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
  *  Loops through each file in the archive in alphabetical order, allowing you to perform an
  *  action using its info. Supports NSProgress for progress reporting, which also allows
  *  cancellation of the operation in the middle

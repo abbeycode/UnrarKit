@@ -572,6 +572,7 @@ NS_DESIGNATED_INITIALIZER
     __block long long bytesDecompressed = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
     progress.kind = NSProgressKindFile;
 	
@@ -579,6 +580,11 @@ NS_DESIGNATED_INITIALIZER
     NSProgress *eachFileProgress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
     eachFileProgress.cancellable = YES;
     eachFileProgress.pausable = NO;
+=======
+    NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
+    progress.cancellable = YES;
+    progress.pausable = NO;
+>>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
     
 >>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
@@ -608,11 +614,15 @@ NS_DESIGNATED_INITIALIZER
             }
             
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (progress.isCancelled) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
 =======
             if (eachFileProgress.isCancelled) {
+=======
+            if (progress.isCancelled) {
+>>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
                 NSString *errorName = nil;
                 [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
 >>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
@@ -630,6 +640,7 @@ NS_DESIGNATED_INITIALIZER
             }
             
 <<<<<<< HEAD
+<<<<<<< HEAD
             [progress setUserInfoObject:@(++filesExtracted)
                                  forKey:NSProgressFileCompletedCountKey];
             [progress setUserInfoObject:@(fileInfos.count)
@@ -638,6 +649,9 @@ NS_DESIGNATED_INITIALIZER
 =======
             eachFileProgress.totalUnitCount += fileInfo.uncompressedSize;
 >>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
+=======
+            progress.completedUnitCount += fileInfo.uncompressedSize;
+>>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
             
             if (progressBlock) {
                 progressBlock(fileInfo, bytesDecompressed / totalSize.floatValue);
@@ -654,8 +668,12 @@ NS_DESIGNATED_INITIALIZER
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         eachFileProgress.totalUnitCount = totalSize.longLongValue;
+=======
+        progress.completedUnitCount = progress.totalUnitCount;
+>>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
         
 >>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
         if (progressBlock) {
@@ -747,7 +765,10 @@ NS_DESIGNATED_INITIALIZER
                 }
             }
         }
-
+        
+        CGFloat totalBytes = fileInfo.uncompressedSize;
+        progress.totalUnitCount = totalBytes;
+        
         if (RHCode != ERAR_SUCCESS) {
             NSString *errorName = nil;
             [self assignError:innerError code:RHCode errorName:&errorName];
@@ -842,8 +863,14 @@ NS_DESIGNATED_INITIALIZER
         return NO;
     }
     
+<<<<<<< HEAD
     
     NSProgress *progress = [self beginProgressOperation:fileInfo.count];
+=======
+    NSProgress *progress = [NSProgress progressWithTotalUnitCount:fileInfo.count];
+    progress.cancellable = YES;
+    progress.pausable = NO;
+>>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
 
     URKLogInfo("Sorting file info by name/path");
     
@@ -969,8 +996,16 @@ NS_DESIGNATED_INITIALIZER
 
     NSError *innerError = nil;
 
+<<<<<<< HEAD
     NSProgress *progress = [self beginProgressOperation:0];
 
+=======
+    NSProgress *progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
+                                                     userInfo:nil];
+    progress.cancellable = YES;
+    progress.pausable = NO;
+    
+>>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
 
@@ -1027,11 +1062,15 @@ NS_DESIGNATED_INITIALIZER
         RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
         self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
             if (progress.isCancelled) {
                 URKLogInfo("Buffered data read cancelled");
                 return NO;
             }
             
+<<<<<<< HEAD
             bytesRead += dataChunk.length;
             progress.completedUnitCount += dataChunk.length;
 
@@ -1039,6 +1078,9 @@ NS_DESIGNATED_INITIALIZER
             URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progressPercent * 100);
             action(dataChunk, progressPercent);
 =======
+=======
+            progress.completedUnitCount += dataChunk.length;
+>>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
             bytesRead += dataChunk.length;
             CGFloat progress = bytesRead / totalBytes;
             URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progress * 100);
@@ -1052,7 +1094,11 @@ NS_DESIGNATED_INITIALIZER
 
         if (progress.isCancelled) {
             NSString *errorName = nil;
+<<<<<<< HEAD
             [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
+=======
+            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+>>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
             URKLogError("Buffered data extraction has been cancelled: %@", errorName);
             return;
         }
