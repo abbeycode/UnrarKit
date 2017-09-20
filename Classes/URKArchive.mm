@@ -37,6 +37,8 @@ NS_DESIGNATED_INITIALIZER
 
 @property (strong) NSObject *threadLock;
 
+@property (weak) NSProgress *progress;
+
 @end
 
 
@@ -408,7 +410,8 @@ NS_DESIGNATED_INITIALIZER
     NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
     progress.cancellable = YES;
     progress.pausable = NO;
-    
+    self.progress = progress;
+
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing File Extraction");
 
@@ -487,6 +490,7 @@ NS_DESIGNATED_INITIALIZER
                                                      userInfo:nil];
     progress.cancellable = YES;
     progress.pausable = NO;
+    self.progress = progress;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing Extraction");
@@ -611,6 +615,7 @@ NS_DESIGNATED_INITIALIZER
     NSProgress *progress = [NSProgress progressWithTotalUnitCount:fileInfo.count];
     progress.cancellable = YES;
     progress.pausable = NO;
+    self.progress = progress;
 
     URKLogInfo("Sorting file info by name/path");
     
@@ -714,7 +719,8 @@ NS_DESIGNATED_INITIALIZER
                                                      userInfo:nil];
     progress.cancellable = YES;
     progress.pausable = NO;
-    
+    self.progress = progress;
+
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
 

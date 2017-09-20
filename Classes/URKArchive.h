@@ -100,7 +100,7 @@ extern NSString *URKErrorDomain;
 /**
  *  An Objective-C/Cocoa wrapper around the unrar library
  */
-@interface URKArchive : NSObject {
+@interface URKArchive : NSObject <NSProgressReporting> {
 
 	HANDLE _rarFile;
 	struct RARHeaderDataEx *header;
@@ -132,6 +132,15 @@ extern NSString *URKErrorDomain;
  *  The total compressed size (in bytes) of the archive. Returns nil on errors
  */
 @property(nullable, readonly) NSNumber *compressedSize;
+
+/**
+ *  Can be used for progress reporting, but it's not necessary. You can also use
+ *  implicit progress reporting. Will be nil until an operation begins, and after one
+ *  completes. Behavior is undefined when multiple operations are in progress
+ *  concurrently. In that case, you should use implicit progress reporting and make
+ *  your parent progress the current progress on each thread
+ */
+@property(nullable, weak, readonly) NSProgress *progress;
 
 
 /**
