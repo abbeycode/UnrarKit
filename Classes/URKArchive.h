@@ -116,11 +116,15 @@ extern NSString *URKErrorDomain;
 /**
  *  An Objective-C/Cocoa wrapper around the unrar library
  */
+<<<<<<< HEAD
 @interface URKArchive : NSObject
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_9_0 || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_11
 <NSProgressReporting>
 #endif
 {
+=======
+@interface URKArchive : NSObject <NSProgressReporting> {
+>>>>>>> Implemented NSProgressReporting protocol to make conformance more apparent
 
 	HANDLE _rarFile;
 	struct RARHeaderDataEx *header;
@@ -154,9 +158,19 @@ extern NSString *URKErrorDomain;
 @property(nullable, readonly) NSNumber *compressedSize;
 
 /**
+<<<<<<< HEAD
  *  True if the file is one volume of a multi-part archive
  */
 @property(readonly) BOOL hasMultipleVolumes;
+=======
+ *  Can be used for progress reporting, but it's not necessary. You can also use
+ *  implicit progress reporting. Will be nil until an operation begins, and after one
+ *  completes. Behavior is undefined when multiple operations are in progress
+ *  concurrently. In that case, you should use implicit progress reporting and make
+ *  your parent progress the current progress on each thread
+ */
+@property(nullable, weak, readonly) NSProgress *progress;
+>>>>>>> Implemented NSProgressReporting protocol to make conformance more apparent
 
 
 /**
