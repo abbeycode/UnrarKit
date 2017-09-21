@@ -410,18 +410,26 @@ NS_DESIGNATED_INITIALIZER
     NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
     progress.cancellable = YES;
     progress.pausable = NO;
+    progress.kind = NSProgressKindFile;
+    [progress setUserInfoObject:@0
+                         forKey:NSProgressFileCompletedCountKey];
+    [progress setUserInfoObject:@(fileInfo.count)
+                         forKey:NSProgressFileTotalCountKey];
     self.progress = progress;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing File Extraction");
 
-        int RHCode = 0, PFCode = 0;
+        int RHCode = 0, PFCode = 0, filesExtracted = 0;
         URKFileInfo *fileInfo;
 
         URKLogInfo("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
             fileInfo = [URKFileInfo fileInfo:header];
             URKLogDebug("Extracting %{public}@", fileInfo.filename);
+            NSURL *extractedURL = [[NSURL fileURLWithPath:filePath] URLByAppendingPathComponent:fileInfo.filename];
+            [progress setUserInfoObject:extractedURL
+                                 forKey:NSProgressFileURLKey];
             
             if ([self headerContainsErrors:error]) {
                 URKLogError("Header contains an error")
@@ -445,6 +453,8 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
             
+            [progress setUserInfoObject:@(++filesExtracted)
+                                 forKey:NSProgressFileCompletedCountKey];
             progress.completedUnitCount += fileInfo.uncompressedSize;
             
             if (progressBlock) {
@@ -461,8 +471,6 @@ NS_DESIGNATED_INITIALIZER
             result = NO;
         }
 
-        progress.completedUnitCount = progress.totalUnitCount;
-        
         if (progressBlock) {
             progressBlock(fileInfo, 1.0);
         }
