@@ -1,6 +1,10 @@
 language: objective-c
 osx_image: xcode8.3
 
+branches:
+  except:
+  - nsprogress
+
 xcode_workspace: UnrarKit.xcworkspace
 
 before_script:
