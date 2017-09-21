@@ -657,14 +657,34 @@ NS_DESIGNATED_INITIALIZER
 {
     URKCreateActivity("Performing Action on Each File's Data");
 
+    NSError *listError = nil;
+    NSArray *fileInfo = [self listFileInfo:&listError];
+    
+    if (!fileInfo || listError) {
+        URKLogError("Error listing contents of archive: %{public}@", listError);
+        
+        if (error) {
+            *error = listError;
+        }
+        
+        return NO;
+    }
+    
+    NSNumber *totalSize = [fileInfo valueForKeyPath:@"@sum.uncompressedSize"];
+
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         int RHCode = 0, PFCode = 0;
 
         BOOL stop = NO;
 
+        NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
+        progress.cancellable = YES;
+        progress.pausable = NO;
+        self.progress = progress;
+        
         URKLogInfo("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-            if (stop) {
+            if (stop || progress.isCancelled) {
                 URKLogDebug("Action dictated an early stop");
                 return;
             }
@@ -702,6 +722,15 @@ NS_DESIGNATED_INITIALIZER
             URKLogDebug("Performing action on data (%lld bytes)", info.uncompressedSize);
             NSData *data = [NSData dataWithBytesNoCopy:buffer length:(NSUInteger)info.uncompressedSize freeWhenDone:YES];
             action(info, data, &stop);
+            
+            progress.completedUnitCount += data.length;
+        }
+        
+        if (progress.isCancelled) {
+            NSString *errorName = nil;
+            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+            URKLogInfo("Returning NO from performOnData:error: due to user cancellation: %@", errorName);
+            return;
         }
 
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {

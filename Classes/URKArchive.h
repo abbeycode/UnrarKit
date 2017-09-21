@@ -139,6 +139,9 @@ extern NSString *URKErrorDomain;
  *  completes. Behavior is undefined when multiple operations are in progress
  *  concurrently. In that case, you should use implicit progress reporting and make
  *  your parent progress the current progress on each thread
+ *
+ *  The instance isn't assigned until the method has started, so you'll need to call
+ *  it from a background thread in order to make use of it
  */
 @property(nullable, weak, readonly) NSProgress *progress;
 
@@ -330,7 +333,9 @@ extern NSString *URKErrorDomain;
                           error:(NSError **)error;
 
 /**
- *  Extracts each file in the archive into memory, allowing you to perform an action on it (not sorted)
+ *  Extracts each file in the archive into memory, allowing you to perform an action
+ *  on it (not sorted). Supports NSProgress for progress reporting, which also allows
+ *  cancellation of the operation in the middle
  *
  *  @param action The action to perform using the data
  *
