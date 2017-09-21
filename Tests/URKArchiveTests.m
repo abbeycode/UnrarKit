@@ -38,14 +38,16 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 
 
 - (void)testFileURL {
-    NSArray *testArchives = @[@"Large Archive.rar",
+    NSArray *testArchives = @[@"Large",
                               @"Test Archive.rar",
                               @"Test Archive (Password).rar",
                               @"Test Archive (Header Password).rar"];
     
     for (NSString *testArchiveName in testArchives) {
         NSLog(@"Testing fileURL of archive %@", testArchiveName);
-        NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+        NSURL *testArchiveURL = ([testArchiveName isEqualToString:@"Large"]
+                                 ? [self largeArchiveURL]
+                                 : self.testFileURLs[testArchiveName]);
         
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
         
@@ -56,14 +58,16 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 }
 
 - (void)testFilename {
-    NSArray *testArchives = @[@"Large Archive.rar",
+    NSArray *testArchives = @[@"Large",
                               @"Test Archive.rar",
                               @"Test Archive (Password).rar",
                               @"Test Archive (Header Password).rar"];
     
     for (NSString *testArchiveName in testArchives) {
         NSLog(@"Testing filename of archive %@", testArchiveName);
-        NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+        NSURL *testArchiveURL = ([testArchiveName isEqualToString:@"Large"]
+                                 ? [self largeArchiveURL]
+                                 : self.testFileURLs[testArchiveName]);
         
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
         
@@ -709,7 +713,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 
 - (void)testPerformOnData_FileMoved
 {
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL = [self largeArchiveURL];
 
     URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
@@ -749,7 +753,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 
 - (void)testPerformOnData_FileDeleted
 {
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL = [self largeArchiveURL];
     
     URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
@@ -787,7 +791,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 
 - (void)testPerformOnData_FileMovedBeforeBegin
 {
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL = [self largeArchiveURL];
     
     URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
@@ -973,7 +977,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 }
 
 - (void)testMultiThreading {
-    NSURL *largeArchiveURL_A = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL_A = [self largeArchiveURL];
     NSURL *largeArchiveURL_B = [largeArchiveURL_A.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive 2.rar"];
     NSURL *largeArchiveURL_C = [largeArchiveURL_A.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive 3.rar"];
     
@@ -1043,7 +1047,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 }
 
 - (void)testMultiThreading_SingleFile {
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL = [self largeArchiveURL];
     
     URKArchive *largeArchiveA = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     URKArchive *largeArchiveB = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
@@ -1101,7 +1105,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 }
 
 - (void)testMultiThreading_SingleArchiveObject {
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL = [self largeArchiveURL];
     
     URKArchive *largeArchive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
