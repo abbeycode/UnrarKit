@@ -168,6 +168,9 @@ extern NSString *URKErrorDomain;
  *  completes. Behavior is undefined when multiple operations are in progress
  *  concurrently. In that case, you should use implicit progress reporting and make
  *  your parent progress the current progress on each thread
+ *
+ *  The instance isn't assigned until the method has started, so you'll need to call
+ *  it from a background thread in order to make use of it
  */
 @property(nullable, weak, readonly) NSProgress *progress;
 >>>>>>> Implemented NSProgressReporting protocol to make conformance more apparent

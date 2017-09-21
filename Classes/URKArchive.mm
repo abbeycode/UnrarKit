@@ -955,7 +955,14 @@ NS_DESIGNATED_INITIALIZER
 
         BOOL stop = NO;
 
+<<<<<<< HEAD
         NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
+=======
+        NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
+        progress.cancellable = YES;
+        progress.pausable = NO;
+        self.progress = progress;
+>>>>>>> Added progress reporting to performOnData, and additional documentation to the progress variable
         
         URKLogInfo("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
@@ -1003,7 +1010,11 @@ NS_DESIGNATED_INITIALIZER
         
         if (progress.isCancelled) {
             NSString *errorName = nil;
+<<<<<<< HEAD
             [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
+=======
+            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+>>>>>>> Added progress reporting to performOnData, and additional documentation to the progress variable
             URKLogInfo("Returning NO from performOnData:error: due to user cancellation: %@", errorName);
             return;
         }
