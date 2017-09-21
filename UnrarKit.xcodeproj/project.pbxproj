@@ -10,10 +10,15 @@
 		7A22B1F81F60A2D3004B8050 /* UnrarKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */; };
 		7A22B1FB1F60A39E004B8050 /* UnrarKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */; };
 <<<<<<< HEAD
+<<<<<<< HEAD
 		7A267F6E1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
 		7A267F6F1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
 =======
 >>>>>>> Added localization script, empty strings file, and wiring for resources bundle
+=======
+		7A267F6E1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
+		7A267F6F1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
+>>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		967872741E460FA70048A54C /* ListVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 967872731E460FA70048A54C /* ListVolumesTests.m */; };
@@ -321,9 +326,13 @@
 		7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnrarKitResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A22B1F91F60A2D3004B8050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UnrarKit.strings; sourceTree = "<group>"; };
 <<<<<<< HEAD
+<<<<<<< HEAD
 		7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressReportingTests.m; sourceTree = "<group>"; };
 =======
 >>>>>>> Added localization script, empty strings file, and wiring for resources bundle
+=======
+		7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressReportingTests.m; sourceTree = "<group>"; };
+>>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
 		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
 		96370FB419ED8A8200DAF8F1 /* blake2s.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s.cpp; sourceTree = "<group>"; };
 		96370FB519ED8A8200DAF8F1 /* blake2s.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = blake2s.hpp; sourceTree = "<group>"; };
@@ -645,6 +654,7 @@
 				96F450741B38527100679597 /* ValidatePasswordTests.m */,
 				96EA532F1B3B462D00F79DC6 /* iOSUnitTestHostApp */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
+				7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */,
 			);
 			path = Tests;
 			sourceTree = SOURCE_ROOT;
@@ -2085,9 +2095,13 @@
 			);
 			defaultConfigurationIsVisible = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 			defaultConfigurationName = Release;
 =======
 >>>>>>> Added localization script, empty strings file, and wiring for resources bundle
+=======
+			defaultConfigurationName = Release;
+>>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
 		};
 		964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "UnrarKit Tests" */ = {
 			isa = XCConfigurationList;

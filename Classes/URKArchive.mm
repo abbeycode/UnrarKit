@@ -587,10 +587,18 @@ NS_DESIGNATED_INITIALIZER
     progress.cancellable = YES;
     progress.pausable = NO;
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
     
 >>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
 =======
+=======
+    progress.kind = NSProgressKindFile;
+    [progress setUserInfoObject:@0
+                         forKey:NSProgressFileCompletedCountKey];
+    [progress setUserInfoObject:@(fileInfo.count)
+                         forKey:NSProgressFileTotalCountKey];
+>>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
     self.progress = progress;
 
 >>>>>>> Implemented NSProgressReporting protocol to make conformance more apparent
@@ -607,8 +615,11 @@ NS_DESIGNATED_INITIALIZER
             NSURL *extractedURL = [[NSURL fileURLWithPath:filePath] URLByAppendingPathComponent:fileInfo.filename];
             [progress setUserInfoObject:extractedURL
                                  forKey:NSProgressFileURLKey];
+<<<<<<< HEAD
             [progress setUserInfoObject:fileInfo
                                  forKey:URKProgressInfoKeyFileInfoExtracting];
+=======
+>>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
             
 <<<<<<< HEAD
             if ([self headerContainsErrors:innerError]) {
@@ -648,10 +659,15 @@ NS_DESIGNATED_INITIALIZER
             
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             [progress setUserInfoObject:@(++filesExtracted)
                                  forKey:NSProgressFileCompletedCountKey];
             [progress setUserInfoObject:@(fileInfos.count)
                                  forKey:NSProgressFileTotalCountKey];
+=======
+            [progress setUserInfoObject:@(++filesExtracted)
+                                 forKey:NSProgressFileCompletedCountKey];
+>>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
             progress.completedUnitCount += fileInfo.uncompressedSize;
 =======
             eachFileProgress.totalUnitCount += fileInfo.uncompressedSize;
@@ -676,6 +692,7 @@ NS_DESIGNATED_INITIALIZER
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         eachFileProgress.totalUnitCount = totalSize.longLongValue;
 =======
@@ -683,6 +700,8 @@ NS_DESIGNATED_INITIALIZER
 >>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
         
 >>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
+=======
+>>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
         if (progressBlock) {
             progressBlock(fileInfo, 1.0);
         }
