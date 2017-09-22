@@ -65,6 +65,14 @@
                BlueprintName = "UnrarKit Tests"
                ReferencedContainer = "container:UnrarKit.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "ProgressReportingTests/testProgressReporting_ExtractFiles_AdditionalDescription">
+               </Test>
+               <Test
+                  Identifier = "ProgressReportingTests/testProgressReporting_ExtractFiles_Description">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
