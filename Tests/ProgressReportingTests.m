@@ -97,7 +97,7 @@ static NSUInteger observerCallCount;
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     NSProgress *extractFilesProgress = [NSProgress progressWithTotalUnitCount:1];
-    [extractFilesProgress becomeCurrentWithPendingUnitCount:1];
+    archive.progress = extractFilesProgress;
     
     NSString *observedSelector = NSStringFromSelector(@selector(localizedDescription));
     
@@ -116,20 +116,15 @@ static NSUInteger observerCallCount;
     XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:progress:error:");
     XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
     
-    [extractFilesProgress resignCurrent];
     [extractFilesProgress removeObserver:self forKeyPath:observedSelector];
+
+    NSArray<NSString *>*expectedDescriptions = @[@"Processing “Test File A.txt”…",
+                                                 @"Processing “Test File B.jpg”…",
+                                                 @"Processing “Test File C.m4a”…"];
     
-    NSUInteger expectedProgressUpdates = 3;
-    NSArray<NSString *>*expectedDescriptions = @[@"Processing “Test File A.txt”",
-                                                 @"Processing “Test File B.jpg”",
-                                                 @"Processing “Test File C.m4a”"];
-    
-    XCTAssertEqual(self.descriptionsReported.count, expectedProgressUpdates, @"Incorrect number of current file info updates");
-    for (NSInteger i = 0; i < expectedProgressUpdates; i++) {
-        NSString *expectedDescription = expectedDescriptions[i];
-        NSString *actualDescription = self.descriptionsReported[i];
-        
-        XCTAssertEqualObjects(actualDescription, expectedDescription, @"Unexpected description %ld", i);
+    for (NSString *expectedDescription in expectedDescriptions) {
+        BOOL descriptionFound = [self.descriptionsReported containsObject:expectedDescription];
+        XCTAssertTrue(descriptionFound, @"Expected progress updates to contain '%@', but they didn't", expectedDescription);
     }
 }
 
@@ -144,7 +139,7 @@ static NSUInteger observerCallCount;
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     NSProgress *extractFilesProgress = [NSProgress progressWithTotalUnitCount:1];
-    [extractFilesProgress becomeCurrentWithPendingUnitCount:1];
+    archive.progress = extractFilesProgress;
     
     NSString *observedSelector = NSStringFromSelector(@selector(localizedAdditionalDescription));
     
@@ -162,21 +157,16 @@ static NSUInteger observerCallCount;
     XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:progress:error:");
     XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
     
-    [extractFilesProgress resignCurrent];
     [extractFilesProgress removeObserver:self forKeyPath:observedSelector];
     
-    NSUInteger expectedProgressUpdates = 4;
     NSArray<NSString *>*expectedAdditionalDescriptions = @[@"Zero KB of 105 KB",
                                                            @"33 bytes of 105 KB",
                                                            @"56 KB of 105 KB",
                                                            @"105 KB of 105 KB"];
     
-    XCTAssertEqual(self.additionalDescriptionsReported.count, expectedProgressUpdates, @"Incorrect number of current file info updates");
-    for (NSInteger i = 0; i < expectedProgressUpdates; i++) {
-        NSString *expectedAdditionalDescription = expectedAdditionalDescriptions[i];
-        NSString *actualAdditionalDescription = self.additionalDescriptionsReported[i];
-        
-        XCTAssertEqualObjects(actualAdditionalDescription, expectedAdditionalDescription, @"Unexpected description %ld", i);
+    for (NSString *expectedDescription in expectedAdditionalDescriptions) {
+        BOOL descriptionFound = [self.additionalDescriptionsReported containsObject:expectedDescription];
+        XCTAssertTrue(descriptionFound, @"Expected progress updates to contain '%@', but they didn't", expectedDescription);
     }
 }
 

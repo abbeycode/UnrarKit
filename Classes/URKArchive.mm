@@ -37,8 +37,6 @@ NS_DESIGNATED_INITIALIZER
 
 @property (strong) NSObject *threadLock;
 
-@property (weak) NSProgress *progress;
-
 @end
 
 
@@ -392,9 +390,9 @@ NS_DESIGNATED_INITIALIZER
     __block BOOL result = YES;
 
     NSError *listError = nil;
-    NSArray *fileInfo = [self listFileInfo:&listError];
+    NSArray *fileInfos = [self listFileInfo:&listError];
 
-    if (!fileInfo || listError) {
+    if (!fileInfos || listError) {
         URKLogError("Error listing contents of archive: %{public}@", listError);
 
         if (error) {
@@ -404,19 +402,12 @@ NS_DESIGNATED_INITIALIZER
         return NO;
     }
 
-    NSNumber *totalSize = [fileInfo valueForKeyPath:@"@sum.uncompressedSize"];
+    NSNumber *totalSize = [fileInfos valueForKeyPath:@"@sum.uncompressedSize"];
     __block long long bytesDecompressed = 0;
 
-    NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
-    progress.cancellable = YES;
-    progress.pausable = NO;
+    NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
     progress.kind = NSProgressKindFile;
-    [progress setUserInfoObject:@0
-                         forKey:NSProgressFileCompletedCountKey];
-    [progress setUserInfoObject:@(fileInfo.count)
-                         forKey:NSProgressFileTotalCountKey];
-    self.progress = progress;
-
+	
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing File Extraction");
 
@@ -455,6 +446,8 @@ NS_DESIGNATED_INITIALIZER
             
             [progress setUserInfoObject:@(++filesExtracted)
                                  forKey:NSProgressFileCompletedCountKey];
+            [progress setUserInfoObject:@(fileInfos.count)
+                                 forKey:NSProgressFileTotalCountKey];
             progress.completedUnitCount += fileInfo.uncompressedSize;
             
             if (progressBlock) {
@@ -493,12 +486,9 @@ NS_DESIGNATED_INITIALIZER
 {
     URKCreateActivity("Extracting Data from File");
     
+    NSProgress *progress = [self beginProgressOperation:0];
+
     __block NSData *result = nil;
-    NSProgress *progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
-                                                     userInfo:nil];
-    progress.cancellable = YES;
-    progress.pausable = NO;
-    self.progress = progress;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing Extraction");
@@ -620,10 +610,8 @@ NS_DESIGNATED_INITIALIZER
         return NO;
     }
     
-    NSProgress *progress = [NSProgress progressWithTotalUnitCount:fileInfo.count];
-    progress.cancellable = YES;
-    progress.pausable = NO;
-    self.progress = progress;
+    
+    NSProgress *progress = [self beginProgressOperation:fileInfo.count];
 
     URKLogInfo("Sorting file info by name/path");
     
@@ -677,10 +665,7 @@ NS_DESIGNATED_INITIALIZER
 
         BOOL stop = NO;
 
-        NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
-        progress.cancellable = YES;
-        progress.pausable = NO;
-        self.progress = progress;
+        NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
         
         URKLogInfo("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
@@ -752,11 +737,7 @@ NS_DESIGNATED_INITIALIZER
 
     NSError *innerError = nil;
 
-    NSProgress *progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
-                                                     userInfo:nil];
-    progress.cancellable = YES;
-    progress.pausable = NO;
-    self.progress = progress;
+    NSProgress *progress = [self beginProgressOperation:0];
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
@@ -1244,6 +1225,25 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     }
 
     return NO;
+}
+
+- (NSProgress *)beginProgressOperation:(NSUInteger)totalUnitCount
+{
+    NSProgress *progress;
+    progress = self.progress;
+    if (!progress) {
+        progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
+                                             userInfo:nil];
+    }
+    
+    if (totalUnitCount > 0) {
+        progress.totalUnitCount = totalUnitCount;
+    }
+    
+    progress.cancellable = YES;
+    progress.pausable = NO;
+    
+    return progress;
 }
 
 @end
