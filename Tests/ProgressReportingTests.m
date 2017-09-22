@@ -20,6 +20,9 @@
 
 static void *ExtractFilesContext = &ExtractFilesContext;
 static void *OtherContext = &OtherContext;
+static void *CancelContext = &CancelContext;
+
+static NSUInteger observerCallCount;
 
 @implementation ProgressReportingTests
 
@@ -30,6 +33,8 @@ static void *OtherContext = &OtherContext;
     self.fractionsCompletedReported = [NSMutableArray array];
     self.descriptionsReported = [NSMutableArray array];
     self.additionalDescriptionsReported = [NSMutableArray array];
+    
+    observerCallCount = 0;
 }
 
 - (void)testProgressReporting_ExtractFiles_FractionCompleted
@@ -262,6 +267,51 @@ static void *OtherContext = &OtherContext;
     }
 }
 
+- (void)testProgressCancellation_ExtractFiles {
+    NSString *testArchiveName = @"Test Archive.rar";
+    NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+    NSString *extractDirectory = [self randomDirectoryWithPrefix:
+                                  [testArchiveName stringByDeletingPathExtension]];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    NSProgress *extractFilesProgress = [NSProgress progressWithTotalUnitCount:1];
+    [extractFilesProgress becomeCurrentWithPendingUnitCount:1];
+    
+    NSString *observedSelector = NSStringFromSelector(@selector(fractionCompleted));
+    
+    [extractFilesProgress addObserver:self
+                           forKeyPath:observedSelector
+                              options:NSKeyValueObservingOptionInitial
+                              context:CancelContext];
+    
+    NSError *extractError = nil;
+    BOOL success = [archive extractFilesTo:extractURL.path
+                                 overwrite:NO
+                                  progress:nil
+                                     error:&extractError];
+    
+    XCTAssertNotNil(extractError, @"Error not returned by extractFilesTo:overwrite:progress:error:");
+    XCTAssertEqual(extractError.code, URKErrorCodeUserCancelled, @"Incorrect error code returned from user cancellation");
+    XCTAssertFalse(success, @"Unrar didn't cancel extraction");
+    
+    [extractFilesProgress resignCurrent];
+    [extractFilesProgress removeObserver:self forKeyPath:observedSelector];
+    
+    
+    NSUInteger expectedProgressUpdates = 2;
+    XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgressUpdates, @"Incorrect number of progress updates");
+    
+    NSError *listContentsError = nil;
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSArray *extractedFiles = [fm contentsOfDirectoryAtPath:extractURL.path
+                                                      error:&listContentsError];
+    
+    XCTAssertNil(listContentsError, @"Error listing contents of extraction directory");
+    XCTAssertEqual(extractedFiles.count, 1, @"Cancellation didn't occur in as timely a fashion as expected");
+}
+
 
 #pragma mark - Mac-only tests
 
@@ -354,6 +404,75 @@ static void *OtherContext = &OtherContext;
         XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.000001f, @"Incorrect progress reported at index %ld", i);
     }
 }
+
+- (void)testProgressCancellation_ExtractData {
+    NSURL *largeArchiveURL = [self largeArchiveURL];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
+    NSString *firstFile = [[archive listFilenames:nil] firstObject];
+    
+    NSProgress *extractFileProgress = [NSProgress progressWithTotalUnitCount:1];
+    [extractFileProgress becomeCurrentWithPendingUnitCount:1];
+    
+    NSString *observedSelector = NSStringFromSelector(@selector(fractionCompleted));
+    
+    [extractFileProgress addObserver:self
+                          forKeyPath:observedSelector
+                             options:NSKeyValueObservingOptionInitial
+                             context:CancelContext];
+    
+    NSError *extractError = nil;
+    NSData *data = [archive extractDataFromFile:firstFile
+                                       progress:nil
+                                          error:&extractError];
+    
+    XCTAssertNotNil(extractError, @"No error returned by cancelled extractDataFromFile:progress:error:");
+    XCTAssertEqual(extractError.code, URKErrorCodeUserCancelled, @"Incorrect error code returned from user cancellation");
+    XCTAssertNil(data, @"extractData didn't return nil when cancelled");
+    
+    [extractFileProgress resignCurrent];
+    [extractFileProgress removeObserver:self forKeyPath:observedSelector];
+    
+    NSUInteger expectedProgressUpdates = 2;
+    XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgressUpdates, @"Incorrect number of progress updates");
+}
+
+- (void)testProgressCancellation_ExtractBufferedData {
+    NSURL *largeArchiveURL = [self largeArchiveURL];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
+    NSString *firstFile = [[archive listFilenames:nil] firstObject];
+    
+    NSProgress *extractFileProgress = [NSProgress progressWithTotalUnitCount:1];
+    [extractFileProgress becomeCurrentWithPendingUnitCount:1];
+    
+    NSString *observedSelector = NSStringFromSelector(@selector(fractionCompleted));
+    
+    [extractFileProgress addObserver:self
+                          forKeyPath:observedSelector
+                             options:NSKeyValueObservingOptionInitial
+                             context:CancelContext];
+    
+    __block NSUInteger blockCallCount = 0;
+    
+    NSError *extractError = nil;
+    BOOL success = [archive extractBufferedDataFromFile:firstFile
+                                                  error:&extractError
+                                                 action:^(NSData * _Nonnull dataChunk, CGFloat percentDecompressed) {
+                                                     blockCallCount++;
+                                                 }];
+    
+    XCTAssertNotNil(extractError, @"No error returned by cancelled extractDataFromFile:progress:error:");
+    XCTAssertEqual(extractError.code, URKErrorCodeUserCancelled, @"Incorrect error code returned from user cancellation");
+    XCTAssertFalse(success, @"extractBufferedData didn't return false when cancelled");
+    
+    [extractFileProgress resignCurrent];
+    [extractFileProgress removeObserver:self forKeyPath:observedSelector];
+    
+    NSUInteger expectedProgressUpdates = 2;
+    XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgressUpdates, @"Incorrect number of progress updates");
+    XCTAssertEqual(blockCallCount, 1, @"Action block called incorrect number of times after cancellation");
+}
 #endif
 
 
@@ -365,6 +484,8 @@ static void *OtherContext = &OtherContext;
                         change:(NSDictionary<NSKeyValueChangeKey,id> *)change
                        context:(void *)context
 {
+    observerCallCount++;
+    
     NSProgress *progress;
    
     if ([object isKindOfClass:[NSProgress class]]) {
@@ -375,6 +496,10 @@ static void *OtherContext = &OtherContext;
     if (context == ExtractFilesContext) {
         [self.descriptionsReported addObject:progress.localizedDescription];
         [self.additionalDescriptionsReported addObject:progress.localizedAdditionalDescription];
+    }
+    
+    if (context == CancelContext && observerCallCount == 2) {
+        [progress cancel];
     }
 }
 

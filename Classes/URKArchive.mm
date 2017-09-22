@@ -359,7 +359,7 @@ NS_DESIGNATED_INITIALIZER
             URKLogDebug("Skipping to next file...");
             if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                 NSString *errorName = nil;
-                [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Error skipping to next header file: %@ (%d)", errorName, PFCode);
                 fileInfos = nil;
                 return;
@@ -368,7 +368,7 @@ NS_DESIGNATED_INITIALIZER
 
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             NSString *errorName = nil;
-            [self assignError:error code:RHCode errorName:&errorName];
+            [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Error reading RAR header: %@ (%d)", errorName, RHCode);
             fileInfos = nil;
         }
@@ -431,7 +431,7 @@ NS_DESIGNATED_INITIALIZER
             [progress setUserInfoObject:extractedURL
                                  forKey:NSProgressFileURLKey];
             
-            if ([self headerContainsErrors:error]) {
+            if ([self headerContainsErrors:innerError]) {
                 URKLogError("Header contains an error")
                 result = NO;
                 return;
@@ -439,7 +439,7 @@ NS_DESIGNATED_INITIALIZER
             
             if (progress.isCancelled) {
                 NSString *errorName = nil;
-                [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+                [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
                 URKLogInfo("Halted file extraction due to user cancellation: %@", errorName);
                 result = NO;
                 return;
@@ -447,7 +447,7 @@ NS_DESIGNATED_INITIALIZER
 
             if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *) filePath.UTF8String, NULL)) != 0) {
                 NSString *errorName = nil;
-                [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Error extracting file: %@ (%d)", errorName, PFCode);
                 result = NO;
                 return;
@@ -466,7 +466,7 @@ NS_DESIGNATED_INITIALIZER
 
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             NSString *errorName = nil;
-            [self assignError:error code:RHCode errorName:&errorName];
+            [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Error reading file header: %@ (%d)", errorName, RHCode);
             result = NO;
         }
@@ -508,7 +508,7 @@ NS_DESIGNATED_INITIALIZER
 
         URKLogInfo("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
-            if ([self headerContainsErrors:error]) {
+            if ([self headerContainsErrors:innerError]) {
                 URKLogError("Header contains an error")
                 return;
             }
@@ -523,7 +523,7 @@ NS_DESIGNATED_INITIALIZER
                 URKLogDebug("Skipping %{public}@", fileInfo.filename);
                 if ((PFCode = RARProcessFileW(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                     NSString *errorName = nil;
-                    [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                    [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                     URKLogError("Error skipping file: %@ (%d)", errorName, PFCode);
                     return;
                 }
@@ -532,7 +532,7 @@ NS_DESIGNATED_INITIALIZER
 
         if (RHCode != ERAR_SUCCESS) {
             NSString *errorName = nil;
-            [self assignError:error code:RHCode errorName:&errorName];
+            [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Error reading file header: %@ (%d)", errorName, RHCode);
             return;
         }
@@ -578,14 +578,14 @@ NS_DESIGNATED_INITIALIZER
         
         if (progress.isCancelled) {
             NSString *errorName = nil;
-            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+            [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
             URKLogInfo("Returning nil data from extraction due to user cancellation: %@", errorName);
             return;
         }
 
         if (PFCode != 0) {
             NSString *errorName = nil;
-            [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+            [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
             URKLogError("Error extracting file data: %@ (%d)", errorName, PFCode);
             return;
         }
@@ -689,7 +689,7 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
             
-            if ([self headerContainsErrors:error]) {
+            if ([self headerContainsErrors:innerError]) {
                 URKLogError("Header contains an error")
                 return;
             }
@@ -714,7 +714,7 @@ NS_DESIGNATED_INITIALIZER
 
             if (PFCode != 0) {
                 NSString *errorName = nil;
-                [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Error processing file: %@ (%d)", errorName, PFCode);
                 return;
             }
@@ -728,14 +728,14 @@ NS_DESIGNATED_INITIALIZER
         
         if (progress.isCancelled) {
             NSString *errorName = nil;
-            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+            [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
             URKLogInfo("Returning NO from performOnData:error: due to user cancellation: %@", errorName);
             return;
         }
 
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             NSString *errorName = nil;
-            [self assignError:error code:RHCode errorName:&errorName];
+            [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Error reading file header: %@ (%d)", errorName, RHCode);
             return;
         }
@@ -767,7 +767,7 @@ NS_DESIGNATED_INITIALIZER
         URKLogInfo("Looping through files, looking for %@...", filePath);
         
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
-            if ([self headerContainsErrors:error]) {
+            if ([self headerContainsErrors:innerError]) {
                 URKLogDebug("Header contains error")
                 return;
             }
@@ -783,7 +783,7 @@ NS_DESIGNATED_INITIALIZER
                 URKLogDebug("Skipping file...");
                 if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                     NSString *errorName = nil;
-                    [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                    [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                     URKLogError("Failed to skip file: %@ (%d)", errorName, PFCode);
                     return;
                 }
@@ -795,7 +795,7 @@ NS_DESIGNATED_INITIALIZER
         
         if (RHCode != ERAR_SUCCESS) {
             NSString *errorName = nil;
-            [self assignError:error code:RHCode errorName:&errorName];
+            [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Header read yielded error: %@ (%d)", errorName, RHCode);
             return;
         }
@@ -818,11 +818,12 @@ NS_DESIGNATED_INITIALIZER
                 return NO;
             }
             
-            progress.completedUnitCount += dataChunk.length;
             bytesRead += dataChunk.length;
-            CGFloat progress = bytesRead / totalBytes;
-            URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progress * 100);
-            action(dataChunk, progress);
+            progress.completedUnitCount += dataChunk.length;
+
+            CGFloat progressPercent = bytesRead / totalBytes;
+            URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progressPercent * 100);
+            action(dataChunk, progressPercent);
             return YES;
         };
 
@@ -831,14 +832,14 @@ NS_DESIGNATED_INITIALIZER
 
         if (progress.isCancelled) {
             NSString *errorName = nil;
-            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
+            [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
             URKLogError("Buffered data extraction has been cancelled: %@", errorName);
             return;
         }
         
         if (PFCode != 0) {
             NSString *errorName = nil;
-            [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+            [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
             URKLogError("Error processing file: %@ (%d)", errorName, PFCode);
         }
     } inMode:RAR_OM_EXTRACT error:&innerError];
