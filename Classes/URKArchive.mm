@@ -382,6 +382,19 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
+                 error:(NSError **)error
+{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    return [self extractFilesTo:filePath
+                      overwrite:overwrite
+                       progress:nil
+                          error:error];
+#pragma clang diagnostic pop
+}
+
+- (BOOL)extractFilesTo:(NSString *)filePath
+             overwrite:(BOOL)overwrite
               progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
                  error:(NSError **)error
 {
@@ -476,10 +489,28 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (NSData *)extractData:(URKFileInfo *)fileInfo
+                  error:(NSError **)error
+{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    return [self extractDataFromFile:fileInfo.filename progress:nil error:error];
+#pragma clang diagnostic pop
+}
+
+- (NSData *)extractData:(URKFileInfo *)fileInfo
                progress:(void (^)(CGFloat percentDecompressed))progressBlock
                   error:(NSError **)error
 {
     return [self extractDataFromFile:fileInfo.filename progress:progressBlock error:error];
+}
+
+- (NSData *)extractDataFromFile:(NSString *)filePath
+                          error:(NSError **)error
+{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    return [self extractDataFromFile:filePath progress:nil error:error];
+#pragma clang diagnostic pop
 }
 
 - (NSData *)extractDataFromFile:(NSString *)filePath

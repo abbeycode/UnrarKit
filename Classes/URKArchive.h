@@ -268,6 +268,22 @@ extern NSString *URKErrorDomain;
 
 /**
  *  Writes all files in the archive to the given path. Supports NSProgress for progress reporting, which also
+ *  allows cancellation in the middle of extraction. Use the 'progress' property (as explained in the README)
+ *  to retrieve more detailed information, such as the current file being extracted, number of files extracted,
+ *  and the URKFileInfo instance being extracted
+ *
+ *  @param filePath  The destination path of the unarchived files
+ *  @param overwrite YES to overwrite files in the destination directory, NO otherwise
+ *  @param error     Contains an NSError object when there was an error reading the archive
+ *
+ *  @return YES on successful extraction, NO if an error was encountered
+ */
+- (BOOL)extractFilesTo:(NSString *)filePath
+             overwrite:(BOOL)overwrite
+                 error:(NSError **)error;
+
+/**
+ *  **DEPRECATED:** Writes all files in the archive to the given path. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction
  *
  *  @param filePath      The destination path of the unarchived files
@@ -284,10 +300,22 @@ extern NSString *URKErrorDomain;
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
               progress:(nullable void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
-                 error:(NSError **)error;
+                 error:(NSError **)error __deprecated_msg("Use extractFilesTo:overwrite:error: instead, and use NSProgress as described in the README");
 
 /**
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
+ *  allows cancellation in the middle of extraction
+ *
+ *  @param fileInfo The info of the file within the archive to be expanded. Only the filename property is used
+ *  @param error    Contains an NSError object when there was an error reading the archive
+ *
+ *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
+ */
+- (nullable NSData *)extractData:(URKFileInfo *)fileInfo
+                           error:(NSError **)error;
+
+/**
+ *  **DEPRECATED:** Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction
  *
  *  @param fileInfo      The info of the file within the archive to be expanded. Only the filename property is used
@@ -301,7 +329,7 @@ extern NSString *URKErrorDomain;
  */
 - (nullable NSData *)extractData:(URKFileInfo *)fileInfo
                         progress:(nullable void (^)(CGFloat percentDecompressed))progressBlock
-                           error:(NSError **)error;
+                           error:(NSError **)error __deprecated_msg("Use extractData:error: instead, and use NSProgress as described in the README");
 
 /**
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
@@ -317,8 +345,24 @@ extern NSString *URKErrorDomain;
  *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
  */
 - (nullable NSData *)extractDataFromFile:(NSString *)filePath
-                                progress:(nullable void (^)(CGFloat percentDecompressed))progressBlock
                                    error:(NSError **)error;
+
+/**
+ *  **DEPRECATED:** Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
+ *  allows cancellation in the middle of extraction
+ *
+ *  @param filePath      The path of the file within the archive to be expanded
+ *  @param progressBlock Called every so often to report the progress of the extraction
+ *
+ *       - *percentDecompressed* The percentage of the file that has been decompressed
+ *
+ *  @param error    Contains an NSError object when there was an error reading the archive
+ *
+ *  @return An NSData object containing the bytes of the file, or nil if an error was encountered
+ */
+- (nullable NSData *)extractDataFromFile:(NSString *)filePath
+                                progress:(nullable void (^)(CGFloat percentDecompressed))progressBlock
+                                   error:(NSError **)error __deprecated_msg("Use extractDataFromFile:error: instead, and use NSProgress as described in the README");
 
 /**
  *  Loops through each file in the archive in alphabetical order, allowing you to perform an
