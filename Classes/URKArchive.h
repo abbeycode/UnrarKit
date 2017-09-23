@@ -97,6 +97,7 @@ typedef NS_ENUM(NSInteger, URKErrorCode) {
     URKErrorCodeUserCancelled = 102,
 };
 
+<<<<<<< HEAD
 typedef NSString *const URKProgressInfoKey;
 
 
@@ -108,6 +109,16 @@ static URKProgressInfoKey _Nonnull
      *  For `extractFilesTo:overwrite:error:`, this key contains an instance of URKFileInfo with the file currently being extracted
      */
     URKProgressInfoKeyFileInfoExtracting = @"URKProgressInfoKeyFileInfoExtracting";
+=======
+<<<<<<< HEAD
+#define ERAR_ARCHIVE_NOT_FOUND  101
+=======
+typedef NSString *const URKProgressInfoKey;
+
+static URKProgressInfoKey _Nonnull
+    URKProgressInfoKeyFileInfoExtracting = @"URKProgressInfoKeyFileInfoExtracting";
+>>>>>>> Added reporting of URKFileInfo objects to progress reporting for extractFiles
+>>>>>>> Added reporting of URKFileInfo objects to progress reporting for extractFiles
 
 NS_ASSUME_NONNULL_BEGIN
 

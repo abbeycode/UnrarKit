@@ -616,10 +616,15 @@ NS_DESIGNATED_INITIALIZER
             [progress setUserInfoObject:extractedURL
                                  forKey:NSProgressFileURLKey];
 <<<<<<< HEAD
+<<<<<<< HEAD
             [progress setUserInfoObject:fileInfo
                                  forKey:URKProgressInfoKeyFileInfoExtracting];
 =======
 >>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
+=======
+            [progress setUserInfoObject:fileInfo
+                                 forKey:URKProgressInfoKeyFileInfoExtracting];
+>>>>>>> Added reporting of URKFileInfo objects to progress reporting for extractFiles
             
 <<<<<<< HEAD
             if ([self headerContainsErrors:innerError]) {
