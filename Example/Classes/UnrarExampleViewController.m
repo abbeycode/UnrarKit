@@ -114,7 +114,7 @@ static void *ProgressObserverContext = &ProgressObserverContext;
         }
 
         // On extraction completion:
-        [self updateExtractionStep:[NSString stringWithFormat:@"Extracted %lub", data.length]];
+        [self updateExtractionStep:[NSString stringWithFormat:@"Extracted %lub", (unsigned long)data.length]];
     });
 }
 
@@ -200,7 +200,7 @@ static void *ProgressObserverContext = &ProgressObserverContext;
     NSFileManager *fm = [NSFileManager defaultManager];
     NSURL *docsDir = [[fm URLsForDirectory:NSDocumentDirectory
                                  inDomains:NSUserDomainMask] firstObject];
-    NSString *filename = [NSString stringWithFormat:@"long-random-str-%lu.txt", numberOfCharacters];
+    NSString *filename = [NSString stringWithFormat:@"long-random-str-%lu.txt", (unsigned long)numberOfCharacters];
     NSURL *fileURL = [docsDir URLByAppendingPathComponent:filename];
     
     if ([fileURL checkResourceIsReachableAndReturnError:nil]) {
