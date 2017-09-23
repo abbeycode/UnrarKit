@@ -93,6 +93,11 @@ typedef NS_ENUM(NSInteger, URKErrorCode) {
     URKErrorCodeUserCancelled = 102,
 };
 
+typedef NSString *const URKProgressInfoKey;
+
+static URKProgressInfoKey _Nonnull
+    URKProgressInfoKeyFileInfoExtracting = @"URKProgressInfoKeyFileInfoExtracting";
+
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *URKErrorDomain;

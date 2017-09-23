@@ -15,6 +15,7 @@
 @property NSMutableArray<NSNumber*> *fractionsCompletedReported;
 @property NSMutableArray<NSString*> *descriptionsReported;
 @property NSMutableArray<NSString*> *additionalDescriptionsReported;
+@property NSMutableArray<URKFileInfo*> *fileInfosReported;
 
 @end
 
@@ -33,6 +34,7 @@ static NSUInteger observerCallCount;
     self.fractionsCompletedReported = [NSMutableArray array];
     self.descriptionsReported = [NSMutableArray array];
     self.additionalDescriptionsReported = [NSMutableArray array];
+    self.fileInfosReported = [NSMutableArray array];
     
     observerCallCount = 0;
 }
@@ -168,6 +170,48 @@ static NSUInteger observerCallCount;
         BOOL descriptionFound = [self.additionalDescriptionsReported containsObject:expectedDescription];
         XCTAssertTrue(descriptionFound, @"Expected progress updates to contain '%@', but they didn't", expectedDescription);
     }
+}
+
+- (void)testProgressReporting_ExtractFiles_FileInfo
+{
+    NSString *testArchiveName = @"Test Archive.rar";
+    NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+    NSString *extractDirectory = [self randomDirectoryWithPrefix:
+                                  [testArchiveName stringByDeletingPathExtension]];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    NSProgress *extractFilesProgress = [NSProgress progressWithTotalUnitCount:1];
+    archive.progress = extractFilesProgress;
+    
+    NSString *observedSelector = NSStringFromSelector(@selector(fractionCompleted));
+    
+    [extractFilesProgress addObserver:self
+                           forKeyPath:observedSelector
+                              options:NSKeyValueObservingOptionInitial
+                              context:ExtractFilesContext];
+    
+    NSError *extractError = nil;
+    BOOL success = [archive extractFilesTo:extractURL.path
+                                 overwrite:NO
+                                  progress:nil
+                                     error:&extractError];
+    
+    XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:progress:error:");
+    XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
+    
+    [extractFilesProgress removeObserver:self forKeyPath:observedSelector];
+    
+    NSUInteger expectedFileInfos = 3;
+    NSArray<NSString *> *expectedFileNames = @[@"Test File A.txt",
+                                               @"Test File B.jpg",
+                                               @"Test File C.m4a"];
+    
+    NSArray<NSString *> *actualFilenames = [self.fileInfosReported valueForKeyPath:NSStringFromSelector(@selector(filename))];
+    
+    XCTAssertEqual(self.fileInfosReported.count, expectedFileInfos, @"Incorrect number of progress updates");
+    XCTAssertTrue([expectedFileNames isEqualToArray:actualFilenames], @"Incorrect filenames returned: %@", actualFilenames);
 }
 
 - (void)testProgressReporting_PerformOnFiles {
@@ -486,6 +530,9 @@ static NSUInteger observerCallCount;
     if (context == ExtractFilesContext) {
         [self.descriptionsReported addObject:progress.localizedDescription];
         [self.additionalDescriptionsReported addObject:progress.localizedAdditionalDescription];
+        
+        URKFileInfo *fileInfo = progress.userInfo[URKProgressInfoKeyFileInfoExtracting];
+        if (fileInfo) [self.fileInfosReported addObject:fileInfo];
     }
     
     if (context == CancelContext && observerCallCount == 2) {

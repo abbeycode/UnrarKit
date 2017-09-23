@@ -421,6 +421,8 @@ NS_DESIGNATED_INITIALIZER
             NSURL *extractedURL = [[NSURL fileURLWithPath:filePath] URLByAppendingPathComponent:fileInfo.filename];
             [progress setUserInfoObject:extractedURL
                                  forKey:NSProgressFileURLKey];
+            [progress setUserInfoObject:fileInfo
+                                 forKey:URKProgressInfoKeyFileInfoExtracting];
             
             if ([self headerContainsErrors:innerError]) {
                 URKLogError("Header contains an error")
