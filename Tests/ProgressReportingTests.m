@@ -82,7 +82,7 @@ static NSUInteger observerCallCount;
         float expectedProgress = expectedProgresses[i].floatValue;
         float actualProgress = self.fractionsCompletedReported[i].floatValue;
         
-        XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.00001f, @"Incorrect progress reported at index %ld", i);
+        XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.00001f, @"Incorrect progress reported at index %ld", (long)i);
     }
 }
 
@@ -209,7 +209,7 @@ static NSUInteger observerCallCount;
         float expectedProgress = expectedProgresses[i].floatValue;
         float actualProgress = self.fractionsCompletedReported[i].floatValue;
         
-        XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.000001f, @"Incorrect progress reported at index %ld", i);
+        XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.000001f, @"Incorrect progress reported at index %ld", (long)i);
     }
 }
 
@@ -253,7 +253,7 @@ static NSUInteger observerCallCount;
         float expectedProgress = expectedProgresses[i].floatValue;
         float actualProgress = self.fractionsCompletedReported[i].floatValue;
         
-        XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.000001f, @"Incorrect progress reported at index %ld", i);
+        XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.000001f, @"Incorrect progress reported at index %ld", (long)i);
     }
 }
 
@@ -347,7 +347,7 @@ static NSUInteger observerCallCount;
         float expectedProgress = expectedProgresses[i].floatValue;
         float actualProgress = self.fractionsCompletedReported[i].floatValue;
         
-        XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.000001f, @"Incorrect progress reported at index %ld", i);
+        XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.000001f, @"Incorrect progress reported at index %ld", (long)i);
     }
 }
 
@@ -391,7 +391,7 @@ static NSUInteger observerCallCount;
         float expectedProgress = expectedProgresses[i].floatValue;
         float actualProgress = self.fractionsCompletedReported[i].floatValue;
         
-        XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.000001f, @"Incorrect progress reported at index %ld", i);
+        XCTAssertEqualWithAccuracy(actualProgress, expectedProgress, 0.000001f, @"Incorrect progress reported at index %ld", (long)i);
     }
 }
 
