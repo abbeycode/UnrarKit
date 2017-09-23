@@ -270,9 +270,9 @@ extern NSString *URKErrorDomain;
  *  Writes all files in the archive to the given path. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction
  *
- *  @param filePath   The destination path of the unarchived files
- *  @param overwrite  YES to overwrite files in the destination directory, NO otherwise
- *  @param progress   Called every so often to report the progress of the extraction
+ *  @param filePath      The destination path of the unarchived files
+ *  @param overwrite     YES to overwrite files in the destination directory, NO otherwise
+ *  @param progressBlock Called every so often to report the progress of the extraction
  *
  *       - *currentFile*                The info about the file that's being extracted
  *       - *percentArchiveDecompressed* The percentage of the archive that has been decompressed
@@ -290,8 +290,8 @@ extern NSString *URKErrorDomain;
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction
  *
- *  @param fileInfo The info of the file within the archive to be expanded. Only the filename property is used
- *  @param progress Called every so often to report the progress of the extraction
+ *  @param fileInfo      The info of the file within the archive to be expanded. Only the filename property is used
+ *  @param progressBlock Called every so often to report the progress of the extraction
  *
  *       - *percentDecompressed* The percentage of the archive that has been decompressed
  *
@@ -307,8 +307,8 @@ extern NSString *URKErrorDomain;
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction
  *
- *  @param filePath The path of the file within the archive to be expanded
- *  @param progress Called every so often to report the progress of the extraction
+ *  @param filePath      The path of the file within the archive to be expanded
+ *  @param progressBlock Called every so often to report the progress of the extraction
  *
  *       - *percentDecompressed* The percentage of the file that has been decompressed
  *
