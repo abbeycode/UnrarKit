@@ -135,15 +135,15 @@ extern NSString *URKErrorDomain;
 
 /**
  *  Can be used for progress reporting, but it's not necessary. You can also use
- *  implicit progress reporting. Will be nil until an operation begins, and after one
- *  completes. Behavior is undefined when multiple operations are in progress
- *  concurrently. In that case, you should use implicit progress reporting and make
- *  your parent progress the current progress on each thread
+ *  implicit progress reporting. If you don't use it, one will still be created,
+ *  which will become a child progress of whichever one is the current NSProgress
+ *  instance.
  *
- *  The instance isn't assigned until the method has started, so you'll need to call
- *  it from a background thread in order to make use of it
+ *  To use this, assign it before beginning an operation that reports progress. Once
+ *  the method you're calling has a reference to it, it will nil it out. Please check
+ *  for nil before assigning it to avoid concurrency conflicts.
  */
-@property(nullable, weak, readonly) NSProgress *progress;
+@property(nullable, strong) NSProgress *progress;
 
 
 /**
