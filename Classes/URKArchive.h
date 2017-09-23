@@ -329,6 +329,7 @@ extern NSString *URKErrorDomain;
 /**
  *  Lists the paths of volumes in a single- or multi-volume archive
  *
+<<<<<<< HEAD
  *  @param error Contains an NSError object when there was an error reading the archive
  *
  *  @return Returns the list of paths of all volumes of the archive
@@ -358,6 +359,7 @@ extern NSString *URKErrorDomain;
  *
  *  @param filePath  The destination path of the unarchived files
  *  @param overwrite YES to overwrite files in the destination directory, NO otherwise
+<<<<<<< HEAD
  *  @param error     Contains an NSError object when there was an error reading the archive
  *
  *  @return YES on successful extraction, NO if an error was encountered
@@ -372,6 +374,14 @@ extern NSString *URKErrorDomain;
  *  @param filePath      The destination path of the unarchived files
  *  @param overwrite     YES to overwrite files in the destination directory, NO otherwise
  *  @param progressBlock Called every so often to report the progress of the extraction
+=======
+ *  @param progress  Called every so often to report the progress of the extraction
+=======
+ *  @param filePath      The destination path of the unarchived files
+ *  @param overwrite     YES to overwrite files in the destination directory, NO otherwise
+ *  @param progressBlock Called every so often to report the progress of the extraction
+>>>>>>> Fixed documentation
+>>>>>>> Fixed documentation
  *
  *       - *currentFile*                The info about the file that's being extracted
  *       - *percentArchiveDecompressed* The percentage of the archive that has been decompressed
@@ -389,6 +399,7 @@ extern NSString *URKErrorDomain;
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction
  *
+<<<<<<< HEAD
  *  @param fileInfo The info of the file within the archive to be expanded. Only the filename property is used
  *  @param error    Contains an NSError object when there was an error reading the archive
  *
@@ -400,6 +411,8 @@ extern NSString *URKErrorDomain;
 /**
  *  **DEPRECATED:** Unarchive a single file from the archive into memory
  *
+=======
+>>>>>>> Fixed documentation
  *  @param fileInfo      The info of the file within the archive to be expanded. Only the filename property is used
  *  @param progressBlock Called every so often to report the progress of the extraction
  *
@@ -417,7 +430,12 @@ extern NSString *URKErrorDomain;
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction
  *
+<<<<<<< HEAD
  *  @param filePath The path of the file within the archive to be expanded
+=======
+ *  @param filePath      The path of the file within the archive to be expanded
+ *  @param progressBlock Called every so often to report the progress of the extraction
+>>>>>>> Fixed documentation
  *
  *       - *percentDecompressed* The percentage of the file that has been decompressed
  *
