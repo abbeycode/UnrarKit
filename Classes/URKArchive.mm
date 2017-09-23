@@ -531,6 +531,9 @@ NS_DESIGNATED_INITIALIZER
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Deprecated methods that take a progress block argument, and created versions without them
                  error:(NSError **)error
 {
 #pragma clang diagnostic push
@@ -544,8 +547,11 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
+<<<<<<< HEAD
 =======
 >>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
+=======
+>>>>>>> Deprecated methods that take a progress block argument, and created versions without them
               progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
                  error:(NSError **)error
 {
@@ -718,6 +724,9 @@ NS_DESIGNATED_INITIALIZER
 
 - (NSData *)extractData:(URKFileInfo *)fileInfo
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Deprecated methods that take a progress block argument, and created versions without them
                   error:(NSError **)error
 {
 #pragma clang diagnostic push
@@ -740,6 +749,9 @@ NS_DESIGNATED_INITIALIZER
 
 - (NSData *)extractDataFromFile:(NSString *)filePath
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Deprecated methods that take a progress block argument, and created versions without them
                           error:(NSError **)error
 {
 #pragma clang diagnostic push
@@ -749,8 +761,11 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (NSData *)extractDataFromFile:(NSString *)filePath
+<<<<<<< HEAD
 =======
 >>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
+=======
+>>>>>>> Deprecated methods that take a progress block argument, and created versions without them
                        progress:(void (^)(CGFloat percentDecompressed))progressBlock
                           error:(NSError **)error
 {

@@ -193,9 +193,12 @@ static NSUInteger observerCallCount;
     BOOL success = [archive extractFilesTo:extractURL.path
                                  overwrite:NO
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                                   progress:nil
 >>>>>>> Added reporting of URKFileInfo objects to progress reporting for extractFiles
+=======
+>>>>>>> Deprecated methods that take a progress block argument, and created versions without them
                                      error:&extractError];
     
     XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:progress:error:");
