@@ -112,7 +112,11 @@ extern NSString *URKErrorDomain;
 /**
  *  An Objective-C/Cocoa wrapper around the unrar library
  */
-@interface URKArchive : NSObject <NSProgressReporting> {
+@interface URKArchive : NSObject
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_9_0 || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_11
+<NSProgressReporting>
+#endif
+{
 
 	HANDLE _rarFile;
 	struct RARHeaderDataEx *header;
