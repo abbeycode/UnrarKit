@@ -11,7 +11,8 @@ fi
 
 if [ -n "$TRAVIS" ] && [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     REPO="github \"$TRAVIS_PULL_REQUEST_SLUG\""
-    echo "Build is for a Pull Request. Overriding REPO ($REPO)"
+    COMMIT=$TRAVIS_PULL_REQUEST_SHA
+    echo "Build is for a Pull Request. Overriding REPO ($REPO) and COMMIT ($COMMIT)"
 fi
 
 if [ ! -d "CarthageValidation" ]; then
