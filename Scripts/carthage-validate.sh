@@ -18,6 +18,8 @@ if [ ! -d "CarthageValidation" ]; then
     mkdir "CarthageValidation"
 fi
 
+echo "Validating commit '$COMMIT'"
+
 pushd CarthageValidation > /dev/null
 
 rm Cartfile
