@@ -500,10 +500,14 @@ extern NSString *URKErrorDomain;
  *  allows cancellation in the middle of extraction
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  *  @param filePath The path of the file within the archive to be expanded
 =======
  *  @param filePath      The path of the file within the archive to be expanded
  *  @param progressBlock Called every so often to report the progress of the extraction
+>>>>>>> Fixed documentation
+=======
+ *  @param filePath The path of the file within the archive to be expanded
 >>>>>>> Fixed documentation
  *
  *       - *percentDecompressed* The percentage of the file that has been decompressed

@@ -1937,6 +1937,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+<<<<<<< HEAD
+=======
+				SWIFT_VERSION = 3.0;
+>>>>>>> Fixed documentation
 				WARNING_CFLAGS = (
 					"-Wno-shorten-64-to-32",
 					"-Wdocumentation",
