@@ -152,21 +152,21 @@ extern NSString *URKErrorDomain;
 
 
 /**
- *  Creates and returns an archive at the given path
+ *  **DEPRECATED:** Creates and returns an archive at the given path
  *
  *  @param filePath A path to the archive file
  */
 + (nullable instancetype)rarArchiveAtPath:(NSString *)filePath __deprecated_msg("Use -initWithPath:error: instead");
 
 /**
- *  Creates and returns an archive at the given URL
+ *  **DEPRECATED:** Creates and returns an archive at the given URL
  *
  *  @param fileURL The URL of the archive file
  */
 + (nullable instancetype)rarArchiveAtURL:(NSURL *)fileURL __deprecated_msg("Use -initWithURL:error: instead");
 
 /**
- *  Creates and returns an archive at the given path, with a given password
+ *  **DEPRECATED:** Creates and returns an archive at the given path, with a given password
  *
  *  @param filePath A path to the archive file
  *  @param password The passowrd of the given archive
@@ -174,7 +174,7 @@ extern NSString *URKErrorDomain;
 + (nullable instancetype)rarArchiveAtPath:(NSString *)filePath password:(NSString *)password __deprecated_msg("Use -initWithPath:password:error: instead");
 
 /**
- *  Creates and returns an archive at the given URL, with a given password
+ *  **DEPRECATED:** Creates and returns an archive at the given URL, with a given password
  *
  *  @param fileURL  The URL of the archive file
  *  @param password The passowrd of the given archive
