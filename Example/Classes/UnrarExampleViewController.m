@@ -99,7 +99,6 @@ static void *ProgressObserverContext = &ProgressObserverContext;
 
         NSError *extractError = nil;
         NSData *data = [archive extractDataFromFile:firstFile
-                                           progress:nil
                                               error:&extractError];
         
         self.currentExtractionProgress = nil;
