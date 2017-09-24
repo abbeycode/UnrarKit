@@ -3,6 +3,7 @@
 if [ -z ${TRAVIS+x} ]; then
     TRAVIS_BUILD_DIR="`pwd`"
     TRAVIS_BRANCH=`git branch | grep ^\* | cut -c 3-`
+    echo "Not running in Travis. Setting TRAVIS_BUILD_DIR ($TRAVIS_BUILD_DIR) and TRAVIS_BRANCH ($TRAVIS_BRANCH)"
 fi
 
 if [ ! -d "CarthageValidation" ]; then
