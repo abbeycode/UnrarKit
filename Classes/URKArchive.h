@@ -335,8 +335,7 @@ extern NSString *URKErrorDomain;
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction
  *
- *  @param filePath      The path of the file within the archive to be expanded
- *  @param progressBlock Called every so often to report the progress of the extraction
+ *  @param filePath The path of the file within the archive to be expanded
  *
  *       - *percentDecompressed* The percentage of the file that has been decompressed
  *

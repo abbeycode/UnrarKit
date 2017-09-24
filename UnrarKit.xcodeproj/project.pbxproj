@@ -1791,7 +1791,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
-				WARNING_CFLAGS = "-Wno-shorten-64-to-32";
+				WARNING_CFLAGS = (
+					"-Wno-shorten-64-to-32",
+					"-Wdocumentation",
+				);
 			};
 			name = Debug;
 		};
@@ -1836,7 +1839,10 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
-				WARNING_CFLAGS = "-Wno-shorten-64-to-32";
+				WARNING_CFLAGS = (
+					"-Wno-shorten-64-to-32",
+					"-Wdocumentation",
+				);
 			};
 			name = Release;
 		};
