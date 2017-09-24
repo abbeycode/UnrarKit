@@ -1,17 +1,18 @@
 #!/bin/bash
 
+REPO="github \"$TRAVIS_REPO_SLUG\""
 BRANCH=$TRAVIS_BRANCH
 
 if [ -z ${TRAVIS+x} ]; then
-    TRAVIS_REPO_SLUG="`pwd`"
+    REPO="git \"`pwd`\""
     BRANCH=`git branch | grep ^\* | cut -c 3-`
-    echo "Not running in Travis. Setting TRAVIS_REPO_SLUG ($TRAVIS_REPO_SLUG) and BRANCH ($BRANCH)"
+    echo "Not running in Travis. Setting REPO ($REPO) and BRANCH ($BRANCH)"
 fi
 
-if [ $TRAVIS_PULL_REQUEST != "false" ]; then
-    TRAVIS_REPO_SLUG=$TRAVIS_PULL_REQUEST_SLUG
+if [ -n "$TRAVIS" ] && [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+    REPO="github \"$TRAVIS_PULL_REQUEST_SLUG\""
     BRANCH=$TRAVIS_PULL_REQUEST_BRANCH
-    echo "Build is for a Pull Request. Overriding TRAVIS_REPO_SLUG ($TRAVIS_REPO_SLUG) and BRANCH ($BRANCH)"
+    echo "Build is for a Pull Request. Overriding REPO ($REPO) and BRANCH ($BRANCH)"
 fi
 
 if [ ! -d "CarthageValidation" ]; then
@@ -24,7 +25,7 @@ rm Cartfile
 rm Cartfile.resolved
 rm -rf Carthage
 
-echo "git \"$TRAVIS_REPO_SLUG\" \"$BRANCH\"" > Cartfile
+echo "$REPO \"$BRANCH\"" > Cartfile
 
 carthage bootstrap --configuration Debug --verbose
 EXIT_CODE=$?
