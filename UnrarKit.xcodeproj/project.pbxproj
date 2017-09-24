@@ -644,6 +644,7 @@
 				96F450781B385AF800679597 /* ListFilenamesTests.m */,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				967872731E460FA70048A54C /* ListVolumesTests.m */,
 				7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */,
 =======
@@ -651,10 +652,15 @@
 =======
 				967872731E460FA70048A54C /* ListVolumesTests.m */,
 >>>>>>> Was at master, merging branch…
+=======
+				967872731E460FA70048A54C /* ListVolumesTests.m */,
+=======
+				7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */,
+>>>>>>> Moved ProgressReportingTests.m into place in the project
+>>>>>>> Moved ProgressReportingTests.m into place in the project
 				96F450741B38527100679597 /* ValidatePasswordTests.m */,
 				96EA532F1B3B462D00F79DC6 /* iOSUnitTestHostApp */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
-				7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */,
 			);
 			path = Tests;
 			sourceTree = SOURCE_ROOT;
