@@ -33,7 +33,7 @@ NS_DESIGNATED_INITIALIZER
 ;
 
 @property (strong) NSData *fileBookmark;
-@property (strong) void(^bufferedReadBlock)(NSData *dataChunk);
+@property (strong) BOOL(^bufferedReadBlock)(NSData *dataChunk);
 
 @property (strong) NSObject *threadLock;
 
@@ -357,7 +357,7 @@ NS_DESIGNATED_INITIALIZER
             URKLogDebug("Skipping to next file...");
             if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                 NSString *errorName = nil;
-                [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Error skipping to next header file: %@ (%d)", errorName, PFCode);
                 fileInfos = nil;
                 return;
@@ -366,7 +366,7 @@ NS_DESIGNATED_INITIALIZER
 
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             NSString *errorName = nil;
-            [self assignError:error code:RHCode errorName:&errorName];
+            [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Error reading RAR header: %@ (%d)", errorName, RHCode);
             fileInfos = nil;
         }
@@ -382,7 +382,20 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
-              progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progress
+                 error:(NSError **)error
+{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    return [self extractFilesTo:filePath
+                      overwrite:overwrite
+                       progress:nil
+                          error:error];
+#pragma clang diagnostic pop
+}
+
+- (BOOL)extractFilesTo:(NSString *)filePath
+             overwrite:(BOOL)overwrite
+              progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
                  error:(NSError **)error
 {
     URKCreateActivity("Extracting Files to Directory");
@@ -390,9 +403,9 @@ NS_DESIGNATED_INITIALIZER
     __block BOOL result = YES;
 
     NSError *listError = nil;
-    NSArray *fileInfo = [self listFileInfo:&listError];
+    NSArray *fileInfos = [self listFileInfo:&listError];
 
-    if (!fileInfo || listError) {
+    if (!fileInfos || listError) {
         URKLogError("Error listing contents of archive: %{public}@", listError);
 
         if (error) {
@@ -402,36 +415,58 @@ NS_DESIGNATED_INITIALIZER
         return NO;
     }
 
-    NSNumber *totalSize = [fileInfo valueForKeyPath:@"@sum.uncompressedSize"];
+    NSNumber *totalSize = [fileInfos valueForKeyPath:@"@sum.uncompressedSize"];
     __block long long bytesDecompressed = 0;
 
+    NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
+    progress.kind = NSProgressKindFile;
+	
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing File Extraction");
 
-        int RHCode = 0, PFCode = 0;
+        int RHCode = 0, PFCode = 0, filesExtracted = 0;
         URKFileInfo *fileInfo;
 
         URKLogInfo("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
             fileInfo = [URKFileInfo fileInfo:header];
             URKLogDebug("Extracting %{public}@", fileInfo.filename);
+            NSURL *extractedURL = [[NSURL fileURLWithPath:filePath] URLByAppendingPathComponent:fileInfo.filename];
+            [progress setUserInfoObject:extractedURL
+                                 forKey:NSProgressFileURLKey];
+            [progress setUserInfoObject:fileInfo
+                                 forKey:URKProgressInfoKeyFileInfoExtracting];
             
-            if (progress) {
-                progress(fileInfo, bytesDecompressed / totalSize.floatValue);
-            }
-
-            if ([self headerContainsErrors:error]) {
+            if ([self headerContainsErrors:innerError]) {
                 URKLogError("Header contains an error")
+                result = NO;
+                return;
+            }
+            
+            if (progress.isCancelled) {
+                NSString *errorName = nil;
+                [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
+                URKLogInfo("Halted file extraction due to user cancellation: %@", errorName);
                 result = NO;
                 return;
             }
 
             if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *) filePath.UTF8String, NULL)) != 0) {
                 NSString *errorName = nil;
-                [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Error extracting file: %@ (%d)", errorName, PFCode);
                 result = NO;
                 return;
+            }
+            
+            [progress setUserInfoObject:@(++filesExtracted)
+                                 forKey:NSProgressFileCompletedCountKey];
+            [progress setUserInfoObject:@(fileInfos.count)
+                                 forKey:NSProgressFileTotalCountKey];
+            progress.completedUnitCount += fileInfo.uncompressedSize;
+            
+            if (progressBlock) {
+                progressBlock(fileInfo, bytesDecompressed / totalSize.floatValue);
             }
 
             bytesDecompressed += fileInfo.uncompressedSize;
@@ -439,13 +474,13 @@ NS_DESIGNATED_INITIALIZER
 
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             NSString *errorName = nil;
-            [self assignError:error code:RHCode errorName:&errorName];
+            [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Error reading file header: %@ (%d)", errorName, RHCode);
             result = NO;
         }
 
-        if (progress) {
-            progress(fileInfo, 1.0);
+        if (progressBlock) {
+            progressBlock(fileInfo, 1.0);
         }
 
     } inMode:RAR_OM_EXTRACT error:error];
@@ -454,17 +489,37 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (NSData *)extractData:(URKFileInfo *)fileInfo
-               progress:(void (^)(CGFloat percentDecompressed))progress
                   error:(NSError **)error
 {
-    return [self extractDataFromFile:fileInfo.filename progress:progress error:error];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    return [self extractDataFromFile:fileInfo.filename progress:nil error:error];
+#pragma clang diagnostic pop
+}
+
+- (NSData *)extractData:(URKFileInfo *)fileInfo
+               progress:(void (^)(CGFloat percentDecompressed))progressBlock
+                  error:(NSError **)error
+{
+    return [self extractDataFromFile:fileInfo.filename progress:progressBlock error:error];
 }
 
 - (NSData *)extractDataFromFile:(NSString *)filePath
-                       progress:(void (^)(CGFloat percentDecompressed))progress
+                          error:(NSError **)error
+{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    return [self extractDataFromFile:filePath progress:nil error:error];
+#pragma clang diagnostic pop
+}
+
+- (NSData *)extractDataFromFile:(NSString *)filePath
+                       progress:(void (^)(CGFloat percentDecompressed))progressBlock
                           error:(NSError **)error
 {
     URKCreateActivity("Extracting Data from File");
+    
+    NSProgress *progress = [self beginProgressOperation:0];
 
     __block NSData *result = nil;
 
@@ -476,7 +531,7 @@ NS_DESIGNATED_INITIALIZER
 
         URKLogInfo("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
-            if ([self headerContainsErrors:error]) {
+            if ([self headerContainsErrors:innerError]) {
                 URKLogError("Header contains an error")
                 return;
             }
@@ -491,7 +546,7 @@ NS_DESIGNATED_INITIALIZER
                 URKLogDebug("Skipping %{public}@", fileInfo.filename);
                 if ((PFCode = RARProcessFileW(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                     NSString *errorName = nil;
-                    [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                    [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                     URKLogError("Error skipping file: %@ (%d)", errorName, PFCode);
                     return;
                 }
@@ -500,7 +555,7 @@ NS_DESIGNATED_INITIALIZER
 
         if (RHCode != ERAR_SUCCESS) {
             NSString *errorName = nil;
-            [self assignError:error code:RHCode errorName:&errorName];
+            [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Error reading file header: %@ (%d)", errorName, RHCode);
             return;
         }
@@ -514,30 +569,46 @@ NS_DESIGNATED_INITIALIZER
 
         NSMutableData *fileData = [NSMutableData dataWithCapacity:(NSUInteger)fileInfo.uncompressedSize];
         CGFloat totalBytes = fileInfo.uncompressedSize;
+        progress.totalUnitCount = totalBytes;
         __block long long bytesRead = 0;
 
-        if (progress) {
-            progress(0.0);
+        if (progressBlock) {
+            progressBlock(0.0);
         }
 
         RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
-        self.bufferedReadBlock = ^void(NSData *dataChunk) {
+        self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
             URKLogDebug("Appending buffered data (%lu bytes)", dataChunk.length);
             [fileData appendData:dataChunk];
+            progress.completedUnitCount += dataChunk.length;
 
             bytesRead += dataChunk.length;
 
-            if (progress) {
-                progress(bytesRead / totalBytes);
+            if (progressBlock) {
+                progressBlock(bytesRead / totalBytes);
             }
+            
+            if (progress.isCancelled) {
+                URKLogInfo("Cancellation initiated");
+                return NO;
+            }
+            
+            return YES;
         };
-
+        
         URKLogInfo("Processing file...");
         PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        
+        if (progress.isCancelled) {
+            NSString *errorName = nil;
+            [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
+            URKLogInfo("Returning nil data from extraction due to user cancellation: %@", errorName);
+            return;
+        }
 
         if (PFCode != 0) {
             NSString *errorName = nil;
-            [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+            [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
             URKLogError("Error extracting file data: %@ (%d)", errorName, PFCode);
             return;
         }
@@ -571,6 +642,9 @@ NS_DESIGNATED_INITIALIZER
 
         return NO;
     }
+    
+    
+    NSProgress *progress = [self beginProgressOperation:fileInfo.count];
 
     URKLogInfo("Sorting file info by name/path");
     
@@ -582,9 +656,16 @@ NS_DESIGNATED_INITIALIZER
         [sortedFileInfo enumerateObjectsUsingBlock:^(URKFileInfo *info, NSUInteger idx, BOOL *stop) {
             URKLogDebug("Performing action on %{public}@", info.filename);
             action(info, stop);
+            progress.completedUnitCount += 1;
             
-            if (stop) {
+            if (*stop) {
                 URKLogInfo("Action dictated an early stop");
+                progress.completedUnitCount = progress.totalUnitCount;
+            }
+            
+            if (progress.isCancelled) {
+                URKLogInfo("File info iteration was cancelled");
+                *stop = YES;
             }
         }];
     }
@@ -597,19 +678,36 @@ NS_DESIGNATED_INITIALIZER
 {
     URKCreateActivity("Performing Action on Each File's Data");
 
+    NSError *listError = nil;
+    NSArray *fileInfo = [self listFileInfo:&listError];
+    
+    if (!fileInfo || listError) {
+        URKLogError("Error listing contents of archive: %{public}@", listError);
+        
+        if (error) {
+            *error = listError;
+        }
+        
+        return NO;
+    }
+    
+    NSNumber *totalSize = [fileInfo valueForKeyPath:@"@sum.uncompressedSize"];
+
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         int RHCode = 0, PFCode = 0;
 
         BOOL stop = NO;
 
+        NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
+        
         URKLogInfo("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-            if (stop) {
+            if (stop || progress.isCancelled) {
                 URKLogDebug("Action dictated an early stop");
                 return;
             }
             
-            if ([self headerContainsErrors:error]) {
+            if ([self headerContainsErrors:innerError]) {
                 URKLogError("Header contains an error")
                 return;
             }
@@ -634,7 +732,7 @@ NS_DESIGNATED_INITIALIZER
 
             if (PFCode != 0) {
                 NSString *errorName = nil;
-                [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Error processing file: %@ (%d)", errorName, PFCode);
                 return;
             }
@@ -642,11 +740,20 @@ NS_DESIGNATED_INITIALIZER
             URKLogDebug("Performing action on data (%lld bytes)", info.uncompressedSize);
             NSData *data = [NSData dataWithBytesNoCopy:buffer length:(NSUInteger)info.uncompressedSize freeWhenDone:YES];
             action(info, data, &stop);
+            
+            progress.completedUnitCount += data.length;
+        }
+        
+        if (progress.isCancelled) {
+            NSString *errorName = nil;
+            [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
+            URKLogInfo("Returning NO from performOnData:error: due to user cancellation: %@", errorName);
+            return;
         }
 
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             NSString *errorName = nil;
-            [self assignError:error code:RHCode errorName:&errorName];
+            [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Error reading file header: %@ (%d)", errorName, RHCode);
             return;
         }
@@ -663,16 +770,18 @@ NS_DESIGNATED_INITIALIZER
 
     NSError *innerError = nil;
 
+    NSProgress *progress = [self beginProgressOperation:0];
+
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
 
         int RHCode = 0, PFCode = 0;
         URKFileInfo *fileInfo;
 
-        URKLogInfo("Looping through files, looking for %@...", fileInfo.filename);
+        URKLogInfo("Looping through files, looking for %@...", filePath);
         
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
-            if ([self headerContainsErrors:error]) {
+            if ([self headerContainsErrors:innerError]) {
                 URKLogDebug("Header contains error")
                 return;
             }
@@ -688,46 +797,63 @@ NS_DESIGNATED_INITIALIZER
                 URKLogDebug("Skipping file...");
                 if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                     NSString *errorName = nil;
-                    [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                    [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                     URKLogError("Failed to skip file: %@ (%d)", errorName, PFCode);
                     return;
                 }
             }
         }
-
+        
+        CGFloat totalBytes = fileInfo.uncompressedSize;
+        progress.totalUnitCount = totalBytes;
+        
         if (RHCode != ERAR_SUCCESS) {
             NSString *errorName = nil;
-            [self assignError:error code:RHCode errorName:&errorName];
+            [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Header read yielded error: %@ (%d)", errorName, RHCode);
             return;
         }
 
         // Empty file, or a directory
-        if (fileInfo.uncompressedSize == 0) {
+        if (totalBytes == 0) {
             URKLogInfo("File is empty or a directory");
             return;
         }
 
-        CGFloat totalBytes = fileInfo.uncompressedSize;
         __block long long bytesRead = 0;
 
         // Repeating the argument instead of using positional specifiers, because they don't work with the {} formatters
         URKLogDebug("Uncompressed size: %{iec-bytes}lld (%lld bytes) in file", (long long)totalBytes, (long long)totalBytes);
 
         RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
-        self.bufferedReadBlock = ^void(NSData *dataChunk) {
+        self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
+            if (progress.isCancelled) {
+                URKLogInfo("Buffered data read cancelled");
+                return NO;
+            }
+            
             bytesRead += dataChunk.length;
-            CGFloat progress = bytesRead / totalBytes;
-            URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progress * 100);
-            action(dataChunk, progress);
+            progress.completedUnitCount += dataChunk.length;
+
+            CGFloat progressPercent = bytesRead / totalBytes;
+            URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progressPercent * 100);
+            action(dataChunk, progressPercent);
+            return YES;
         };
 
         URKLogDebug("Processing file...");
         PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
 
+        if (progress.isCancelled) {
+            NSString *errorName = nil;
+            [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
+            URKLogError("Buffered data extraction has been cancelled: %@", errorName);
+            return;
+        }
+        
         if (PFCode != 0) {
             NSString *errorName = nil;
-            [self assignError:error code:(NSInteger)PFCode errorName:&errorName];
+            [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
             URKLogError("Error processing file: %@ (%d)", errorName, PFCode);
         }
     } inMode:RAR_OM_EXTRACT error:&innerError];
@@ -871,7 +997,10 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     if (msg == UCM_PROCESSDATA) {
         URKLogDebug("msg: UCM_PROCESSDATA; Copying data chunk and calling read block");
         NSData *dataChunk = [NSData dataWithBytesNoCopy:(UInt8 *)P1 length:P2 freeWhenDone:NO];
-        refToSelf.bufferedReadBlock(dataChunk);
+        BOOL cancelRequested = !refToSelf.bufferedReadBlock(dataChunk);
+        if (cancelRequested) {
+            return -1;
+        }
     }
 
     return 0;
@@ -1006,74 +1135,79 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     NSString *detail = @"";
 
     switch (errorCode) {
-        case ERAR_END_ARCHIVE:
+        case URKErrorCodeEndOfArchive:
             errorName = @"ERAR_END_ARCHIVE";
             break;
 
-        case ERAR_NO_MEMORY:
+        case URKErrorCodeNoMemory:
             errorName = @"ERAR_NO_MEMORY";
             detail = NSLocalizedStringFromTableInBundle(@"Ran out of memory while reading archive", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_BAD_DATA:
+        case URKErrorCodeBadData:
             errorName = @"ERAR_BAD_DATA";
             detail = NSLocalizedStringFromTableInBundle(@"Archive has a corrupt header", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_BAD_ARCHIVE:
+        case URKErrorCodeBadArchive:
             errorName = @"ERAR_BAD_ARCHIVE";
             detail = NSLocalizedStringFromTableInBundle(@"File is not a valid RAR archive", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_UNKNOWN_FORMAT:
+        case URKErrorCodeUnknownFormat:
             errorName = @"ERAR_UNKNOWN_FORMAT";
             detail = NSLocalizedStringFromTableInBundle(@"RAR headers encrypted in unknown format", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_EOPEN:
+        case URKErrorCodeOpen:
             errorName = @"ERAR_EOPEN";
-            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while opening file", @"UnrarKit", _resources, @"Error detail string");
+            detail = NSLocalizedStringFromTableInBundle(@"Failed to open a reference to the file", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_ECREATE:
+        case URKErrorCodeCreate:
             errorName = @"ERAR_ECREATE";
-            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while creating file", @"UnrarKit", _resources, @"Error detail string");
+            detail = NSLocalizedStringFromTableInBundle(@"Failed to create the target directory for extraction", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_ECLOSE:
+        case URKErrorCodeClose:
             errorName = @"ERAR_ECLOSE";
-            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while closing file", @"UnrarKit", _resources, @"Error detail string");
+            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while closing the archive", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_EREAD:
+        case URKErrorCodeRead:
             errorName = @"ERAR_EREAD";
-            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while reading file", @"UnrarKit", _resources, @"Error detail string");
+            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while reading the archive", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_EWRITE:
+        case URKErrorCodeWrite:
             errorName = @"ERAR_EWRITE";
-            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while writing file", @"UnrarKit", _resources, @"Error detail string");
+            detail = NSLocalizedStringFromTableInBundle(@"Error encountered while writing a file to disk", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_SMALL_BUF:
+        case URKErrorCodeSmall:
             errorName = @"ERAR_SMALL_BUF";
             detail = NSLocalizedStringFromTableInBundle(@"Buffer too small to contain entire comments", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_UNKNOWN:
+        case URKErrorCodeUnknown:
             errorName = @"ERAR_UNKNOWN";
             detail = NSLocalizedStringFromTableInBundle(@"An unknown error occurred", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_MISSING_PASSWORD:
+        case URKErrorCodeMissingPassword:
             errorName = @"ERAR_MISSING_PASSWORD";
             detail = NSLocalizedStringFromTableInBundle(@"No password given to unlock a protected archive", @"UnrarKit", _resources, @"Error detail string");
             break;
 
-        case ERAR_ARCHIVE_NOT_FOUND:
+        case URKErrorCodeArchiveNotFound:
             errorName = @"ERAR_ARCHIVE_NOT_FOUND";
             detail = NSLocalizedStringFromTableInBundle(@"Unable to find the archive", @"UnrarKit", _resources, @"Error detail string");
             break;
+            
+        case URKErrorCodeUserCancelled:
+            errorName = @"ERAR_USER_CANCELLED";
+            detail = NSLocalizedStringFromTableInBundle(@"User cancelled the operation in progress", @"UnrarKit", _resources, @"Error detail string");
+   break;
 
         default:
             errorName = [NSString stringWithFormat:@"Unknown (%ld)", (long)errorCode];
@@ -1095,7 +1229,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:
                                          @{NSLocalizedFailureReasonErrorKey: *outErrorName,
-                                           NSLocalizedDescriptionKey: *outErrorName,
+                                           NSLocalizedDescriptionKey: errorDetail,
                                            NSLocalizedRecoverySuggestionErrorKey: errorDetail}];
         
         if (self.fileURL) {
@@ -1124,6 +1258,25 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     }
 
     return NO;
+}
+
+- (NSProgress *)beginProgressOperation:(NSUInteger)totalUnitCount
+{
+    NSProgress *progress;
+    progress = self.progress;
+    if (!progress) {
+        progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
+                                             userInfo:nil];
+    }
+    
+    if (totalUnitCount > 0) {
+        progress.totalUnitCount = totalUnitCount;
+    }
+    
+    progress.cancellable = YES;
+    progress.pausable = NO;
+    
+    return progress;
 }
 
 @end

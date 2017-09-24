@@ -91,11 +91,81 @@ BOOL success = [archive extractBufferedDataFromFile:@"a file in the archive.jpg"
                 }];
 ```
 
+# Progress Reporting
+
+The following methods support `NSProgress` and `NSProgressReporting`:
+
+* `extractFilesTo:overwrite:error:`
+* `extractData:error:`
+* `extractDataFromFile:error:`
+* `performOnFilesInArchive:error:`
+* `performOnDataInArchive:error:`
+* `extractBufferedDataFromFile:error:action:`
+
+## Using implicit `NSProgress` hierarchy
+
+You can create your own instance of `NSProgress` and observe its `fractionCompleted` property with KVO to monitor progress like so:
+
+```Objective-C
+    static void *ExtractDataContext = &ExtractDataContext;
+
+    URKArchive *archive = [[URKArchive alloc] initWithURL:aFileURL error:nil];
+
+    NSProgress *extractDataProgress = [NSProgress progressWithTotalUnitCount:1];
+    [extractDataProgress becomeCurrentWithPendingUnitCount:1];
+    
+    NSString *observedSelector = NSStringFromSelector(@selector(fractionCompleted));
+    
+    [extractDataProgress addObserver:self
+                          forKeyPath:observedSelector
+                             options:NSKeyValueObservingOptionInitial
+                             context:ExtractDataContext];
+    
+    NSError *extractError = nil;
+    NSData *data = [archive extractDataFromFile:firstFile error:&extractError];
+
+    [extractDataProgress resignCurrent];
+    [extractDataProgress removeObserver:self forKeyPath:observedSelector];
+```
+
+## Using your own explicit `NSProgress` instance
+
+If you don't have a hierarchy of `NSProgress` instances, or if you want to observe more details during progress updates in `extractFilesTo:overwrite:error:`, you can create your own instance of `NSProgress` and set the `URKArchive` instance's `progress` property, like so:
+
+```Objective-C
+    static void *ExtractFilesContext = &ExtractFilesContext;
+
+    URKArchive *archive = [[URKArchive alloc] initWithURL:aFileURL error:nil];
+    
+    NSProgress *extractFilesProgress = [NSProgress progressWithTotalUnitCount:1];
+    archive.progress = extractFilesProgress;
+    
+    NSString *observedSelector = NSStringFromSelector(@selector(localizedDescription));
+    
+    [self.descriptionsReported removeAllObjects];
+    [extractFilesProgress addObserver:self
+                           forKeyPath:observedSelector
+                              options:NSKeyValueObservingOptionInitial
+                              context:ExtractFilesContext];
+    
+    NSError *extractError = nil;
+    BOOL success = [archive extractFilesTo:extractURL.path
+                                 overwrite:NO
+                                     error:&extractError];
+    
+    [extractFilesProgress removeObserver:self forKeyPath:observedSelector];
+```
+
+## Cancellation with `NSProgress`
+
+Using either method above, you can call `[progress cancel]` to stop the operation in progress. It will cause the operation to fail, returning `nil` or `NO` (depending on the return type, and give an error with error code `URKErrorCodeUserCancelled`.
+
+
 # Notes
 
 To open in Xcode, use the [UnrarKit.xcworkspace](UnrarKit.xcworkspace) file, which includes the other projects.
 
-## Documentation
+# Documentation
 
 Full documentation for the project is available on [CocoaDocs](http://cocoadocs.org/docsets/UnrarKit).
 

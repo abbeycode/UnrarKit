@@ -38,14 +38,16 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 
 
 - (void)testFileURL {
-    NSArray *testArchives = @[@"Large Archive.rar",
+    NSArray *testArchives = @[@"Large",
                               @"Test Archive.rar",
                               @"Test Archive (Password).rar",
                               @"Test Archive (Header Password).rar"];
     
     for (NSString *testArchiveName in testArchives) {
         NSLog(@"Testing fileURL of archive %@", testArchiveName);
-        NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+        NSURL *testArchiveURL = ([testArchiveName isEqualToString:@"Large"]
+                                 ? [self largeArchiveURL]
+                                 : self.testFileURLs[testArchiveName]);
         
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
         
@@ -56,14 +58,16 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 }
 
 - (void)testFilename {
-    NSArray *testArchives = @[@"Large Archive.rar",
+    NSArray *testArchives = @[@"Large",
                               @"Test Archive.rar",
                               @"Test Archive (Password).rar",
                               @"Test Archive (Header Password).rar"];
     
     for (NSString *testArchiveName in testArchives) {
         NSLog(@"Testing filename of archive %@", testArchiveName);
-        NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+        NSURL *testArchiveURL = ([testArchiveName isEqualToString:@"Large"]
+                                 ? [self largeArchiveURL]
+                                 : self.testFileURLs[testArchiveName]);
         
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
         
@@ -428,13 +432,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
             NSString *expectedFilename = expectedFiles[i];
             
             NSError *error = nil;
-            NSData *extractedData = [archive extractDataFromFile:expectedFilename
-                                                        progress:^(CGFloat percentDecompressed) {
-#if DEBUG
-                                                            NSLog(@"Extracting, %f%% complete", percentDecompressed);
-#endif
-                                                        }
-                                                           error:&error];
+            NSData *extractedData = [archive extractDataFromFile:expectedFilename error:&error];
             
             XCTAssertNil(error, @"Error in extractData:error:");
             
@@ -444,13 +442,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
             XCTAssertTrue([expectedFileData isEqualToData:extractedData], @"Extracted data doesn't match original file");
             
             error = nil;
-            NSData *dataFromFileInfo = [archive extractData:fileInfos[i]
-                                                   progress:^(CGFloat percentDecompressed) {
-#if DEBUG
-                                                       NSLog(@"Extracting from file info, %f%% complete", percentDecompressed);
-#endif
-                                                   }
-                                                      error:&error];
+            NSData *dataFromFileInfo = [archive extractData:fileInfos[i] error:&error];
             XCTAssertNil(error, @"Error extracting data by file info");
             XCTAssertTrue([expectedFileData isEqualToData:dataFromFileInfo], @"Extracted data from file info doesn't match original file");
         }
@@ -476,13 +468,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         NSString *expectedFilename = expectedFiles[i];
         
         NSError *error = nil;
-        NSData *extractedData = [archive extractDataFromFile:expectedFilename
-                                                    progress:^(CGFloat percentDecompressed) {
-#if DEBUG
-                                                        NSLog(@"Extracting, %f%% complete", percentDecompressed);
-#endif
-                                                    }
-                                                       error:&error];
+        NSData *extractedData = [archive extractDataFromFile:expectedFilename error:&error];
         
         XCTAssertNil(error, @"Error in extractData:error:");
         
@@ -492,13 +478,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         XCTAssertTrue([expectedFileData isEqualToData:extractedData], @"Extracted data doesn't match original file");
         
         error = nil;
-        NSData *dataFromFileInfo = [archive extractData:fileInfos[i]
-                                               progress:^(CGFloat percentDecompressed) {
-#if DEBUG
-                                                   NSLog(@"Extracting from file info, %f%% complete", percentDecompressed);
-#endif
-                                               }
-                                                  error:&error];
+        NSData *dataFromFileInfo = [archive extractData:fileInfos[i] error:&error];
         XCTAssertNil(error, @"Error extracting data by file info");
         XCTAssertTrue([expectedFileData isEqualToData:dataFromFileInfo], @"Extracted data from file info doesn't match original file");
     }
@@ -513,13 +493,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[testArchiveName] error:nil];
         
         NSError *error = nil;
-        NSData *data = [archive extractDataFromFile:@"Test File A.txt"
-                                           progress:^(CGFloat percentDecompressed) {
-#if DEBUG
-                                               NSLog(@"Extracting, %f%% complete", percentDecompressed);
-#endif
-                                           }
-                                              error:&error];
+        NSData *data = [archive extractDataFromFile:@"Test File A.txt" error:&error];
         
         XCTAssertNotNil(error, @"Extract data without password succeeded");
         XCTAssertNil(data, @"Data returned without password");
@@ -532,13 +506,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test File A.txt"] error:nil];
     
     NSError *error = nil;
-    NSData *data = [archive extractDataFromFile:@"Any file.txt"
-                                       progress:^(CGFloat percentDecompressed) {
-#if DEBUG
-                                           NSLog(@"Extracting, %f%% complete", percentDecompressed);
-#endif
-                                       }
-                                          error:&error];
+    NSData *data = [archive extractDataFromFile:@"Any file.txt" error:&error];
     
     XCTAssertNotNil(error, @"Extract data for invalid archive succeeded");
     XCTAssertNil(data, @"Data returned for invalid archive");
@@ -709,7 +677,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 
 - (void)testPerformOnData_FileMoved
 {
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL = [self largeArchiveURL];
 
     URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
@@ -749,7 +717,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 
 - (void)testPerformOnData_FileDeleted
 {
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL = [self largeArchiveURL];
     
     URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
@@ -787,7 +755,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 
 - (void)testPerformOnData_FileMovedBeforeBegin
 {
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL = [self largeArchiveURL];
     
     URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
@@ -955,13 +923,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         XCTAssertNotNil(fileList);
         
         for (NSString *fileName in fileList) {
-            NSData *fileData = [archive extractDataFromFile:fileName
-                                                   progress:^(CGFloat percentDecompressed) {
-#if DEBUG
-                                                       NSLog(@"Extracting, %f%% complete", percentDecompressed);
-#endif
-                                                   }
-                                                      error:&error];
+            NSData *fileData = [archive extractDataFromFile:fileName error:&error];
             XCTAssertNotNil(fileData);
             XCTAssertNil(error);
         }
@@ -973,7 +935,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 }
 
 - (void)testMultiThreading {
-    NSURL *largeArchiveURL_A = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL_A = [self largeArchiveURL];
     NSURL *largeArchiveURL_B = [largeArchiveURL_A.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive 2.rar"];
     NSURL *largeArchiveURL_C = [largeArchiveURL_A.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive 3.rar"];
     
@@ -1043,7 +1005,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 }
 
 - (void)testMultiThreading_SingleFile {
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL = [self largeArchiveURL];
     
     URKArchive *largeArchiveA = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     URKArchive *largeArchiveB = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
@@ -1101,7 +1063,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 }
 
 - (void)testMultiThreading_SingleArchiveObject {
-    NSURL *largeArchiveURL = self.testFileURLs[@"Large Archive.rar"];
+    NSURL *largeArchiveURL = [self largeArchiveURL];
     
     URKArchive *largeArchive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     
@@ -1189,7 +1151,6 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     URKArchive *unicodeNamedArchive = [[URKArchive alloc] initWithURL:newArchiveURL error:nil];
     BOOL extractSuccess = [unicodeNamedArchive extractFilesTo:extractURL.path
                                                     overwrite:NO
-                                                     progress:nil
                                                         error:&error];
 
     XCTAssertTrue(extractSuccess, @"Failed to extract archive");
