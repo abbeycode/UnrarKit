@@ -15,6 +15,10 @@ Pod::Spec.new do |s|
   s.resource_bundles = {
       'UnrarKitResources' => ['Resources/**/*']
   }
+  s.test_spec 'Tests' do |test_spec|
+    test_spec.source_files = 'Tests/*.{h,m}'
+    test_spec.resources = ['Tests/Test Data']
+  end
 
   s.subspec "unrar-lib" do |ss|
     ss.public_header_files = "Libraries/unrar/raros.hpp",
