@@ -7,7 +7,11 @@
 #import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
 #import "raros.hpp"
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
 #import "dll.hpp"
+#pragma clang diagnostic pop
 
 @class URKFileInfo;
 
