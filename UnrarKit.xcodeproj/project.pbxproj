@@ -1526,6 +1526,7 @@
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
+<<<<<<< HEAD
 			};
 			name = Release;
 		};
@@ -1590,6 +1591,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
+=======
+>>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
 			};
 			name = Release;
 		};
@@ -1687,6 +1690,14 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
+=======
+>>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
+>>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1718,6 +1729,14 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
+=======
+>>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
+>>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1944,9 +1963,12 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 				SWIFT_VERSION = 3.0;
 >>>>>>> Fixed documentation
+=======
+>>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
 				WARNING_CFLAGS = (
 					"-Wno-shorten-64-to-32",
 					"-Wdocumentation",
