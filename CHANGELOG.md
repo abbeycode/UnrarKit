@@ -6,6 +6,7 @@
 * Switched to Travis Build Stages instead of the unofficial Travis-After-All (Issue #42)
 * Added detailed logging using new unified logging framework. See [the readme](README.md) for more details (Issue #35)
 * Added localized details to returned `NSError` objects (Issue #45)
+* Fixed warnings from Xcode 9 (Issue #51)
 
 
 ## 2.8.1

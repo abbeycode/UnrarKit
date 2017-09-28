@@ -5,7 +5,11 @@
 
 #import <Foundation/Foundation.h>
 #import "raros.hpp"
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
 #import "dll.hpp"
+#pragma clang diagnostic pop
 
 /* See http://www.forensicswiki.org/wiki/RAR and
    http://www.rarlab.com/technote.htm#filehead for
