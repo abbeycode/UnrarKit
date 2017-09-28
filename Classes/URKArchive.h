@@ -180,7 +180,12 @@ extern NSString *URKErrorDomain;
  *  True if the file is one volume of a multi-part archive
  */
 @property(readonly) BOOL hasMultipleVolumes;
+<<<<<<< HEAD
 =======
+=======
+
+/**
+>>>>>>> Fixed merge error
  *  Can be used for progress reporting, but it's not necessary. You can also use
  *  implicit progress reporting. If you don't use it, one will still be created,
  *  which will become a child progress of whichever one is the current NSProgress
