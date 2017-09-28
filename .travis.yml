@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode8.3
+osx_image: xcode9
 
 xcode_workspace: UnrarKit.xcworkspace
 
@@ -33,6 +33,7 @@ matrix:
       env: Name=Carthage
 
     - stage: Release
+      if: tag IS present
       script: ./Scripts/push-output.sh
 
 # Turn on Docker, container-based infrastructure

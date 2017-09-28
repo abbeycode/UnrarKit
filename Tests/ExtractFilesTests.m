@@ -43,11 +43,6 @@
         NSError *error = nil;
         BOOL success = [archive extractFilesTo:extractURL.path
                                      overwrite:NO
-                                      progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
-#if DEBUG
-                                          NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
-#endif
-                                      }
                                          error:&error];
         
         XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
@@ -115,7 +110,6 @@
         NSError *error = nil;
         BOOL success = [archive extractFilesTo:extractURL.path
                                      overwrite:NO
-                                      progress:nil
                                          error:&error];
         
         XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
@@ -164,11 +158,6 @@
     NSError *error = nil;
     BOOL success = [archive extractFilesTo:extractURL.path
                                  overwrite:NO
-                                  progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
-#if DEBUG
-                                      NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
-#endif
-                                  }
                                      error:&error];
     
     XCTAssertNil(error, @"Error returned by unrarFileTo:overWrite:error:");
@@ -219,11 +208,6 @@
         NSError *error = nil;
         BOOL success = [archive extractFilesTo:extractURL.path
                                      overwrite:NO
-                                      progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
-#if DEBUG
-                                          NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
-#endif
-                                      }
                                          error:&error];
         BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
         
@@ -245,11 +229,6 @@
     NSError *error = nil;
     BOOL success = [archive extractFilesTo:extractURL.path
                                  overwrite:NO
-                                  progress:^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
-#if DEBUG
-                                      NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
-#endif
-                                  }
                                      error:&error];
     BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
     

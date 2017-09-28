@@ -29,6 +29,7 @@
 // Mac Only
 
 #if !TARGET_OS_IPHONE
+- (NSURL *)largeArchiveURL;
 - (NSInteger)numberOfOpenFileHandles;
 - (NSURL *)archiveWithFiles:(NSArray *)fileURLs;
 

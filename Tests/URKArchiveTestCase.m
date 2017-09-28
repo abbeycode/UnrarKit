@@ -97,31 +97,6 @@ static NSURL *originalLargeArchiveURL;
     }
     
     
-#if !TARGET_OS_IPHONE
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSMutableArray *largeTextFiles = [NSMutableArray array];
-        for (NSInteger i = 0; i < 20; i++) {
-            [largeTextFiles addObject:[self randomTextFileOfLength:3000000]];
-        }
-        
-        NSError *largeArchiveError = nil;
-        
-        NSURL *largeArchiveURLRandomName = [self archiveWithFiles:largeTextFiles];
-        originalLargeArchiveURL = [largeArchiveURLRandomName.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive (Original).rar"];
-        [fm moveItemAtURL:largeArchiveURLRandomName toURL:originalLargeArchiveURL error:&largeArchiveError];
-        
-        XCTAssertNil(largeArchiveError, @"Error renaming original large archive: %@", largeArchiveError);
-    });
-    
-    NSString *largeArchiveName = @"Large Archive.rar";
-    NSURL *destinationURL = [self.tempDirectory URLByAppendingPathComponent:largeArchiveName isDirectory:NO];
-    [fm copyItemAtURL:originalLargeArchiveURL toURL:destinationURL error:&error];
-    XCTAssertNil(error, @"Failed to copy the Large Archive");
-    
-    self.testFileURLs[largeArchiveName] = destinationURL;
-#endif
-    
     // Make a "corrupt" rar file
     NSURL *m4aFileURL = [self urlOfTestFile:@"Test File C.m4a"];
     self.corruptArchive = [self.tempDirectory URLByAppendingPathComponent:@"corrupt.rar"];
@@ -213,6 +188,34 @@ static NSURL *originalLargeArchiveURL;
 
 
 #if !TARGET_OS_IPHONE
+- (NSURL *)largeArchiveURL {
+    NSFileManager *fm = [NSFileManager defaultManager];
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSMutableArray *largeTextFiles = [NSMutableArray array];
+        for (NSInteger i = 0; i < 20; i++) {
+            [largeTextFiles addObject:[self randomTextFileOfLength:3000000]];
+        }
+        
+        NSError *largeArchiveError = nil;
+        
+        NSURL *largeArchiveURLRandomName = [self archiveWithFiles:largeTextFiles];
+        originalLargeArchiveURL = [largeArchiveURLRandomName.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive (Original).rar"];
+        [fm moveItemAtURL:largeArchiveURLRandomName toURL:originalLargeArchiveURL error:&largeArchiveError];
+        
+        XCTAssertNil(largeArchiveError, @"Error renaming original large archive: %@", largeArchiveError);
+    });
+    
+    NSString *largeArchiveName = @"Large Archive.rar";
+    NSURL *destinationURL = [self.tempDirectory URLByAppendingPathComponent:largeArchiveName isDirectory:NO];
+    NSError *fileCopyError = nil;
+    [fm copyItemAtURL:originalLargeArchiveURL toURL:destinationURL error:&fileCopyError];
+    XCTAssertNil(fileCopyError, @"Failed to copy the Large Archive");
+    
+    return destinationURL;
+}
+
 - (NSInteger)numberOfOpenFileHandles {
     int pid = [[NSProcessInfo processInfo] processIdentifier];
     NSPipe *pipe = [NSPipe pipe];
