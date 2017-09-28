@@ -156,7 +156,7 @@ extern NSString *URKErrorDomain;
 /**
  *  True if the file is one volume of a multi-part archive
  */
-@property(readonly) BOOL
+@property(readonly) BOOL hasMultipleVolumes;
 
 /**
  *  Can be used for progress reporting, but it's not necessary. You can also use
