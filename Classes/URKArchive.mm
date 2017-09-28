@@ -1122,8 +1122,8 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
     if (flags)
         delete flags->ArcName;
-    delete flags, flags = 0;
-    delete header, header = 0;
+    delete flags; flags = 0;
+    delete header; header = 0;
     return YES;
 }
 
