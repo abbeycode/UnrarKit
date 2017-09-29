@@ -11,6 +11,7 @@
 		7A22B1FB1F60A39E004B8050 /* UnrarKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */; };
 		7A267F6E1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
 		7A267F6F1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
+		7ACC4CC71F7EEFE3001A07F6 /* UnrarKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96EA535B1B3CB04300F79DC6 /* UnrarKit.framework */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		9699F91D1B3CB4D000B6D373 /* URKArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = 489CFA0E128B5169005DCC2A /* URKArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -139,7 +140,6 @@
 		9699FA8C1B3D9B6F00B6D373 /* IsPasswordProtectedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450761B38552200679597 /* IsPasswordProtectedTests.m */; };
 		9699FA8D1B3D9B6F00B6D373 /* ListFilenamesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450781B385AF800679597 /* ListFilenamesTests.m */; };
 		9699FA8E1B3D9B6F00B6D373 /* ValidatePasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F450741B38527100679597 /* ValidatePasswordTests.m */; };
-		9699FA8F1B3DA4C400B6D373 /* UnrarKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9699F9DA1B3CB83100B6D373 /* UnrarKit.framework */; };
 		969BD9B019EDE88E002CE755 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4A18DB722E00B5651B /* rar.cpp */; };
 		969BD9B119EDE88E002CE755 /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6D18DB722E00B5651B /* strlist.cpp */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		969BD9B219EDE88E002CE755 /* strfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6B18DB722E00B5651B /* strfn.cpp */; settings = {COMPILER_FLAGS = "-Wno-logical-op-parentheses"; }; };
@@ -260,6 +260,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		7ACC4CC81F7EF00F001A07F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A22B1E91F60A05F004B8050;
+			remoteInfo = UnrarKitResources;
+		};
 		96EA53541B3B691B00F79DC6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -492,7 +499,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9699FA8F1B3DA4C400B6D373 /* UnrarKit.framework in Frameworks */,
+				7ACC4CC71F7EEFE3001A07F6 /* UnrarKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1013,6 +1020,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				7ACC4CC91F7EF00F001A07F6 /* PBXTargetDependency */,
 			);
 			name = UnrarKit;
 			productName = UnrarKit;
@@ -1315,6 +1323,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		7ACC4CC91F7EF00F001A07F6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A22B1E91F60A05F004B8050 /* UnrarKitResources */;
+			targetProxy = 7ACC4CC81F7EF00F001A07F6 /* PBXContainerItemProxy */;
+		};
 		96EA53551B3B691B00F79DC6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 96EA532D1B3B462D00F79DC6 /* iOSUnitTestHostApp */;
@@ -1402,6 +1415,7 @@
 				);
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -1447,6 +1461,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 			};
@@ -1622,7 +1637,6 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = UnrarKit;
-				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WARNING_CFLAGS = " -Wno-shorten-64-to-32";
@@ -1665,7 +1679,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = UnrarKit;
-				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
