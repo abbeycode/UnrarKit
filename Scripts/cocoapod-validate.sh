@@ -11,7 +11,7 @@ if [ -z "$TRAVIS_TAG" ]; then
 fi
 
 # Lint the podspec to check for errors. Don't call `pod spec lint`, because we want it to evaluate locally
-pod lib lint
+pod lib lint --verbose
 
 if [ -n "$TRAVIS_TAG_SUBSTITUTED" ]; then
     echo "Unsetting TRAVIS_TAG..."
