@@ -289,16 +289,20 @@ extern NSString *URKErrorDomain;
 /**
  *  Gets the path of the first volume in a multi-volume archive, or the only volume in a single-volume one
  *
+ *  @param filePath A path to the archive file
+ *
  *  @return Returns the path, or nil if there was an error
  */
-- (nullable NSString *)firstVolumePath;
+- (NSString *)firstVolumePath:(NSString *)filePath;
 
 /**
  *  Gets the URL of the first volume in a multi-volume archive, or the only volume in a single-volume one
  *
+ *  @param fileURL  The URL of the archive file
+ *
  *  @return Returns the URL, or nil if there was an error
  */
-- (nullable NSURL *)firstVolumeURL;
+- (NSURL *)firstVolumeURL:(NSURL *)fileURL;
 
 /**
  *  Lists the paths of volumes in a single- or multi-volume archive
