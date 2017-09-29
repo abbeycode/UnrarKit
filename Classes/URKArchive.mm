@@ -21,11 +21,8 @@ os_log_t unrarkit_log;
 #endif
 #pragma clang diagnostic pop
 
-<<<<<<< HEAD
 static NSBundle *_resources = nil;
 
-=======
->>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
 
 @interface URKArchive ()
 
@@ -39,8 +36,6 @@ NS_DESIGNATED_INITIALIZER
 @property (strong) BOOL(^bufferedReadBlock)(NSData *dataChunk);
 
 @property (strong) NSObject *threadLock;
-
-@property (weak) NSProgress *progress;
 
 @end
 
@@ -80,7 +75,6 @@ NS_DESIGNATED_INITIALIZER
 + (void)initialize {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-<<<<<<< HEAD
         NSBundle *mainBundle = [NSBundle mainBundle];
         NSURL *resourcesURL = [mainBundle URLForResource:@"UnrarKitResources" withExtension:@"bundle"];
         
@@ -88,8 +82,6 @@ NS_DESIGNATED_INITIALIZER
                       ? [NSBundle bundleWithURL:resourcesURL]
                       : mainBundle);
         
-=======
->>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
         URKLogInit();
     });
 }
@@ -261,30 +253,11 @@ NS_DESIGNATED_INITIALIZER
     return [NSNumber numberWithUnsignedLongLong:attributes.fileSize];
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-- (BOOL)hasMultipleVolumes
-{
-    NSError *listError = nil;
-    NSArray<NSURL*> *volumeURLs = [self listVolumeURLs:&listError];
-    
-    if (!volumeURLs) {
-        NSLog(@"Error getting file volumes list: %@", listError);
-        return false;
-    }
-    
-    return (volumeURLs.count > 1);
-}
-
-=======
->>>>>>> Rebased to multivolume branch
-=======
 - (BOOL)hasMultipleVolumes
 {
     return NO;
 }
 
->>>>>>> Was at master, merging branch…
 
 
 #pragma mark - Zip file detection
@@ -361,46 +334,6 @@ NS_DESIGNATED_INITIALIZER
 #pragma mark - Public Methods
 
 
-<<<<<<< HEAD
--(BOOL)isVolume
-{
-    return [self isVolume:self.fileURL];
-}
-
-<<<<<<< HEAD
-- (BOOL)isVolume:(NSURL *)fileURL
-{
-    @try {
-        NSError *error = nil;
-        if (![self _unrarOpenFile:fileURL.path
-                           inMode:RAR_OM_EXTRACT
-                     withPassword:nil
-                            error:&error])
-        {
-            return NO;
-        }
-        
-        if (error) {
-            NSLog(@"Error checking for volume properties: %@", error);
-            return NO;
-        }
-        
-        RARReadHeaderEx(_rarFile, header);
-        bool isVolume = (header->Flags & MHD_VOLUME) != 0;
-        
-        return isVolume;
-    }
-    @finally {
-        [self closeFile];
-    }
-    
-    return NO;
-}
-
-=======
->>>>>>> isVolume method removed
-=======
->>>>>>> Removing extra space
 - (NSArray<NSString*> *)listFilenames:(NSError **)error
 {
     URKCreateActivity("Listing Filenames");
@@ -452,46 +385,8 @@ NS_DESIGNATED_INITIALIZER
     return [NSArray arrayWithArray:fileInfos];
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-- (nullable NSString *)firstVolumePath
-{
-    __block NSString *volumePath = self.filename;
-    NSTextCheckingResult * match;
-
-    if (self.filename.length)
-    {
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.part)([0-9]+)(.rar)$" options:NSRegularExpressionCaseInsensitive error:nil];
-        match = [regex firstMatchInString:self.filename options:0 range:NSMakeRange(0, self.filename.length)];
-        if (match)
-        {
-            int rangeLength = 10;
-            NSString * leadingZeros = @"";
-            while (rangeLength < match.range.length)
-            {
-                rangeLength++;
-                leadingZeros = [leadingZeros stringByAppendingString:@"0"];
-            }
-            NSString * regexTemplate = [NSString stringWithFormat:@"$1%@1$3", leadingZeros];
-            volumePath = [regex stringByReplacingMatchesInString:self.filename options:0 range:NSMakeRange(0, self.filename.length) withTemplate:regexTemplate];
-        }
-        else {
-            // After rXX, rar uses r-z and symbols like {}|~... so accepting anything but a number
-            regex = [NSRegularExpression regularExpressionWithPattern:@"(\\.[^0-9])([0-9]+)$" options:NSRegularExpressionCaseInsensitive error:nil];
-            match = [regex firstMatchInString:self.filename options:0 range:NSMakeRange(0, self.filename.length)];
-            if (match)
-                volumePath = [[self.filename stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
-        }
-    }
-    
-    if (match && ![[NSFileManager defaultManager] fileExistsAtPath:volumePath])
-        return nil;
-    
-    return volumePath;
-=======
 - (nullable NSString *)firstVolumePath {
     return @"";
->>>>>>> Was at master, merging branch…
 }
 
 - (nullable NSURL *)firstVolumeURL {
@@ -506,65 +401,7 @@ NS_DESIGNATED_INITIALIZER
 
 - (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error
 {
-<<<<<<< HEAD
-    NSMutableSet<NSString*> *volumePaths = [NSMutableSet new];
-    
-    NSURL * firstVolumeURL = [self firstVolumeURL];
-    if (firstVolumeURL != self.fileURL)
-    {
-        @try {
-            NSError *firstVolumeError = nil;
-            
-            if ([self _unrarOpenFile:firstVolumeURL.path
-                              inMode:RAR_OM_LIST_INCSPLIT
-                        withPassword:nil
-                               error:&firstVolumeError])
-            {
-                int RHCode = 0, PFCode = 0;
-                
-                while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
-                    [volumePaths addObject:[URKFileInfo fileInfo:header].archiveName];
-                    
-                    if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
-                        [self assignError:error code:(NSInteger)PFCode];
-                        volumePaths = nil;
-                        return nil;
-                    }
-                }
-                
-                if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
-                    [self assignError:error code:RHCode];
-                    volumePaths = nil;
-                }
-                
-            }
-            else {
-                if (error) {
-                    *error = firstVolumeError;
-                }
-                return nil;
-            }
-        }
-        @finally {
-            [self closeFile];
-        }
-    }
-    else {
-        NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
-        
-        if (listFileInfo == nil) {
-            return nil;
-        }
-        
-        for (URKFileInfo* info in listFileInfo) {
-            [volumePaths addObject:info.archiveName];
-        }
-    }
-
-    return [NSArray arrayWithArray:volumePaths.allObjects];
-=======
     return @[];
->>>>>>> Was at master, merging branch…
 }
 
 - (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
@@ -589,17 +426,8 @@ NS_DESIGNATED_INITIALIZER
     return [NSArray arrayWithArray:volumeURLs];
 }
 
-<<<<<<< HEAD
-=======
->>>>>>> Rebased to multivolume branch
-=======
->>>>>>> Was at master, merging branch…
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Deprecated methods that take a progress block argument, and created versions without them
                  error:(NSError **)error
 {
 #pragma clang diagnostic push
@@ -613,11 +441,6 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
-<<<<<<< HEAD
-=======
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
-=======
->>>>>>> Deprecated methods that take a progress block argument, and created versions without them
               progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
                  error:(NSError **)error
 {
@@ -628,11 +451,7 @@ NS_DESIGNATED_INITIALIZER
     NSError *listError = nil;
     NSArray *fileInfos = [self listFileInfo:&listError];
 
-<<<<<<< HEAD
     if (!fileInfos || listError) {
-=======
-    if (!fileInfo || listError) {
->>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
         URKLogError("Error listing contents of archive: %{public}@", listError);
 
         if (error) {
@@ -645,35 +464,9 @@ NS_DESIGNATED_INITIALIZER
     NSNumber *totalSize = [fileInfos valueForKeyPath:@"@sum.uncompressedSize"];
     __block long long bytesDecompressed = 0;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
     progress.kind = NSProgressKindFile;
 	
-=======
-    NSProgress *eachFileProgress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
-    eachFileProgress.cancellable = YES;
-    eachFileProgress.pausable = NO;
-=======
-    NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
-    progress.cancellable = YES;
-    progress.pausable = NO;
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
-    
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
-=======
-=======
-    progress.kind = NSProgressKindFile;
-    [progress setUserInfoObject:@0
-                         forKey:NSProgressFileCompletedCountKey];
-    [progress setUserInfoObject:@(fileInfo.count)
-                         forKey:NSProgressFileTotalCountKey];
->>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
-    self.progress = progress;
-
->>>>>>> Implemented NSProgressReporting protocol to make conformance more apparent
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing File Extraction");
 
@@ -687,40 +480,18 @@ NS_DESIGNATED_INITIALIZER
             NSURL *extractedURL = [[NSURL fileURLWithPath:filePath] URLByAppendingPathComponent:fileInfo.filename];
             [progress setUserInfoObject:extractedURL
                                  forKey:NSProgressFileURLKey];
-<<<<<<< HEAD
-<<<<<<< HEAD
             [progress setUserInfoObject:fileInfo
                                  forKey:URKProgressInfoKeyFileInfoExtracting];
-=======
->>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
-=======
-            [progress setUserInfoObject:fileInfo
-                                 forKey:URKProgressInfoKeyFileInfoExtracting];
->>>>>>> Added reporting of URKFileInfo objects to progress reporting for extractFiles
             
-<<<<<<< HEAD
             if ([self headerContainsErrors:innerError]) {
-=======
-            if ([self headerContainsErrors:error]) {
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
                 URKLogError("Header contains an error")
                 result = NO;
                 return;
             }
             
-<<<<<<< HEAD
-<<<<<<< HEAD
             if (progress.isCancelled) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
-=======
-            if (eachFileProgress.isCancelled) {
-=======
-            if (progress.isCancelled) {
->>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
-                NSString *errorName = nil;
-                [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
                 URKLogInfo("Halted file extraction due to user cancellation: %@", errorName);
                 result = NO;
                 return;
@@ -734,24 +505,11 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
             
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
             [progress setUserInfoObject:@(++filesExtracted)
                                  forKey:NSProgressFileCompletedCountKey];
             [progress setUserInfoObject:@(fileInfos.count)
                                  forKey:NSProgressFileTotalCountKey];
-=======
-            [progress setUserInfoObject:@(++filesExtracted)
-                                 forKey:NSProgressFileCompletedCountKey];
->>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
             progress.completedUnitCount += fileInfo.uncompressedSize;
-=======
-            eachFileProgress.totalUnitCount += fileInfo.uncompressedSize;
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
-=======
-            progress.completedUnitCount += fileInfo.uncompressedSize;
->>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
             
             if (progressBlock) {
                 progressBlock(fileInfo, bytesDecompressed / totalSize.floatValue);
@@ -767,18 +525,6 @@ NS_DESIGNATED_INITIALIZER
             result = NO;
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-        eachFileProgress.totalUnitCount = totalSize.longLongValue;
-=======
-        progress.completedUnitCount = progress.totalUnitCount;
->>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
-        
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
-=======
->>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
         if (progressBlock) {
             progressBlock(fileInfo, 1.0);
         }
@@ -789,10 +535,6 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (NSData *)extractData:(URKFileInfo *)fileInfo
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Deprecated methods that take a progress block argument, and created versions without them
                   error:(NSError **)error
 {
 #pragma clang diagnostic push
@@ -805,19 +547,10 @@ NS_DESIGNATED_INITIALIZER
                progress:(void (^)(CGFloat percentDecompressed))progressBlock
                   error:(NSError **)error
 {
-=======
-               progress:(void (^)(CGFloat percentDecompressed))progressBlock
-                  error:(NSError **)error
-{
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
     return [self extractDataFromFile:fileInfo.filename progress:progressBlock error:error];
 }
 
 - (NSData *)extractDataFromFile:(NSString *)filePath
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Deprecated methods that take a progress block argument, and created versions without them
                           error:(NSError **)error
 {
 #pragma clang diagnostic push
@@ -827,27 +560,14 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (NSData *)extractDataFromFile:(NSString *)filePath
-<<<<<<< HEAD
-=======
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
-=======
->>>>>>> Deprecated methods that take a progress block argument, and created versions without them
                        progress:(void (^)(CGFloat percentDecompressed))progressBlock
                           error:(NSError **)error
 {
     URKCreateActivity("Extracting Data from File");
     
-<<<<<<< HEAD
     NSProgress *progress = [self beginProgressOperation:0];
 
-=======
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
     __block NSData *result = nil;
-    NSProgress *progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
-                                                     userInfo:nil];
-    progress.cancellable = YES;
-    progress.pausable = NO;
-    self.progress = progress;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing Extraction");
@@ -878,10 +598,7 @@ NS_DESIGNATED_INITIALIZER
                 }
             }
         }
-        
-        CGFloat totalBytes = fileInfo.uncompressedSize;
-        progress.totalUnitCount = totalBytes;
-        
+
         if (RHCode != ERAR_SUCCESS) {
             NSString *errorName = nil;
             [self assignError:innerError code:RHCode errorName:&errorName];
@@ -930,11 +647,7 @@ NS_DESIGNATED_INITIALIZER
         
         if (progress.isCancelled) {
             NSString *errorName = nil;
-<<<<<<< HEAD
             [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
-=======
-            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
             URKLogInfo("Returning nil data from extraction due to user cancellation: %@", errorName);
             return;
         }
@@ -976,18 +689,8 @@ NS_DESIGNATED_INITIALIZER
         return NO;
     }
     
-<<<<<<< HEAD
     
     NSProgress *progress = [self beginProgressOperation:fileInfo.count];
-=======
-    NSProgress *progress = [NSProgress progressWithTotalUnitCount:fileInfo.count];
-    progress.cancellable = YES;
-    progress.pausable = NO;
-<<<<<<< HEAD
->>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
-=======
-    self.progress = progress;
->>>>>>> Implemented NSProgressReporting protocol to make conformance more apparent
 
     URKLogInfo("Sorting file info by name/path");
     
@@ -1041,14 +744,7 @@ NS_DESIGNATED_INITIALIZER
 
         BOOL stop = NO;
 
-<<<<<<< HEAD
         NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
-=======
-        NSProgress *progress = [NSProgress progressWithTotalUnitCount:totalSize.longLongValue];
-        progress.cancellable = YES;
-        progress.pausable = NO;
-        self.progress = progress;
->>>>>>> Added progress reporting to performOnData, and additional documentation to the progress variable
         
         URKLogInfo("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
@@ -1096,11 +792,7 @@ NS_DESIGNATED_INITIALIZER
         
         if (progress.isCancelled) {
             NSString *errorName = nil;
-<<<<<<< HEAD
             [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
-=======
-            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
->>>>>>> Added progress reporting to performOnData, and additional documentation to the progress variable
             URKLogInfo("Returning NO from performOnData:error: due to user cancellation: %@", errorName);
             return;
         }
@@ -1124,21 +816,8 @@ NS_DESIGNATED_INITIALIZER
 
     NSError *innerError = nil;
 
-<<<<<<< HEAD
     NSProgress *progress = [self beginProgressOperation:0];
 
-=======
-    NSProgress *progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
-                                                     userInfo:nil];
-    progress.cancellable = YES;
-    progress.pausable = NO;
-<<<<<<< HEAD
-    
->>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
-=======
-    self.progress = progress;
-
->>>>>>> Implemented NSProgressReporting protocol to make conformance more apparent
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
 
@@ -1194,31 +873,17 @@ NS_DESIGNATED_INITIALIZER
 
         RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
         self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
             if (progress.isCancelled) {
                 URKLogInfo("Buffered data read cancelled");
                 return NO;
             }
             
-<<<<<<< HEAD
             bytesRead += dataChunk.length;
             progress.completedUnitCount += dataChunk.length;
 
             CGFloat progressPercent = bytesRead / totalBytes;
             URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progressPercent * 100);
             action(dataChunk, progressPercent);
-=======
-=======
-            progress.completedUnitCount += dataChunk.length;
->>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
-            bytesRead += dataChunk.length;
-            CGFloat progress = bytesRead / totalBytes;
-            URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progress * 100);
-            action(dataChunk, progress);
->>>>>>> Added support for NSProgress with cancellation to extraction methods, which is exposed in the test app
             return YES;
         };
 
@@ -1227,11 +892,7 @@ NS_DESIGNATED_INITIALIZER
 
         if (progress.isCancelled) {
             NSString *errorName = nil;
-<<<<<<< HEAD
             [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
-=======
-            [self assignError:error code:URKErrorCodeUserCancelled errorName:&errorName];
->>>>>>> Added NSProgress+cancellation support to a couple more methods for which it makes sense, and cleaned up some code along the way
             URKLogError("Buffered data extraction has been cancelled: %@", errorName);
             return;
         }
@@ -1271,16 +932,8 @@ NS_DESIGNATED_INITIALIZER
             return NO;
         }
 
-<<<<<<< HEAD
         URKLogDebug("Reading header and starting processing...");
         
-=======
-        if (error) {
-            URKLogError("Error checking for password: %{public}@", error);
-            return NO;
-        }
-
->>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
         int RHCode = RARReadHeaderEx(_rarFile, header);
         int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
 
@@ -1315,21 +968,13 @@ NS_DESIGNATED_INITIALIZER
     __block BOOL passwordIsGood = YES;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
-<<<<<<< HEAD
         URKCreateActivity("Performing action");
-=======
-        if (error) {
-            URKLogError("Error validating password: %{public}@", error);
-            return;
-        }
->>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
 
         URKLogDebug("Opening and processing archive...");
         
         int RHCode = RARReadHeaderEx(_rarFile, header);
         int PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
 
-<<<<<<< HEAD
         if ([self headerContainsErrors:innerError]) {
             if (error.code == ERAR_MISSING_PASSWORD) {
                 URKLogDebug("Password invalidated by header");
@@ -1339,10 +984,6 @@ NS_DESIGNATED_INITIALIZER
                 URKLogError("Errors in header while validating password: %{public}@", error);
             }
 
-=======
-        if ([self headerContainsErrors:&error] && error.code == ERAR_MISSING_PASSWORD) {
-            URKLogError("Errors in header while validating password: %{public}@", error);
->>>>>>> Added macros for unified logging and activity tracing, and switched to the new macros for existing log statements (Issue #35)
             return;
         }
 

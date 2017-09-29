@@ -1,41 +1,17 @@
 # UnrarKit CHANGELOG
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 ## 2.9
 
-<<<<<<< HEAD
 * Added support for `NSProgress` and `NSProgressReporting` in all extraction and iteration methods (Issue #34)
 * Switched to Travis Build Stages instead of the unofficial Travis-After-All (Issue #42)
 * Added detailed logging using new unified logging framework. See [the readme](README.md) for more details (Issue #35)
 * Added localized details to returned `NSError` objects (Issue #45)
 * Fixed warnings from Xcode 9 (Issue #51)
-=======
-* Switched to Travis Build Stages instead of the unofficial Travis-After-All (Issue #42)
->>>>>>> Added release note [ci skip]
 
 
-<<<<<<< HEAD
-=======
->>>>>>> Rebased to multivolume branch
-=======
-
->>>>>>> Was at master, merging branch…
-=======
->>>>>>> Added release notes for 2.8.1 (Issue #43)
-=======
-=======
-## 2.9
-
-* Switched to Travis Build Stages instead of the unofficial Travis-After-All (Issue #42)
-
-
->>>>>>> Was at master, merging branch…
->>>>>>> Was at master, merging branch…
 ## 2.8.1
 
-Updated to UnRAR library v 5.4.5 (Issue #43 - Thanks to [@Jegge](https://github.com/Jegge) for the suggestion!)
+Updated to UnRAR library v 5.5.5 (Issue #43 - Thanks to [@Jegge](https://github.com/Jegge) for the suggestion!)
 
 ## 2.8
 

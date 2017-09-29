@@ -7,21 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-<<<<<<< HEAD
 		7A22B1F81F60A2D3004B8050 /* UnrarKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */; };
 		7A22B1FB1F60A39E004B8050 /* UnrarKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */; };
-<<<<<<< HEAD
-<<<<<<< HEAD
 		7A267F6E1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
 		7A267F6F1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
-=======
->>>>>>> Added localization script, empty strings file, and wiring for resources bundle
-=======
-		7A267F6E1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
-		7A267F6F1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
->>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
-=======
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		967872741E460FA70048A54C /* ListVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 967872731E460FA70048A54C /* ListVolumesTests.m */; };
@@ -168,7 +157,7 @@
 		969BD9BD19EDE88E002CE755 /* isnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3318DB722E00B5651B /* isnt.cpp */; };
 		969BD9BE19EDE88E002CE755 /* crypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1618DB722E00B5651B /* crypt.cpp */; settings = {COMPILER_FLAGS = "-Wno-logical-op-parentheses -Wno-switch -Wno-switch"; }; };
 		969BD9BF19EDE88E002CE755 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1418DB722E00B5651B /* crc.cpp */; };
-		969BD9C019EDE88E002CE755 /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5418DB722E00B5651B /* rawread.cpp */; };
+		969BD9C019EDE88E002CE755 /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5418DB722E00B5651B /* rawread.cpp */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
 		969BD9C119EDE88E002CE755 /* encname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1C18DB722E00B5651B /* encname.cpp */; };
 		969BD9C219EDE88E002CE755 /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5B18DB722E00B5651B /* resource.cpp */; };
 		969BD9C319EDE88E002CE755 /* match.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3F18DB722E00B5651B /* match.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses"; }; };
@@ -190,54 +179,23 @@
 		969BD9D319EDE88E002CE755 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; settings = {COMPILER_FLAGS = "-Wno-logical-op-parentheses"; }; };
 		969BD9D419EDE88E002CE755 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3618DB722E00B5651B /* list.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses -Wno-switch -Wno-unused-function"; }; };
 		969BD9D519EDE88E002CE755 /* find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2C18DB722E00B5651B /* find.cpp */; };
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		969BD9D619EDE88E002CE755 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses -Wno-conditional-uninitialized -Wno-unused-variable -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
 		969BD9D719EDE88E002CE755 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
-=======
-		969BD9D619EDE88E002CE755 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses -Wno-conditional-uninitialized -Wno-unused-variable"; }; };
-		969BD9D719EDE88E002CE755 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; };
->>>>>>> Silenced two warnings caused by an update to unpack30.cpp (Issue #43)
-=======
-		969BD9D619EDE88E002CE755 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses -Wno-conditional-uninitialized -Wno-unused-variable -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
-		969BD9D719EDE88E002CE755 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
->>>>>>> Ignoring analyzer issues for Unrar library files (Issue #43)
-=======
-		969BD9D619EDE88E002CE755 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses -Wno-conditional-uninitialized"; }; };
-		969BD9D719EDE88E002CE755 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; };
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 		969BD9D819EDE88E002CE755 /* threadpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD219ED8C6100DAF8F1 /* threadpool.cpp */; };
 		969BD9D919EDE88E002CE755 /* rs16.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCD19ED8B9700DAF8F1 /* rs16.cpp */; settings = {COMPILER_FLAGS = "-Wno-unused-variable"; }; };
 		969BD9DA19EDE88E002CE755 /* cmddata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0D18DB722E00B5651B /* cmddata.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses -Wno-shorten-64-to-32"; }; };
 		969BD9DB19EDE88E002CE755 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD419ED8C8000DAF8F1 /* ui.cpp */; };
 		969BD9DC19EDE88E002CE755 /* filestr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2A18DB722E00B5651B /* filestr.cpp */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks -Wno-parentheses"; }; };
-		969BD9DD19EDE88E002CE755 /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5918DB722E00B5651B /* recvol.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses"; }; };
+		969BD9DD19EDE88E002CE755 /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5918DB722E00B5651B /* recvol.cpp */; settings = {COMPILER_FLAGS = "-Wno-parentheses -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
 		969BD9DE19EDE88E002CE755 /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5F18DB722E00B5651B /* rs.cpp */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		969BD9DF19EDE88E002CE755 /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; settings = {COMPILER_FLAGS = "-Wno-logical-op-parentheses"; }; };
+		969BD9DF19EDE88E002CE755 /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; settings = {COMPILER_FLAGS = "-Wno-logical-op-parentheses -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
 		969BD9E019EDE88E002CE755 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks -Wno-unused-variable"; }; };
 		969BD9E119EDE88E002CE755 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks -Wno-parentheses"; }; };
 		969BD9E219EDE88E002CE755 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		96BF58BB1F3A487100BC24E1 /* UnrarKitMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */; };
 		96BF58BC1F3A487100BC24E1 /* UnrarKitMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */; };
 		96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */; };
 		96A043E01E4D232F00BD7013 /* HasMultipleVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */; };
-=======
->>>>>>> Rebased to multivolume branch
-=======
-		96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */; };
-		96A043E01E4D232F00BD7013 /* HasMultipleVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */; };
->>>>>>> Was at master, merging branch…
-=======
->>>>>>> Rebased to multivolume branch
-=======
-		96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */; };
-		96A043E01E4D232F00BD7013 /* HasMultipleVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */; };
->>>>>>> Was at master, merging branch…
 		96DBF7FD1A3F72800033B759 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
 		96E5D345198B333200A74340 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
 		96EA53331B3B462D00F79DC6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EA53321B3B462D00F79DC6 /* AppDelegate.swift */; };
@@ -260,7 +218,7 @@
 		96EA53861B3CB2C700F79DC6 /* isnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3318DB722E00B5651B /* isnt.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		96EA53871B3CB2C700F79DC6 /* crypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1618DB722E00B5651B /* crypt.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-logical-op-parentheses -Wno-switch"; }; };
 		96EA53881B3CB2C700F79DC6 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1418DB722E00B5651B /* crc.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		96EA53891B3CB2C700F79DC6 /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5418DB722E00B5651B /* rawread.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		96EA53891B3CB2C700F79DC6 /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5418DB722E00B5651B /* rawread.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
 		96EA538A1B3CB2C700F79DC6 /* encname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1C18DB722E00B5651B /* encname.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		96EA538B1B3CB2C700F79DC6 /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5B18DB722E00B5651B /* resource.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		96EA538C1B3CB2C700F79DC6 /* match.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3F18DB722E00B5651B /* match.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses"; }; };
@@ -283,38 +241,23 @@
 		96EA539D1B3CB2C700F79DC6 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-logical-op-parentheses"; }; };
 		96EA539E1B3CB2C700F79DC6 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3618DB722E00B5651B /* list.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses -Wno-switch -Wno-unused-function"; }; };
 		96EA539F1B3CB2C700F79DC6 /* find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2C18DB722E00B5651B /* find.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		96EA53A01B3CB2C700F79DC6 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses -Wno-conditional-uninitialized -Wno-unused-variable -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
 		96EA53A11B3CB2C700F79DC6 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
-=======
-		96EA53A01B3CB2C700F79DC6 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses -Wno-conditional-uninitialized -Wno-unused-variable"; }; };
-		96EA53A11B3CB2C700F79DC6 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
->>>>>>> Silenced two warnings caused by an update to unpack30.cpp (Issue #43)
-=======
-		96EA53A01B3CB2C700F79DC6 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses -Wno-conditional-uninitialized -Wno-unused-variable -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
-		96EA53A11B3CB2C700F79DC6 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
->>>>>>> Ignoring analyzer issues for Unrar library files (Issue #43)
-=======
-		96EA53A01B3CB2C700F79DC6 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses -Wno-conditional-uninitialized"; }; };
-		96EA53A11B3CB2C700F79DC6 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 		96EA53A21B3CB2C700F79DC6 /* threadpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD219ED8C6100DAF8F1 /* threadpool.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		96EA53A31B3CB2C700F79DC6 /* rs16.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FCD19ED8B9700DAF8F1 /* rs16.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-unused-variable"; }; };
 		96EA53A41B3CB2C700F79DC6 /* cmddata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0D18DB722E00B5651B /* cmddata.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses -Wno-shorten-64-to-32"; }; };
 		96EA53A51B3CB2C700F79DC6 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD419ED8C8000DAF8F1 /* ui.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		96EA53A61B3CB2C700F79DC6 /* filestr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2A18DB722E00B5651B /* filestr.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		96EA53A71B3CB2C700F79DC6 /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5918DB722E00B5651B /* recvol.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses"; }; };
+		96EA53A71B3CB2C700F79DC6 /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5918DB722E00B5651B /* recvol.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-parentheses -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
 		96EA53A81B3CB2C700F79DC6 /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5F18DB722E00B5651B /* rs.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks"; }; };
-		96EA53A91B3CB2C700F79DC6 /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-logical-op-parentheses"; }; };
+		96EA53A91B3CB2C700F79DC6 /* scantree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6318DB722E00B5651B /* scantree.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Wno-logical-op-parentheses -Xanalyzer -analyzer-disable-all-checks -Wno-unused-command-line-argument"; }; };
 		96EA53AA1B3CB2C700F79DC6 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks -Wno-unused-variable"; }; };
 		96EA53AB1B3CB2C700F79DC6 /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1818DB722E00B5651B /* dll.cpp */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w -Xanalyzer -analyzer-disable-all-checks -Wno-parentheses"; }; };
 		96EA53AC1B3CB2C700F79DC6 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
 		96F5BBBD1B39A68600ACB162 /* URKArchiveTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 964547D11B384F7D00202B28 /* URKArchiveTestCase.m */; };
 		96F5BBBF1B39AD3000ACB162 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		96F5BBC11B39AEBC00ACB162 /* Test Data in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AD018D28F1600AD7321 /* Test Data */; };
-		96F5BBC21B39AF2300ACB162 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
+		96F5BBC21B39AF2300ACB162 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; settings = {COMPILER_FLAGS = "-Wno-shorten-64-to-32"; }; };
 		96F5BBC31B39B18B00ACB162 /* ExtractFilesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F4507A1B385BCD00679597 /* ExtractFilesTests.m */; };
 		F3FCD46F1A3262E5003612BF /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
 /* End PBXBuildFile section */
@@ -344,19 +287,9 @@
 /* Begin PBXFileReference section */
 		489CFA0E128B5169005DCC2A /* URKArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = URKArchive.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		489CFA0F128B5169005DCC2A /* URKArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = URKArchive.mm; sourceTree = "<group>"; };
-<<<<<<< HEAD
 		7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnrarKitResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A22B1F91F60A2D3004B8050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UnrarKit.strings; sourceTree = "<group>"; };
-<<<<<<< HEAD
-<<<<<<< HEAD
 		7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressReportingTests.m; sourceTree = "<group>"; };
-=======
->>>>>>> Added localization script, empty strings file, and wiring for resources bundle
-=======
-		7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressReportingTests.m; sourceTree = "<group>"; };
->>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
-=======
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
 		96370FB419ED8A8200DAF8F1 /* blake2s.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s.cpp; sourceTree = "<group>"; };
 		96370FB519ED8A8200DAF8F1 /* blake2s.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = blake2s.hpp; sourceTree = "<group>"; };
@@ -517,25 +450,9 @@
 		96853F8518DB722F00B5651B /* win32stm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = win32stm.cpp; sourceTree = "<group>"; };
 		9699F9DA1B3CB83100B6D373 /* UnrarKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UnrarKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		969F17361A60297700665453 /* UnrarKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnrarKit.h; sourceTree = "<group>"; };
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKitMacros.h; sourceTree = "<group>"; };
 		96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstVolumeTests.m; sourceTree = "<group>"; };
 		96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HasMultipleVolumesTests.m; sourceTree = "<group>"; };
-=======
->>>>>>> Rebased to multivolume branch
-=======
-		96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstVolumeTests.m; sourceTree = "<group>"; };
-		96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HasMultipleVolumesTests.m; sourceTree = "<group>"; };
->>>>>>> Was at master, merging branch…
-=======
->>>>>>> Rebased to multivolume branch
-=======
-		96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstVolumeTests.m; sourceTree = "<group>"; };
-		96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HasMultipleVolumesTests.m; sourceTree = "<group>"; };
->>>>>>> Was at master, merging branch…
 		96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+UnrarKit.h"; path = "Categories/NSString+UnrarKit.h"; sourceTree = "<group>"; };
 		96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSString+UnrarKit.mm"; path = "Categories/NSString+UnrarKit.mm"; sourceTree = "<group>"; };
 		96EA532E1B3B462D00F79DC6 /* iOSUnitTestHostApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSUnitTestHostApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -554,6 +471,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7A22B1E71F60A05F004B8050 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		964C8AB818D28EE000AD7321 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -605,6 +529,7 @@
 				9699F9DA1B3CB83100B6D373 /* UnrarKit.framework */,
 				96F5BBB11B39A65F00ACB162 /* UnrarKit iOS Tests.xctest */,
 				96EA532E1B3B462D00F79DC6 /* iOSUnitTestHostApp.app */,
+				7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -613,8 +538,8 @@
 			isa = PBXGroup;
 			children = (
 				08FB77AEFE84172EC02AAC07 /* Classes */,
-				96853ED318DB704900B5651B /* Resources */,
 				964C8AC218D28EE000AD7321 /* Tests */,
+				7A22B1EB1F60A05F004B8050 /* UnrarKitResources */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 				96853F0418DB722E00B5651B /* Libraries */,
@@ -644,6 +569,16 @@
 			path = Classes;
 			sourceTree = SOURCE_ROOT;
 		};
+		7A22B1EB1F60A05F004B8050 /* UnrarKitResources */ = {
+			isa = PBXGroup;
+			children = (
+				96853ED418DB707000B5651B /* UnrarKit-Info.plist */,
+				7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */,
+			);
+			name = UnrarKitResources;
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		964C8AC218D28EE000AD7321 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -656,39 +591,8 @@
 				96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */,
 				96F450761B38552200679597 /* IsPasswordProtectedTests.m */,
 				96F450781B385AF800679597 /* ListFilenamesTests.m */,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 				967872731E460FA70048A54C /* ListVolumesTests.m */,
 				7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */,
-=======
->>>>>>> Rebased to multivolume branch
-=======
-				967872731E460FA70048A54C /* ListVolumesTests.m */,
->>>>>>> Was at master, merging branch…
-=======
-=======
->>>>>>> Rebased to multivolume branch
-=======
->>>>>>> Was at master, merging branch…
-				967872731E460FA70048A54C /* ListVolumesTests.m */,
-<<<<<<< HEAD
-=======
-				7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */,
->>>>>>> Moved ProgressReportingTests.m into place in the project
-<<<<<<< HEAD
->>>>>>> Moved ProgressReportingTests.m into place in the project
-=======
-=======
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
-=======
->>>>>>> Rebased to multivolume branch
-=======
-				967872731E460FA70048A54C /* ListVolumesTests.m */,
->>>>>>> Was at master, merging branch…
 				96F450741B38527100679597 /* ValidatePasswordTests.m */,
 				96EA532F1B3B462D00F79DC6 /* iOSUnitTestHostApp */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
@@ -705,14 +609,6 @@
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
-		};
-		96853ED318DB704900B5651B /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				96853ED418DB707000B5651B /* UnrarKit-Info.plist */,
-			);
-			path = Resources;
-			sourceTree = SOURCE_ROOT;
 		};
 		96853F0418DB722E00B5651B /* Libraries */ = {
 			isa = PBXGroup;
@@ -1044,6 +940,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		7A22B1E91F60A05F004B8050 /* UnrarKitResources */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A22B1EF1F60A05F004B8050 /* Build configuration list for PBXNativeTarget "UnrarKitResources" */;
+			buildPhases = (
+				7A22B1E61F60A05F004B8050 /* Sources */,
+				7A22B1E71F60A05F004B8050 /* Frameworks */,
+				7A22B1E81F60A05F004B8050 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UnrarKitResources;
+			productName = UnrarKitResources;
+			productReference = 7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 		964C8ABA18D28EE000AD7321 /* UnrarKit Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "UnrarKit Tests" */;
@@ -1140,8 +1053,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0900;
 				TargetAttributes = {
+					7A22B1E91F60A05F004B8050 = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+					};
 					964C8ABA18D28EE000AD7321 = {
 						LastSwiftMigration = 0820;
 						TestTargetID = 96853EDA18DB71CD00B5651B;
@@ -1151,6 +1068,7 @@
 					};
 					96EA532D1B3B462D00F79DC6 = {
 						CreatedOnToolsVersion = 6.3.2;
+						LastSwiftMigration = 0900;
 					};
 					96EA535A1B3CB04300F79DC6 = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -1158,6 +1076,7 @@
 					};
 					96F5BBB01B39A65F00ACB162 = {
 						CreatedOnToolsVersion = 6.3.2;
+						LastSwiftMigration = 0900;
 						TestTargetID = 96EA532D1B3B462D00F79DC6;
 					};
 				};
@@ -1183,12 +1102,21 @@
 				964C8ABA18D28EE000AD7321 /* UnrarKit Tests */,
 				9699F9D91B3CB83100B6D373 /* UnrarKit iOS */,
 				96F5BBB01B39A65F00ACB162 /* UnrarKit iOS Tests */,
+				7A22B1E91F60A05F004B8050 /* UnrarKitResources */,
 				96EA532D1B3B462D00F79DC6 /* iOSUnitTestHostApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7A22B1E81F60A05F004B8050 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A22B1F81F60A2D3004B8050 /* UnrarKit.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		964C8AB918D28EE000AD7321 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1218,6 +1146,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A22B1FB1F60A39E004B8050 /* UnrarKitResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1232,6 +1161,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7A22B1E61F60A05F004B8050 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		964C8AB718D28EE000AD7321 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1242,6 +1178,7 @@
 				9699FA8E1B3D9B6F00B6D373 /* ValidatePasswordTests.m in Sources */,
 				967872741E460FA70048A54C /* ListVolumesTests.m in Sources */,
 				9699FA8B1B3D9B6F00B6D373 /* ExtractFilesTests.m in Sources */,
+				7A267F6E1F713B970004EAA6 /* ProgressReportingTests.m in Sources */,
 				9699FA8A1B3D9B6F00B6D373 /* URKArchiveTestCase.m in Sources */,
 				96A043E01E4D232F00BD7013 /* HasMultipleVolumesTests.m in Sources */,
 				9699FA8D1B3D9B6F00B6D373 /* ListFilenamesTests.m in Sources */,
@@ -1381,6 +1318,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96F5BBBD1B39A68600ACB162 /* URKArchiveTestCase.m in Sources */,
+				7A267F6F1F713B970004EAA6 /* ProgressReportingTests.m in Sources */,
 				96F5BBC21B39AF2300ACB162 /* NSString+UnrarKit.mm in Sources */,
 				96F5BBC31B39B18B00ACB162 /* ExtractFilesTests.m in Sources */,
 			);
@@ -1397,6 +1335,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A22B1F91F60A2D3004B8050 /* en */,
+			);
+			name = UnrarKit.strings;
+			path = Resources;
+			sourceTree = SOURCE_ROOT;
+		};
 		964C8AC518D28EE000AD7321 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1430,12 +1377,18 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1461,7 +1414,7 @@
 				);
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1471,12 +1424,18 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1501,9 +1460,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-<<<<<<< HEAD
 				SWIFT_VERSION = 4.0;
-<<<<<<< HEAD
 			};
 			name = Release;
 		};
@@ -1568,75 +1525,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
-=======
->>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
-			};
-			name = Release;
-		};
-		7A22B1ED1F60A05F004B8050 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Resources/UnrarKit-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.UnrarKitResources";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
-		7A22B1EE1F60A05F004B8050 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Resources/UnrarKit-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.UnrarKitResources";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				WRAPPER_EXTENSION = bundle;
-=======
-				SWIFT_VERSION = 3.0;
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 			};
 			name = Release;
 		};
@@ -1670,24 +1558,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
-<<<<<<< HEAD
-				SDKROOT = macosx;
-				SWIFT_VERSION = 3.0;
-=======
->>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
-<<<<<<< HEAD
->>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
-=======
-=======
-				SDKROOT = macosx;
-				SWIFT_VERSION = 3.0;
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1719,24 +1589,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
-<<<<<<< HEAD
-				SDKROOT = macosx;
-				SWIFT_VERSION = 3.0;
-=======
->>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
-<<<<<<< HEAD
->>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
-=======
-=======
-				SDKROOT = macosx;
-				SWIFT_VERSION = 3.0;
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1962,22 +1814,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-				SWIFT_VERSION = 3.0;
->>>>>>> Fixed documentation
-=======
->>>>>>> Removed SWIFT_VERSION overrides, and specified 4.0 at the project level
 				WARNING_CFLAGS = (
 					"-Wno-shorten-64-to-32",
 					"-Wdocumentation",
 				);
-=======
-				SWIFT_VERSION = 3.0;
-				WARNING_CFLAGS = "-Wno-shorten-64-to-32";
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 			};
 			name = Debug;
 		};
@@ -2020,9 +1860,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
-				WARNING_CFLAGS = "-Wno-shorten-64-to-32";
+				WARNING_CFLAGS = (
+					"-Wno-shorten-64-to-32",
+					"-Wdocumentation",
+				);
 			};
 			name = Release;
 		};
@@ -2064,6 +1906,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOSUnitTestHostApp.app/iOSUnitTestHostApp";
 			};
 			name = Debug;
@@ -2101,6 +1945,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOSUnitTestHostApp.app/iOSUnitTestHostApp";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2118,7 +1964,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-<<<<<<< HEAD
 		7A22B1EF1F60A05F004B8050 /* Build configuration list for PBXNativeTarget "UnrarKitResources" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2126,17 +1971,8 @@
 				7A22B1EE1F60A05F004B8050 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
 			defaultConfigurationName = Release;
-=======
->>>>>>> Added localization script, empty strings file, and wiring for resources bundle
-=======
-			defaultConfigurationName = Release;
->>>>>>> Added more details to extractFiles progress reporting, along with some unit tests (which presently indicate it's not working right)
 		};
-=======
->>>>>>> Added tests, headers, and stubs for multi-volume archives (PR #38)
 		964C8ACF18D28EE000AD7321 /* Build configuration list for PBXNativeTarget "UnrarKit Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

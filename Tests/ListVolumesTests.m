@@ -61,7 +61,7 @@
     XCTAssertNil(listVolumesError, @"Error listing volume paths");
     XCTAssertNotNil(volumePaths, @"No paths returned");
     XCTAssertEqual(volumePaths.count, 5, @"Wrong number of volume paths listed");
-    XCTAssertTrue([[NSSet setWithArray:expectedVolumePaths] isEqual:[NSSet setWithArray:volumePaths]],
+    XCTAssertTrue([expectedVolumePaths isEqualToArray:volumePaths],
                   @"Expected these paths:\n%@\n\nGot these:\n%@", expectedVolumePaths, volumePaths);
 
     
@@ -71,7 +71,7 @@
     XCTAssertNil(listVolumesError, @"Error listing volume URLs");
     XCTAssertNotNil(volumeURLs, @"No URLs returned");
     XCTAssertEqual(volumeURLs.count, 5, @"Wrong number of volume URLs listed");
-    XCTAssertTrue([[NSSet setWithArray:expectedVolumeURLs] isEqual:[NSSet setWithArray:volumeURLs]],
+    XCTAssertTrue([expectedVolumeURLs isEqualToArray:volumeURLs],
                   @"Expected these URL:\n%@\n\nGot these:\n%@", expectedVolumeURLs, volumeURLs);
 }
 
@@ -96,7 +96,7 @@
     XCTAssertNil(listVolumesError, @"Error listing volume paths");
     XCTAssertNotNil(volumePaths, @"No paths returned");
     XCTAssertEqual(volumePaths.count, 5, @"Wrong number of volume paths listed");
-    XCTAssertTrue([[NSSet setWithArray:expectedVolumePaths] isEqual:[NSSet setWithArray:volumePaths]],
+    XCTAssertTrue([expectedVolumePaths isEqualToArray:volumePaths],
                   @"Expected these paths:\n%@\n\nGot these:\n%@", expectedVolumePaths, volumePaths);
     
     
@@ -106,7 +106,7 @@
     XCTAssertNil(listVolumesError, @"Error listing volume URLs");
     XCTAssertNotNil(volumeURLs, @"No URLs returned");
     XCTAssertEqual(volumeURLs.count, 5, @"Wrong number of volume URLs listed");
-    XCTAssertTrue([[NSSet setWithArray:expectedVolumeURLs] isEqual:[NSSet setWithArray:volumeURLs]],
+    XCTAssertTrue([expectedVolumeURLs isEqualToArray:volumeURLs],
                   @"Expected these URL:\n%@\n\nGot these:\n%@", expectedVolumeURLs, volumeURLs);
 }
 
