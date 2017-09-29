@@ -263,7 +263,7 @@ NS_DESIGNATED_INITIALIZER
         return false;
     }
     
-    return (volumeURLs.count > 1);
+    return volumeURLs.count > 1;
 }
 
 
