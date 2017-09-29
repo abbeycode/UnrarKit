@@ -459,14 +459,17 @@ NS_DESIGNATED_INITIALIZER
                     [volumePaths addObject:[URKFileInfo fileInfo:header].archiveName];
                     
                     if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
-                        [self assignError:error code:(NSInteger)PFCode];
-                        volumePaths = nil;
+                        NSString *errorName = nil;
+                        [self assignError:&firstVolumeError code:(NSInteger)PFCode errorName:&errorName];
+                        URKLogError("Error listing volume paths: %@ (%d)", errorName, PFCode);
                         return nil;
                     }
                 }
                 
                 if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
-                    [self assignError:error code:RHCode];
+                    NSString *errorName = nil;
+                    [self assignError:&firstVolumeError code:RHCode errorName:&errorName];
+                    URKLogError("Error listing volume paths: %@ (%d)", errorName, RHCode);
                     volumePaths = nil;
                 }
                 
