@@ -440,7 +440,7 @@ NS_DESIGNATED_INITIALIZER
 
 - (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error
 {
-    NSMutableSet<NSString*> *volumePaths = [NSMutableSet new];
+    NSMutableOrderedSet<NSString*> *volumePaths = [NSMutableOrderedSet new];
     
     NSURL * firstVolumeURL = [self firstVolumeURL];
     if (firstVolumeURL != self.fileURL)
@@ -497,7 +497,7 @@ NS_DESIGNATED_INITIALIZER
         }
     }
 
-    return [NSArray arrayWithArray:volumePaths.allObjects];
+    return [NSArray arrayWithArray:volumePaths.array];
 }
 
 - (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
