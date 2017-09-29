@@ -255,7 +255,15 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)hasMultipleVolumes
 {
-    return NO;
+    NSError *listError = nil;
+    NSArray<NSURL*> *volumeURLs = [self listVolumeURLs:&listError];
+    
+    if (!volumeURLs) {
+        NSLog(@"Error getting file volumes list: %@", listError);
+        return false;
+    }
+    
+    return (volumeURLs.count > 1);
 }
 
 
@@ -386,7 +394,38 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (nullable NSString *)firstVolumePath {
-    return @"";
+    __block NSString *volumePath = self.filename;
+    NSTextCheckingResult * match;
+
+    if (self.filename.length)
+    {
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.part)([0-9]+)(.rar)$" options:NSRegularExpressionCaseInsensitive error:nil];
+        match = [regex firstMatchInString:self.filename options:0 range:NSMakeRange(0, self.filename.length)];
+        if (match)
+        {
+            int rangeLength = 10;
+            NSString * leadingZeros = @"";
+            while (rangeLength < match.range.length)
+            {
+                rangeLength++;
+                leadingZeros = [leadingZeros stringByAppendingString:@"0"];
+            }
+            NSString * regexTemplate = [NSString stringWithFormat:@"$1%@1$3", leadingZeros];
+            volumePath = [regex stringByReplacingMatchesInString:self.filename options:0 range:NSMakeRange(0, self.filename.length) withTemplate:regexTemplate];
+        }
+        else {
+            // After rXX, rar uses r-z and symbols like {}|~... so accepting anything but a number
+            regex = [NSRegularExpression regularExpressionWithPattern:@"(\\.[^0-9])([0-9]+)$" options:NSRegularExpressionCaseInsensitive error:nil];
+            match = [regex firstMatchInString:self.filename options:0 range:NSMakeRange(0, self.filename.length)];
+            if (match)
+                volumePath = [[self.filename stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
+        }
+    }
+    
+    if (match && ![[NSFileManager defaultManager] fileExistsAtPath:volumePath])
+        return nil;
+    
+    return volumePath;
 }
 
 - (nullable NSURL *)firstVolumeURL {
@@ -401,7 +440,61 @@ NS_DESIGNATED_INITIALIZER
 
 - (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error
 {
-    return @[];
+    NSMutableSet<NSString*> *volumePaths = [NSMutableSet new];
+    
+    NSURL * firstVolumeURL = [self firstVolumeURL];
+    if (firstVolumeURL != self.fileURL)
+    {
+        @try {
+            NSError *firstVolumeError = nil;
+            
+            if ([self _unrarOpenFile:firstVolumeURL.path
+                              inMode:RAR_OM_LIST_INCSPLIT
+                        withPassword:nil
+                               error:&firstVolumeError])
+            {
+                int RHCode = 0, PFCode = 0;
+                
+                while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+                    [volumePaths addObject:[URKFileInfo fileInfo:header].archiveName];
+                    
+                    if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                        [self assignError:error code:(NSInteger)PFCode];
+                        volumePaths = nil;
+                        return nil;
+                    }
+                }
+                
+                if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
+                    [self assignError:error code:RHCode];
+                    volumePaths = nil;
+                }
+                
+            }
+            else {
+                if (error) {
+                    *error = firstVolumeError;
+                }
+                return nil;
+            }
+        }
+        @finally {
+            [self closeFile];
+        }
+    }
+    else {
+        NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
+        
+        if (listFileInfo == nil) {
+            return nil;
+        }
+        
+        for (URKFileInfo* info in listFileInfo) {
+            [volumePaths addObject:info.archiveName];
+        }
+    }
+
+    return [NSArray arrayWithArray:volumePaths.allObjects];
 }
 
 - (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
