@@ -14,20 +14,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A22B1E91F60A05F004B8050"
-               BuildableName = "UnrarKitResources.bundle"
-               BlueprintName = "UnrarKitResources"
-               ReferencedContainer = "container:UnrarKit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "96EA535A1B3CB04300F79DC6"
                BuildableName = "UnrarKit.framework"
                BlueprintName = "UnrarKit"
