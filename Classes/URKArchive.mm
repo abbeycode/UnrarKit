@@ -1331,7 +1331,6 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     }
     
     NSString *volumePath = volumeURL.path;
-    NSTextCheckingResult *match;
 
     NSError *regexError = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.part)([0-9]+)(.rar)$"
@@ -1342,8 +1341,10 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
         return nil;
     }
     
+    NSString *firstVolumePath = nil;
+    
     // Check if it's following the current convention, like "Archive.part03.rar"
-    match = [regex firstMatchInString:volumePath options:0 range:NSMakeRange(0, volumePath.length)];
+    NSTextCheckingResult *match = [regex firstMatchInString:volumePath options:0 range:NSMakeRange(0, volumePath.length)];
     if (match) {
         URKLogDebug("The file is part of a multi-volume archive");
         
@@ -1354,10 +1355,10 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
                               stringByAppendingString:@"1"];
         
         NSString * regexTemplate = [NSString stringWithFormat:@"$1%@$3", partOne];
-        volumePath = [regex stringByReplacingMatchesInString:volumePath
-                                                     options:0
-                                                       range:NSMakeRange(0, volumePath.length)
-                                                withTemplate:regexTemplate];
+        firstVolumePath = [regex stringByReplacingMatchesInString:volumePath
+                                                          options:0
+                                                            range:NSMakeRange(0, volumePath.length)
+                                                     withTemplate:regexTemplate];
     }
 
     // It still might be a multivolume archive. Check for the legacy naming convention, like "Archive.r03"
@@ -1376,18 +1377,18 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
         match = [regex firstMatchInString:volumePath options:0 range:NSMakeRange(0, volumePath.length)];
         if (match) {
             URKLogDebug("The archive is part of a legacy volume");
-            volumePath = [[volumePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
+            firstVolumePath = [[volumePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
         }
     }
     
     // If it's a volume of either naming convention, use it
-    if (match) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:volumePath]) {
-            URKLogDebug("First volume part %{public}@ found. Using as the main archive", volumePath);
-            return [NSURL fileURLWithPath:volumePath];
+    if (firstVolumePath) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:firstVolumePath]) {
+            URKLogDebug("First volume part %{public}@ found. Using as the main archive", firstVolumePath);
+            return [NSURL fileURLWithPath:firstVolumePath];
         }
         else {
-            URKLogInfo("First volume part not found: %{public}@. Skipping first volume selection", volumePath);
+            URKLogInfo("First volume part not found: %{public}@. Skipping first volume selection", firstVolumePath);
             return nil;
         }
     }
