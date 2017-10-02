@@ -303,7 +303,12 @@ static NSURL *originalLargeArchiveURL;
 
 - (NSArray<NSURL *> *)multiPartArchiveWithName:(NSString *)baseName
 {
-    NSURL *textFile = [self randomTextFileOfLength:100000];
+    return [self multiPartArchiveWithName:baseName fileSize:100000];
+}
+
+- (NSArray<NSURL *> *)multiPartArchiveWithName:(NSString *)baseName fileSize:(NSUInteger)fileSize
+{
+    NSURL *textFile = [self randomTextFileOfLength:fileSize];
     
     // Generate multi-volume archive, with parts no larger than 20 KB in size
     NSString *commandOutputString = nil;
@@ -315,10 +320,16 @@ static NSURL *originalLargeArchiveURL;
     NSMutableArray<NSString*> *volumePaths = [NSMutableArray arrayWithArray:
                                               [commandOutputString regexMatches:@"Creating archive (.+)"]];
     NSString *intendedFirstVolumePath = volumePaths.firstObject;
+    
+    // Fill in leading zeroes according to number of parts (no fewer than 2 digits)
+    int numDigits = MAX(2, floor(log10(volumePaths.count)) + 1);
+    NSString *zeroPadding = [@"" stringByPaddingToLength:numDigits - 1 withString:@"0" startingAtIndex:0];
+    NSString *actualExtension = [NSString stringWithFormat:@"part%@1.rar", zeroPadding];
+    
     NSString *firstVolumeDir = [intendedFirstVolumePath stringByDeletingLastPathComponent];
     NSString *actualFirstVolumePath = [firstVolumeDir stringByAppendingPathComponent:
                                        [baseName stringByReplacingOccurrencesOfString:@"rar"
-                                                                           withString:@"part01.rar"]];
+                                                                           withString:actualExtension]];
     [volumePaths replaceObjectAtIndex:0 withObject:actualFirstVolumePath];
     
     NSMutableArray<NSURL*> *result = [NSMutableArray array];

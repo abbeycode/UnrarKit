@@ -41,6 +41,7 @@
 - (NSURL *)archiveWithFiles:(NSArray *)fileURLs name:(NSString *)archiveName arguments:(NSArray *)customArgs commandOutput:(NSString **)commandOutput;
 
 - (NSArray<NSURL *> *)multiPartArchiveWithName:(NSString *)baseName;
+- (NSArray<NSURL *> *)multiPartArchiveWithName:(NSString *)baseName fileSize:(NSUInteger)fileSize;
 - (NSArray<NSURL *> *)multiPartArchiveOldSchemeWithName:(NSString *)baseName;
 #endif
 

@@ -42,7 +42,19 @@
     NSURL *thirdVolumeURL = volumeURLs[2];
 
     NSURL *returnedFirstVolumeURL = [URKArchive firstVolumeURL:thirdVolumeURL];
+    
+    XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
+    XCTAssertEqualObjects(returnedFirstVolumeURL.absoluteString, firstVolumeURL.absoluteString, @"Incorrect URL returned as first volume");
+}
 
+- (void)testMultipleVolume_UseMiddleVolume_OneHundredParts {
+    NSArray<NSURL*> *volumeURLs = [self multiPartArchiveWithName:@"ListVolumesTests-testMultipleVolume_UseFirstVolume.rar" fileSize:2500000];
+    
+    NSURL *firstVolumeURL = volumeURLs.firstObject;
+    NSURL *hundredthVolumeURL = volumeURLs[100];
+    
+    NSURL *returnedFirstVolumeURL = [URKArchive firstVolumeURL:hundredthVolumeURL];
+    
     XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
     XCTAssertEqualObjects(returnedFirstVolumeURL.absoluteString, firstVolumeURL.absoluteString, @"Incorrect URL returned as first volume");
 }
