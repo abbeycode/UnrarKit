@@ -1383,11 +1383,11 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     // If it's a volume of either naming convention, use it
     if (match) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:volumePath]) {
-            URKLogDebug("First volume part %@ found. Using as the main archive", volumePath);
+            URKLogDebug("First volume part %{public}@ found. Using as the main archive", volumePath);
             return [NSURL fileURLWithPath:volumePath];
         }
         else {
-            URKLogInfo("First volume part %@ not found. Skipping first volume selection", volumePath);
+            URKLogInfo("First volume part not found: %{public}@. Skipping first volume selection", volumePath);
             return nil;
         }
     }
