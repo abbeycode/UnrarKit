@@ -7,6 +7,7 @@
 * Added detailed logging using new unified logging framework. See [the readme](README.md) for more details (Issue #35)
 * Added localized details to returned `NSError` objects (Issue #45)
 * Fixed warnings from Xcode 9 (Issue #51)
+* Removed iOS-specific targets, after allowing macOS framework and unit test bundles to be cross-platform (Issue #55)
 
 
 ## 2.8.1
