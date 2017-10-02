@@ -135,7 +135,11 @@ NS_DESIGNATED_INITIALIZER
             *error = nil;
         }
         
-        fileURL = [self firstVolumeURL:fileURL];
+        NSURL *firstVolumeURL = [URKArchive firstVolumeURL:fileURL];
+        if (firstVolumeURL && ![firstVolumeURL.absoluteString isEqualToString:fileURL.absoluteString]) {
+            URKLogDebug("Overriding fileURL with first volume URL: %{public}@", firstVolumeURL);
+            fileURL = firstVolumeURL;
+        }
         
         URKLogDebug("Initializing private fields");
 
@@ -261,7 +265,7 @@ NS_DESIGNATED_INITIALIZER
     NSArray<NSURL*> *volumeURLs = [self listVolumeURLs:&listError];
     
     if (!volumeURLs) {
-        NSLog(@"Error getting file volumes list: %@", listError);
+        URKLogError("Error getting file volumes list: %{public}@", listError);
         return false;
     }
     
@@ -395,97 +399,29 @@ NS_DESIGNATED_INITIALIZER
     return [NSArray arrayWithArray:fileInfos];
 }
 
-- (NSString *)firstVolumePath:(NSString *)filePath {
-    NSURL *fileURL = [self firstVolumeURL:[NSURL fileURLWithPath:filePath]];
-
-    return fileURL.path;
-}
-
-- (NSURL *)firstVolumeURL:(NSURL *)fileURL {
-    
-    URKLogDebug("Checking if the archive is part of a volume...");
-    
-    __block NSString *volumePath = fileURL.path;
-    NSTextCheckingResult * match;
-    
-    if (volumePath.length)
-    {
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.part)([0-9]+)(.rar)$" options:NSRegularExpressionCaseInsensitive error:nil];
-        match = [regex firstMatchInString:volumePath options:0 range:NSMakeRange(0, volumePath.length)];
-        if (match)
-        {
-            URKLogDebug("The archive part of a volume");
-            
-            int rangeLength = 10;
-            NSString * leadingZeros = @"";
-            while (rangeLength < match.range.length)
-            {
-                rangeLength++;
-                leadingZeros = [leadingZeros stringByAppendingString:@"0"];
-            }
-            NSString * regexTemplate = [NSString stringWithFormat:@"$1%@1$3", leadingZeros];
-            volumePath = [regex stringByReplacingMatchesInString:volumePath options:0 range:NSMakeRange(0, volumePath.length) withTemplate:regexTemplate];
-        }
-        else {
-            // After rXX, rar uses r-z and symbols like {}|~... so accepting anything but a number
-            regex = [NSRegularExpression regularExpressionWithPattern:@"(\\.[^0-9])([0-9]+)$" options:NSRegularExpressionCaseInsensitive error:nil];
-            match = [regex firstMatchInString:volumePath options:0 range:NSMakeRange(0, volumePath.length)];
-            if (match) {
-                URKLogDebug("The archive is part of a legacy volume");
-                volumePath = [[volumePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
-            }
-        }
-    }
-    
-    if (match) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:volumePath]) {
-            URKLogDebug("First volume part %@ found. Using as the main archive", volumePath);
-            return [NSURL fileURLWithPath:volumePath];
-        }
-        else
-            URKLogInfo("First volume part %@ not found. Skipping first volume selection", volumePath);
-    }
-
-    return fileURL;
-}
-
-- (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error
+- (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
 {
-    NSMutableOrderedSet<NSString*> *volumePaths = [NSMutableOrderedSet new];
-
     NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
     
     if (listFileInfo == nil) {
         return nil;
     }
     
+    NSMutableSet<NSURL*> *volumeURLs = [[NSMutableSet alloc] init];
+    
     for (URKFileInfo* info in listFileInfo) {
-        [volumePaths addObject:info.archiveName];
-    }
-
-    return [NSArray arrayWithArray:volumePaths.array];
-}
-
-- (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
-{
-    NSError *listPathsError = nil;
-    NSArray<NSString*> *volumePaths = [self listVolumePaths:&listPathsError];
-    
-    if (!volumePaths) {
-        if (error) {
-            *error = listPathsError;
-        }
+        NSURL *archiveURL = [NSURL fileURLWithPath:info.archiveName];
         
-        return nil;
+        if (archiveURL) {
+            [volumeURLs addObject:archiveURL];
+        }
     }
+
+    SEL sortBySelector = @selector(path);
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(sortBySelector) ascending:YES];
+    NSArray<NSURL*> *sortedVolumes = [volumeURLs sortedArrayUsingDescriptors:@[sortDescriptor]];
     
-    NSMutableArray<NSURL*> *volumeURLs = [NSMutableArray arrayWithCapacity:volumePaths.count];
-    
-    for (NSString *volumePath in volumePaths) {
-        [volumeURLs addObject:[NSURL fileURLWithPath:volumePath]];
-    }
-    
-    return [NSArray arrayWithArray:volumeURLs];
+    return sortedVolumes;
 }
 
 - (BOOL)extractFilesTo:(NSString *)filePath
@@ -1385,6 +1321,55 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     progress.pausable = NO;
     
     return progress;
+}
+
++ (NSURL *)firstVolumeURL:(NSURL *)volumeURL {
+    URKLogDebug("Checking if the archive is part of a volume...");
+    
+    NSString *volumePath = volumeURL.path;
+    NSTextCheckingResult * match;
+    
+    if (volumePath.length)
+    {
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.part)([0-9]+)(.rar)$" options:NSRegularExpressionCaseInsensitive error:nil];
+        match = [regex firstMatchInString:volumePath options:0 range:NSMakeRange(0, volumePath.length)];
+        if (match)
+        {
+            URKLogDebug("The archive part of a volume");
+            
+            int rangeLength = 10;
+            NSString * leadingZeros = @"";
+            while (rangeLength < match.range.length)
+            {
+                rangeLength++;
+                leadingZeros = [leadingZeros stringByAppendingString:@"0"];
+            }
+            NSString * regexTemplate = [NSString stringWithFormat:@"$1%@1$3", leadingZeros];
+            volumePath = [regex stringByReplacingMatchesInString:volumePath options:0 range:NSMakeRange(0, volumePath.length) withTemplate:regexTemplate];
+        }
+        else {
+            // After rXX, rar uses r-z and symbols like {}|~... so accepting anything but a number
+            regex = [NSRegularExpression regularExpressionWithPattern:@"(\\.[^0-9])([0-9]+)$" options:NSRegularExpressionCaseInsensitive error:nil];
+            match = [regex firstMatchInString:volumePath options:0 range:NSMakeRange(0, volumePath.length)];
+            if (match) {
+                URKLogDebug("The archive is part of a legacy volume");
+                volumePath = [[volumePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
+            }
+        }
+    }
+    
+    if (match) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:volumePath]) {
+            URKLogDebug("First volume part %@ found. Using as the main archive", volumePath);
+            return [NSURL fileURLWithPath:volumePath];
+        }
+        else {
+            URKLogInfo("First volume part %@ not found. Skipping first volume selection", volumePath);
+            return nil;
+        }
+    }
+    
+    return volumeURL;
 }
 
 @end

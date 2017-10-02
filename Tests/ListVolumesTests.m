@@ -19,17 +19,6 @@
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
     NSError *listVolumesError = nil;
-    NSArray<NSString*> *volumePaths = [archive listVolumePaths:&listVolumesError];
-    
-    XCTAssertNil(listVolumesError, @"Error listing volume paths");
-    XCTAssertNotNil(volumePaths, @"No paths returned");
-    XCTAssertEqual(volumePaths.count, 1, @"Wrong number of volume paths listed");
-    
-    XCTAssertEqualObjects(volumePaths[0].lastPathComponent, testArchiveURL.path.lastPathComponent,
-                          @"Wrong path returned");
-
-
-    listVolumesError = nil;
     NSArray<NSURL*> *volumeURLs = [archive listVolumeURLs:&listVolumesError];
     
     XCTAssertNil(listVolumesError, @"Error listing volume URLs");
@@ -44,28 +33,16 @@
     NSArray<NSURL*> *generatedVolumeURLs = [self multiPartArchiveWithName:@"ListVolumesTests-testMultipleVolume_UseFirstVolume.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:generatedVolumeURLs.firstObject error:nil];
     
-    NSMutableArray<NSString *> *expectedVolumePaths = [NSMutableArray array];
     NSMutableArray<NSURL *> *expectedVolumeURLs = [NSMutableArray array];
     
     // NSTemporaryDirectory() returns '/var', which maps to '/private/var'
     for (NSURL *volumeURL in generatedVolumeURLs) {
         NSString *originalPath = volumeURL.path;
         NSString *privatePath = [@"/private" stringByAppendingString:originalPath];
-        [expectedVolumePaths addObject:privatePath];
         [expectedVolumeURLs addObject:[NSURL fileURLWithPath:privatePath]];
     }
     
     NSError *listVolumesError = nil;
-    NSArray<NSString*> *volumePaths = [archive listVolumePaths:&listVolumesError];
-    
-    XCTAssertNil(listVolumesError, @"Error listing volume paths");
-    XCTAssertNotNil(volumePaths, @"No paths returned");
-    XCTAssertEqual(volumePaths.count, 5, @"Wrong number of volume paths listed");
-    XCTAssertTrue([expectedVolumePaths isEqualToArray:volumePaths],
-                  @"Expected these paths:\n%@\n\nGot these:\n%@", expectedVolumePaths, volumePaths);
-
-    
-    listVolumesError = nil;
     NSArray<NSURL*> *volumeURLs = [archive listVolumeURLs:&listVolumesError];
     
     XCTAssertNil(listVolumesError, @"Error listing volume URLs");
@@ -79,28 +56,16 @@
     NSArray<NSURL*> *generatedVolumeURLs = [self multiPartArchiveWithName:@"ListVolumesTests-testMultipleVolume_UseMiddleVolume.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:generatedVolumeURLs[2] error:nil];
     
-    NSMutableArray<NSString *> *expectedVolumePaths = [NSMutableArray array];
     NSMutableArray<NSURL *> *expectedVolumeURLs = [NSMutableArray array];
     
     // NSTemporaryDirectory() returns '/var', which maps to '/private/var'
     for (NSURL *volumeURL in generatedVolumeURLs) {
         NSString *originalPath = volumeURL.path;
         NSString *privatePath = [@"/private" stringByAppendingString:originalPath];
-        [expectedVolumePaths addObject:privatePath];
         [expectedVolumeURLs addObject:[NSURL fileURLWithPath:privatePath]];
     }
     
     NSError *listVolumesError = nil;
-    NSArray<NSString*> *volumePaths = [archive listVolumePaths:&listVolumesError];
-    
-    XCTAssertNil(listVolumesError, @"Error listing volume paths");
-    XCTAssertNotNil(volumePaths, @"No paths returned");
-    XCTAssertEqual(volumePaths.count, 5, @"Wrong number of volume paths listed");
-    XCTAssertTrue([expectedVolumePaths isEqualToArray:volumePaths],
-                  @"Expected these paths:\n%@\n\nGot these:\n%@", expectedVolumePaths, volumePaths);
-    
-    
-    listVolumesError = nil;
     NSArray<NSURL*> *volumeURLs = [archive listVolumeURLs:&listVolumesError];
     
     XCTAssertNil(listVolumesError, @"Error listing volume URLs");

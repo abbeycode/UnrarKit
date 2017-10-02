@@ -287,33 +287,6 @@ extern NSString *URKErrorDomain;
 - (nullable NSArray<URKFileInfo*> *)listFileInfo:(NSError **)error;
 
 /**
- *  Gets the path of the first volume in a multi-volume archive, or the only volume in a single-volume one
- *
- *  @param filePath A path to the archive file
- *
- *  @return Returns the path, or nil if there was an error
- */
-- (NSString *)firstVolumePath:(NSString *)filePath;
-
-/**
- *  Gets the URL of the first volume in a multi-volume archive, or the only volume in a single-volume one
- *
- *  @param fileURL  The URL of the archive file
- *
- *  @return Returns the URL, or nil if there was an error
- */
-- (NSURL *)firstVolumeURL:(NSURL *)fileURL;
-
-/**
- *  Lists the paths of volumes in a single- or multi-volume archive
- *
- *  @param error Contains an NSError object when there was an error reading the archive
- *
- *  @return Returns the list of paths of all volumes of the archive
- */
-- (nullable NSArray<NSString*> *)listVolumePaths:(NSError **)error;
-
-/**
  *  Lists the URLs of volumes in a single- or multi-volume archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive

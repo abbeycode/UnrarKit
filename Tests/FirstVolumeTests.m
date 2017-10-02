@@ -8,85 +8,63 @@
 
 #import "URKArchiveTestCase.h"
 
-@interface FirstVolumeTests : URKArchiveTestCase
+@interface FirstVolumeTests : URKArchiveTestCase @end
+
+@interface URKArchive (Tests)
+
+// It's a private class method
++ (NSURL *)firstVolumeURL:(NSURL *)volumeURL;
 
 @end
 
 @implementation FirstVolumeTests
 
 - (void)testSingleVolume {
-    NSURL *testArchiveURL = self.testFileURLs[@"Test Archive.rar"];
-    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    NSURL *onlyVolumeArchiveURL = self.testFileURLs[@"Test Archive.rar"];
+    NSURL *returnedFirstVolumeURL = [URKArchive firstVolumeURL:onlyVolumeArchiveURL];
     
-    NSString *firstVolumePath = [archive firstVolumePath];
-    
-    XCTAssertNotNil(firstVolumePath, @"No path returned");
-    XCTAssertTrue([firstVolumePath hasSuffix:testArchiveURL.path], @"Wrong URL returned (%@)", firstVolumePath);
-    
-    NSURL *firstVolumeURL = [archive firstVolumeURL];
-    
-    XCTAssertNotNil(firstVolumeURL, @"No URL returned");
-    XCTAssertEqualObjects(firstVolumeURL.path, firstVolumePath, @"Path and URL don't match each other");
+    XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
+    XCTAssertEqualObjects(returnedFirstVolumeURL, onlyVolumeArchiveURL, @"URL changed even though it's a single volume archive");
 }
 
 - (void)testMultipleVolume_UseFirstVolume {
     NSArray<NSURL*> *volumeURLs = [self multiPartArchiveWithName:@"FirstVolumeTests-testMultipleVolume_UseFirstVolume.rar"];
-    URKArchive *archive = [[URKArchive alloc] initWithURL:volumeURLs.firstObject error:nil];
-    
-    NSString *firstVolumePath = [archive firstVolumePath];
+    NSURL *firstVolumeURL = volumeURLs.firstObject;
+    NSURL *returnedFirstVolumeURL = [URKArchive firstVolumeURL:firstVolumeURL];
 
-    XCTAssertNotNil(firstVolumePath, @"No path returned");
-    XCTAssertTrue([firstVolumePath hasSuffix:volumeURLs.firstObject.path], @"Wrong URL returned (%@)", firstVolumePath);
-    
-    NSURL *firstVolumeURL = [archive firstVolumeURL];
-    
-    XCTAssertNotNil(firstVolumeURL, @"No URL returned");
-    XCTAssertEqualObjects(firstVolumeURL.path, firstVolumePath, @"Path and URL don't match each other");
+    XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
+    XCTAssertEqualObjects(returnedFirstVolumeURL, firstVolumeURL, @"URL changed even though it was initialized with the first volume");
 }
 
 - (void)testMultipleVolume_UseMiddleVolume {
     NSArray<NSURL*> *volumeURLs = [self multiPartArchiveWithName:@"ListVolumesTests-testMultipleVolume_UseFirstVolume.rar"];
-    URKArchive *archive = [[URKArchive alloc] initWithURL:volumeURLs[2] error:nil];
-    
-    NSString *firstVolumePath = [archive firstVolumePath];
-    
-    XCTAssertNotNil(firstVolumePath, @"No path returned");
-    XCTAssertTrue([firstVolumePath hasSuffix:volumeURLs.firstObject.path], @"Wrong URL returned (%@)", firstVolumePath);
-    
-    NSURL *firstVolumeURL = [archive firstVolumeURL];
-    
-    XCTAssertNotNil(firstVolumeURL, @"No URL returned");
-    XCTAssertEqualObjects(firstVolumeURL.path, firstVolumePath, @"Path and URL don't match each other");
+    NSURL *firstVolumeURL = volumeURLs.firstObject;
+    NSURL *thirdVolumeURL = volumeURLs[2];
+
+    NSURL *returnedFirstVolumeURL = [URKArchive firstVolumeURL:thirdVolumeURL];
+
+    XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
+    XCTAssertEqualObjects(returnedFirstVolumeURL.absoluteString, firstVolumeURL.absoluteString, @"Incorrect URL returned as first volume");
 }
 
 - (void)testMultipleVolume_UseFirstVolume_OldNamingScheme {
     NSArray<NSURL*> *volumeURLs = [self multiPartArchiveOldSchemeWithName:@"FirstVolumeTests-testMultipleVolume_UseFirstVolume_OldNamingScheme.rar"];
-    URKArchive *archive = [[URKArchive alloc] initWithURL:volumeURLs.firstObject error:nil];
+    NSURL *firstVolumeURL = volumeURLs.firstObject;
+    NSURL *returnedFirstVolumeURL = [URKArchive firstVolumeURL:firstVolumeURL];
     
-    NSString *firstVolumePath = [archive firstVolumePath];
-    
-    XCTAssertNotNil(firstVolumePath, @"No path returned");
-    XCTAssertTrue([firstVolumePath hasSuffix:volumeURLs.firstObject.path], @"Wrong URL returned (%@)", firstVolumePath);
-    
-    NSURL *firstVolumeURL = [archive firstVolumeURL];
-    
-    XCTAssertNotNil(firstVolumeURL, @"No URL returned");
-    XCTAssertEqualObjects(firstVolumeURL.path, firstVolumePath, @"Path and URL don't match each other");
+    XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
+    XCTAssertEqualObjects(returnedFirstVolumeURL, firstVolumeURL, @"URL changed even though it was initialized with the first volume");
 }
 
 - (void)testMultipleVolume_UseMiddleVolume_OldNamingScheme {
     NSArray<NSURL*> *volumeURLs = [self multiPartArchiveOldSchemeWithName:@"FirstVolumeTests-testMultipleVolume_UseMiddleVolume_OldNamingScheme.rar"];
-    URKArchive *archive = [[URKArchive alloc] initWithURL:volumeURLs[2] error:nil];
+    NSURL *firstVolumeURL = volumeURLs.firstObject;
+    NSURL *thirdVolumeURL = volumeURLs[2];
     
-    NSString *firstVolumePath = [archive firstVolumePath];
+    NSURL *returnedFirstVolumeURL = [URKArchive firstVolumeURL:thirdVolumeURL];
     
-    XCTAssertNotNil(firstVolumePath, @"No path returned");
-    XCTAssertTrue([firstVolumePath hasSuffix:volumeURLs.firstObject.path], @"Wrong URL returned (%@)", firstVolumePath);
-    
-    NSURL *firstVolumeURL = [archive firstVolumeURL];
-    
-    XCTAssertNotNil(firstVolumeURL, @"No URL returned");
-    XCTAssertEqualObjects(firstVolumeURL.path, firstVolumePath, @"Path and URL don't match each other");
+    XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
+    XCTAssertEqualObjects(returnedFirstVolumeURL.absoluteString, firstVolumeURL.absoluteString, @"Incorrect URL returned as first volume");
 }
 
 - (void)testMultipleVolume_FirstVolumeMissing {
@@ -97,13 +75,10 @@
                                               error:&deleteError];
     XCTAssertNil(deleteError, @"Error deleting first volume of archive");
     
-    URKArchive *archive = [[URKArchive alloc] initWithURL:volumeURLs[2] error:nil];
+    NSURL *firstVolumeURL = volumeURLs.firstObject;
+    NSURL *returnedFirstVolumeURL = [URKArchive firstVolumeURL:firstVolumeURL];
     
-    NSString *firstVolumePath = [archive firstVolumePath];
-    XCTAssertNil(firstVolumePath, @"First volume path returned when it does not exist");
-    
-    NSURL *firstVolumeURL = [archive firstVolumeURL];
-    XCTAssertNil(firstVolumeURL, @"First volume URL returned when it does not exist");
+    XCTAssertNil(returnedFirstVolumeURL, @"First volume URL returned when it does not exist");
 }
 
 @end
