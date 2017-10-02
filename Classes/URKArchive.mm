@@ -1342,24 +1342,25 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
         return nil;
     }
     
-    // Check if it's following the current convention, like ".part03.rar"
+    // Check if it's following the current convention, like "Archive.part03.rar"
     match = [regex firstMatchInString:volumePath options:0 range:NSMakeRange(0, volumePath.length)];
-    if (match)
-    {
-        URKLogDebug("The archive part of a volume");
+    if (match) {
+        URKLogDebug("The file is part of a multi-volume archive");
         
-        int rangeLength = 10;
-        NSString * leadingZeros = @"";
-        while (rangeLength < match.range.length)
-        {
-            rangeLength++;
-            leadingZeros = [leadingZeros stringByAppendingString:@"0"];
-        }
-        NSString * regexTemplate = [NSString stringWithFormat:@"$1%@1$3", leadingZeros];
-        volumePath = [regex stringByReplacingMatchesInString:volumePath options:0 range:NSMakeRange(0, volumePath.length) withTemplate:regexTemplate];
+        NSRange numberRange = [match rangeAtIndex:2];
+        NSString * partOne = [[@"" stringByPaddingToLength:numberRange.length - 1
+                                                withString:@"0"
+                                           startingAtIndex:0]
+                              stringByAppendingString:@"1"];
+        
+        NSString * regexTemplate = [NSString stringWithFormat:@"$1%@$3", partOne];
+        volumePath = [regex stringByReplacingMatchesInString:volumePath
+                                                     options:0
+                                                       range:NSMakeRange(0, volumePath.length)
+                                                withTemplate:regexTemplate];
     }
 
-    // It still might be a multivolume archive. Check for the legacy naming convention, like ".r03"
+    // It still might be a multivolume archive. Check for the legacy naming convention, like "Archive.r03"
     else {
         // After rXX, rar uses r-z and symbols like {}|~... so accepting anything but a number
         NSError *legacyRegexError = nil;
