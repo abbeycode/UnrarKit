@@ -261,6 +261,8 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)hasMultipleVolumes
 {
+    URKCreateActivity("Check If Multi-Volume Archive");
+    
     NSError *listError = nil;
     NSArray<NSURL*> *volumeURLs = [self listVolumeURLs:&listError];
     
@@ -401,6 +403,8 @@ NS_DESIGNATED_INITIALIZER
 
 - (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
 {
+    URKCreateActivity("Listing Volume URLs");
+
     NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
     
     if (listFileInfo == nil) {
@@ -1306,6 +1310,8 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
 - (NSProgress *)beginProgressOperation:(NSUInteger)totalUnitCount
 {
+    URKCreateActivity("-beginProgressOperation:");
+    
     NSProgress *progress;
     progress = self.progress;
     if (!progress) {
@@ -1324,7 +1330,9 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 }
 
 + (NSURL *)firstVolumeURL:(NSURL *)volumeURL {
-    URKLogDebug("Checking if the archive is part of a volume...");
+    URKCreateActivity("+firstVolumeURL:");
+
+    URKLogDebug("Checking if the file is part of a multi-volume archive...");
     
     if (!volumeURL) {
         URKLogError("+firstVolumeURL: nil volumeURL passed")
