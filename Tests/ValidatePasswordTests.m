@@ -6,7 +6,6 @@
 //
 //
 
-#import <Cocoa/Cocoa.h>
 #import "URKArchiveTestCase.h"
 
 @interface ValidatePasswordTests : URKArchiveTestCase @end

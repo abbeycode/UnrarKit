@@ -395,7 +395,7 @@ NS_DESIGNATED_INITIALIZER
         return nil;
     }
 
-    URKLogDebug("Found %lu files", fileInfos.count);
+    URKLogDebug("Found %lu files", (unsigned long)fileInfos.count);
     return [NSArray arrayWithArray:fileInfos];
 }
 
@@ -622,7 +622,7 @@ NS_DESIGNATED_INITIALIZER
 
         RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
         self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
-            URKLogDebug("Appending buffered data (%lu bytes)", dataChunk.length);
+            URKLogDebug("Appending buffered data (%lu bytes)", (unsigned long)dataChunk.length);
             [fileData appendData:dataChunk];
             progress.completedUnitCount += dataChunk.length;
 
@@ -880,7 +880,7 @@ NS_DESIGNATED_INITIALIZER
             progress.completedUnitCount += dataChunk.length;
 
             CGFloat progressPercent = bytesRead / totalBytes;
-            URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", dataChunk.length, progressPercent * 100);
+            URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", (unsigned long)dataChunk.length, progressPercent * 100);
             action(dataChunk, progressPercent);
             return YES;
         };

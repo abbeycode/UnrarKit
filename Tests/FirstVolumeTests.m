@@ -27,6 +27,8 @@
     XCTAssertEqualObjects(returnedFirstVolumeURL, onlyVolumeArchiveURL, @"URL changed even though it's a single volume archive");
 }
 
+
+#if !TARGET_OS_IPHONE
 - (void)testMultipleVolume_UseFirstVolume {
     NSArray<NSURL*> *volumeURLs = [self multiPartArchiveWithName:@"FirstVolumeTests-testMultipleVolume_UseFirstVolume.rar"];
     NSURL *firstVolumeURL = volumeURLs.firstObject;
@@ -35,7 +37,9 @@
     XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
     XCTAssertEqualObjects(returnedFirstVolumeURL, firstVolumeURL, @"URL changed even though it was initialized with the first volume");
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testMultipleVolume_UseMiddleVolume {
     NSArray<NSURL*> *volumeURLs = [self multiPartArchiveWithName:@"ListVolumesTests-testMultipleVolume_UseFirstVolume.rar"];
     NSURL *firstVolumeURL = volumeURLs.firstObject;
@@ -46,7 +50,9 @@
     XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
     XCTAssertEqualObjects(returnedFirstVolumeURL.absoluteString, firstVolumeURL.absoluteString, @"Incorrect URL returned as first volume");
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testMultipleVolume_UseMiddleVolume_OneHundredParts {
     NSArray<NSURL*> *volumeURLs = [self multiPartArchiveWithName:@"ListVolumesTests-testMultipleVolume_UseFirstVolume.rar" fileSize:2500000];
     
@@ -58,7 +64,9 @@
     XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
     XCTAssertEqualObjects(returnedFirstVolumeURL.absoluteString, firstVolumeURL.absoluteString, @"Incorrect URL returned as first volume");
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testMultipleVolume_UseFirstVolume_OldNamingScheme {
     NSArray<NSURL*> *volumeURLs = [self multiPartArchiveOldSchemeWithName:@"FirstVolumeTests-testMultipleVolume_UseFirstVolume_OldNamingScheme.rar"];
     NSURL *firstVolumeURL = volumeURLs.firstObject;
@@ -67,7 +75,9 @@
     XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
     XCTAssertEqualObjects(returnedFirstVolumeURL, firstVolumeURL, @"URL changed even though it was initialized with the first volume");
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testMultipleVolume_UseMiddleVolume_OldNamingScheme {
     NSArray<NSURL*> *volumeURLs = [self multiPartArchiveOldSchemeWithName:@"FirstVolumeTests-testMultipleVolume_UseMiddleVolume_OldNamingScheme.rar"];
     NSURL *firstVolumeURL = volumeURLs.firstObject;
@@ -78,7 +88,9 @@
     XCTAssertNotNil(returnedFirstVolumeURL, @"No URL returned");
     XCTAssertEqualObjects(returnedFirstVolumeURL.absoluteString, firstVolumeURL.absoluteString, @"Incorrect URL returned as first volume");
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testMultipleVolume_FirstVolumeMissing {
     NSArray<NSURL*> *volumeURLs = [self multiPartArchiveWithName:@"ListVolumesTests-testMultipleVolume_FirstVolumeMissing.rar"];
     
@@ -92,5 +104,6 @@
     
     XCTAssertNil(returnedFirstVolumeURL, @"First volume URL returned when it does not exist");
 }
+#endif
 
 @end

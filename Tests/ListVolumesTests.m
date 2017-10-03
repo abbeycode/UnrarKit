@@ -29,6 +29,7 @@
                           @"Wrong URL returned");
 }
 
+#if !TARGET_OS_IPHONE
 - (void)testMultipleVolume_UseFirstVolume {
     NSArray<NSURL*> *generatedVolumeURLs = [self multiPartArchiveWithName:@"ListVolumesTests-testMultipleVolume_UseFirstVolume.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:generatedVolumeURLs.firstObject error:nil];
@@ -51,7 +52,9 @@
     XCTAssertTrue([expectedVolumeURLs isEqualToArray:volumeURLs],
                   @"Expected these URL:\n%@\n\nGot these:\n%@", expectedVolumeURLs, volumeURLs);
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testMultipleVolume_UseMiddleVolume {
     NSArray<NSURL*> *generatedVolumeURLs = [self multiPartArchiveWithName:@"ListVolumesTests-testMultipleVolume_UseMiddleVolume.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:generatedVolumeURLs[2] error:nil];
@@ -74,5 +77,6 @@
     XCTAssertTrue([expectedVolumeURLs isEqualToArray:volumeURLs],
                   @"Expected these URL:\n%@\n\nGot these:\n%@", expectedVolumeURLs, volumeURLs);
 }
+#endif
 
 @end
