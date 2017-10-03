@@ -12,6 +12,28 @@
 //#import "Availability.h"
 //#import "AvailabilityInternal.h"
 
+#define _stringify(a) #a
+
+#define RarHppIgnore \
+_Pragma( _stringify( clang diagnostic push ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wcast-align" ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wextra-semi" ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wold-style-cast" ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wpadded" ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wreserved-id-macro" ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wshorten-64-to-32" ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wundef" ) )
+
+#define DllHppIgnore \
+_Pragma( _stringify( clang diagnostic push ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wreserved-id-macro" ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wstrict-prototypes" ) ) \
+
+#define RarosHppIgnore \
+_Pragma( _stringify( clang diagnostic push ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wreserved-id-macro" ) ) \
+
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundef"
 #pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
@@ -54,7 +76,6 @@ os_activity_scope(activity);
 #define _removeLogFormatTokens(format) [[@format \
     stringByReplacingOccurrencesOfString:@"{public}" withString:@""] \
     stringByReplacingOccurrencesOfString:@"{iec-bytes}" withString:@""]
-#define _stringify(a) #a
 #define _nsLogWithoutWarnings(format, ...) \
 _Pragma( _stringify( clang diagnostic push ) ) \
 _Pragma( _stringify( clang diagnostic ignored "-Wformat-nonliteral" ) ) \
@@ -72,9 +93,9 @@ _Pragma( _stringify( clang diagnostic pop ) )
 // No-op, as no equivalent to Activities exists
 #define URKCreateActivity(name) (void)0
 
-#endif
-
 
 #pragma clang diagnostic pop
+
+#endif // UNIFIED_LOGGING_SUPPORTED
 
 #endif /* UnrarKitMacros_h */

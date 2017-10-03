@@ -1363,10 +1363,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-                WARNING_CFLAGS = (
-                    "-Wno-shorten-64-to-32",
-                    "-Wdocumentation",
-                );
+				WARNING_CFLAGS = (
+					"-Weverything",
+					"-Wno-auto-import",
+					"-Wno-objc-missing-property-synthesis",
+				);
 			};
 			name = Debug;
 		};
@@ -1410,10 +1411,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
-                WARNING_CFLAGS = (
-                    "-Wno-shorten-64-to-32",
-                    "-Wdocumentation",
-                );
+				WARNING_CFLAGS = (
+					"-Weverything",
+					"-Wno-auto-import",
+					"-Wno-objc-missing-property-synthesis",
+				);
 			};
 			name = Release;
 		};

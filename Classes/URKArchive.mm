@@ -9,7 +9,9 @@
 #import "UnrarKitMacros.h"
 #import "NSString+UnrarKit.h"
 
+RarHppIgnore
 #import "rar.hpp"
+#pragma clang diagnostic pop
 
 
 NSString *URKErrorDomain = @"URKErrorDomain";
@@ -31,6 +33,10 @@ static NSBundle *_resources = nil;
 NS_DESIGNATED_INITIALIZER
 #endif
 ;
+
+@property (assign) HANDLE rarFile;
+@property (assign) struct RARHeaderDataEx *header;
+@property (assign) struct RAROpenArchiveDataEx *flags;
 
 @property (strong) NSData *fileBookmark;
 @property (strong) BOOL(^bufferedReadBlock)(NSData *dataChunk);
@@ -136,7 +142,8 @@ NS_DESIGNATED_INITIALIZER
         }
         
         NSURL *firstVolumeURL = [URKArchive firstVolumeURL:fileURL];
-        if (firstVolumeURL && ![firstVolumeURL.absoluteString isEqualToString:fileURL.absoluteString]) {
+        NSString * _Nonnull fileURLAbsoluteString = static_cast<NSString * _Nonnull>(fileURL.absoluteString);
+        if (firstVolumeURL && ![firstVolumeURL.absoluteString isEqualToString:fileURLAbsoluteString]) {
             URKLogDebug("Overriding fileURL with first volume URL: %{public}@", firstVolumeURL);
             fileURL = firstVolumeURL;
         }
@@ -363,6 +370,7 @@ NS_DESIGNATED_INITIALIZER
     URKCreateActivity("Listing File Info");
 
     __block NSMutableArray *fileInfos = [NSMutableArray array];
+    __weak URKArchive *welf = self;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing List Action");
@@ -371,12 +379,12 @@ NS_DESIGNATED_INITIALIZER
 
         URKLogInfo("Reading through RAR header looking for files...");
         
-        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+        while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == 0) {
             URKLogDebug("Adding object");
-            [fileInfos addObject:[URKFileInfo fileInfo:header]];
+            [fileInfos addObject:[URKFileInfo fileInfo:welf.header]];
 
             URKLogDebug("Skipping to next file...");
-            if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+            if ((PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Error skipping to next header file: %@ (%d)", errorName, PFCode);
@@ -469,6 +477,8 @@ NS_DESIGNATED_INITIALIZER
     NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
     progress.kind = NSProgressKindFile;
 	
+    __weak URKArchive *welf = self;
+
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing File Extraction");
 
@@ -476,8 +486,8 @@ NS_DESIGNATED_INITIALIZER
         URKFileInfo *fileInfo;
 
         URKLogInfo("Reading through RAR header looking for files...");
-        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
-            fileInfo = [URKFileInfo fileInfo:header];
+        while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
+            fileInfo = [URKFileInfo fileInfo:welf.header];
             URKLogDebug("Extracting %{public}@", fileInfo.filename);
             NSURL *extractedURL = [[NSURL fileURLWithPath:filePath] URLByAppendingPathComponent:fileInfo.filename];
             [progress setUserInfoObject:extractedURL
@@ -499,7 +509,7 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
 
-            if ((PFCode = RARProcessFile(_rarFile, RAR_EXTRACT, (char *) filePath.UTF8String, NULL)) != 0) {
+            if ((PFCode = RARProcessFile(welf.rarFile, RAR_EXTRACT, (char *) filePath.UTF8String, NULL)) != 0) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Error extracting file: %@ (%d)", errorName, PFCode);
@@ -570,6 +580,7 @@ NS_DESIGNATED_INITIALIZER
     NSProgress *progress = [self beginProgressOperation:0];
 
     __block NSData *result = nil;
+    __weak URKArchive *welf = self;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing Extraction");
@@ -578,13 +589,13 @@ NS_DESIGNATED_INITIALIZER
         URKFileInfo *fileInfo;
 
         URKLogInfo("Reading through RAR header looking for files...");
-        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
+        while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:innerError]) {
                 URKLogError("Header contains an error")
                 return;
             }
 
-            fileInfo = [URKFileInfo fileInfo:header];
+            fileInfo = [URKFileInfo fileInfo:welf.header];
 
             if ([fileInfo.filename isEqualToString:filePath]) {
                 URKLogDebug("Extracting %{public}@", fileInfo.filename);
@@ -592,7 +603,7 @@ NS_DESIGNATED_INITIALIZER
             }
             else {
                 URKLogDebug("Skipping %{public}@", fileInfo.filename);
-                if ((PFCode = RARProcessFileW(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                if ((PFCode = RARProcessFileW(welf.rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                     NSString *errorName = nil;
                     [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                     URKLogError("Error skipping file: %@ (%d)", errorName, PFCode);
@@ -624,7 +635,7 @@ NS_DESIGNATED_INITIALIZER
             progressBlock(0.0);
         }
 
-        RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
+        RARSetCallback(welf.rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
         self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
             URKLogDebug("Appending buffered data (%lu bytes)", (unsigned long)dataChunk.length);
             [fileData appendData:dataChunk];
@@ -645,7 +656,7 @@ NS_DESIGNATED_INITIALIZER
         };
         
         URKLogInfo("Processing file...");
-        PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        PFCode = RARProcessFile(welf.rarFile, RAR_TEST, NULL, NULL);
         
         if (progress.isCancelled) {
             NSString *errorName = nil;
@@ -740,6 +751,7 @@ NS_DESIGNATED_INITIALIZER
     }
     
     NSNumber *totalSize = [fileInfo valueForKeyPath:@"@sum.uncompressedSize"];
+    __weak URKArchive *welf = self;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         int RHCode = 0, PFCode = 0;
@@ -749,7 +761,7 @@ NS_DESIGNATED_INITIALIZER
         NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
         
         URKLogInfo("Reading through RAR header looking for files...");
-        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == 0) {
+        while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == 0) {
             if (stop || progress.isCancelled) {
                 URKLogDebug("Action dictated an early stop");
                 return;
@@ -760,7 +772,7 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
             
-            URKFileInfo *info = [URKFileInfo fileInfo:header];
+            URKFileInfo *info = [URKFileInfo fileInfo:welf.header];
             URKLogDebug("Performing action on %{public}@", info.filename);
 
             // Empty file, or a directory
@@ -773,10 +785,10 @@ NS_DESIGNATED_INITIALIZER
             UInt8 *buffer = (UInt8 *)malloc((size_t)info.uncompressedSize * sizeof(UInt8));
             UInt8 *callBackBuffer = buffer;
 
-            RARSetCallback(_rarFile, CallbackProc, (long) &callBackBuffer);
+            RARSetCallback(welf.rarFile, CallbackProc, (long) &callBackBuffer);
 
             URKLogInfo("Processing file...");
-            PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+            PFCode = RARProcessFile(welf.rarFile, RAR_TEST, NULL, NULL);
 
             if (PFCode != 0) {
                 NSString *errorName = nil;
@@ -820,6 +832,8 @@ NS_DESIGNATED_INITIALIZER
 
     NSProgress *progress = [self beginProgressOperation:0];
 
+    __weak URKArchive *welf = self;
+
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
 
@@ -828,14 +842,14 @@ NS_DESIGNATED_INITIALIZER
 
         URKLogInfo("Looping through files, looking for %@...", filePath);
         
-        while ((RHCode = RARReadHeaderEx(_rarFile, header)) == ERAR_SUCCESS) {
+        while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:innerError]) {
                 URKLogDebug("Header contains error")
                 return;
             }
 
             URKLogDebug("Getting file info from header");
-            fileInfo = [URKFileInfo fileInfo:header];
+            fileInfo = [URKFileInfo fileInfo:welf.header];
 
             if ([fileInfo.filename isEqualToString:filePath]) {
                 URKLogDebug("Found desired file");
@@ -843,7 +857,7 @@ NS_DESIGNATED_INITIALIZER
             }
             else {
                 URKLogDebug("Skipping file...");
-                if ((PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                if ((PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                     NSString *errorName = nil;
                     [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                     URKLogError("Failed to skip file: %@ (%d)", errorName, PFCode);
@@ -873,7 +887,7 @@ NS_DESIGNATED_INITIALIZER
         // Repeating the argument instead of using positional specifiers, because they don't work with the {} formatters
         URKLogDebug("Uncompressed size: %{iec-bytes}lld (%lld bytes) in file", (long long)totalBytes, (long long)totalBytes);
 
-        RARSetCallback(_rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
+        RARSetCallback(welf.rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
         self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
             if (progress.isCancelled) {
                 URKLogInfo("Buffered data read cancelled");
@@ -890,7 +904,7 @@ NS_DESIGNATED_INITIALIZER
         };
 
         URKLogDebug("Processing file...");
-        PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        PFCode = RARProcessFile(welf.rarFile, RAR_TEST, NULL, NULL);
 
         if (progress.isCancelled) {
             NSString *errorName = nil;
@@ -936,8 +950,8 @@ NS_DESIGNATED_INITIALIZER
 
         URKLogDebug("Reading header and starting processing...");
         
-        int RHCode = RARReadHeaderEx(_rarFile, header);
-        int PFCode = RARProcessFile(_rarFile, RAR_SKIP, NULL, NULL);
+        int RHCode = RARReadHeaderEx(self.rarFile, self.header);
+        int PFCode = RARProcessFile(self.rarFile, RAR_SKIP, NULL, NULL);
 
         URKLogDebug("Checking header");
         if ([self headerContainsErrors:&error]) {
@@ -968,14 +982,15 @@ NS_DESIGNATED_INITIALIZER
 
     __block NSError *error = nil;
     __block BOOL passwordIsGood = YES;
+    __weak URKArchive *welf = self;
 
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
 
         URKLogDebug("Opening and processing archive...");
         
-        int RHCode = RARReadHeaderEx(_rarFile, header);
-        int PFCode = RARProcessFile(_rarFile, RAR_TEST, NULL, NULL);
+        int RHCode = RARReadHeaderEx(welf.rarFile, welf.header);
+        int PFCode = RARProcessFile(welf.rarFile, RAR_TEST, NULL, NULL);
 
         if ([self headerContainsErrors:innerError]) {
             if (error.code == ERAR_MISSING_PASSWORD) {
@@ -1124,32 +1139,32 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     
     ErrHandler.Clean();
 
-    header = new RARHeaderDataEx;
-    bzero(header, sizeof(RARHeaderDataEx));
-	flags = new RAROpenArchiveDataEx;
-    bzero(flags, sizeof(RAROpenArchiveDataEx));
+    self.header = new RARHeaderDataEx;
+    bzero(self.header, sizeof(RARHeaderDataEx));
+	self.flags = new RAROpenArchiveDataEx;
+    bzero(self.flags, sizeof(RAROpenArchiveDataEx));
 
     URKLogDebug("Setting archive name...");
     
 	const char *filenameData = (const char *) [rarFile UTF8String];
-	flags->ArcName = new char[strlen(filenameData) + 1];
-	strcpy(flags->ArcName, filenameData);
-	flags->OpenMode = (uint)mode;
+	self.flags->ArcName = new char[strlen(filenameData) + 1];
+	strcpy(self.flags->ArcName, filenameData);
+	self.flags->OpenMode = (uint)mode;
 
     URKLogDebug("Opening archive %{public}@...", rarFile);
     
-	_rarFile = RAROpenArchiveEx(flags);
-	if (_rarFile == 0 || flags->OpenResult != 0) {
+	self.rarFile = RAROpenArchiveEx(self.flags);
+	if (self.rarFile == 0 || self.flags->OpenResult != 0) {
         NSString *errorName = nil;
-        [self assignError:error code:(NSInteger)flags->OpenResult errorName:&errorName];
-        URKLogError("Error opening archive: %@ (%d)", errorName, flags->OpenResult);
+        [self assignError:error code:(NSInteger)self.flags->OpenResult errorName:&errorName];
+        URKLogError("Error opening archive: %@ (%d)", errorName, self.flags->OpenResult);
         return NO;
     }
 
     if(aPassword != nil) {
         URKLogDebug("Setting password...");
         char *password = (char *) [aPassword UTF8String];
-        RARSetPassword(_rarFile, password);
+        RARSetPassword(self.rarFile, password);
     }
 
 	return YES;
@@ -1159,19 +1174,19 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 {
     URKCreateActivity("-closeFile");
 
-    if (_rarFile) {
+    if (self.rarFile) {
         URKLogDebug("Closing archive %{public}@...", self.filename);
-        RARCloseArchive(_rarFile);
+        RARCloseArchive(self.rarFile);
     }
     
     URKLogDebug("Cleaning up fields...");
     
-    _rarFile = 0;
+    self.rarFile = 0;
 
-    if (flags)
-        delete flags->ArcName;
-    delete flags; flags = 0;
-    delete header; header = 0;
+    if (self.flags)
+        delete self.flags->ArcName;
+    delete self.flags; self.flags = 0;
+    delete self.header; self.header = 0;
     return YES;
 }
 
@@ -1296,7 +1311,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 {
     URKCreateActivity("-headerContainsErrors:");
 
-    BOOL isPasswordProtected = header->Flags & 0x04;
+    BOOL isPasswordProtected = self.header->Flags & 0x04;
 
     if (isPasswordProtected && !self.password) {
         NSString *errorName = nil;

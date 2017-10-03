@@ -6,10 +6,13 @@
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
-#import "raros.hpp"
+#import "UnrarKitMacros.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wstrict-prototypes"
+RarosHppIgnore
+#import "raros.hpp"
+#pragma clang diagnostic pop
+
+DllHppIgnore
 #import "dll.hpp"
 #pragma clang diagnostic pop
 
@@ -117,15 +120,10 @@ extern NSString *URKErrorDomain;
  *  An Objective-C/Cocoa wrapper around the unrar library
  */
 @interface URKArchive : NSObject
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_9_0 || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_11
+// Minimum of iOS 9, macOS 10.11 SDKs
+#if (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED > 90000) || (defined(MAC_OS_X_VERSION_MIN_REQUIRED) && MAC_OS_X_VERSION_MIN_REQUIRED > 101100)
 <NSProgressReporting>
 #endif
-{
-
-	HANDLE _rarFile;
-	struct RARHeaderDataEx *header;
-	struct RAROpenArchiveDataEx *flags;
-}
 
 
 /**
