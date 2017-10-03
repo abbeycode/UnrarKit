@@ -134,7 +134,13 @@ NS_DESIGNATED_INITIALIZER
         if (error) {
             *error = nil;
         }
-
+        
+        NSURL *firstVolumeURL = [URKArchive firstVolumeURL:fileURL];
+        if (firstVolumeURL && ![firstVolumeURL.absoluteString isEqualToString:fileURL.absoluteString]) {
+            URKLogDebug("Overriding fileURL with first volume URL: %{public}@", firstVolumeURL);
+            fileURL = firstVolumeURL;
+        }
+        
         URKLogDebug("Initializing private fields");
 
         NSError *bookmarkError = nil;
@@ -251,6 +257,21 @@ NS_DESIGNATED_INITIALIZER
     }
     
     return [NSNumber numberWithUnsignedLongLong:attributes.fileSize];
+}
+
+- (BOOL)hasMultipleVolumes
+{
+    URKCreateActivity("Check If Multi-Volume Archive");
+    
+    NSError *listError = nil;
+    NSArray<NSURL*> *volumeURLs = [self listVolumeURLs:&listError];
+    
+    if (!volumeURLs) {
+        URKLogError("Error getting file volumes list: %{public}@", listError);
+        return false;
+    }
+    
+    return volumeURLs.count > 1;
 }
 
 
@@ -378,6 +399,33 @@ NS_DESIGNATED_INITIALIZER
 
     URKLogDebug("Found %lu files", (unsigned long)fileInfos.count);
     return [NSArray arrayWithArray:fileInfos];
+}
+
+- (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
+{
+    URKCreateActivity("Listing Volume URLs");
+
+    NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
+    
+    if (listFileInfo == nil) {
+        return nil;
+    }
+    
+    NSMutableSet<NSURL*> *volumeURLs = [[NSMutableSet alloc] init];
+    
+    for (URKFileInfo* info in listFileInfo) {
+        NSURL *archiveURL = [NSURL fileURLWithPath:info.archiveName];
+        
+        if (archiveURL) {
+            [volumeURLs addObject:archiveURL];
+        }
+    }
+
+    SEL sortBySelector = @selector(path);
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(sortBySelector) ascending:YES];
+    NSArray<NSURL*> *sortedVolumes = [volumeURLs sortedArrayUsingDescriptors:@[sortDescriptor]];
+    
+    return sortedVolumes;
 }
 
 - (BOOL)extractFilesTo:(NSString *)filePath
@@ -1262,6 +1310,8 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
 - (NSProgress *)beginProgressOperation:(NSUInteger)totalUnitCount
 {
+    URKCreateActivity("-beginProgressOperation:");
+    
     NSProgress *progress;
     progress = self.progress;
     if (!progress) {
@@ -1277,6 +1327,81 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     progress.pausable = NO;
     
     return progress;
+}
+
++ (NSURL *)firstVolumeURL:(NSURL *)volumeURL {
+    URKCreateActivity("+firstVolumeURL:");
+
+    URKLogDebug("Checking if the file is part of a multi-volume archive...");
+    
+    if (!volumeURL) {
+        URKLogError("+firstVolumeURL: nil volumeURL passed")
+    }
+    
+    NSString *volumePath = volumeURL.path;
+
+    NSError *regexError = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(.part)([0-9]+)(.rar)$"
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&regexError];
+    if (!regex) {
+        URKLogError("Error constructing filename regex")
+        return nil;
+    }
+    
+    NSString *firstVolumePath = nil;
+    
+    // Check if it's following the current convention, like "Archive.part03.rar"
+    NSTextCheckingResult *match = [regex firstMatchInString:volumePath options:0 range:NSMakeRange(0, volumePath.length)];
+    if (match) {
+        URKLogDebug("The file is part of a multi-volume archive");
+        
+        NSRange numberRange = [match rangeAtIndex:2];
+        NSString * partOne = [[@"" stringByPaddingToLength:numberRange.length - 1
+                                                withString:@"0"
+                                           startingAtIndex:0]
+                              stringByAppendingString:@"1"];
+        
+        NSString * regexTemplate = [NSString stringWithFormat:@"$1%@$3", partOne];
+        firstVolumePath = [regex stringByReplacingMatchesInString:volumePath
+                                                          options:0
+                                                            range:NSMakeRange(0, volumePath.length)
+                                                     withTemplate:regexTemplate];
+    }
+
+    // It still might be a multivolume archive. Check for the legacy naming convention, like "Archive.r03"
+    else {
+        // After rXX, rar uses r-z and symbols like {}|~... so accepting anything but a number
+        NSError *legacyRegexError = nil;
+        regex = [NSRegularExpression regularExpressionWithPattern:@"(\\.[^0-9])([0-9]+)$"
+                                                          options:NSRegularExpressionCaseInsensitive
+                                                            error:&legacyRegexError];
+        
+        if (!regex) {
+            URKLogError("Error constructing legacy filename regex")
+            return nil;
+        }
+        
+        match = [regex firstMatchInString:volumePath options:0 range:NSMakeRange(0, volumePath.length)];
+        if (match) {
+            URKLogDebug("The archive is part of a legacy volume");
+            firstVolumePath = [[volumePath stringByDeletingPathExtension] stringByAppendingPathExtension:@"rar"];
+        }
+    }
+    
+    // If it's a volume of either naming convention, use it
+    if (firstVolumePath) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:firstVolumePath]) {
+            URKLogDebug("First volume part %{public}@ found. Using as the main archive", firstVolumePath);
+            return [NSURL fileURLWithPath:firstVolumePath];
+        }
+        else {
+            URKLogInfo("First volume part not found: %{public}@. Skipping first volume selection", firstVolumePath);
+            return nil;
+        }
+    }
+    
+    return volumeURL;
 }
 
 @end
