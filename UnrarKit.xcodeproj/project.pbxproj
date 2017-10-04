@@ -119,6 +119,7 @@
 		7AC29ACB1F83C3E700DA4DE6 /* libunrar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AC29A5D1F83C08200DA4DE6 /* libunrar.a */; };
 		7AC29ACD1F83DB0400DA4DE6 /* dll.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F1A18DB722E00B5651B /* dll.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AC29ACE1F83DB1000DA4DE6 /* raros.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F4E18DB722E00B5651B /* raros.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7AC29AD01F850A6A00DA4DE6 /* UnrarKitMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		967872741E460FA70048A54C /* ListVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 967872731E460FA70048A54C /* ListVolumesTests.m */; };
@@ -729,6 +730,7 @@
 				9699F91D1B3CB4D000B6D373 /* URKArchive.h in Headers */,
 				9699F91E1B3CB4D000B6D373 /* URKFileInfo.h in Headers */,
 				9699F91F1B3CB4D000B6D373 /* UnrarKit.h in Headers */,
+				7AC29AD01F850A6A00DA4DE6 /* UnrarKitMacros.h in Headers */,
 				7AC29ACD1F83DB0400DA4DE6 /* dll.hpp in Headers */,
 				7AC29ACE1F83DB1000DA4DE6 /* raros.hpp in Headers */,
 			);
