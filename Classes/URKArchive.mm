@@ -28,7 +28,7 @@ static NSBundle *_resources = nil;
 
 @interface URKArchive ()
 
-- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password error:(NSError **)error
+- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password error:(NSError * __autoreleasing *)error
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_7_0 || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_9
 NS_DESIGNATED_INITIALIZER
 #endif
@@ -100,32 +100,32 @@ NS_DESIGNATED_INITIALIZER
     return nil;
 }
 
-- (instancetype)initWithPath:(NSString *)filePath error:(NSError **)error
+- (instancetype)initWithPath:(NSString *)filePath error:(NSError * __autoreleasing *)error
 {
     return [self initWithFile:[NSURL fileURLWithPath:filePath] error:error];
 }
 
-- (instancetype)initWithURL:(NSURL *)fileURL error:(NSError **)error
+- (instancetype)initWithURL:(NSURL *)fileURL error:(NSError * __autoreleasing *)error
 {
     return [self initWithFile:fileURL error:error];
 }
 
-- (instancetype)initWithPath:(NSString *)filePath password:(NSString *)password error:(NSError **)error
+- (instancetype)initWithPath:(NSString *)filePath password:(NSString *)password error:(NSError * __autoreleasing *)error
 {
     return [self initWithFile:[NSURL fileURLWithPath:filePath] password:password error:error];
 }
 
-- (instancetype)initWithURL:(NSURL *)fileURL password:(NSString *)password error:(NSError **)error
+- (instancetype)initWithURL:(NSURL *)fileURL password:(NSString *)password error:(NSError * __autoreleasing *)error
 {
     return [self initWithFile:fileURL password:password error:error];
 }
 
-- (instancetype)initWithFile:(NSURL *)fileURL error:(NSError **)error
+- (instancetype)initWithFile:(NSURL *)fileURL error:(NSError * __autoreleasing *)error
 {
     return [self initWithFile:fileURL password:nil error:error];
 }
 
-- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password error:(NSError **)error
+- (instancetype)initWithFile:(NSURL *)fileURL password:(NSString*)password error:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("Init Archive");
 
@@ -349,7 +349,8 @@ NS_DESIGNATED_INITIALIZER
         return NO;
     }
 
-    return [URKArchive pathIsARAR:fileURL.path];
+    NSString *_Nonnull path = static_cast<NSString *_Nonnull>(fileURL.path);
+    return [URKArchive pathIsARAR:path];
 }
 
 
@@ -357,7 +358,7 @@ NS_DESIGNATED_INITIALIZER
 #pragma mark - Public Methods
 
 
-- (NSArray<NSString*> *)listFilenames:(NSError **)error
+- (NSArray<NSString*> *)listFilenames:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("Listing Filenames");
 
@@ -365,7 +366,7 @@ NS_DESIGNATED_INITIALIZER
     return [files valueForKey:@"filename"];
 }
 
-- (NSArray<URKFileInfo*> *)listFileInfo:(NSError **)error
+- (NSArray<URKFileInfo*> *)listFileInfo:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("Listing File Info");
 
@@ -409,7 +410,7 @@ NS_DESIGNATED_INITIALIZER
     return [NSArray arrayWithArray:fileInfos];
 }
 
-- (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error
+- (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("Listing Volume URLs");
 
@@ -438,7 +439,7 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
-                 error:(NSError **)error
+                 error:(NSError * __autoreleasing *)error
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -452,7 +453,7 @@ NS_DESIGNATED_INITIALIZER
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
               progress:(void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
-                 error:(NSError **)error
+                 error:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("Extracting Files to Directory");
 
@@ -524,7 +525,12 @@ NS_DESIGNATED_INITIALIZER
             progress.completedUnitCount += fileInfo.uncompressedSize;
             
             if (progressBlock) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdouble-promotion"
+                // I would change the signature of this block, but it's been deprecated already,
+                // so it'll just get dropped eventually, and it made sense to silence the warning
                 progressBlock(fileInfo, bytesDecompressed / totalSize.floatValue);
+#pragma clang diagnostic pop
             }
 
             bytesDecompressed += fileInfo.uncompressedSize;
@@ -547,7 +553,7 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (NSData *)extractData:(URKFileInfo *)fileInfo
-                  error:(NSError **)error
+                  error:(NSError * __autoreleasing *)error
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -557,13 +563,13 @@ NS_DESIGNATED_INITIALIZER
 
 - (NSData *)extractData:(URKFileInfo *)fileInfo
                progress:(void (^)(CGFloat percentDecompressed))progressBlock
-                  error:(NSError **)error
+                  error:(NSError * __autoreleasing *)error
 {
     return [self extractDataFromFile:fileInfo.filename progress:progressBlock error:error];
 }
 
 - (NSData *)extractDataFromFile:(NSString *)filePath
-                          error:(NSError **)error
+                          error:(NSError * __autoreleasing *)error
 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -573,7 +579,7 @@ NS_DESIGNATED_INITIALIZER
 
 - (NSData *)extractDataFromFile:(NSString *)filePath
                        progress:(void (^)(CGFloat percentDecompressed))progressBlock
-                          error:(NSError **)error
+                          error:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("Extracting Data from File");
     
@@ -683,7 +689,7 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (BOOL)performOnFilesInArchive:(void(^)(URKFileInfo *fileInfo, BOOL *stop))action
-                          error:(NSError **)error
+                          error:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("Performing Action on Each File");
 
@@ -733,7 +739,7 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (BOOL)performOnDataInArchive:(void (^)(URKFileInfo *, NSData *, BOOL *))action
-                         error:(NSError **)error
+                         error:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("Performing Action on Each File's Data");
 
@@ -823,7 +829,7 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (BOOL)extractBufferedDataFromFile:(NSString *)filePath
-                              error:(NSError **)error
+                              error:(NSError * __autoreleasing *)error
                              action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
 {
     URKCreateActivity("Extracting Buffered Data");
@@ -866,7 +872,7 @@ NS_DESIGNATED_INITIALIZER
             }
         }
         
-        CGFloat totalBytes = fileInfo.uncompressedSize;
+        long long totalBytes = fileInfo.uncompressedSize;
         progress.totalUnitCount = totalBytes;
         
         if (RHCode != ERAR_SUCCESS) {
@@ -885,7 +891,7 @@ NS_DESIGNATED_INITIALIZER
         __block long long bytesRead = 0;
 
         // Repeating the argument instead of using positional specifiers, because they don't work with the {} formatters
-        URKLogDebug("Uncompressed size: %{iec-bytes}lld (%lld bytes) in file", (long long)totalBytes, (long long)totalBytes);
+        URKLogDebug("Uncompressed size: %{iec-bytes}lld (%lld bytes) in file", totalBytes, totalBytes);
 
         RARSetCallback(welf.rarFile, BufferedReadCallbackProc, (long)(__bridge void *) self);
         self.bufferedReadBlock = ^BOOL(NSData *dataChunk) {
@@ -897,7 +903,7 @@ NS_DESIGNATED_INITIALIZER
             bytesRead += dataChunk.length;
             progress.completedUnitCount += dataChunk.length;
 
-            CGFloat progressPercent = bytesRead / totalBytes;
+            CGFloat progressPercent = bytesRead / static_cast<CGFloat>(totalBytes);
             URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", (unsigned long)dataChunk.length, progressPercent * 100);
             action(dataChunk, progressPercent);
             return YES;
@@ -1076,7 +1082,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
 - (BOOL)performActionWithArchiveOpen:(void(^)(NSError **innerError))action
                               inMode:(NSInteger)mode
-                               error:(NSError **)error
+                               error:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("-performActionWithArchiveOpen:inMode:error:");
 
@@ -1126,7 +1132,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     }
 }
 
-- (BOOL)_unrarOpenFile:(NSString *)rarFile inMode:(NSInteger)mode withPassword:(NSString *)aPassword error:(NSError **)error
+- (BOOL)_unrarOpenFile:(NSString *)rarFile inMode:(NSInteger)mode withPassword:(NSString *)aPassword error:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("-_unrarOpenFile:inMode:withPassword:error:");
 
@@ -1190,7 +1196,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     return YES;
 }
 
-- (NSString *)errorNameForErrorCode:(NSInteger)errorCode detail:(NSString **)errorDetail
+- (NSString *)errorNameForErrorCode:(NSInteger)errorCode detail:(NSString * __autoreleasing *)errorDetail
 {
     NSAssert(errorDetail != NULL, @"errorDetail out parameter not given");
     
@@ -1282,7 +1288,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     return errorName;
 }
 
-- (BOOL)assignError:(NSError **)error code:(NSInteger)errorCode errorName:(NSString **)outErrorName
+- (BOOL)assignError:(NSError * __autoreleasing *)error code:(NSInteger)errorCode errorName:(NSString * __autoreleasing *)outErrorName
 {
     if (error) {
         NSAssert(outErrorName, @"An out variable for errorName must be provided");
@@ -1307,7 +1313,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     return NO;
 }
 
-- (BOOL)headerContainsErrors:(NSError **)error
+- (BOOL)headerContainsErrors:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("-headerContainsErrors:");
 

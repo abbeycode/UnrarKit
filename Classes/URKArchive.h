@@ -129,12 +129,12 @@ extern NSString *URKErrorDomain;
 /**
  *  The URL of the archive
  */
-@property(nullable, weak, readonly) NSURL *fileURL;
+@property(nullable, weak, atomic, readonly) NSURL *fileURL;
 
 /**
  *  The filename of the archive
  */
-@property(nullable, weak, readonly) NSString *filename;
+@property(nullable, weak, atomic, readonly) NSString *filename;
 
 /**
  *  The password of the archive
@@ -144,17 +144,17 @@ extern NSString *URKErrorDomain;
 /**
  *  The total uncompressed size (in bytes) of all files in the archive. Returns nil on errors
  */
-@property(nullable, readonly) NSNumber *uncompressedSize;
+@property(nullable, atomic, readonly) NSNumber *uncompressedSize;
 
 /**
  *  The total compressed size (in bytes) of the archive. Returns nil on errors
  */
-@property(nullable, readonly) NSNumber *compressedSize;
+@property(nullable, atomic, readonly) NSNumber *compressedSize;
 
 /**
  *  True if the file is one volume of a multi-part archive
  */
-@property(readonly) BOOL hasMultipleVolumes;
+@property(atomic, readonly) BOOL hasMultipleVolumes;
 
 /**
  *  Can be used for progress reporting, but it's not necessary. You can also use
