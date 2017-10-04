@@ -6,10 +6,13 @@
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
-#import "raros.hpp"
+#import "UnrarKitMacros.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wstrict-prototypes"
+RarosHppIgnore
+#import "raros.hpp"
+#pragma clang diagnostic pop
+
+DllHppIgnore
 #import "dll.hpp"
 #pragma clang diagnostic pop
 
@@ -117,26 +120,21 @@ extern NSString *URKErrorDomain;
  *  An Objective-C/Cocoa wrapper around the unrar library
  */
 @interface URKArchive : NSObject
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_9_0 || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_11
+// Minimum of iOS 9, macOS 10.11 SDKs
+#if (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED > 90000) || (defined(MAC_OS_X_VERSION_MIN_REQUIRED) && MAC_OS_X_VERSION_MIN_REQUIRED > 101100)
 <NSProgressReporting>
 #endif
-{
-
-	HANDLE _rarFile;
-	struct RARHeaderDataEx *header;
-	struct RAROpenArchiveDataEx *flags;
-}
 
 
 /**
  *  The URL of the archive
  */
-@property(nullable, weak, readonly) NSURL *fileURL;
+@property(nullable, weak, atomic, readonly) NSURL *fileURL;
 
 /**
  *  The filename of the archive
  */
-@property(nullable, weak, readonly) NSString *filename;
+@property(nullable, weak, atomic, readonly) NSString *filename;
 
 /**
  *  The password of the archive
@@ -146,17 +144,17 @@ extern NSString *URKErrorDomain;
 /**
  *  The total uncompressed size (in bytes) of all files in the archive. Returns nil on errors
  */
-@property(nullable, readonly) NSNumber *uncompressedSize;
+@property(nullable, atomic, readonly) NSNumber *uncompressedSize;
 
 /**
  *  The total compressed size (in bytes) of the archive. Returns nil on errors
  */
-@property(nullable, readonly) NSNumber *compressedSize;
+@property(nullable, atomic, readonly) NSNumber *compressedSize;
 
 /**
  *  True if the file is one volume of a multi-part archive
  */
-@property(readonly) BOOL hasMultipleVolumes;
+@property(atomic, readonly) BOOL hasMultipleVolumes;
 
 /**
  *  Can be used for progress reporting, but it's not necessary. You can also use

@@ -4,10 +4,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "raros.hpp"
+#import "UnrarKitMacros.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wstrict-prototypes"
+RarosHppIgnore
+#import "raros.hpp"
+#pragma clang diagnostic pop
+
+DllHppIgnore
 #import "dll.hpp"
 #pragma clang diagnostic pop
 
