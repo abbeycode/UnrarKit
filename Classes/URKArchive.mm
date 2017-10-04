@@ -1329,7 +1329,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     return NO;
 }
 
-- (NSProgress *)beginProgressOperation:(NSUInteger)totalUnitCount
+- (NSProgress *)beginProgressOperation:(unsigned long long)totalUnitCount
 {
     URKCreateActivity("-beginProgressOperation:");
     
