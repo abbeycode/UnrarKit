@@ -15,8 +15,8 @@
 		2899E5220DE3E06400AC0155 /* UnrarExampleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* UnrarExampleViewController.xib */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D7ACF80DDB3853001CB0EB /* UnrarExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* UnrarExampleViewController.m */; };
+		7A67C2EC1F86D1C400D7FA38 /* UnrarKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A67C2ED1F86D1C400D7FA38 /* UnrarKit.framework */; };
 		964547CB1B32026700202B28 /* Test Archive (Password).rar in Resources */ = {isa = PBXBuildFile; fileRef = 964547CA1B32026700202B28 /* Test Archive (Password).rar */; };
-		9690E9D91B5EB553008FB6DA /* UnrarKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9690E9D51B5EAF9E008FB6DA /* UnrarKit.framework */; };
 		96CD2C1A18D4D823002D004A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96CD2C1918D4D823002D004A /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
@@ -33,9 +33,9 @@
 		28D7ACF70DDB3853001CB0EB /* UnrarExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnrarExampleViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* UnrarExample_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarExample_Prefix.pch; sourceTree = "<group>"; };
+		7A67C2ED1F86D1C400D7FA38 /* UnrarKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UnrarKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D1107310486CEB800E47090 /* UnrarExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "UnrarExample-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		964547CA1B32026700202B28 /* Test Archive (Password).rar */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Test Archive (Password).rar"; path = "../Tests/Test Data/Test Archive (Password).rar"; sourceTree = "<group>"; };
-		9690E9D51B5EAF9E008FB6DA /* UnrarKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UnrarKit.framework; path = "../../../Library/Developer/Xcode/DerivedData/UnrarKit-gzvaaqxmnbebtugiflrvekbllxhn/Build/Products/Debug/UnrarKit.framework"; sourceTree = "<group>"; };
 		96CD2C1918D4D823002D004A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -44,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9690E9D91B5EB553008FB6DA /* UnrarKit.framework in Frameworks */,
+				7A67C2EC1F86D1C400D7FA38 /* UnrarKit.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -109,7 +109,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9690E9D51B5EAF9E008FB6DA /* UnrarKit.framework */,
+				7A67C2ED1F86D1C400D7FA38 /* UnrarKit.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,

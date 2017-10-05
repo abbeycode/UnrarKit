@@ -1,8 +1,6 @@
 language: objective-c
 osx_image: xcode9
 
-xcode_workspace: UnrarKit.xcworkspace
-
 before_script:
     # Make log level less verbose. Temporarily undo if more info is needed
     - sudo log config --mode "level:default" --subsystem com.abbey-code.UnrarKit
