@@ -7,18 +7,21 @@
 #
 
 import json
+import os
 import urllib2
 import sys
 
-def add_release(token, repo, tag, notes):
+def add_release(token, repo, tag, archive_path, notes):
     '''
+    Creates a release on GitHub for the given arguments
     '''
-    print('token: "{}", repo: "{}", tag: "{}", notes: "{}"'.format('SECURE' if token else '', repo, tag, notes))
+    print('token: "{}", repo: "{}", tag: "{}", archive: "{}" notes: "{}"'.format('SECURE' if token else '', repo, tag, archive_path, notes))
     
     assert token, 'No API token given'
     assert repo, 'No repo given'
     assert '/' in repo, "Repo doesn't look like a valid GitHub repo (e.g. abbeycode/UnrarKit)"
     assert tag, 'No tag given'
+    assert archive_path, 'No archive path given'
     assert notes, 'No notes given'
 
     is_beta = tag_is_beta(tag)
@@ -32,12 +35,15 @@ def add_release(token, repo, tag, notes):
     }
     
     data = json.dumps(values)
-    req = urllib2.Request(url, data)
-    response = urllib2.urlopen(req)
+    request = urllib2.Request(url, data)
+    response = urllib2.urlopen(request)
     the_page = response.read()
     
     response_dict = json.loads(the_page)
+    upload_url = response_dict['upload_url']
     release_url = response_dict['url']
+    
+    upload_carthage_archive(token, upload_url, archive_path)
 
     print('Release added: {}'.format(release_url))
     return True
@@ -67,8 +73,30 @@ def tag_is_beta(tag):
     '''
     
     return 'beta' in tag or 'RC' in tag or 'prerelease' in tag or 'alpha' in tag
+
+def upload_carthage_archive(token, upload_url, archive_path):
+    '''
+    Uploads the archive at the given path to GitHub for the release specified
+    '''
     
+    upload_url = upload_url.split('{')[0]
+    url = '{}?access_token={}&name={}'.format(upload_url, token, archive_path)
+    header = {'Content-Type': 'application/zip'}
+
+    with FileWithLen(archive_path, 'r') as f:
+        request = urllib2.Request(url, f, header)
+        response = urllib2.urlopen(request)
     
+    page = response.read()    
+    response_dict = json.loads(page)
+    return True
+
+class FileWithLen(file):
+    def __init__(self, *args, **keyws):
+        file.__init__(self, *args, **keyws)
+
+    def __len__(self):
+        return int(os.fstat(self.fileno())[6])
 
 if __name__ == '__main__':
     # Allow script to be called with 'test' argument
@@ -77,7 +105,7 @@ if __name__ == '__main__':
         result = doctest.testmod()
         sys.exit(0 if result.failed == 0 else 1)
 
-    expected_arg_count = 5
+    expected_arg_count = 6
 
     if len(sys.argv) != expected_arg_count:
         print('\nadd-github-release given {} arguments ({}). Expecting {}\n'.format(len(sys.argv) - 1, sys.argv[1:], expected_arg_count - 1))

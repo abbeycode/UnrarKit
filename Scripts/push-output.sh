@@ -34,4 +34,5 @@ if [ $? -ne 0 ]; then
 fi
 
 RELEASE_NOTES=$(./Scripts/get-release-notes.sh $TRAVIS_TAG)
-./Scripts/add-github-release.py $GITHUB_RELEASE_API_TOKEN $TRAVIS_REPO_SLUG $TRAVIS_TAG "$RELEASE_NOTES"
+ARCHIVE_PATH=$(./Scripts/archive-carthage.sh)
+./Scripts/add-github-release.py $GITHUB_RELEASE_API_TOKEN $TRAVIS_REPO_SLUG $TRAVIS_TAG "$ARCHIVE_PATH" "$RELEASE_NOTES"
