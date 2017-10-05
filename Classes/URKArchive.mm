@@ -159,7 +159,7 @@ NS_DESIGNATED_INITIALIZER
         _threadLock = [[NSObject alloc] init];
 
         if (bookmarkError) {
-            URKLog("Error creating bookmark to RAR archive: %@", bookmarkError);
+            URKLog("Error creating bookmark to RAR archive: %{public}@", bookmarkError);
 
             if (error) {
                 *error = bookmarkError;
@@ -388,7 +388,7 @@ NS_DESIGNATED_INITIALIZER
             if ((PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
-                URKLogError("Error skipping to next header file: %@ (%d)", errorName, PFCode);
+                URKLogError("Error skipping to next header file: %{public}@ (%d)", errorName, PFCode);
                 fileInfos = nil;
                 return;
             }
@@ -397,7 +397,7 @@ NS_DESIGNATED_INITIALIZER
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             NSString *errorName = nil;
             [self assignError:innerError code:RHCode errorName:&errorName];
-            URKLogError("Error reading RAR header: %@ (%d)", errorName, RHCode);
+            URKLogError("Error reading RAR header: %{public}@ (%d)", errorName, RHCode);
             fileInfos = nil;
         }
     } inMode:RAR_OM_LIST_INCSPLIT error:error];
@@ -505,7 +505,7 @@ NS_DESIGNATED_INITIALIZER
             if (progress.isCancelled) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
-                URKLogInfo("Halted file extraction due to user cancellation: %@", errorName);
+                URKLogInfo("Halted file extraction due to user cancellation: %{public}@", errorName);
                 result = NO;
                 return;
             }
@@ -513,7 +513,7 @@ NS_DESIGNATED_INITIALIZER
             if ((PFCode = RARProcessFile(welf.rarFile, RAR_EXTRACT, (char *) filePath.UTF8String, NULL)) != 0) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
-                URKLogError("Error extracting file: %@ (%d)", errorName, PFCode);
+                URKLogError("Error extracting file: %{public}@ (%d)", errorName, PFCode);
                 result = NO;
                 return;
             }
@@ -539,7 +539,7 @@ NS_DESIGNATED_INITIALIZER
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             NSString *errorName = nil;
             [self assignError:innerError code:RHCode errorName:&errorName];
-            URKLogError("Error reading file header: %@ (%d)", errorName, RHCode);
+            URKLogError("Error reading file header: %{public}@ (%d)", errorName, RHCode);
             result = NO;
         }
 
@@ -612,7 +612,7 @@ NS_DESIGNATED_INITIALIZER
                 if ((PFCode = RARProcessFileW(welf.rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                     NSString *errorName = nil;
                     [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
-                    URKLogError("Error skipping file: %@ (%d)", errorName, PFCode);
+                    URKLogError("Error skipping file: %{public}@ (%d)", errorName, PFCode);
                     return;
                 }
             }
@@ -621,7 +621,7 @@ NS_DESIGNATED_INITIALIZER
         if (RHCode != ERAR_SUCCESS) {
             NSString *errorName = nil;
             [self assignError:innerError code:RHCode errorName:&errorName];
-            URKLogError("Error reading file header: %@ (%d)", errorName, RHCode);
+            URKLogError("Error reading file header: %{public}@ (%d)", errorName, RHCode);
             return;
         }
 
@@ -667,14 +667,14 @@ NS_DESIGNATED_INITIALIZER
         if (progress.isCancelled) {
             NSString *errorName = nil;
             [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
-            URKLogInfo("Returning nil data from extraction due to user cancellation: %@", errorName);
+            URKLogInfo("Returning nil data from extraction due to user cancellation: %{public}@", errorName);
             return;
         }
 
         if (PFCode != 0) {
             NSString *errorName = nil;
             [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
-            URKLogError("Error extracting file data: %@ (%d)", errorName, PFCode);
+            URKLogError("Error extracting file data: %{public}@ (%d)", errorName, PFCode);
             return;
         }
 
@@ -799,7 +799,7 @@ NS_DESIGNATED_INITIALIZER
             if (PFCode != 0) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
-                URKLogError("Error processing file: %@ (%d)", errorName, PFCode);
+                URKLogError("Error processing file: %{public}@ (%d)", errorName, PFCode);
                 return;
             }
 
@@ -813,14 +813,14 @@ NS_DESIGNATED_INITIALIZER
         if (progress.isCancelled) {
             NSString *errorName = nil;
             [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
-            URKLogInfo("Returning NO from performOnData:error: due to user cancellation: %@", errorName);
+            URKLogInfo("Returning NO from performOnData:error: due to user cancellation: %{public}@", errorName);
             return;
         }
 
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             NSString *errorName = nil;
             [self assignError:innerError code:RHCode errorName:&errorName];
-            URKLogError("Error reading file header: %@ (%d)", errorName, RHCode);
+            URKLogError("Error reading file header: %{public}@ (%d)", errorName, RHCode);
             return;
         }
     } inMode:RAR_OM_EXTRACT error:error];
@@ -846,7 +846,7 @@ NS_DESIGNATED_INITIALIZER
         int RHCode = 0, PFCode = 0;
         URKFileInfo *fileInfo;
 
-        URKLogInfo("Looping through files, looking for %@...", filePath);
+        URKLogInfo("Looping through files, looking for %{public}@...", filePath);
         
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:innerError]) {
@@ -866,7 +866,7 @@ NS_DESIGNATED_INITIALIZER
                 if ((PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                     NSString *errorName = nil;
                     [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
-                    URKLogError("Failed to skip file: %@ (%d)", errorName, PFCode);
+                    URKLogError("Failed to skip file: %{public}@ (%d)", errorName, PFCode);
                     return;
                 }
             }
@@ -878,7 +878,7 @@ NS_DESIGNATED_INITIALIZER
         if (RHCode != ERAR_SUCCESS) {
             NSString *errorName = nil;
             [self assignError:innerError code:RHCode errorName:&errorName];
-            URKLogError("Header read yielded error: %@ (%d)", errorName, RHCode);
+            URKLogError("Header read yielded error: %{public}@ (%d)", errorName, RHCode);
             return;
         }
 
@@ -915,14 +915,14 @@ NS_DESIGNATED_INITIALIZER
         if (progress.isCancelled) {
             NSString *errorName = nil;
             [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
-            URKLogError("Buffered data extraction has been cancelled: %@", errorName);
+            URKLogError("Buffered data extraction has been cancelled: %{public}@", errorName);
             return;
         }
         
         if (PFCode != 0) {
             NSString *errorName = nil;
             [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
-            URKLogError("Error processing file: %@ (%d)", errorName, PFCode);
+            URKLogError("Error processing file: %{public}@ (%d)", errorName, PFCode);
         }
     } inMode:RAR_OM_EXTRACT error:&innerError];
 
@@ -1101,7 +1101,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
                            inMode:mode
                      withPassword:self.password
                             error:&openFileError]) {
-            URKLogError("Failed to open archive: %@", openFileError);
+            URKLogError("Failed to open archive: %{public}@", openFileError);
             
             if (error) {
                 *error = openFileError;
@@ -1121,7 +1121,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
         }
 
         if (actionError) {
-            URKLogError("Action block returned error: %@", actionError);
+            URKLogError("Action block returned error: %{public}@", actionError);
             
             if (error){
                 *error = actionError;
@@ -1163,7 +1163,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 	if (self.rarFile == 0 || self.flags->OpenResult != 0) {
         NSString *errorName = nil;
         [self assignError:error code:(NSInteger)self.flags->OpenResult errorName:&errorName];
-        URKLogError("Error opening archive: %@ (%d)", errorName, self.flags->OpenResult);
+        URKLogError("Error opening archive: %{public}@ (%d)", errorName, self.flags->OpenResult);
         return NO;
     }
 
@@ -1322,7 +1322,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     if (isPasswordProtected && !self.password) {
         NSString *errorName = nil;
         [self assignError:error code:ERAR_MISSING_PASSWORD errorName:&errorName];
-        URKLogError("Password protected and no password specified: %@ (%d)", errorName, ERAR_MISSING_PASSWORD);
+        URKLogError("Password protected and no password specified: %{public}@ (%d)", errorName, ERAR_MISSING_PASSWORD);
         return YES;
     }
 
