@@ -904,7 +904,7 @@ NS_DESIGNATED_INITIALIZER
             bytesRead += dataChunk.length;
             progress.completedUnitCount += dataChunk.length;
 
-            CGFloat progressPercent = bytesRead / static_cast<CGFloat>(totalBytes);
+            double progressPercent = bytesRead / static_cast<double>(totalBytes);
             URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", (unsigned long)dataChunk.length, progressPercent * 100);
             action(dataChunk, progressPercent);
             return YES;
