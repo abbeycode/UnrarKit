@@ -46,20 +46,44 @@ __IPHONE_OS_VERSION_MIN_REQUIRED >= 100000 \
 || __TV_OS_VERSION_MIN_REQUIRED >= 100000 \
 || __WATCH_OS_VERSION_MIN_REQUIRED >= 30000
 
+#if TARGET_OS_IPHONE
+#define SDK_10_13_MAJOR 11
+#define SDK_10_13_MINOR 0
+#else
+#define SDK_10_13_MAJOR 10
+#define SDK_10_13_MINOR 13
+#endif
+
 #if UNIFIED_LOGGING_SUPPORTED
 #import <os/log.h>
 #import <os/activity.h>
 
 // Called from +[UnrarKit initialize] and +[URKArchiveTestCase setUp]
 extern os_log_t unrarkit_log; // Declared in URKArchive.m
-#define URKLogInit() unrarkit_log = os_log_create("com.abbey-code.UnrarKit", "General");
+extern BOOL isAtLeast10_13SDK; // Declared in URKArchive.m
+#define URKLogInit() \
+    unrarkit_log = os_log_create("com.abbey-code.UnrarKit", "General"); \
+    \
+    NSOperatingSystemVersion minVersion; \
+    minVersion.majorVersion = SDK_10_13_MAJOR; \
+    minVersion.minorVersion = SDK_10_13_MINOR; \
+    minVersion.patchVersion = 0; \
+    isAtLeast10_13SDK = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:minVersion]; \
+    URKLogDebug("Is >= 10.13 (or iOS 11): %@", isAtLeast10_13SDK ? @"YES" : @"NO");
 
 #define URKLog(format, ...)      os_log(unrarkit_log, format, ##__VA_ARGS__);
 #define URKLogInfo(format, ...)  os_log_info(unrarkit_log, format, ##__VA_ARGS__);
 #define URKLogDebug(format, ...) os_log_debug(unrarkit_log, format, ##__VA_ARGS__);
 
-#define URKLogError(format, ...) os_log_error(unrarkit_log, format, ##__VA_ARGS__);
-#define URKLogFault(format, ...) os_log_fault(unrarkit_log, format, ##__VA_ARGS__);
+
+#define URKLogError(format, ...) \
+    if (isAtLeast10_13SDK) os_log_error(unrarkit_log, format, ##__VA_ARGS__); \
+    else os_log_with_type(unrarkit_log, OS_LOG_TYPE_ERROR, format, ##__VA_ARGS__);
+
+#define URKLogFault(format, ...) \
+    if (isAtLeast10_13SDK) os_log_fault(unrarkit_log, format, ##__VA_ARGS__); \
+    else os_log_with_type(unrarkit_log, OS_LOG_TYPE_FAULT, format, ##__VA_ARGS__);
+
 
 #define URKCreateActivity(name) \
 os_activity_t activity = os_activity_create(name, OS_ACTIVITY_CURRENT, OS_ACTIVITY_FLAG_DEFAULT); \

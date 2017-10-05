@@ -20,6 +20,7 @@ NSString *URKErrorDomain = @"URKErrorDomain";
 #pragma clang diagnostic ignored "-Wundef"
 #if UNIFIED_LOGGING_SUPPORTED
 os_log_t unrarkit_log;
+BOOL isAtLeast10_13SDK;
 #endif
 #pragma clang diagnostic pop
 
