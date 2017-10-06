@@ -451,6 +451,11 @@ extern NSString *URKErrorDomain;
  */
 - (BOOL)validatePassword;
 
+- (BOOL)checkDataIntegrity:(NSError **)error;
+
+- (BOOL)checkDataIntegrity:(URKFileInfo *)fileInfo error:(NSError **)error;
+
+- (BOOL)checkDataIntegrityOfFile:(NSString *)filePath error:(NSError **)error;
 
 @end
 NS_ASSUME_NONNULL_END

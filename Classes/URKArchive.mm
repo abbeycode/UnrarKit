@@ -1030,6 +1030,20 @@ NS_DESIGNATED_INITIALIZER
     return passwordIsGood;
 }
 
+- (BOOL)checkDataIntegrity:(NSError * __autoreleasing *)error
+{
+    return NO;
+}
+
+- (BOOL)checkDataIntegrity:(URKFileInfo *)fileInfo error:(NSError * __autoreleasing *)error
+{
+    return NO;
+}
+
+- (BOOL)checkDataIntegrityOfFile:(NSString *)filePath error:(NSError * __autoreleasing *)error
+{
+    return NO;
+}
 
 
 #pragma mark - Callback Functions
