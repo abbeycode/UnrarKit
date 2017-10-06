@@ -333,10 +333,6 @@
 		96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnrarKitMacros.h; sourceTree = "<group>"; };
 		96DBF7F71A3F72800033B759 /* NSString+UnrarKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+UnrarKit.h"; path = "Categories/NSString+UnrarKit.h"; sourceTree = "<group>"; };
 		96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSString+UnrarKit.mm"; path = "Categories/NSString+UnrarKit.mm"; sourceTree = "<group>"; };
-		96EA53311B3B462D00F79DC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		96EA53321B3B462D00F79DC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		96EA53371B3B462D00F79DC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		96EA533C1B3B462D00F79DC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		96EA535B1B3CB04300F79DC6 /* UnrarKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UnrarKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		96F450741B38527100679597 /* ValidatePasswordTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValidatePasswordTests.m; sourceTree = "<group>"; };
 		96F450761B38552200679597 /* IsPasswordProtectedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IsPasswordProtectedTests.m; sourceTree = "<group>"; };
@@ -452,7 +448,6 @@
 				967872731E460FA70048A54C /* ListVolumesTests.m */,
 				7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */,
 				96F450741B38527100679597 /* ValidatePasswordTests.m */,
-				96EA532F1B3B462D00F79DC6 /* iOSUnitTestHostApp */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
 			);
 			path = Tests;
@@ -636,25 +631,6 @@
 				96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */,
 			);
 			name = Categories;
-			sourceTree = "<group>";
-		};
-		96EA532F1B3B462D00F79DC6 /* iOSUnitTestHostApp */ = {
-			isa = PBXGroup;
-			children = (
-				96EA53321B3B462D00F79DC6 /* AppDelegate.swift */,
-				96EA53361B3B462D00F79DC6 /* Main.storyboard */,
-				96EA533B1B3B462D00F79DC6 /* LaunchScreen.xib */,
-				96EA53301B3B462D00F79DC6 /* Supporting Files */,
-			);
-			path = iOSUnitTestHostApp;
-			sourceTree = "<group>";
-		};
-		96EA53301B3B462D00F79DC6 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				96EA53311B3B462D00F79DC6 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1008,22 +984,6 @@
 				964C8AC618D28EE000AD7321 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		96EA53361B3B462D00F79DC6 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				96EA53371B3B462D00F79DC6 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		96EA533B1B3B462D00F79DC6 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				96EA533C1B3B462D00F79DC6 /* Base */,
-			);
-			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
