@@ -10,7 +10,7 @@ matrix:
     - stage: Test
       env: Name=Mac
       # The CLANG arguments and find command fail the build on analyzer errors
-      script: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+      script: travis_wait 30 xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 
     - stage: Test
       env: Name=iOS
