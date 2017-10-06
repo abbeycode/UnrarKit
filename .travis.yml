@@ -33,6 +33,3 @@ matrix:
     - stage: Release
       if: tag IS present
       script: ./Scripts/push-output.sh
-
-# Turn on Docker, container-based infrastructure
-sudo: false
