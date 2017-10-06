@@ -7,4 +7,4 @@ set -ev
 carthage build --no-skip-current
 carthage archive
 
-echo "UnrarKit.framework.zip"
+export ARCHIVE_PATH="UnrarKit.framework.zip"
