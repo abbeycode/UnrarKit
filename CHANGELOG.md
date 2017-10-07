@@ -4,6 +4,7 @@
 
 * Added support for `NSProgress` and `NSProgressReporting` in all extraction and iteration methods (Issue #34)
 * Added enhanced support for multivolume archives (PRs #59, #38 - Thanks to [@aonez](https://github.com/aonez) for the idea and implementation!)
+* Added methods for checking data integrity of archived files (Issue #26, PR #61 - Thanks to [@amosavian](https://github.com/amosavian) for the suggestion!)
 * Added detailed logging using new unified logging framework. See [the readme](README.md) for more details (Issue #35)
 * Added localized details to returned `NSError` objects (Issue #45)
 * Moved `unrar` sources into a static library, and addressed a wide variety of warnings exposed by the `-Weverything` flag (Issue #56)

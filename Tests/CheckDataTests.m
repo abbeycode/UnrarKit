@@ -11,6 +11,8 @@
 
 @implementation CheckDataTests
 
+#pragma mark - checkDataIntegrity
+
 - (void)testCheckDataIntegrity {
     NSArray *testArchives = @[@"Test Archive.rar",
                               @"Test Archive (Password).rar",
@@ -43,8 +45,6 @@
     XCTAssertNotNil(dataCheckError, @"No error returned by checkDataIntegrity");
 }
 
-
-
 - (void)testCheckDataIntegrity_ModifiedCRC {
     NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
@@ -55,6 +55,8 @@
     XCTAssertFalse(success, @"Data integrity check passed for archive with a modified CRC");
     XCTAssertNotNil(dataCheckError, @"No error returned by checkDataIntegrity");
 }
+
+#pragma mark - checkDataIntegrityOfFile
 
 - (void)testCheckDataIntegrityForFile {
     NSArray *testArchives = @[@"Test Archive.rar",
