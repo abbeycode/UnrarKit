@@ -453,8 +453,6 @@ extern NSString *URKErrorDomain;
 
 - (BOOL)checkDataIntegrity:(NSError **)error;
 
-- (BOOL)checkDataIntegrity:(URKFileInfo *)fileInfo error:(NSError **)error;
-
 - (BOOL)checkDataIntegrityOfFile:(NSString *)filePath error:(NSError **)error;
 
 @end

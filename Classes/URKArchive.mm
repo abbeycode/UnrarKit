@@ -1035,11 +1035,6 @@ NS_DESIGNATED_INITIALIZER
     return NO;
 }
 
-- (BOOL)checkDataIntegrity:(URKFileInfo *)fileInfo error:(NSError * __autoreleasing *)error
-{
-    return NO;
-}
-
 - (BOOL)checkDataIntegrityOfFile:(NSString *)filePath error:(NSError * __autoreleasing *)error
 {
     return NO;
