@@ -11,7 +11,7 @@
 
 @implementation CheckDataTests
 
-- (void)testCheckDataIntegrity_Good {
+- (void)testCheckDataIntegrity {
     NSArray *testArchives = @[@"Test Archive.rar",
                               @"Test Archive (Password).rar",
                               @"Test Archive (Header Password).rar"];
@@ -56,7 +56,7 @@
     XCTAssertNotNil(dataCheckError, @"No error returned by checkDataIntegrity");
 }
 
-- (void)testCheckDataIntegrityForFile_Good {
+- (void)testCheckDataIntegrityForFile {
     NSArray *testArchives = @[@"Test Archive.rar",
                               @"Test Archive (Password).rar",
                               @"Test Archive (Header Password).rar"];

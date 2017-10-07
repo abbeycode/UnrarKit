@@ -8,6 +8,9 @@
 "Buffer too small to contain entire comments" = "Buffer too small to contain entire comments";
 
 /* Error detail string */
+"Data extracted from archive doesn't match what was written" = "Data extracted from archive doesn't match what was written";
+
+/* Error detail string */
 "Error encountered while closing file" = "Error encountered while closing file";
 
 /* Error detail string */

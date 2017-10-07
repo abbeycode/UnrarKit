@@ -98,6 +98,11 @@ typedef NS_ENUM(NSInteger, URKErrorCode) {
      *  User cancelled the operation
      */
     URKErrorCodeUserCancelled = 102,
+    
+    /**
+     *  CRC of extracted data doesn't match file header
+     */
+    URKErrorCodeCorruptData = 103,
 };
 
 typedef NSString *const URKProgressInfoKey;

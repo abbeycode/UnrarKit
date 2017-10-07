@@ -9,6 +9,8 @@
 #import "UnrarKitMacros.h"
 #import "NSString+UnrarKit.h"
 
+#import "zlib.h"
+
 RarHppIgnore
 #import "rar.hpp"
 #pragma clang diagnostic pop
@@ -1032,12 +1034,59 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)checkDataIntegrity:(NSError * __autoreleasing *)error
 {
-    return NO;
+    return [self checkDataIntegrityOfFile:(NSString *_Nonnull)nil error:error];
 }
 
 - (BOOL)checkDataIntegrityOfFile:(NSString *)filePath error:(NSError * __autoreleasing *)error
 {
-    return NO;
+    URKCreateActivity("Checking Data Integrity");
+
+    URKLogInfo("Checking integrity of %{public}@", filePath ? filePath : @"whole archive");
+    
+    __block BOOL corruptDataFound = YES;
+    __block URKFileInfo *corruptFileInfo;
+    __block uLong foundCRC;
+    
+    if (error) {
+        *error = nil;
+    }
+
+    NSError *performOnDataError = nil;
+    [self performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+        URKCreateActivity("Iterating through each file");
+        corruptDataFound = NO; // Set inside here so invalid archives are marked as corrupt
+        if (filePath && ![fileInfo.filename isEqualToString:filePath]) return;
+        
+        NSUInteger expectedCRC = fileInfo.CRC;
+        uLong actualCRC = crc32((uLong)0, (const Bytef*)fileData.bytes, (uint)fileData.length);
+        URKLogDebug("Checking integrity of %{public}@. Expected CRC: %010lu vs. Actual: %010lu",
+                    fileInfo.filename, expectedCRC, actualCRC);
+        if (expectedCRC != actualCRC) {
+            corruptDataFound = YES;
+            corruptFileInfo = fileInfo;
+            foundCRC = actualCRC;
+        }
+        
+        if (filePath) *stop = YES;
+    }
+                           error:&performOnDataError];
+    
+    if (performOnDataError) {
+        if (error) {
+            *error = performOnDataError;
+        }
+        
+        URKLogError("Error checking data integrity: %{public}@", performOnDataError);
+    }
+    
+    if (corruptDataFound) {
+        NSString *errorName = nil;
+        [self assignError:error code:URKErrorCodeCorruptData errorName:&errorName];
+        URKLogError("Corrupt data found (filename: %{public}@, expected CRC: %010lu, actual CRC: %010lu, Error: %{public}@ (%d)",
+                    corruptFileInfo.filename, corruptFileInfo.CRC, foundCRC, errorName, URKErrorCodeCorruptData);
+    }
+    
+    return !corruptDataFound;
 }
 
 
@@ -1287,7 +1336,12 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
         case URKErrorCodeUserCancelled:
             errorName = @"ERAR_USER_CANCELLED";
             detail = NSLocalizedStringFromTableInBundle(@"User cancelled the operation in progress", @"UnrarKit", _resources, @"Error detail string");
-   break;
+            break;
+            
+        case URKErrorCodeCorruptData:
+            errorName = @"ERAR_CORRUPT_DATA";
+            detail = NSLocalizedStringFromTableInBundle(@"Data extracted from archive doesn't match what was written", @"UnrarKit", _resources, @"Error detail string");
+            break;
 
         default:
             errorName = [NSString stringWithFormat:@"Unknown (%ld)", (long)errorCode];
@@ -1301,12 +1355,12 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
 - (BOOL)assignError:(NSError * __autoreleasing *)error code:(NSInteger)errorCode errorName:(NSString * __autoreleasing *)outErrorName
 {
-    if (error) {
-        NSAssert(outErrorName, @"An out variable for errorName must be provided");
-        
-        NSString *errorDetail = nil;
-        *outErrorName = [self errorNameForErrorCode:errorCode detail:&errorDetail];
+    NSAssert(outErrorName, @"An out variable for errorName must be provided");
+    
+    NSString *errorDetail = nil;
+    *outErrorName = [self errorNameForErrorCode:errorCode detail:&errorDetail];
 
+    if (error) {
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:
                                          @{NSLocalizedFailureReasonErrorKey: *outErrorName,
                                            NSLocalizedDescriptionKey: errorDetail,
