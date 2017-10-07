@@ -1046,18 +1046,29 @@ NS_DESIGNATED_INITIALIZER
     __block BOOL corruptDataFound = YES;
     __block URKFileInfo *corruptFileInfo;
     __block uLong foundCRC;
+    __block NSError *innerError = nil;
     
     if (error) {
         *error = nil;
     }
 
-    NSError *performOnDataError = nil;
-    [self performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+    NSError *performOnFilesError = nil;
+    [self performOnFilesInArchive:^(URKFileInfo *fileInfo, BOOL *stop) {
         URKCreateActivity("Iterating through each file");
         corruptDataFound = NO; // Set inside here so invalid archives are marked as corrupt
         if (filePath && ![fileInfo.filename isEqualToString:filePath]) return;
         
-        NSUInteger expectedCRC = fileInfo.CRC;
+        URKLogDebug("Extracting '%{public}@ to check its CRC...", fileInfo.filename);
+        NSError *extractError = nil;
+        NSData *fileData = [self extractData:fileInfo error:&extractError];
+        if (!fileData) {
+            innerError = extractError;
+            URKLogError("Error extracting %{public}@: %{public}@", fileInfo.filename, extractError);
+            *stop = YES;
+            return;
+        }
+        
+        uLong expectedCRC = fileInfo.CRC;
         uLong actualCRC = crc32((uLong)0, (const Bytef*)fileData.bytes, (uint)fileData.length);
         URKLogDebug("Checking integrity of %{public}@. Expected CRC: %010lu vs. Actual: %010lu",
                     fileInfo.filename, expectedCRC, actualCRC);
@@ -1068,22 +1079,21 @@ NS_DESIGNATED_INITIALIZER
         }
         
         if (filePath) *stop = YES;
-    }
-                           error:&performOnDataError];
+    } error:&performOnFilesError];
     
-    if (performOnDataError) {
+    if (performOnFilesError) {
         if (error) {
-            *error = performOnDataError;
+            *error = performOnFilesError;
         }
         
-        URKLogError("Error checking data integrity: %{public}@", performOnDataError);
+        URKLogError("Error checking data integrity: %{public}@", performOnFilesError);
     }
     
     if (corruptDataFound) {
         NSString *errorName = nil;
-        [self assignError:error code:URKErrorCodeCorruptData errorName:&errorName];
+        [self assignError:error code:URKErrorCodeCorruptData underlyer:innerError errorName:&errorName];
         URKLogError("Corrupt data found (filename: %{public}@, expected CRC: %010lu, actual CRC: %010lu, Error: %{public}@ (%d)",
-                    corruptFileInfo.filename, corruptFileInfo.CRC, foundCRC, errorName, URKErrorCodeCorruptData);
+                    corruptFileInfo.filename, (uLong)corruptFileInfo.CRC, foundCRC, errorName, URKErrorCodeCorruptData);
     }
     
     return !corruptDataFound;
@@ -1355,6 +1365,11 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
 - (BOOL)assignError:(NSError * __autoreleasing *)error code:(NSInteger)errorCode errorName:(NSString * __autoreleasing *)outErrorName
 {
+    return [self assignError:error code:errorCode underlyer:nil errorName:outErrorName];
+}
+
+- (BOOL)assignError:(NSError * __autoreleasing *)error code:(NSInteger)errorCode underlyer:(NSError *)underlyingError errorName:(NSString * __autoreleasing *)outErrorName
+{
     NSAssert(outErrorName, @"An out variable for errorName must be provided");
     
     NSString *errorDetail = nil;
@@ -1368,6 +1383,10 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
         
         if (self.fileURL) {
             userInfo[NSURLErrorKey] = self.fileURL;
+        }
+        
+        if (underlyingError) {
+            userInfo[NSUnderlyingErrorKey] = underlyingError;
         }
         
         *error = [NSError errorWithDomain:URKErrorDomain
