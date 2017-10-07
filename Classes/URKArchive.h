@@ -456,8 +456,29 @@ extern NSString *URKErrorDomain;
  */
 - (BOOL)validatePassword;
 
+
+/**
+ Extract each file in the archive, checking whether the data matches the CRC checksum
+ stored at the time it was written
+
+ @param error Contains an NSError object when there was a problem reading the
+              archive, or when data is corrupt
+ 
+ @return YES if the data is all correct, false if any check failed
+ */
 - (BOOL)checkDataIntegrity:(NSError **)error;
 
+
+/**
+ Extract a particular file, to determine if its data matches the CRC
+ checksum stored at the time it written
+
+ @param filePath The file in the archive to check
+ @param error    Contains an NSError object when there was a problem reading the
+                 archive, or when data is corrupt
+ 
+ @return YES if the data is correct, false if any check failed
+ */
 - (BOOL)checkDataIntegrityOfFile:(NSString *)filePath error:(NSError **)error;
 
 @end
