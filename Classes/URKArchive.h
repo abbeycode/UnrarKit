@@ -326,7 +326,7 @@ extern NSString *URKErrorDomain;
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
               progress:(nullable void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
-                 error:(NSError **)error __deprecated_msg("Use extractFilesTo:overwrite:error: instead, and if using the progress block, replace with NSProgress as described in the README");
+                 error:(NSError **)error __deprecated_msg("Use -extractFilesTo:overwrite:error: instead, and if using the progress block, replace with NSProgress as described in the README");
 
 /**
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
@@ -354,7 +354,7 @@ extern NSString *URKErrorDomain;
  */
 - (nullable NSData *)extractData:(URKFileInfo *)fileInfo
                         progress:(nullable void (^)(CGFloat percentDecompressed))progressBlock
-                           error:(NSError **)error __deprecated_msg("Use extractData:error: instead, and if using the progress block, replace with NSProgress as described in the README");
+                           error:(NSError **)error __deprecated_msg("Use -extractData:error: instead, and if using the progress block, replace with NSProgress as described in the README");
 
 /**
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
@@ -385,7 +385,7 @@ extern NSString *URKErrorDomain;
  */
 - (nullable NSData *)extractDataFromFile:(NSString *)filePath
                                 progress:(nullable void (^)(CGFloat percentDecompressed))progressBlock
-                                   error:(NSError **)error __deprecated_msg("Use extractDataFromFile:error: instead, and if using the progress block, replace with NSProgress as described in the README");
+                                   error:(NSError **)error __deprecated_msg("Use -extractDataFromFile:error: instead, and if using the progress block, replace with NSProgress as described in the README");
 
 /**
  *  Loops through each file in the archive in alphabetical order, allowing you to perform an
