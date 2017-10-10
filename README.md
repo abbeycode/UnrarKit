@@ -61,19 +61,12 @@ if (archive.isPasswordProtected) {
 ```Objective-C
 BOOL extractFilesSuccessful = [archive extractFilesTo:@"some/directory"
                                             overWrite:NO
-                                             progress:
-    ^(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed) {
-        NSLog(@"Extracting %@: %f%% complete", currentFile.filename, percentArchiveDecompressed);
-    }
                                                 error:&error];
 ```
 
 ## Extracting a file into memory
 ```Objective-C
 NSData *extractedData = [archive extractDataFromFile:@"a file in the archive.jpg"
-                                            progress:^(CGFloat percentDecompressed) {
-                                                         NSLog(@"Extracting, %f%% complete", percentDecompressed);
-                                            }
                                                error:&error];
 ```
 
