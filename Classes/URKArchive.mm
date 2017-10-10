@@ -1395,6 +1395,8 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     
     NSProgress *progress;
     progress = self.progress;
+    self.progress = nil;
+    
     if (!progress) {
         progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
                                              userInfo:nil];
