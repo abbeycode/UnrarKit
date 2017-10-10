@@ -26,11 +26,8 @@
                               : nil);
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
         
-        NSError *dataCheckError = nil;
-        BOOL success = [archive checkDataIntegrity:&dataCheckError];
-        
+        BOOL success = [archive checkDataIntegrity];
         XCTAssertTrue(success, @"Data integrity check failed for %@", testArchiveName);
-        XCTAssertNil(dataCheckError, @"Error returned by checkDataIntegrity: %@", dataCheckError);
     }
 }
 
@@ -38,22 +35,16 @@
     NSURL *testArchiveURL = self.testFileURLs[@"Test File B.jpg"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
-    NSError *dataCheckError = nil;
-    BOOL success = [archive checkDataIntegrity:&dataCheckError];
-    
+    BOOL success = [archive checkDataIntegrity];
     XCTAssertFalse(success, @"Data integrity check passed for non-archive");
-    XCTAssertNotNil(dataCheckError, @"No error returned by checkDataIntegrity");
 }
 
 - (void)testCheckDataIntegrity_ModifiedCRC {
     NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
-    NSError *dataCheckError = nil;
-    BOOL success = [archive checkDataIntegrity:&dataCheckError];
-
+    BOOL success = [archive checkDataIntegrity];
     XCTAssertFalse(success, @"Data integrity check passed for archive with a modified CRC");
-    XCTAssertNotNil(dataCheckError, @"No error returned by checkDataIntegrity");
 }
 
 #pragma mark - checkDataIntegrityOfFile
@@ -78,11 +69,9 @@
         XCTAssertNil(listFilenamesError, @"Error returned for %@: %@", testArchiveName, listFilenamesError);
         
         NSString *firstFilename = filenames.firstObject;
-        NSError *dataCheckError = nil;
-        BOOL success = [archive checkDataIntegrityOfFile:firstFilename error:&dataCheckError];
+        BOOL success = [archive checkDataIntegrityOfFile:firstFilename];
         
         XCTAssertTrue(success, @"Data integrity check failed for %@ in %@", firstFilename, testArchiveName);
-        XCTAssertNil(dataCheckError, @"Error returned by checkDataIntegrity: %@", dataCheckError);
     }
 }
 
@@ -90,24 +79,16 @@
     NSURL *testArchiveURL = self.testFileURLs[@"Test File B.jpg"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
-    NSString *filename = @"README.md";
-    NSError *dataCheckError = nil;
-    BOOL success = [archive checkDataIntegrityOfFile:filename error:&dataCheckError];
-
+    BOOL success = [archive checkDataIntegrityOfFile:@"README.md"];
     XCTAssertFalse(success, @"Data integrity check passed for non-archive");
-    XCTAssertNotNil(dataCheckError, @"Error not returned by checkDataIntegrity");
 }
 
 - (void)testCheckDataIntegrityForFile_ModifiedCRC {
     NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     
-    NSString *filename = @"README.md";
-    NSError *dataCheckError = nil;
-    BOOL success = [archive checkDataIntegrityOfFile:filename error:&dataCheckError];
-    
+    BOOL success = [archive checkDataIntegrityOfFile:@"README.md"];
     XCTAssertFalse(success, @"Data integrity check passed for archive with modified CRC");
-    XCTAssertNotNil(dataCheckError, @"Error not returned by checkDataIntegrity");
 }
 
 @end

@@ -1032,25 +1032,18 @@ NS_DESIGNATED_INITIALIZER
     return passwordIsGood;
 }
 
-- (BOOL)checkDataIntegrity:(NSError * __autoreleasing *)error
+- (BOOL)checkDataIntegrity
 {
-    return [self checkDataIntegrityOfFile:(NSString *_Nonnull)nil error:error];
+    return [self checkDataIntegrityOfFile:(NSString *_Nonnull)nil];
 }
 
-- (BOOL)checkDataIntegrityOfFile:(NSString *)filePath error:(NSError * __autoreleasing *)error
+- (BOOL)checkDataIntegrityOfFile:(NSString *)filePath
 {
     URKCreateActivity("Checking Data Integrity");
 
     URKLogInfo("Checking integrity of %{public}@", filePath ? filePath : @"whole archive");
-    
+
     __block BOOL corruptDataFound = YES;
-    __block URKFileInfo *corruptFileInfo;
-    __block uLong foundCRC;
-    __block NSError *innerError = nil;
-    
-    if (error) {
-        *error = nil;
-    }
 
     NSError *performOnFilesError = nil;
     [self performOnFilesInArchive:^(URKFileInfo *fileInfo, BOOL *stop) {
@@ -1062,7 +1055,6 @@ NS_DESIGNATED_INITIALIZER
         NSError *extractError = nil;
         NSData *fileData = [self extractData:fileInfo error:&extractError];
         if (!fileData) {
-            innerError = extractError;
             URKLogError("Error extracting %{public}@: %{public}@", fileInfo.filename, extractError);
             *stop = YES;
             return;
@@ -1074,26 +1066,15 @@ NS_DESIGNATED_INITIALIZER
                     fileInfo.filename, expectedCRC, actualCRC);
         if (expectedCRC != actualCRC) {
             corruptDataFound = YES;
-            corruptFileInfo = fileInfo;
-            foundCRC = actualCRC;
+            URKLogError("Corrupt data found (filename: %{public}@, expected CRC: %010lu, actual CRC: %010lu",
+                        fileInfo.filename, expectedCRC, actualCRC);
         }
         
         if (filePath) *stop = YES;
     } error:&performOnFilesError];
     
     if (performOnFilesError) {
-        if (error) {
-            *error = performOnFilesError;
-        }
-        
         URKLogError("Error checking data integrity: %{public}@", performOnFilesError);
-    }
-    
-    if (corruptDataFound) {
-        NSString *errorName = nil;
-        [self assignError:error code:URKErrorCodeCorruptData underlyer:innerError errorName:&errorName];
-        URKLogError("Corrupt data found (filename: %{public}@, expected CRC: %010lu, actual CRC: %010lu, Error: %{public}@ (%d)",
-                    corruptFileInfo.filename, (uLong)corruptFileInfo.CRC, foundCRC, errorName, URKErrorCodeCorruptData);
     }
     
     return !corruptDataFound;
