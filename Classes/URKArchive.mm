@@ -723,6 +723,11 @@ NS_DESIGNATED_INITIALIZER
         URKCreateActivity("Iterating Each File Info");
         
         [sortedFileInfo enumerateObjectsUsingBlock:^(URKFileInfo *info, NSUInteger idx, BOOL *stop) {
+            if (progress.isCancelled) {
+                URKLogInfo("PerformOnFiles iteration was cancelled");
+                *stop = YES;
+            }
+
             URKLogDebug("Performing action on %{public}@", info.filename);
             action(info, stop);
             progress.completedUnitCount += 1;
@@ -730,11 +735,6 @@ NS_DESIGNATED_INITIALIZER
             if (*stop) {
                 URKLogInfo("Action dictated an early stop");
                 progress.completedUnitCount = progress.totalUnitCount;
-            }
-            
-            if (progress.isCancelled) {
-                URKLogInfo("File info iteration was cancelled");
-                *stop = YES;
             }
         }];
     }
