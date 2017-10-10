@@ -1328,11 +1328,6 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
             errorName = @"ERAR_USER_CANCELLED";
             detail = NSLocalizedStringFromTableInBundle(@"User cancelled the operation in progress", @"UnrarKit", _resources, @"Error detail string");
             break;
-            
-        case URKErrorCodeCorruptData:
-            errorName = @"ERAR_CORRUPT_DATA";
-            detail = NSLocalizedStringFromTableInBundle(@"Data extracted from archive doesn't match what was written", @"UnrarKit", _resources, @"Error detail string");
-            break;
 
         default:
             errorName = [NSString stringWithFormat:@"Unknown (%ld)", (long)errorCode];
