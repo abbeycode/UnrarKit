@@ -64,7 +64,7 @@ static NSUInteger observerCallCount;
                                  overwrite:NO
                                      error:&extractError];
     
-    XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:progress:error:");
+    XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:error:");
     XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
     
     [extractFilesProgress resignCurrent];
@@ -113,7 +113,7 @@ static NSUInteger observerCallCount;
                                  overwrite:NO
                                      error:&extractError];
     
-    XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:progress:error:");
+    XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:error:");
     XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
     
     [extractFilesProgress removeObserver:self forKeyPath:observedSelector];
@@ -153,7 +153,7 @@ static NSUInteger observerCallCount;
                                  overwrite:NO
                                      error:&extractError];
     
-    XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:progress:error:");
+    XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:error:");
     XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
     
     [extractFilesProgress removeObserver:self forKeyPath:observedSelector];
@@ -194,7 +194,7 @@ static NSUInteger observerCallCount;
                                  overwrite:NO
                                      error:&extractError];
     
-    XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:progress:error:");
+    XCTAssertNil(extractError, @"Error returned by extractFilesTo:overwrite:error:");
     XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
     
     [extractFilesProgress removeObserver:self forKeyPath:observedSelector];
@@ -321,7 +321,7 @@ static NSUInteger observerCallCount;
                                  overwrite:NO
                                      error:&extractError];
     
-    XCTAssertNotNil(extractError, @"Error not returned by extractFilesTo:overwrite:progress:error:");
+    XCTAssertNotNil(extractError, @"Error not returned by extractFilesTo:overwrite:error:");
     XCTAssertEqual(extractError.code, URKErrorCodeUserCancelled, @"Incorrect error code returned from user cancellation");
     XCTAssertFalse(success, @"Unrar didn't cancel extraction");
     
@@ -365,7 +365,7 @@ static NSUInteger observerCallCount;
     NSError *extractError = nil;
     NSData *data = [archive extractDataFromFile:firstFile error:&extractError];
     
-    XCTAssertNil(extractError, @"Error returned by extractDataFromFile:progress:error:");
+    XCTAssertNil(extractError, @"Error returned by extractDataFromFile:error:");
     XCTAssertNotNil(data, @"Unrar failed to extract large archive");
     
     [extractFileProgress resignCurrent];
@@ -409,7 +409,7 @@ static NSUInteger observerCallCount;
                                                   error:&extractError
                                                  action:^(NSData * _Nonnull dataChunk, CGFloat percentDecompressed) {}];
     
-    XCTAssertNil(extractError, @"Error returned by extractDataFromFile:progress:error:");
+    XCTAssertNil(extractError, @"Error returned by extractDataFromFile:error:");
     XCTAssertTrue(success, @"Unrar failed to extract large archive into buffer");
     
     [extractFileProgress resignCurrent];
@@ -451,7 +451,7 @@ static NSUInteger observerCallCount;
     NSError *extractError = nil;
     NSData *data = [archive extractDataFromFile:firstFile error:&extractError];
     
-    XCTAssertNotNil(extractError, @"No error returned by cancelled extractDataFromFile:progress:error:");
+    XCTAssertNotNil(extractError, @"No error returned by cancelled extractDataFromFile:error:");
     XCTAssertEqual(extractError.code, URKErrorCodeUserCancelled, @"Incorrect error code returned from user cancellation");
     XCTAssertNil(data, @"extractData didn't return nil when cancelled");
     
@@ -487,7 +487,7 @@ static NSUInteger observerCallCount;
                                                      blockCallCount++;
                                                  }];
     
-    XCTAssertNotNil(extractError, @"No error returned by cancelled extractDataFromFile:progress:error:");
+    XCTAssertNotNil(extractError, @"No error returned by cancelled extractDataFromFile:error:");
     XCTAssertEqual(extractError.code, URKErrorCodeUserCancelled, @"Incorrect error code returned from user cancellation");
     XCTAssertFalse(success, @"extractBufferedData didn't return false when cancelled");
     

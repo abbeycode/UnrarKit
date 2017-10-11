@@ -37,6 +37,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 #pragma mark Archive File
 
 
+#if !TARGET_OS_IPHONE
 - (void)testFileURL {
     NSArray *testArchives = @[@"Large",
                               @"Test Archive.rar",
@@ -56,7 +57,9 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         XCTAssertTrue([testArchiveURL isEqual:resolvedURL], @"Resolved URL doesn't match original");
     }
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testFilename {
     NSArray *testArchives = @[@"Large",
                               @"Test Archive.rar",
@@ -80,6 +83,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
                       @"Resolved filename doesn't match original");
     }
 }
+#endif
 
 - (void)testUncompressedSize {
     NSURL *testArchiveURL = self.testFileURLs[@"Test Archive.rar"];
@@ -158,6 +162,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     XCTAssertFalse(pathIsRAR, @"Missing file is reported as a RAR");
 }
 
+#if !TARGET_OS_IPHONE
 - (void)testPathIsARAR_FileHandleLeaks
 {
     NSURL *smallFileURL = [self randomTextFileOfLength:1];
@@ -181,6 +186,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     
     XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
 }
+#endif
 
 #pragma By URL
 
@@ -212,6 +218,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     XCTAssertFalse(urlIsRAR, @"Missing file is reported as a RAR");
 }
 
+#if !TARGET_OS_IPHONE
 - (void)testurlIsARAR_FileHandleLeaks
 {
     NSURL *smallFileURL = [self randomTextFileOfLength:1];
@@ -235,6 +242,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     
     XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
 }
+#endif
 
 
 
@@ -574,6 +582,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
 
+#if !TARGET_OS_IPHONE
 - (void)testPerformOnFiles_Ordering
 {
     NSArray *testFilenames = @[@"AAA.txt",
@@ -603,6 +612,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Archive files not iterated through in correct order");
     } error:&error];
 }
+#endif
 
 
 #pragma mark Perform on Data
@@ -675,6 +685,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
 
+#if !TARGET_OS_IPHONE
 - (void)testPerformOnData_FileMoved
 {
     NSURL *largeArchiveURL = [self largeArchiveURL];
@@ -714,7 +725,9 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testPerformOnData_FileDeleted
 {
     NSURL *largeArchiveURL = [self largeArchiveURL];
@@ -752,7 +765,9 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testPerformOnData_FileMovedBeforeBegin
 {
     NSURL *largeArchiveURL = [self largeArchiveURL];
@@ -788,6 +803,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
 }
+#endif
 
 - (void)testPerformOnData_Folder
 {
@@ -839,6 +855,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
                   @"File extracted in buffer not returned correctly");
 }
 
+#if !TARGET_OS_IPHONE
 - (void)testExtractBufferedData_VeryLarge
 {
     kdebug_signpost_start(SignPostCodeCreateTextFile, 0, 0, 0, SignPostColorBlue);
@@ -887,12 +904,14 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     
     XCTAssertTrue([fileData isEqualToData:deflatedData], @"Data didn't restore correctly");
 }
+#endif
 
 
 
 #pragma mark Various
 
 
+#if !TARGET_OS_IPHONE
 - (void)testFileDescriptorUsage
 {
     NSInteger initialFileCount = [self numberOfOpenFileHandles];
@@ -933,7 +952,9 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     
     XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testMultiThreading {
     NSURL *largeArchiveURL_A = [self largeArchiveURL];
     NSURL *largeArchiveURL_B = [largeArchiveURL_A.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive 2.rar"];
@@ -1003,7 +1024,9 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         }
     }];
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testMultiThreading_SingleFile {
     NSURL *largeArchiveURL = [self largeArchiveURL];
     
@@ -1061,7 +1084,9 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         }
     }];
 }
+#endif
 
+#if !TARGET_OS_IPHONE
 - (void)testMultiThreading_SingleArchiveObject {
     NSURL *largeArchiveURL = [self largeArchiveURL];
     
@@ -1117,6 +1142,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         }
     }];
 }
+#endif
 
 - (void)testErrorIsCorrect
 {

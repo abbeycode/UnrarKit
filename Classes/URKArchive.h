@@ -6,10 +6,13 @@
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
-#import "raros.hpp"
+#import "UnrarKitMacros.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wstrict-prototypes"
+RarosHppIgnore
+#import "raros.hpp"
+#pragma clang diagnostic pop
+
+DllHppIgnore
 #import "dll.hpp"
 #pragma clang diagnostic pop
 
@@ -117,26 +120,21 @@ extern NSString *URKErrorDomain;
  *  An Objective-C/Cocoa wrapper around the unrar library
  */
 @interface URKArchive : NSObject
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_9_0 || MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_X_VERSION_10_11
+// Minimum of iOS 9, macOS 10.11 SDKs
+#if (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED > 90000) || (defined(MAC_OS_X_VERSION_MIN_REQUIRED) && MAC_OS_X_VERSION_MIN_REQUIRED > 101100)
 <NSProgressReporting>
 #endif
-{
-
-	HANDLE _rarFile;
-	struct RARHeaderDataEx *header;
-	struct RAROpenArchiveDataEx *flags;
-}
 
 
 /**
  *  The URL of the archive
  */
-@property(nullable, weak, readonly) NSURL *fileURL;
+@property(nullable, weak, atomic, readonly) NSURL *fileURL;
 
 /**
  *  The filename of the archive
  */
-@property(nullable, weak, readonly) NSString *filename;
+@property(nullable, weak, atomic, readonly) NSString *filename;
 
 /**
  *  The password of the archive
@@ -146,12 +144,17 @@ extern NSString *URKErrorDomain;
 /**
  *  The total uncompressed size (in bytes) of all files in the archive. Returns nil on errors
  */
-@property(nullable, readonly) NSNumber *uncompressedSize;
+@property(nullable, atomic, readonly) NSNumber *uncompressedSize;
 
 /**
  *  The total compressed size (in bytes) of the archive. Returns nil on errors
  */
-@property(nullable, readonly) NSNumber *compressedSize;
+@property(nullable, atomic, readonly) NSNumber *compressedSize;
+
+/**
+ *  True if the file is one volume of a multi-part archive
+ */
+@property(atomic, readonly) BOOL hasMultipleVolumes;
 
 /**
  *  Can be used for progress reporting, but it's not necessary. You can also use
@@ -282,6 +285,15 @@ extern NSString *URKErrorDomain;
 - (nullable NSArray<URKFileInfo*> *)listFileInfo:(NSError **)error;
 
 /**
+ *  Lists the URLs of volumes in a single- or multi-volume archive
+ *
+ *  @param error Contains an NSError object when there was an error reading the archive
+ *
+ *  @return Returns the list of URLs of all volumes of the archive
+ */
+- (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError **)error;
+
+/**
  *  Writes all files in the archive to the given path. Supports NSProgress for progress reporting, which also
  *  allows cancellation in the middle of extraction. Use the progress property (as explained in the README) to
  *  retrieve more detailed information, such as the current file being extracted, number of files extracted,
@@ -314,7 +326,7 @@ extern NSString *URKErrorDomain;
 - (BOOL)extractFilesTo:(NSString *)filePath
              overwrite:(BOOL)overwrite
               progress:(nullable void (^)(URKFileInfo *currentFile, CGFloat percentArchiveDecompressed))progressBlock
-                 error:(NSError **)error __deprecated_msg("Use extractFilesTo:overwrite:error: instead, and if using the progress block, replace with NSProgress as described in the README");
+                 error:(NSError **)error __deprecated_msg("Use -extractFilesTo:overwrite:error: instead, and if using the progress block, replace with NSProgress as described in the README");
 
 /**
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
@@ -342,7 +354,7 @@ extern NSString *URKErrorDomain;
  */
 - (nullable NSData *)extractData:(URKFileInfo *)fileInfo
                         progress:(nullable void (^)(CGFloat percentDecompressed))progressBlock
-                           error:(NSError **)error __deprecated_msg("Use extractData:error: instead, and if using the progress block, replace with NSProgress as described in the README");
+                           error:(NSError **)error __deprecated_msg("Use -extractData:error: instead, and if using the progress block, replace with NSProgress as described in the README");
 
 /**
  *  Unarchive a single file from the archive into memory. Supports NSProgress for progress reporting, which also
@@ -373,7 +385,7 @@ extern NSString *URKErrorDomain;
  */
 - (nullable NSData *)extractDataFromFile:(NSString *)filePath
                                 progress:(nullable void (^)(CGFloat percentDecompressed))progressBlock
-                                   error:(NSError **)error __deprecated_msg("Use extractDataFromFile:error: instead, and if using the progress block, replace with NSProgress as described in the README");
+                                   error:(NSError **)error __deprecated_msg("Use -extractDataFromFile:error: instead, and if using the progress block, replace with NSProgress as described in the README");
 
 /**
  *  Loops through each file in the archive in alphabetical order, allowing you to perform an
@@ -439,6 +451,25 @@ extern NSString *URKErrorDomain;
  */
 - (BOOL)validatePassword;
 
+
+/**
+ Extract each file in the archive, checking whether the data matches the CRC checksum
+ stored at the time it was written
+
+ @return YES if the data is all correct, false if any check failed
+ */
+- (BOOL)checkDataIntegrity;
+
+
+/**
+ Extract a particular file, to determine if its data matches the CRC
+ checksum stored at the time it written
+
+ @param filePath The file in the archive to check
+ 
+ @return YES if the data is correct, false if any check failed
+ */
+- (BOOL)checkDataIntegrityOfFile:(NSString *)filePath;
 
 @end
 NS_ASSUME_NONNULL_END
