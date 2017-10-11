@@ -120,6 +120,7 @@
 		7AC29ACD1F83DB0400DA4DE6 /* dll.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F1A18DB722E00B5651B /* dll.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AC29ACE1F83DB1000DA4DE6 /* raros.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F4E18DB722E00B5651B /* raros.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AC29AD01F850A6A00DA4DE6 /* UnrarKitMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7ADC7A091F8831BC00023C2E /* CheckDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADC7A081F8831BC00023C2E /* CheckDataTests.m */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		967872741E460FA70048A54C /* ListVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 967872731E460FA70048A54C /* ListVolumesTests.m */; };
@@ -170,6 +171,7 @@
 		7A22B1F91F60A2D3004B8050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UnrarKit.strings; sourceTree = "<group>"; };
 		7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressReportingTests.m; sourceTree = "<group>"; };
 		7AC29A5D1F83C08200DA4DE6 /* libunrar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libunrar.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7ADC7A081F8831BC00023C2E /* CheckDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckDataTests.m; sourceTree = "<group>"; };
 		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
 		96370FB419ED8A8200DAF8F1 /* blake2s.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s.cpp; sourceTree = "<group>"; };
 		96370FB519ED8A8200DAF8F1 /* blake2s.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = blake2s.hpp; sourceTree = "<group>"; };
@@ -440,6 +442,7 @@
 				964547D01B384F7D00202B28 /* URKArchiveTestCase.h */,
 				964547D11B384F7D00202B28 /* URKArchiveTestCase.m */,
 				964C8AC818D28EE000AD7321 /* URKArchiveTests.m */,
+				7ADC7A081F8831BC00023C2E /* CheckDataTests.m */,
 				96F4507A1B385BCD00679597 /* ExtractFilesTests.m */,
 				96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */,
 				96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */,
@@ -945,6 +948,7 @@
 				9699FA8A1B3D9B6F00B6D373 /* URKArchiveTestCase.m in Sources */,
 				96A043E01E4D232F00BD7013 /* HasMultipleVolumesTests.m in Sources */,
 				9699FA8D1B3D9B6F00B6D373 /* ListFilenamesTests.m in Sources */,
+				7ADC7A091F8831BC00023C2E /* CheckDataTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1312,7 +1316,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lz",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1360,7 +1367,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lz",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

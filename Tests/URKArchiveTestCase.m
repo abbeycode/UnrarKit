@@ -35,6 +35,7 @@ static NSURL *originalLargeArchiveURL;
                            @"Test Archive (RAR5, Password).rar",
                            @"Test Archive (RAR5).rar",
                            @"Folder Archive.rar",
+                           @"Modified CRC Archive.rar",
                            @"Test File A.txt",
                            @"Test File B.jpg",
                            @"Test File C.m4a",

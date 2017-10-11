@@ -9,6 +9,8 @@
 #import "UnrarKitMacros.h"
 #import "NSString+UnrarKit.h"
 
+#import "zlib.h"
+
 RarHppIgnore
 #import "rar.hpp"
 #pragma clang diagnostic pop
@@ -721,6 +723,11 @@ NS_DESIGNATED_INITIALIZER
         URKCreateActivity("Iterating Each File Info");
         
         [sortedFileInfo enumerateObjectsUsingBlock:^(URKFileInfo *info, NSUInteger idx, BOOL *stop) {
+            if (progress.isCancelled) {
+                URKLogInfo("PerformOnFiles iteration was cancelled");
+                *stop = YES;
+            }
+
             URKLogDebug("Performing action on %{public}@", info.filename);
             action(info, stop);
             progress.completedUnitCount += 1;
@@ -728,11 +735,6 @@ NS_DESIGNATED_INITIALIZER
             if (*stop) {
                 URKLogInfo("Action dictated an early stop");
                 progress.completedUnitCount = progress.totalUnitCount;
-            }
-            
-            if (progress.isCancelled) {
-                URKLogInfo("File info iteration was cancelled");
-                *stop = YES;
             }
         }];
     }
@@ -1030,6 +1032,53 @@ NS_DESIGNATED_INITIALIZER
     return passwordIsGood;
 }
 
+- (BOOL)checkDataIntegrity
+{
+    return [self checkDataIntegrityOfFile:(NSString *_Nonnull)nil];
+}
+
+- (BOOL)checkDataIntegrityOfFile:(NSString *)filePath
+{
+    URKCreateActivity("Checking Data Integrity");
+
+    URKLogInfo("Checking integrity of %{public}@", filePath ? filePath : @"whole archive");
+
+    __block BOOL corruptDataFound = YES;
+
+    NSError *performOnFilesError = nil;
+    [self performOnFilesInArchive:^(URKFileInfo *fileInfo, BOOL *stop) {
+        URKCreateActivity("Iterating through each file");
+        corruptDataFound = NO; // Set inside here so invalid archives are marked as corrupt
+        if (filePath && ![fileInfo.filename isEqualToString:filePath]) return;
+        
+        URKLogDebug("Extracting '%{public}@ to check its CRC...", fileInfo.filename);
+        NSError *extractError = nil;
+        NSData *fileData = [self extractData:fileInfo error:&extractError];
+        if (!fileData) {
+            URKLogError("Error extracting %{public}@: %{public}@", fileInfo.filename, extractError);
+            *stop = YES;
+            return;
+        }
+        
+        uLong expectedCRC = fileInfo.CRC;
+        uLong actualCRC = crc32((uLong)0, (const Bytef*)fileData.bytes, (uint)fileData.length);
+        URKLogDebug("Checking integrity of %{public}@. Expected CRC: %010lu vs. Actual: %010lu",
+                    fileInfo.filename, expectedCRC, actualCRC);
+        if (expectedCRC != actualCRC) {
+            corruptDataFound = YES;
+            URKLogError("Corrupt data found (filename: %{public}@, expected CRC: %010lu, actual CRC: %010lu",
+                        fileInfo.filename, expectedCRC, actualCRC);
+        }
+        
+        if (filePath) *stop = YES;
+    } error:&performOnFilesError];
+    
+    if (performOnFilesError) {
+        URKLogError("Error checking data integrity: %{public}@", performOnFilesError);
+    }
+    
+    return !corruptDataFound;
+}
 
 
 #pragma mark - Callback Functions
@@ -1278,7 +1327,7 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
         case URKErrorCodeUserCancelled:
             errorName = @"ERAR_USER_CANCELLED";
             detail = NSLocalizedStringFromTableInBundle(@"User cancelled the operation in progress", @"UnrarKit", _resources, @"Error detail string");
-   break;
+            break;
 
         default:
             errorName = [NSString stringWithFormat:@"Unknown (%ld)", (long)errorCode];
@@ -1292,12 +1341,17 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
 - (BOOL)assignError:(NSError * __autoreleasing *)error code:(NSInteger)errorCode errorName:(NSString * __autoreleasing *)outErrorName
 {
-    if (error) {
-        NSAssert(outErrorName, @"An out variable for errorName must be provided");
-        
-        NSString *errorDetail = nil;
-        *outErrorName = [self errorNameForErrorCode:errorCode detail:&errorDetail];
+    return [self assignError:error code:errorCode underlyer:nil errorName:outErrorName];
+}
 
+- (BOOL)assignError:(NSError * __autoreleasing *)error code:(NSInteger)errorCode underlyer:(NSError *)underlyingError errorName:(NSString * __autoreleasing *)outErrorName
+{
+    NSAssert(outErrorName, @"An out variable for errorName must be provided");
+    
+    NSString *errorDetail = nil;
+    *outErrorName = [self errorNameForErrorCode:errorCode detail:&errorDetail];
+
+    if (error) {
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:
                                          @{NSLocalizedFailureReasonErrorKey: *outErrorName,
                                            NSLocalizedDescriptionKey: errorDetail,
@@ -1305,6 +1359,10 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
         
         if (self.fileURL) {
             userInfo[NSURLErrorKey] = self.fileURL;
+        }
+        
+        if (underlyingError) {
+            userInfo[NSUnderlyingErrorKey] = underlyingError;
         }
         
         *error = [NSError errorWithDomain:URKErrorDomain
@@ -1337,6 +1395,8 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     
     NSProgress *progress;
     progress = self.progress;
+    self.progress = nil;
+    
     if (!progress) {
         progress = [[NSProgress alloc] initWithParent:[NSProgress currentProgress]
                                              userInfo:nil];
