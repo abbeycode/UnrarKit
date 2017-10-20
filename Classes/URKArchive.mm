@@ -335,7 +335,7 @@ NS_DESIGNATED_INITIALIZER
             return YES;
         }
 
-        URKLogDebug("File is not a ZIP. Unknown contents in 7th and 8th bytes (%02X %02X)", dataBytes[6], dataBytes[7]);
+        URKLogDebug("File is not a RAR. Unknown contents in 7th and 8th bytes (%02X %02X)", dataBytes[6], dataBytes[7]);
     }
     @finally {
         [handle closeFile];
