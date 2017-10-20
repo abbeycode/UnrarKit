@@ -60,7 +60,7 @@ __IPHONE_OS_VERSION_MIN_REQUIRED >= 100000 \
 
 // Called from +[UnrarKit initialize] and +[URKArchiveTestCase setUp]
 extern os_log_t unrarkit_log; // Declared in URKArchive.m
-extern BOOL isAtLeast10_13SDK; // Declared in URKArchive.m
+extern BOOL unrarkitIsAtLeast10_13SDK; // Declared in URKArchive.m
 #define URKLogInit() \
     unrarkit_log = os_log_create("com.abbey-code.UnrarKit", "General"); \
     \
@@ -68,8 +68,8 @@ extern BOOL isAtLeast10_13SDK; // Declared in URKArchive.m
     minVersion.majorVersion = SDK_10_13_MAJOR; \
     minVersion.minorVersion = SDK_10_13_MINOR; \
     minVersion.patchVersion = 0; \
-    isAtLeast10_13SDK = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:minVersion]; \
-    URKLogDebug("Is >= 10.13 (or iOS 11): %@", isAtLeast10_13SDK ? @"YES" : @"NO");
+    unrarkitIsAtLeast10_13SDK = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:minVersion]; \
+    URKLogDebug("Is >= 10.13 (or iOS 11): %@", unrarkitIsAtLeast10_13SDK ? @"YES" : @"NO");
 
 #define URKLog(format, ...)      os_log(unrarkit_log, format, ##__VA_ARGS__);
 #define URKLogInfo(format, ...)  os_log_info(unrarkit_log, format, ##__VA_ARGS__);
@@ -77,11 +77,11 @@ extern BOOL isAtLeast10_13SDK; // Declared in URKArchive.m
 
 
 #define URKLogError(format, ...) \
-    if (isAtLeast10_13SDK) os_log_error(unrarkit_log, format, ##__VA_ARGS__); \
+    if (unrarkitIsAtLeast10_13SDK) os_log_error(unrarkit_log, format, ##__VA_ARGS__); \
     else os_log_with_type(unrarkit_log, OS_LOG_TYPE_ERROR, format, ##__VA_ARGS__);
 
 #define URKLogFault(format, ...) \
-    if (isAtLeast10_13SDK) os_log_fault(unrarkit_log, format, ##__VA_ARGS__); \
+    if (unrarkitIsAtLeast10_13SDK) os_log_fault(unrarkit_log, format, ##__VA_ARGS__); \
     else os_log_with_type(unrarkit_log, OS_LOG_TYPE_FAULT, format, ##__VA_ARGS__);
 
 
