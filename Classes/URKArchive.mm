@@ -163,7 +163,7 @@ NS_DESIGNATED_INITIALIZER
         _threadLock = [[NSObject alloc] init];
 
         if (bookmarkError) {
-            URKLog("Error creating bookmark to RAR archive: %{public}@", bookmarkError);
+            URKLogError("Error creating bookmark to RAR archive: %{public}@", bookmarkError);
 
             if (error) {
                 *error = bookmarkError;

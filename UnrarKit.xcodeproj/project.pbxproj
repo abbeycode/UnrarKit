@@ -1180,6 +1180,7 @@
 					"-analyzer-disable-all-checks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -1214,6 +1215,7 @@
 					"-analyzer-disable-all-checks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
