@@ -382,7 +382,7 @@ NS_DESIGNATED_INITIALIZER
 
         int RHCode = 0, PFCode = 0;
 
-        URKLogInfo("Reading through RAR header looking for files...");
+        URKLogDebug("Reading through RAR header looking for files...");
         
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == 0) {
             URKLogDebug("Adding object");
@@ -490,7 +490,7 @@ NS_DESIGNATED_INITIALIZER
         int RHCode = 0, PFCode = 0, filesExtracted = 0;
         URKFileInfo *fileInfo;
 
-        URKLogInfo("Reading through RAR header looking for files...");
+        URKLogDebug("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
             fileInfo = [URKFileInfo fileInfo:welf.header];
             URKLogDebug("Extracting %{public}@", fileInfo.filename);
@@ -598,7 +598,7 @@ NS_DESIGNATED_INITIALIZER
         int RHCode = 0, PFCode = 0;
         URKFileInfo *fileInfo;
 
-        URKLogInfo("Reading through RAR header looking for files...");
+        URKLogDebug("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:innerError]) {
                 URKLogError("Header contains an error")
@@ -770,7 +770,7 @@ NS_DESIGNATED_INITIALIZER
 
         NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
         
-        URKLogInfo("Reading through RAR header looking for files...");
+        URKLogDebug("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == 0) {
             if (stop || progress.isCancelled) {
                 URKLogDebug("Action dictated an early stop");
