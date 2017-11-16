@@ -1,0 +1,1 @@
+Gave UnrarKitResources its own info.plist file, removing the CFBundleExecutable key
