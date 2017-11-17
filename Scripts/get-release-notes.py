@@ -148,6 +148,10 @@ if __name__ == '__main__':
         sys.exit(1)
 
     version = sys.argv[1]
+    
+    if not version:
+        print("Empty version number passed", file=sys.stderr)
+        sys.exit(1)
 
     if len(sys.argv) >= 3 and sys.argv[2] == CHECK_BETA_NOTES_FLAG:
         if not have_beta_notes_been_updated(version):
