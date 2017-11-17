@@ -1,1 +1,1 @@
-Gave UnrarKitResources its own info.plist file, removing the CFBundleExecutable key
+Fixed release notes addition, so these notes are taken from beta-notes.md
