@@ -16,8 +16,7 @@ Pod::Spec.new do |s|
   s.subspec "unrar-lib" do |ss|
     ss.public_header_files = "Libraries/unrar/raros.hpp",
                              "Libraries/unrar/dll.hpp"
-    ss.source_files = "Libraries/unrar/*.hpp",
-                      "Libraries/unrar/rar.cpp",
+    ss.source_files = "Libraries/unrar/rar.cpp",
                       "Libraries/unrar/strlist.cpp",
                       "Libraries/unrar/strfn.cpp",
                       "Libraries/unrar/pathfn.cpp",
@@ -95,7 +94,8 @@ Pod::Spec.new do |s|
                         "Libraries/unrar/win32stm.cpp"
     ss.pod_target_xcconfig = { "OTHER_LDFLAGS" => "$(inherited) -lc++",
                                "OTHER_CFLAGS" => "$(inherited) -Wno-return-type -Wno-logical-op-parentheses -Wno-conversion -Wno-parentheses -Wno-unused-function -Wno-unused-variable -Wno-switch -Wno-unused-command-line-argument",
-                               "OTHER_CPLUSPLUSFLAGS" => "$(inherited) -DSILENT -DRARDLL $(OTHER_CFLAGS)" }
+                               "OTHER_CPLUSPLUSFLAGS" => "$(inherited) -DSILENT -DRARDLL $(OTHER_CFLAGS)",
+                               "USER_HEADER_SEARCH_PATHS" => "${PODS_ROOT}/UnrarKit/Libraries/unrar" }
     ss.compiler_flags = "-Xanalyzer -analyzer-disable-all-checks"
   end
 end
