@@ -13,6 +13,8 @@ Pod::Spec.new do |s|
   s.source_files = "Classes/**/*.{mm,m,h}"
   s.public_header_files = "Classes/*.h"
 
+  s.preserve_paths      = "Libraries/unrar"
+
   s.subspec "unrar-lib" do |ss|
     ss.public_header_files = "Libraries/unrar/raros.hpp",
                              "Libraries/unrar/dll.hpp"
