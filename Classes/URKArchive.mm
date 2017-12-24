@@ -481,6 +481,8 @@ NS_DESIGNATED_INITIALIZER
 
     NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
     progress.kind = NSProgressKindFile;
+    
+    URKLogDebug("Archive has total size of %{iec-bytes}lld", totalSize.longLongValue);
 	
     __weak URKArchive *welf = self;
 
@@ -489,11 +491,13 @@ NS_DESIGNATED_INITIALIZER
 
         int RHCode = 0, PFCode = 0, filesExtracted = 0;
         URKFileInfo *fileInfo;
+        
+        URKLogInfo("Extracting to %{public}@", filePath);
 
         URKLogDebug("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
             fileInfo = [URKFileInfo fileInfo:welf.header];
-            URKLogDebug("Extracting %{public}@", fileInfo.filename);
+            URKLogDebug("Extracting %{public}@ (%{iec-bytes}lld)", fileInfo.filename, fileInfo.uncompressedSize);
             NSURL *extractedURL = [[NSURL fileURLWithPath:filePath] URLByAppendingPathComponent:fileInfo.filename];
             [progress setUserInfoObject:extractedURL
                                  forKey:NSProgressFileURLKey];
@@ -527,6 +531,8 @@ NS_DESIGNATED_INITIALIZER
             [progress setUserInfoObject:@(fileInfos.count)
                                  forKey:NSProgressFileTotalCountKey];
             progress.completedUnitCount += fileInfo.uncompressedSize;
+            
+            URKLogDebug("Finished extracting %{public}@. Extraction %f complete", fileInfo.filename, progress.fractionCompleted);
             
             if (progressBlock) {
 #pragma clang diagnostic push
