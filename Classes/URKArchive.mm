@@ -374,6 +374,7 @@ NS_DESIGNATED_INITIALIZER
 {
     URKCreateActivity("Listing File Info");
 
+    NSMutableSet *filenames = [NSMutableSet set];
     __block NSMutableArray *fileInfos = [NSMutableArray array];
     __weak URKArchive *welf = self;
 
@@ -385,8 +386,16 @@ NS_DESIGNATED_INITIALIZER
         URKLogDebug("Reading through RAR header looking for files...");
         
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == 0) {
-            URKLogDebug("Adding object");
-            [fileInfos addObject:[URKFileInfo fileInfo:welf.header]];
+            URKFileInfo *fileInfo = [URKFileInfo fileInfo:welf.header];
+            
+            if (![filenames containsObject:fileInfo.filename]) {
+                URKLogDebug("Adding object");
+                [fileInfos addObject:fileInfo];
+                [filenames addObject:fileInfo.filename];
+            }
+            else {
+                URKLogDebug("Not adding %{public}@ to list of file infos, as it has already been listed", fileInfo.filename)
+            }
 
             URKLogDebug("Skipping to next file...");
             if ((PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL)) != 0) {
