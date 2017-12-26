@@ -344,6 +344,19 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     }
 }
 
+#if !TARGET_OS_IPHONE
+- (void)testListFileInfo_MultivolumeArchive {
+    NSArray<NSURL*> *generatedVolumeURLs = [self multiPartArchiveWithName:@"ListFileInfoTests_MultivolumeArchive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:generatedVolumeURLs.firstObject error:nil];
+    
+    NSError *error = nil;
+    NSArray *files = [archive listFileInfo:&error];
+    
+    XCTAssertNil(error, @"Error returned when listing file info for multivolume archive");
+    XCTAssertEqual(files.count, 1, @"Incorrect number of file info items returned for multivolume archive");
+}
+#endif
+
 - (void)testListFileInfo_HeaderPassword
 {
     NSArray *testArchives = @[@"Test Archive (Header Password).rar"];
