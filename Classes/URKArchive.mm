@@ -163,7 +163,7 @@ NS_DESIGNATED_INITIALIZER
         _threadLock = [[NSObject alloc] init];
 
         if (bookmarkError) {
-            URKLog("Error creating bookmark to RAR archive: %{public}@", bookmarkError);
+            URKLogFault("Error creating bookmark to RAR archive: %{public}@", bookmarkError);
 
             if (error) {
                 *error = bookmarkError;
@@ -374,59 +374,45 @@ NS_DESIGNATED_INITIALIZER
 {
     URKCreateActivity("Listing File Info");
 
-    __block NSMutableArray *fileInfos = [NSMutableArray array];
-    __weak URKArchive *welf = self;
-
-    BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
-        URKCreateActivity("Performing List Action");
-
-        int RHCode = 0, PFCode = 0;
-
-        URKLogInfo("Reading through RAR header looking for files...");
-        
-        while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == 0) {
-            URKLogDebug("Adding object");
-            [fileInfos addObject:[URKFileInfo fileInfo:welf.header]];
-
-            URKLogDebug("Skipping to next file...");
-            if ((PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL)) != 0) {
-                NSString *errorName = nil;
-                [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
-                URKLogError("Error skipping to next header file: %{public}@ (%d)", errorName, PFCode);
-                fileInfos = nil;
-                return;
-            }
-        }
-
-        if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
-            NSString *errorName = nil;
-            [self assignError:innerError code:RHCode errorName:&errorName];
-            URKLogError("Error reading RAR header: %{public}@ (%d)", errorName, RHCode);
-            fileInfos = nil;
-        }
-    } inMode:RAR_OM_LIST_INCSPLIT error:error];
-
-	if (!success || !fileInfos) {
+    NSArray<URKFileInfo*> *allFileInfo = [self allFileInfo:error];
+    
+    if (!allFileInfo) {
+        URKLogError("-allFileInfo: returned an error")
         return nil;
     }
+    
+    URKLogDebug("Found %lu total file info items", (unsigned long)allFileInfo.count);
+    
+    NSMutableSet<NSString*> *distinctFilenames = [NSMutableSet set];
+    NSMutableArray<URKFileInfo*> *distinctFileInfo = [NSMutableArray array];
+    
+    for (URKFileInfo *info in allFileInfo) {
+        if (![distinctFilenames containsObject:info.filename]) {
+            [distinctFileInfo addObject:info];
+            [distinctFilenames addObject:info.filename];
+        } else {
+            URKLogDebug("Skipping %{public}@ from list of file info, since it's already represented (probably from another archive volume)", info.filename);
+        }
+    }
+    
+    URKLogDebug("Found %lu distinct file info items", (unsigned long)distinctFileInfo.count);
 
-    URKLogDebug("Found %lu files", (unsigned long)fileInfos.count);
-    return [NSArray arrayWithArray:fileInfos];
+    return [NSArray arrayWithArray:distinctFileInfo];
 }
 
 - (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("Listing Volume URLs");
 
-    NSArray<URKFileInfo*> *listFileInfo = [self listFileInfo:error];
+    NSArray<URKFileInfo*> *allFileInfo = [self allFileInfo:error];
     
-    if (listFileInfo == nil) {
+    if (!allFileInfo) {
         return nil;
     }
     
     NSMutableSet<NSURL*> *volumeURLs = [[NSMutableSet alloc] init];
     
-    for (URKFileInfo* info in listFileInfo) {
+    for (URKFileInfo* info in allFileInfo) {
         NSURL *archiveURL = [NSURL fileURLWithPath:info.archiveName];
         
         if (archiveURL) {
@@ -481,6 +467,8 @@ NS_DESIGNATED_INITIALIZER
 
     NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
     progress.kind = NSProgressKindFile;
+    
+    URKLogDebug("Archive has total size of %{iec-bytes}lld", totalSize.longLongValue);
 	
     __weak URKArchive *welf = self;
 
@@ -489,11 +477,13 @@ NS_DESIGNATED_INITIALIZER
 
         int RHCode = 0, PFCode = 0, filesExtracted = 0;
         URKFileInfo *fileInfo;
+        
+        URKLogInfo("Extracting to %{public}@", filePath);
 
-        URKLogInfo("Reading through RAR header looking for files...");
+        URKLogDebug("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
             fileInfo = [URKFileInfo fileInfo:welf.header];
-            URKLogDebug("Extracting %{public}@", fileInfo.filename);
+            URKLogDebug("Extracting %{public}@ (%{iec-bytes}lld)", fileInfo.filename, fileInfo.uncompressedSize);
             NSURL *extractedURL = [[NSURL fileURLWithPath:filePath] URLByAppendingPathComponent:fileInfo.filename];
             [progress setUserInfoObject:extractedURL
                                  forKey:NSProgressFileURLKey];
@@ -527,6 +517,8 @@ NS_DESIGNATED_INITIALIZER
             [progress setUserInfoObject:@(fileInfos.count)
                                  forKey:NSProgressFileTotalCountKey];
             progress.completedUnitCount += fileInfo.uncompressedSize;
+            
+            URKLogDebug("Finished extracting %{public}@. Extraction %f complete", fileInfo.filename, progress.fractionCompleted);
             
             if (progressBlock) {
 #pragma clang diagnostic push
@@ -598,7 +590,7 @@ NS_DESIGNATED_INITIALIZER
         int RHCode = 0, PFCode = 0;
         URKFileInfo *fileInfo;
 
-        URKLogInfo("Reading through RAR header looking for files...");
+        URKLogDebug("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:innerError]) {
                 URKLogError("Header contains an error")
@@ -770,7 +762,7 @@ NS_DESIGNATED_INITIALIZER
 
         NSProgress *progress = [self beginProgressOperation:totalSize.longLongValue];
         
-        URKLogInfo("Reading through RAR header looking for files...");
+        URKLogDebug("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == 0) {
             if (stop || progress.isCancelled) {
                 URKLogDebug("Action dictated an early stop");
@@ -1245,6 +1237,49 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     delete self.flags; self.flags = 0;
     delete self.header; self.header = 0;
     return YES;
+}
+
+- (NSArray<URKFileInfo *> *) allFileInfo:(NSError * __autoreleasing *)error {
+    URKCreateActivity("-allFileInfo:");
+    
+    __block NSMutableArray *fileInfos = [NSMutableArray array];
+    __weak URKArchive *welf = self;
+    
+    BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
+        URKCreateActivity("Performing List Action");
+        
+        int RHCode = 0, PFCode = 0;
+        
+        URKLogDebug("Reading through RAR header looking for files...");
+        
+        while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == 0) {
+            URKLogDebug("Adding object");
+            [fileInfos addObject:[URKFileInfo fileInfo:welf.header]];
+            
+            URKLogDebug("Skipping to next file...");
+            if ((PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL)) != 0) {
+                NSString *errorName = nil;
+                [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
+                URKLogError("Error skipping to next header file: %{public}@ (%d)", errorName, PFCode);
+                fileInfos = nil;
+                return;
+            }
+        }
+        
+        if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
+            NSString *errorName = nil;
+            [self assignError:innerError code:RHCode errorName:&errorName];
+            URKLogError("Error reading RAR header: %{public}@ (%d)", errorName, RHCode);
+            fileInfos = nil;
+        }
+    } inMode:RAR_OM_LIST_INCSPLIT error:error];
+    
+    if (!success || !fileInfos) {
+        return nil;
+    }
+    
+    URKLogDebug("Found %lu files", (unsigned long)fileInfos.count);
+    return [NSArray arrayWithArray:fileInfos];
 }
 
 - (NSString *)errorNameForErrorCode:(NSInteger)errorCode detail:(NSString * __autoreleasing *)errorDetail

@@ -218,7 +218,7 @@ Most messages fall into this category, making it extremely verbose. All non-erro
 
 #### Fault log level
 
-So far, there is only one case that gets logged at Fault-level: when a Cocoa framework methods that come back with an error
+Used when a Cocoa framework method comes back with an error. There are only a handful of uses
 
 ### Activities
 1. Public methods have an English activity names with spaces, and are title-case

@@ -60,8 +60,8 @@
 		7AC29A901F83C21700DA4DE6 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FD419ED8C8000DAF8F1 /* ui.cpp */; };
 		7AC29A911F83C21700DA4DE6 /* unpack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7A18DB722E00B5651B /* unpack.cpp */; };
 		7AC29A921F83C21700DA4DE6 /* volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F8218DB722F00B5651B /* volume.cpp */; };
-		7AC29A931F83C2A200DA4DE6 /* dll.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F1A18DB722E00B5651B /* dll.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7AC29A941F83C2A200DA4DE6 /* raros.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F4E18DB722E00B5651B /* raros.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7AC29A931F83C2A200DA4DE6 /* dll.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F1A18DB722E00B5651B /* dll.hpp */; };
+		7AC29A941F83C2A200DA4DE6 /* raros.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F4E18DB722E00B5651B /* raros.hpp */; };
 		7AC29A951F83C36900DA4DE6 /* archive.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F0918DB722E00B5651B /* archive.hpp */; };
 		7AC29A961F83C36900DA4DE6 /* array.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F0B18DB722E00B5651B /* array.hpp */; };
 		7AC29A971F83C36900DA4DE6 /* cmddata.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F0E18DB722E00B5651B /* cmddata.hpp */; };
@@ -167,6 +167,7 @@
 /* Begin PBXFileReference section */
 		489CFA0E128B5169005DCC2A /* URKArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = URKArchive.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		489CFA0F128B5169005DCC2A /* URKArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = URKArchive.mm; sourceTree = "<group>"; };
+		7A0668ED1FBBAABB00437F5F /* UnrarKitResources-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnrarKitResources-Info.plist"; sourceTree = "<group>"; };
 		7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnrarKitResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A22B1F91F60A2D3004B8050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UnrarKit.strings; sourceTree = "<group>"; };
 		7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressReportingTests.m; sourceTree = "<group>"; };
@@ -216,7 +217,7 @@
 		964C8AD018D28F1600AD7321 /* Test Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Test Data"; sourceTree = "<group>"; };
 		9660D7AE1A3F4FF90059AC1E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		967872731E460FA70048A54C /* ListVolumesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListVolumesTests.m; sourceTree = "<group>"; };
-		96853ED418DB707000B5651B /* UnrarKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnrarKit-Info.plist"; sourceTree = "<group>"; };
+		96853ED418DB707000B5651B /* UnrarKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "UnrarKit-Info.plist"; path = "../Resources/UnrarKit-Info.plist"; sourceTree = "<group>"; };
 		96853F0718DB722E00B5651B /* arccmt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = arccmt.cpp; sourceTree = "<group>"; };
 		96853F0818DB722E00B5651B /* archive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = archive.cpp; sourceTree = "<group>"; };
 		96853F0918DB722E00B5651B /* archive.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = archive.hpp; sourceTree = "<group>"; };
@@ -421,15 +422,24 @@
 				F3FCD4691A3262E5003612BF /* URKFileInfo.h */,
 				F3FCD46A1A3262E5003612BF /* URKFileInfo.m */,
 				96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */,
+				7A0668EC1FBBAA3100437F5F /* Supporting Files */,
 			);
 			path = Classes;
 			sourceTree = SOURCE_ROOT;
 		};
-		7A22B1EB1F60A05F004B8050 /* UnrarKitResources */ = {
+		7A0668EC1FBBAA3100437F5F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				96853ED418DB707000B5651B /* UnrarKit-Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7A22B1EB1F60A05F004B8050 /* UnrarKitResources */ = {
+			isa = PBXGroup;
+			children = (
 				7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */,
+				7A0668ED1FBBAABB00437F5F /* UnrarKitResources-Info.plist */,
 			);
 			name = UnrarKitResources;
 			path = Resources;
@@ -1107,7 +1117,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Resources/UnrarKit-Info.plist";
+				INFOPLIST_FILE = "Resources/UnrarKitResources-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.UnrarKitResources";
@@ -1136,7 +1146,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "Resources/UnrarKit-Info.plist";
+				INFOPLIST_FILE = "Resources/UnrarKitResources-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.UnrarKitResources";
@@ -1180,6 +1190,7 @@
 					"-analyzer-disable-all-checks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -1214,6 +1225,7 @@
 					"-analyzer-disable-all-checks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};

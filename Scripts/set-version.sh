@@ -27,7 +27,14 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-RELEASE_NOTES=$(./Scripts/get-release-notes.sh $1)
+./Scripts/get-release-notes.py $1 --beta-notes-check
+
+# Check whether beta notes have been updated. The check passes for first- or non-beta releases
+if [ ! $? -eq 0 ]; then
+    exit 1
+fi
+
+RELEASE_NOTES=$(./Scripts/get-release-notes.py $1)
 if [ -z "$RELEASE_NOTES" ]; then
     echo -e "${RED}Please add release notes for v$1 into CHANGELOG.md$COLOR_OFF"
     exit 1
