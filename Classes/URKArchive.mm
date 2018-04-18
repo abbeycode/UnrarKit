@@ -504,7 +504,17 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
 
-            if ((PFCode = RARProcessFile(welf.rarFile, RAR_EXTRACT, (char *) filePath.UTF8String, NULL)) != 0) {
+            char *cFilePath = NULL;
+            BOOL utf8ConversionSucceeded = [filePath getCString:cFilePath maxLength:NSIntegerMax encoding:NSUTF8StringEncoding];
+            if (!utf8ConversionSucceeded) {
+                NSString *errorName = nil;
+                [self assignError:innerError code:URKErrorCodeStringConversion errorName:&errorName];
+                URKLogError("Error converting file to UTF-8");
+                result = NO;
+                return;
+            }
+            
+            if ((PFCode = RARProcessFile(welf.rarFile, RAR_EXTRACT, cFilePath, NULL)) != 0) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Error extracting file: %{public}@ (%d)", errorName, PFCode);
@@ -1212,8 +1222,17 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
 
     if(aPassword != nil) {
         URKLogDebug("Setting password...");
-        char *password = (char *) [aPassword UTF8String];
-        RARSetPassword(self.rarFile, password);
+        
+        char *cPassword = NULL;
+        BOOL utf8ConversionSucceeded = [aPassword getCString:cPassword maxLength:NSIntegerMax encoding:NSUTF8StringEncoding];
+        if (!utf8ConversionSucceeded) {
+            NSString *errorName = nil;
+            [self assignError:error code:URKErrorCodeStringConversion errorName:&errorName];
+            URKLogError("Error converting password to UTF-8");
+            return NO;
+        }
+        
+        RARSetPassword(self.rarFile, cPassword);
     }
 
 	return YES;
@@ -1362,6 +1381,12 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
         case URKErrorCodeUserCancelled:
             errorName = @"ERAR_USER_CANCELLED";
             detail = NSLocalizedStringFromTableInBundle(@"User cancelled the operation in progress", @"UnrarKit", _resources, @"Error detail string");
+            break;
+            
+
+        case URKErrorCodeStringConversion:
+            errorName = @"ERAR_UTF8_PATH_CONVERSION";
+            detail = NSLocalizedStringFromTableInBundle(@"Error converting a string to UTF-8", @"UnrarKit", _resources, @"Error detail string");
             break;
 
         default:

@@ -868,7 +868,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
                   @"File extracted in buffer not returned correctly");
 }
 
-#if !TARGET_OS_IPHONE
+#if !TARGET_OS_IPHONE && __MAC_OS_X_VERSION_MIN_REQUIRED >= 101200
 - (void)testExtractBufferedData_VeryLarge
 {
     kdebug_signpost_start(SignPostCodeCreateTextFile, 0, 0, 0, SignPostColorBlue);
