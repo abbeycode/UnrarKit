@@ -49,8 +49,9 @@
         XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
         
         error = nil;
-        NSArray *extractedFiles = [fm contentsOfDirectoryAtPath:extractURL.path
-                                                          error:&error];
+        NSArray *extractedFiles = [[fm contentsOfDirectoryAtPath:extractURL.path
+                                                           error:&error]
+                                   sortedArrayUsingSelector:@selector(compare:)];
         
         XCTAssertNil(error, @"Failed to list contents of extract directory: %@", extractURL);
         
@@ -116,8 +117,9 @@
         XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
         
         error = nil;
-        NSArray *extractedFiles = [fm contentsOfDirectoryAtPath:extractURL.path
-                                                          error:&error];
+        NSArray *extractedFiles = [[fm contentsOfDirectoryAtPath:extractURL.path
+                                                           error:&error]
+                                   sortedArrayUsingSelector:@selector(compare:)];
         
         XCTAssertNil(error, @"Failed to list contents of extract directory: %@", extractURL);
         
@@ -164,8 +166,9 @@
     XCTAssertTrue(success, @"Unrar failed to extract %@ to %@", testArchiveName, extractURL);
     
     error = nil;
-    NSArray *extractedFiles = [fm contentsOfDirectoryAtPath:extractURL.path
-                                                      error:&error];
+    NSArray *extractedFiles = [[fm contentsOfDirectoryAtPath:extractURL.path
+                                                       error:&error]
+                               sortedArrayUsingSelector:@selector(compare:)];
     
     XCTAssertNil(error, @"Failed to list contents of extract directory: %@", extractURL);
     

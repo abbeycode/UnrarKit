@@ -504,12 +504,14 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
 
-            char *cFilePath = NULL;
-            BOOL utf8ConversionSucceeded = [filePath getCString:cFilePath maxLength:NSIntegerMax encoding:NSUTF8StringEncoding];
+            char cFilePath[2048];
+            BOOL utf8ConversionSucceeded = [filePath getCString:cFilePath
+                                                      maxLength:sizeof(cFilePath)
+                                                       encoding:NSUTF8StringEncoding];
             if (!utf8ConversionSucceeded) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:URKErrorCodeStringConversion errorName:&errorName];
-                URKLogError("Error converting file to UTF-8");
+                URKLogError("Error converting file to UTF-8 (buffer too short?)");
                 result = NO;
                 return;
             }
@@ -840,7 +842,7 @@ NS_DESIGNATED_INITIALIZER
 {
     URKCreateActivity("Extracting Buffered Data");
 
-    NSError *innerError = nil;
+    NSError *actionError = nil;
 
     NSProgress *progress = [self beginProgressOperation:0];
 
@@ -930,17 +932,17 @@ NS_DESIGNATED_INITIALIZER
             [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
             URKLogError("Error processing file: %{public}@ (%d)", errorName, PFCode);
         }
-    } inMode:RAR_OM_EXTRACT error:&innerError];
+    } inMode:RAR_OM_EXTRACT error:&actionError];
 
     if (error) {
-        *error = innerError ? innerError : nil;
+        *error = actionError;
 
-        if (innerError) {
-            URKLogError("Error reading buffered data from file\nfilePath: %{public}@\nerror: %{public}@", filePath, innerError);
+        if (actionError) {
+            URKLogError("Error reading buffered data from file\nfilePath: %{public}@\nerror: %{public}@", filePath, actionError);
         }
     }
 
-    return success && !innerError;
+    return success && !actionError;
 }
 
 - (BOOL)isPasswordProtected
@@ -1223,12 +1225,14 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     if(aPassword != nil) {
         URKLogDebug("Setting password...");
         
-        char *cPassword = NULL;
-        BOOL utf8ConversionSucceeded = [aPassword getCString:cPassword maxLength:NSIntegerMax encoding:NSUTF8StringEncoding];
+        char cPassword[2048];
+        BOOL utf8ConversionSucceeded = [aPassword getCString:cPassword
+                                                   maxLength:sizeof(cPassword)
+                                                    encoding:NSUTF8StringEncoding];
         if (!utf8ConversionSucceeded) {
             NSString *errorName = nil;
             [self assignError:error code:URKErrorCodeStringConversion errorName:&errorName];
-            URKLogError("Error converting password to UTF-8");
+            URKLogError("Error converting password to UTF-8 (buffer too short?)");
             return NO;
         }
         
