@@ -14,7 +14,10 @@ fi
 sed -i .original 's/RARGetDllVersion();/RARGetDllVersion(void);/' Libraries/unrar/dll.hpp
 
 # Lint the podspec to check for errors. Don't call `pod spec lint`, because we want it to evaluate locally
-pod lib lint --verbose
+
+# Using sed to remove logging from output until CocoaPods issue #7577 is implemented and I can use the
+# OS_ACTIVITY_MODE = disable environment variable from the test spec scheme
+pod lib lint --verbose | sed -l '/xctest\[/d; /^$/d'
 
 # Put back the original dll.hpp
 mv Libraries/unrar/dll.hpp.original Libraries/unrar/dll.hpp
