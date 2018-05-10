@@ -1,1 +1,1 @@
-Fixed bug when listing file info for multivolume archive that resulted in duplicate items (Issue #67 - Thanks to [@skito](https://github.com/skito) for catching this)
+Added CocoaPods Test Spec, so your test suite can also run UnrarKit's unit tests Issue #44
