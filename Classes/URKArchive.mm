@@ -532,7 +532,7 @@ NS_DESIGNATED_INITIALIZER
                 
                 NSInteger errorCode = progress.isCancelled ? URKErrorCodeUserCancelled : PFCode;
                 [self assignError:innerError code:errorCode errorName:&errorName];
-                URKLogError("Error extracting file: %{public}@ (%ld)", errorName, errorCode);
+                URKLogError("Error extracting file: %{public}@ (%ld)", errorName, (long)errorCode);
                 result = NO;
                 return;
             }
