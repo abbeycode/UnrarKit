@@ -22,7 +22,8 @@ _Pragma( _stringify( clang diagnostic ignored "-Wold-style-cast" ) ) \
 _Pragma( _stringify( clang diagnostic ignored "-Wpadded" ) ) \
 _Pragma( _stringify( clang diagnostic ignored "-Wreserved-id-macro" ) ) \
 _Pragma( _stringify( clang diagnostic ignored "-Wshorten-64-to-32" ) ) \
-_Pragma( _stringify( clang diagnostic ignored "-Wundef" ) )
+_Pragma( _stringify( clang diagnostic ignored "-Wcast-qual" ) ) \
+_Pragma( _stringify( clang diagnostic ignored "-Wundef" ) ) \
 
 #define DllHppIgnore \
 _Pragma( _stringify( clang diagnostic push ) ) \

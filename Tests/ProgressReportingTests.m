@@ -12,10 +12,10 @@
 
 @interface ProgressReportingTests : URKArchiveTestCase
 
-@property NSMutableArray<NSNumber*> *fractionsCompletedReported;
-@property NSMutableArray<NSString*> *descriptionsReported;
-@property NSMutableArray<NSString*> *additionalDescriptionsReported;
-@property NSMutableArray<URKFileInfo*> *fileInfosReported;
+@property (retain) NSMutableArray<NSNumber*> *fractionsCompletedReported;
+@property (retain) NSMutableArray<NSString*> *descriptionsReported;
+@property (retain) NSMutableArray<NSString*> *additionalDescriptionsReported;
+@property (retain) NSMutableArray<URKFileInfo*> *fileInfosReported;
 
 @end
 
@@ -516,6 +516,8 @@ static NSUInteger observerCallCount;
     if ([object isKindOfClass:[NSProgress class]]) {
         progress = object;
         [self.fractionsCompletedReported addObject:@(progress.fractionCompleted)];
+    } else {
+        return;
     }
     
     if (context == ExtractFilesContext) {
@@ -527,6 +529,7 @@ static NSUInteger observerCallCount;
     }
     
     if (context == CancelContext && observerCallCount == 2) {
+        NSLog(@"Cancelling progress in -[ProgressReportingTests observeValueForKeyPath:ofObject:change:context:]");
         [progress cancel];
     }
 }

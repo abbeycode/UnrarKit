@@ -98,6 +98,11 @@ typedef NS_ENUM(NSInteger, URKErrorCode) {
      *  User cancelled the operation
      */
     URKErrorCodeUserCancelled = 102,
+    
+    /**
+     *  Error converting string to UTF-8
+     */
+    URKErrorCodeStringConversion = 103,
 };
 
 typedef NSString *const URKProgressInfoKey;
