@@ -44,6 +44,7 @@ NS_DESIGNATED_INITIALIZER
 
 @property (strong) NSData *fileBookmark;
 @property (strong) BOOL(^bufferedReadBlock)(NSData *dataChunk);
+@property (strong) BOOL(^shouldCancelBlock)();
 
 @property (strong) NSObject *threadLock;
 
@@ -516,10 +517,19 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
             
+            RARSetCallback(welf.rarFile, AllowCancellationCallbackProc, (long)(__bridge void *) self);
+            self.shouldCancelBlock = ^BOOL{
+                URKCreateActivity("shouldCancelBlock")
+                URKLogDebug("Progress.isCancelled: %{public}@", progress.isCancelled ? @"YES" : @"NO")
+                return progress.isCancelled;
+            };
+
             if ((PFCode = RARProcessFile(welf.rarFile, RAR_EXTRACT, cFilePath, NULL)) != 0) {
                 NSString *errorName = nil;
-                [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
-                URKLogError("Error extracting file: %{public}@ (%d)", errorName, PFCode);
+                
+                NSInteger errorCode = progress.isCancelled ? URKErrorCodeUserCancelled : PFCode;
+                [self assignError:innerError code:errorCode errorName:&errorName];
+                URKLogError("Error extracting file: %{public}@ (%ld)", errorName, errorCode);
                 result = NO;
                 return;
             }
@@ -543,6 +553,9 @@ NS_DESIGNATED_INITIALIZER
 
             bytesDecompressed += fileInfo.uncompressedSize;
         }
+        
+        RARSetCallback(welf.rarFile, NULL, NULL);
+        self.shouldCancelBlock = nil;
 
         if (RHCode != ERAR_SUCCESS && RHCode != ERAR_END_ARCHIVE) {
             NSString *errorName = nil;
@@ -919,6 +932,9 @@ NS_DESIGNATED_INITIALIZER
 
         URKLogDebug("Processing file...");
         PFCode = RARProcessFile(welf.rarFile, RAR_TEST, NULL, NULL);
+        
+        RARSetCallback(welf.rarFile, NULL, NULL);
+        self.bufferedReadBlock = nil;
 
         if (progress.isCancelled) {
             NSString *errorName = nil;
@@ -1128,6 +1144,23 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     }
 
     return 0;
+}
+
+int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, long P2) {
+    URKCreateActivity("AllowCancellationCallbackProc");
+    URKArchive *refToSelf = (__bridge URKArchive *)(void *)UserData;
+
+    if (![refToSelf shouldCancelBlock]) {
+        return 0;
+    }
+    
+    BOOL shouldCancel = refToSelf.shouldCancelBlock();
+    if (shouldCancel) {
+        URKLogDebug("Operation cancelled in shouldCancelBlock()");
+        refToSelf.shouldCancelBlock = nil;
+    }
+    
+    return shouldCancel ? -1 : 0;
 }
 
 

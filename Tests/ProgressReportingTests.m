@@ -342,6 +342,7 @@ static NSUInteger observerCallCount;
 }
 
 
+
 #pragma mark - Mac-only tests
 
 
@@ -497,6 +498,65 @@ static NSUInteger observerCallCount;
     NSUInteger expectedProgressUpdates = 2;
     XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgressUpdates, @"Incorrect number of progress updates");
     XCTAssertEqual(blockCallCount, 1, @"Action block called incorrect number of times after cancellation");
+}
+
+- (void)testProgressCancellation_ExtractFiles_MiddleOfFile {
+    NSURL *largeTextFile = [self randomTextFileOfLength:50000000]; // Increase for a more dramatic test
+    XCTAssertNotNil(largeTextFile, @"No large text file URL returned");
+    NSURL *testArchiveURL = [self archiveWithFiles:@[largeTextFile]];
+    
+    NSString *extractDirectory = [self randomDirectoryWithPrefix:@"CancelExtractInMiddle"];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    NSProgress *extractFilesProgress = [NSProgress progressWithTotalUnitCount:1];
+    [extractFilesProgress becomeCurrentWithPendingUnitCount:1];
+    
+    NSString *observedSelector = NSStringFromSelector(@selector(fractionCompleted));
+    
+    [extractFilesProgress addObserver:self
+                           forKeyPath:observedSelector
+                              options:NSKeyValueObservingOptionInitial
+                              context:ExtractFilesContext];
+    
+    // Half a second later, cancel progress
+    dispatch_queue_t cancellationQueue = dispatch_queue_create("Extract Files Cancellation", 0);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), cancellationQueue, ^{
+        URKLogInfo("Cancelling extraction in progress");
+        [extractFilesProgress cancel];
+    });
+    
+    NSDate *extractStart = [NSDate date];
+
+    NSError *extractError = nil;
+    BOOL success = [archive extractFilesTo:extractURL.path
+                                 overwrite:NO
+                                     error:&extractError];
+    
+    NSDate *extractFinish = [NSDate date];
+
+    NSTimeInterval executionTime = [extractFinish timeIntervalSinceDate:extractStart];
+    XCTAssertLessThan(executionTime, 1.0, @"Asynchronous file extraction cancel didn't stop in the middle of a file");
+
+    XCTAssertNotNil(extractError, @"Error not returned by extractFilesTo:overwrite:error:");
+    XCTAssertEqual(extractError.code, URKErrorCodeUserCancelled, @"Incorrect error code returned from user cancellation");
+    XCTAssertFalse(success, @"Unrar didn't cancel extraction");
+    
+    [extractFilesProgress resignCurrent];
+    [extractFilesProgress removeObserver:self forKeyPath:observedSelector];
+    
+    
+    NSUInteger expectedProgressUpdates = 1;
+    XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgressUpdates, @"Incorrect number of progress updates");
+
+    NSError *listContentsError = nil;
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSArray *extractedFiles = [fm contentsOfDirectoryAtPath:extractURL.path
+                                                      error:&listContentsError];
+
+    XCTAssertNil(listContentsError, @"Error listing contents of extraction directory");
+    XCTAssertEqual(extractedFiles.count, 0, @"Partial file produced in spite of cancellation");
 }
 #endif
 
