@@ -525,6 +525,9 @@ NS_DESIGNATED_INITIALIZER
             };
 
             if ((PFCode = RARProcessFile(welf.rarFile, RAR_EXTRACT, cFilePath, NULL)) != 0) {
+                RARSetCallback(welf.rarFile, NULL, NULL);
+                self.shouldCancelBlock = nil;
+
                 NSString *errorName = nil;
                 
                 NSInteger errorCode = progress.isCancelled ? URKErrorCodeUserCancelled : PFCode;
@@ -684,6 +687,9 @@ NS_DESIGNATED_INITIALIZER
         
         URKLogInfo("Processing file...");
         PFCode = RARProcessFile(welf.rarFile, RAR_TEST, NULL, NULL);
+        
+        RARSetCallback(welf.rarFile, NULL, NULL);
+        self.bufferedReadBlock = nil;
         
         if (progress.isCancelled) {
             NSString *errorName = nil;
