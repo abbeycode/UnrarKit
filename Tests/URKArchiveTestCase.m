@@ -113,9 +113,16 @@ static NSURL *originalLargeArchiveURL;
     NSString *largeArchiveDirectory = originalLargeArchiveURL.path.stringByDeletingLastPathComponent;
     BOOL tempDirContainsLargeArchive = [largeArchiveDirectory isEqualToString:self.tempDirectory.path];
     if (!self.testFailed && !tempDirContainsLargeArchive) {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] removeItemAtURL:self.tempDirectory error:&error];
+        __block NSError *error = nil;
         
+        dispatch_semaphore_t sem = dispatch_semaphore_create(1);
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSFileManager defaultManager] removeItemAtURL:self.tempDirectory error:&error];
+            dispatch_semaphore_signal(sem);
+        });
+
+        dispatch_semaphore_wait(sem, dispatch_time(DISPATCH_TIME_NOW, 5000));
         XCTAssertNil(error, @"Error deleting temp directory");
     }
     
