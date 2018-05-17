@@ -1,1 +1,1 @@
-Added CocoaPods Test Spec, so your test suite can also run UnrarKit's unit tests Issue #44
+Improved the `-extractFilesTo:overwrite:progress:error:` method, so it now allows cancellation in the middle of extracting a file. This will come in handy when the files in the archive are larger (Issue #74). Thanks, @skito!
