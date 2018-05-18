@@ -872,8 +872,13 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testExtractBufferedData_VeryLarge
 {
     kdebug_signpost_start(SignPostCodeCreateTextFile, 0, 0, 0, SignPostColorBlue);
-    NSURL *largeTextFile = [self randomTextFileOfLength:1000000]; // Increase for a more dramatic test
+    const NSInteger fileSize = 1000000; // Increase for a more dramatic test
+    NSString *fileSizeStr = [NSByteCountFormatter stringFromByteCount:fileSize * 2 // x 2 because it's UTF-16
+                                                           countStyle:NSByteCountFormatterCountStyleFile];
+    URKLogInfo("Creating a large text file of size %{public}@", fileSizeStr);
+    NSURL *largeTextFile = [self randomTextFileOfLength:fileSize];
     XCTAssertNotNil(largeTextFile, @"No large text file URL returned");
+    NSString *largeFileName = largeTextFile.lastPathComponent;
     kdebug_signpost_end(SignPostCodeCreateTextFile, 0, 0, 0, SignPostColorBlue);
 
     kdebug_signpost_start(SignPostCodeArchiveData, 0, 0, 0, SignPostColorGreen);
@@ -897,7 +902,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     kdebug_signpost_start(SignPostCodeExtractData, 0, 0, 0, SignPostColorPurple);
 
     NSError *error = nil;
-    BOOL success = [archive extractBufferedDataFromFile:largeTextFile.lastPathComponent
+    BOOL success = [archive extractBufferedDataFromFile:largeFileName
                                                   error:&error
                                                  action:
                     ^(NSData *dataChunk, CGFloat percentDecompressed) {
@@ -916,6 +921,54 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     NSData *fileData = [NSData dataWithContentsOfURL:largeTextFile];
     
     XCTAssertTrue([fileData isEqualToData:deflatedData], @"Data didn't restore correctly");
+}
+
+- (void)testExtractBufferedData_VeryLargeSingleFile
+{
+    NSString *largeArchiveName = @"Large Single File Archive.rar";
+    NSString *archivedFileName = @"AF429D3F-E1AE-4A67-B0F0-475B9D1AB713-87062-0000ACEB6B04D0A8.txt";
+
+    NSURL *archiveURL = [self urlOfTestFile:largeArchiveName];
+    XCTAssertNotNil(archiveURL, @"No URL found for archived large text file");
+    
+    NSError *reachableError = nil;
+    BOOL archiveExists = [archiveURL checkResourceIsReachableAndReturnError:&reachableError];
+    XCTAssertTrue(archiveExists,
+                  @"Could not find large single file. This file is not part of the repo - please add"
+                  " it to the `Tests/Test Data` directory and update the largeArchiveName and "
+                  "archivedFileName variables above. (largeArchiveName: %@ || archivedFileName: %@ :: Error: %@)",
+                  largeArchiveName, archivedFileName, reachableError);
+    
+    NSURL *deflatedFileURL = [self.tempDirectory URLByAppendingPathComponent:@"DeflatedTextFile.txt"];
+    BOOL createSuccess = [[NSFileManager defaultManager] createFileAtPath:deflatedFileURL.path
+                                                                 contents:nil
+                                                               attributes:nil];
+    XCTAssertTrue(createSuccess, @"Failed to create empty deflate file");
+    
+    NSError *handleError = nil;
+    NSFileHandle *deflated = [NSFileHandle fileHandleForWritingToURL:deflatedFileURL
+                                                               error:&handleError];
+    XCTAssertNil(handleError, @"Error creating a file handle");
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
+    
+    kdebug_signpost_start(SignPostCodeExtractData, 0, 0, 0, SignPostColorPurple);
+    
+    NSError *error = nil;
+    BOOL success = [archive extractBufferedDataFromFile:archivedFileName
+                                                  error:&error
+                                                 action:
+                    ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                        NSLog(@"Decompressed: %f%%", percentDecompressed);
+                        [deflated writeData:dataChunk];
+                    }];
+    
+    kdebug_signpost_end(SignPostCodeExtractData, 0, 0, 0, SignPostColorPurple);
+    
+    XCTAssertTrue(success, @"Failed to read buffered data");
+    XCTAssertNil(error, @"Error reading buffered data");
+    
+    [deflated closeFile];
 }
 #endif
 
