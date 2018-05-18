@@ -16,6 +16,9 @@ else
     echo -e "\nTag looks like a version number: $TRAVIS_TAG"
 fi
 
+# For linting purposes, fix the error in dll.hpp
+sed -i .original 's/RARGetDllVersion();/RARGetDllVersion(void);/' Libraries/unrar/dll.hpp
+
 # Skip tests because they're assumed to have passed during the cocoapod-validate script or else
 # this script wouldn't run
 echo -e "\nLinting podspec..."
@@ -25,6 +28,9 @@ if [ $? -ne 0 ]; then
     echo -e "\nPodspec failed lint. Run again with --verbose to troubleshoot"
     exit 1
 fi
+
+# Put back the original dll.hpp
+mv Libraries/unrar/dll.hpp.original Libraries/unrar/dll.hpp
 
 echo -e "\nExporting Carthage archive...\n"
 # Exports ARCHIVE_PATH, used below
