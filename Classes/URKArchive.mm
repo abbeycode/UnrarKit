@@ -519,7 +519,7 @@ NS_DESIGNATED_INITIALIZER
             
             RARSetCallback(welf.rarFile, AllowCancellationCallbackProc, (long)(__bridge void *) self);
             self.shouldCancelBlock = ^BOOL{
-                URKCreateActivity("shouldCancelBlock")
+                URKCreateActivity("shouldCancelBlock");
                 URKLogDebug("Progress.isCancelled: %{public}@", progress.isCancelled ? @"YES" : @"NO")
                 return progress.isCancelled;
             };
