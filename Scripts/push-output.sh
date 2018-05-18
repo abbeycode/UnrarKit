@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo
+set -ev
 
 # Only potentially push to CocoaPods when it's a tagged build
 if [ -z "$TRAVIS_TAG" ]; then
