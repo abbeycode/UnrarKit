@@ -1,1 +1,2 @@
-Improved the `-extractFilesTo:overwrite:progress:error:` method, so it now allows cancellation in the middle of extracting a file. This will come in handy when the files in the archive are larger (Issue #74). Thanks, @skito!
+* Improved the `-extractFilesTo:overwrite:progress:error:` method, so it now allows cancellation in the middle of extracting a file. This will come in handy when the files in the archive are larger (Issue #74). Thanks, @skito!
+* Upgraded UnRAR library to v5.6.3 (Issue #77)

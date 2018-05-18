@@ -9,6 +9,7 @@
 * Added localized details to returned `NSError` objects (Issue #45)
 * Fixed bug when listing file info for multivolume archive that resulted in duplicate items (Issue #67 - Thanks to [@skito](https://github.com/skito) for catching this)
 * Moved `unrar` sources into a static library, and addressed a wide variety of warnings exposed by the `-Weverything` flag (Issue #56)
+* Upgraded UnRAR library to v5.6.3 (Issue #77)
 * Switched to Travis Build Stages instead of the unofficial Travis-After-All (Issue #42)
 * Added CocoaPods Test Spec, so your test suite can also run UnrarKit's unit tests Issue #44
 * Fixed warnings from Xcode 9 (Issue #51)
