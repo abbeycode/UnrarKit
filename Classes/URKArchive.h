@@ -290,6 +290,24 @@ extern NSString *URKErrorDomain;
 - (nullable NSArray<URKFileInfo*> *)listFileInfo:(NSError **)error;
 
 /**
+ *  Iterates the header of the archive, calling the block with each archived file's info.
+ *
+ *  WARNING: There is no filtering of duplicate header entries. If a file is listed twice, `action`
+ *  will be called twice with that file's path
+ *
+ *  @param action The action to perform using the data. Must be non-nil
+ *
+ *       - *fileInfo* The metadata of the file within the archive
+ *       - *stop*     Set to YES to stop reading the archive
+ *
+ *  @param error Contains an NSError object when there was an error reading the archive
+ *
+ *  @return Returns NO if an error was encountered
+ */
+- (BOOL) iterateFileInfo:(void(^)(URKFileInfo *fileInfo, BOOL *stop))action
+                   error:(NSError **)error;
+
+/**
  *  Lists the URLs of volumes in a single- or multi-volume archive
  *
  *  @param error Contains an NSError object when there was an error reading the archive
