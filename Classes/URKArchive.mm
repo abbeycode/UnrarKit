@@ -375,30 +375,58 @@ NS_DESIGNATED_INITIALIZER
 {
     URKCreateActivity("Listing File Info");
 
-    NSArray<URKFileInfo*> *allFileInfo = [self allFileInfo:error];
+    NSMutableSet<NSString*> *distinctFilenames = [NSMutableSet set];
+    NSMutableArray<URKFileInfo*> *distinctFileInfo = [NSMutableArray array];
+    NSError *innerError = nil;
+
+    BOOL wasSuccessful = [self iterateFileInfo:^(URKFileInfo * _Nonnull fileInfo, BOOL * _Nonnull stop) {
+        if (![distinctFilenames containsObject:fileInfo.filename]) {
+            [distinctFileInfo addObject:fileInfo];
+            [distinctFilenames addObject:fileInfo.filename];
+        } else {
+            URKLogDebug("Skipping %{public}@ from list of file info, since it's already represented (probably from another archive volume)", fileInfo.filename);
+        }
+    }
+                    error:&innerError];
     
-    if (!allFileInfo) {
-        URKLogError("-allFileInfo: returned an error")
+    if (!wasSuccessful) {
+        URKLogError("Failed to iterate file info: %{public}@", innerError);
+        
+        if (error && innerError) {
+            *error = innerError;
+        }
+        
         return nil;
     }
     
-    URKLogDebug("Found %lu total file info items", (unsigned long)allFileInfo.count);
+    URKLogDebug("Found %lu file info items", (unsigned long)distinctFileInfo.count);
+    return [NSArray arrayWithArray:distinctFileInfo];
+}
+
+- (BOOL) iterateFileInfo:(void(^)(URKFileInfo *fileInfo, BOOL *stop))action
+                   error:(NSError * __autoreleasing *)error
+{
+    URKCreateActivity("Iterating File Info");
+    NSAssert(action != nil, @"'action' is a required argument");
+
+    NSError *innerError = nil;
+
+    URKLogDebug("Beginning to iterate through contents of %{public}@", self.filename);
     
-    NSMutableSet<NSString*> *distinctFilenames = [NSMutableSet set];
-    NSMutableArray<URKFileInfo*> *distinctFileInfo = [NSMutableArray array];
+    BOOL wasSuccessful = [self iterateAllFileInfo:action
+                                            error:&innerError];
     
-    for (URKFileInfo *info in allFileInfo) {
-        if (![distinctFilenames containsObject:info.filename]) {
-            [distinctFileInfo addObject:info];
-            [distinctFilenames addObject:info.filename];
-        } else {
-            URKLogDebug("Skipping %{public}@ from list of file info, since it's already represented (probably from another archive volume)", info.filename);
+    if (!wasSuccessful) {
+        URKLogError("Failed to iterate all file info: %{public}@", innerError);
+        
+        if (error && innerError) {
+            *error = innerError;
         }
+        
+        return NO;
     }
     
-    URKLogDebug("Found %lu distinct file info items", (unsigned long)distinctFileInfo.count);
-
-    return [NSArray arrayWithArray:distinctFileInfo];
+    return YES;
 }
 
 - (nullable NSArray<NSURL*> *)listVolumeURLs:(NSError * __autoreleasing *)error
@@ -1301,13 +1329,15 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
     return YES;
 }
 
-- (NSArray<URKFileInfo *> *) allFileInfo:(NSError * __autoreleasing *)error {
+- (BOOL) iterateAllFileInfo:(void(^)(URKFileInfo *fileInfo, BOOL *stop))action
+                      error:(NSError * __autoreleasing *)error
+{
     URKCreateActivity("-allFileInfo:");
+    NSAssert(action != nil, @"'action' is a required argument");
     
-    __block NSMutableArray *fileInfos = [NSMutableArray array];
     __weak URKArchive *welf = self;
     
-    BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
+    BOOL wasSuccessful = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing List Action");
         
         int RHCode = 0, PFCode = 0;
@@ -1315,15 +1345,21 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
         URKLogDebug("Reading through RAR header looking for files...");
         
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == 0) {
-            URKLogDebug("Adding object");
-            [fileInfos addObject:[URKFileInfo fileInfo:welf.header]];
+            URKLogDebug("Calling iterateAllFileInfo handler");
+            BOOL shouldStop = NO;
+            URKFileInfo *info = [URKFileInfo fileInfo:welf.header];
+            action(info, &shouldStop);
+            
+            if (shouldStop) {
+                URKLogDebug("iterateAllFileInfo got signal to stop");
+                return;
+            }
             
             URKLogDebug("Skipping to next file...");
             if ((PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL)) != 0) {
                 NSString *errorName = nil;
                 [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Error skipping to next header file: %{public}@ (%d)", errorName, PFCode);
-                fileInfos = nil;
                 return;
             }
         }
@@ -1332,11 +1368,31 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
             NSString *errorName = nil;
             [self assignError:innerError code:RHCode errorName:&errorName];
             URKLogError("Error reading RAR header: %{public}@ (%d)", errorName, RHCode);
-            fileInfos = nil;
         }
     } inMode:RAR_OM_LIST_INCSPLIT error:error];
     
-    if (!success || !fileInfos) {
+    return wasSuccessful;
+}
+
+- (NSArray<URKFileInfo *> *) allFileInfo:(NSError * __autoreleasing *)error {
+    URKCreateActivity("-allFileInfo:");
+    
+    NSMutableArray *fileInfos = [NSMutableArray array];
+    NSError *innerError = nil;
+    
+    URKLogDebug("Iterating all file info");
+    BOOL wasSuccessful = [self iterateAllFileInfo:^(URKFileInfo *fileInfo, BOOL *stop) {
+        [fileInfos addObject:fileInfo];
+    }
+                       error:&innerError];
+    
+    if (!wasSuccessful || !fileInfos) {
+        URKLogError("File info iteration was not successful: %{public}@", innerError);
+
+        if (error && innerError) {
+            *error = innerError;
+        }
+        
         return nil;
     }
     
