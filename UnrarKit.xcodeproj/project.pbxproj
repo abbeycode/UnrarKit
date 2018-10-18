@@ -1266,7 +1266,7 @@
 					"$(BUILT_PRODUCTS_DIR)/../../Headers",
 				);
 				INFOPLIST_FILE = "Tests/UnrarKit Tests-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks $(DT_TOOLCHAIN_DIR)/usr/lib/swift/iphonesimulator";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/UnrarKit Tests-Bridging-Header.h";
@@ -1298,7 +1298,7 @@
 					"$(BUILT_PRODUCTS_DIR)/../../Headers",
 				);
 				INFOPLIST_FILE = "Tests/UnrarKit Tests-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks $(DT_TOOLCHAIN_DIR)/usr/lib/swift/iphonesimulator";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Tests/UnrarKit Tests-Bridging-Header.h";
