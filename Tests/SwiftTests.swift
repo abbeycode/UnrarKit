@@ -26,6 +26,7 @@ class SwiftTests: URKArchiveTestCase {
     
     func testExtractBufferedData_LargeSingleFile() {
         guard #available(macOS 10.12, *) else { return }
+        NSLog("Running...")
         
         let largeArchiveName = "Large Single File Archive.rar";
         let archivedFileName = "AF429D3F-E1AE-4A67-B0F0-475B9D1AB713-87062-0000ACEB6B04D0A8.txt";
