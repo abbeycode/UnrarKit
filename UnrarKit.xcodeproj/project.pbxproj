@@ -10,6 +10,7 @@
 		7A22B1F81F60A2D3004B8050 /* UnrarKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */; };
 		7A22B1FB1F60A39E004B8050 /* UnrarKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */; };
 		7A267F6E1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
+		7A3E4BCE2178B34000C6CE98 /* SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3E4BCD2178B34000C6CE98 /* SwiftTests.swift */; };
 		7AC29A611F83C0D600DA4DE6 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4A18DB722E00B5651B /* rar.cpp */; };
 		7AC29A621F83C0DD00DA4DE6 /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6D18DB722E00B5651B /* strlist.cpp */; };
 		7AC29A631F83C0E200DA4DE6 /* strfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6B18DB722E00B5651B /* strfn.cpp */; };
@@ -171,6 +172,8 @@
 		7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnrarKitResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A22B1F91F60A2D3004B8050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UnrarKit.strings; sourceTree = "<group>"; };
 		7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressReportingTests.m; sourceTree = "<group>"; };
+		7A3E4BCA2178AEAD00C6CE98 /* UnrarKit Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnrarKit Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		7A3E4BCD2178B34000C6CE98 /* SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTests.swift; sourceTree = "<group>"; };
 		7AC29A5D1F83C08200DA4DE6 /* libunrar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libunrar.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7ADC7A081F8831BC00023C2E /* CheckDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckDataTests.m; sourceTree = "<group>"; };
 		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
@@ -461,6 +464,7 @@
 				967872731E460FA70048A54C /* ListVolumesTests.m */,
 				7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */,
 				96F450741B38527100679597 /* ValidatePasswordTests.m */,
+				7A3E4BCD2178B34000C6CE98 /* SwiftTests.swift */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
 			);
 			path = Tests;
@@ -470,6 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				964C8AC418D28EE000AD7321 /* UnrarKit Tests-Info.plist */,
+				7A3E4BCA2178AEAD00C6CE98 /* UnrarKit Tests-Bridging-Header.h */,
 				964C8AC518D28EE000AD7321 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -817,7 +822,7 @@
 						ProvisioningStyle = Automatic;
 					};
 					964C8ABA18D28EE000AD7321 = {
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1000;
 						TestTargetID = 96853EDA18DB71CD00B5651B;
 					};
 					96EA535A1B3CB04300F79DC6 = {
@@ -949,6 +954,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */,
+				7A3E4BCE2178B34000C6CE98 /* SwiftTests.swift in Sources */,
 				9699FA891B3D9B5700B6D373 /* URKArchiveTests.m in Sources */,
 				9699FA8C1B3D9B6F00B6D373 /* IsPasswordProtectedTests.m in Sources */,
 				9699FA8E1B3D9B6F00B6D373 /* ValidatePasswordTests.m in Sources */,
@@ -1263,6 +1269,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/UnrarKit Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1292,6 +1301,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/UnrarKit Tests-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
