@@ -1162,12 +1162,14 @@ int CALLBACK BufferedReadCallbackProc(UINT msg, long UserData, long P1, long P2)
     BOOL (^bufferedReadBlock)(NSData*) = (__bridge BOOL(^)(NSData*))(void *)UserData;
 
     if (msg == UCM_PROCESSDATA) {
-        URKLogDebug("msg: UCM_PROCESSDATA; Copying data chunk and calling read block");
-        NSData *dataChunk = [NSData dataWithBytes:(UInt8 *)P1 length:P2];
-        BOOL cancelRequested = !bufferedReadBlock(dataChunk);
-
-        if (cancelRequested) {
-            return -1;
+        @autoreleasepool {
+            URKLogDebug("msg: UCM_PROCESSDATA; Copying data chunk and calling read block");
+            NSData *dataChunk = [NSData dataWithBytes:(UInt8 *)P1 length:P2];
+            BOOL cancelRequested = !bufferedReadBlock(dataChunk);
+            
+            if (cancelRequested) {
+                return -1;
+            }
         }
     }
 
