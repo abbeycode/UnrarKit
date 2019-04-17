@@ -84,7 +84,7 @@ void QuickOpen::Load(uint64 BlockPos)
     if (ReadSize==0 || Arc->GetHeaderType()!=HEAD_SERVICE ||
         !Arc->SubHead.CmpName(SUBHEAD_TYPE_QOPEN))
       return;
-    QLHeaderPos=Arc->CurBlockPos;
+    QOHeaderPos=Arc->CurBlockPos;
     RawDataStart=Arc->Tell();
     RawDataSize=Arc->SubHead.UnpSize;
 
@@ -172,7 +172,7 @@ bool QuickOpen::Seek(int64 Offset,int Method)
   // archive updating involve several passes. So if we detect that file
   // pointer is moved back, we reload quick open data from beginning.
   if (Method==SEEK_SET && (uint64)Offset<SeekPos && (uint64)Offset<LastReadHeaderPos)
-    Load(QLHeaderPos);
+    Load(QOHeaderPos);
 
   if (Method==SEEK_SET)
     SeekPos=Offset;
@@ -250,10 +250,10 @@ bool QuickOpen::ReadRaw(RawRead &Raw)
     return false;
   }
 
-  // If rest of block data crosses buffer boundary, read it in loop.
-  size_t DataLeft=ReadBufSize-ReadBufPos;
+  // If rest of block data crosses Buf boundary, read it in loop.
   while (SizeToRead>0)
   {
+    size_t DataLeft=ReadBufSize-ReadBufPos;
     size_t CurSizeToRead=Min(DataLeft,(size_t)SizeToRead);
     Raw.Read(Buf+ReadBufPos,CurSizeToRead);
     ReadBufPos+=CurSizeToRead;
@@ -280,9 +280,11 @@ bool QuickOpen::ReadNext()
   uint Flags=(uint)Raw.GetV();
   uint64 Offset=Raw.GetV();
   size_t HeaderSize=(size_t)Raw.GetV();
+  if (HeaderSize>MAX_HEADER_SIZE_RAR5)
+    return false;
   LastReadHeader.Alloc(HeaderSize);
   Raw.GetB(&LastReadHeader[0],HeaderSize);
   // Calculate the absolute position as offset from quick open service header.
-  LastReadHeaderPos=QLHeaderPos-Offset;
+  LastReadHeaderPos=QOHeaderPos-Offset;
   return true;
 }

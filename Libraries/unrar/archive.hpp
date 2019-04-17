@@ -20,6 +20,9 @@ enum ADDSUBDATA_FLAGS
   ASDF_CRYPTIFHEADERS = 8  // Encrypt data after subheader only in -hp mode.
 };
 
+// RAR5 headers must not exceed 2 MB.
+#define MAX_HEADER_SIZE_RAR5 0x200000
+
 class Archive:public File
 {
   private:
@@ -34,8 +37,7 @@ class Archive:public File
     void RequestArcPassword();
     void UnexpEndArcMsg();
     void BrokenHeaderMsg();
-    void UnkEncVerMsg(const wchar *Name);
-    void UnkEncVerMsg();
+    void UnkEncVerMsg(const wchar *Name,const wchar *Info);
     bool ReadCommentData(Array<wchar> *CmtData);
 
 #if !defined(RAR_NOCRYPT)
@@ -82,7 +84,7 @@ class Archive:public File
     void AddSubData(byte *SrcData,uint64 DataSize,File *SrcFile,
          const wchar *Name,uint Flags);
     bool ReadSubData(Array<byte> *UnpData,File *DestFile);
-    HEADER_TYPE GetHeaderType() {return CurHeaderType;};
+    HEADER_TYPE GetHeaderType() {return CurHeaderType;}
     RAROptions* GetRAROptions() {return Cmd;}
     void SetSilentOpen(bool Mode) {SilentOpen=Mode;}
 #if 0

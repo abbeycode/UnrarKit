@@ -59,7 +59,11 @@ void CmdExtract::DoExtract()
   {
     if (!PasswordCancelled)
       uiMsg(UIERROR_NOFILESTOEXTRACT,ArcName);
-    ErrHandler.SetErrorCode(RARX_NOFILES);
+
+    // Other error codes may explain a reason of "no files extracted" clearer,
+    // so set it only if no other errors found (wrong mask set by user).
+    if (ErrHandler.GetErrorCode()==RARX_SUCCESS)
+      ErrHandler.SetErrorCode(RARX_NOFILES);
   }
   else
     if (!Cmd->DisableDone)
@@ -83,7 +87,7 @@ void CmdExtract::ExtractArchiveInit(Archive &Arc)
   FirstFile=true;
 #endif
 
-  PasswordAll=(Cmd->Password.IsSet());
+  GlobalPassword=Cmd->Password.IsSet() || uiIsGlobalPasswordSet();
 
   DataIO.UnpVolume=false;
 
@@ -157,7 +161,7 @@ EXTRACT_ARC_CODE CmdExtract::ExtractArchive()
     // This size is necessary to display the correct total progress indicator.
 
     wchar NextName[NM];
-    wcscpy(NextName,Arc.FileName);
+    wcsncpyz(NextName,Arc.FileName,ASIZE(NextName));
 
     while (true)
     {
@@ -294,7 +298,7 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
 
   bool EqualNames=false;
   wchar MatchedArg[NM];
-  int MatchNumber=Cmd->IsProcessFile(Arc.FileHead,&EqualNames,MatchType,MatchedArg,ASIZE(MatchedArg));
+  int MatchNumber=Cmd->IsProcessFile(Arc.FileHead,&EqualNames,MatchType,0,MatchedArg,ASIZE(MatchedArg));
   bool MatchFound=MatchNumber!=0;
 #ifndef SFX_MODULE
   if (Cmd->ExclPath==EXCL_BASEPATH)
@@ -319,6 +323,7 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
 
     if (wcsicomp(ArcName,CurVolName)!=0 && FileExist(ArcName))
     {
+      wcsncpyz(Cmd->ArcName,ArcName,ASIZE(ArcName)); // For GUI "Delete archive after extraction".
       // If first volume name does not match the current name and if such
       // volume name really exists, let's unpack from this first volume.
       Repeat=true;
@@ -340,7 +345,7 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
 #endif
 
   wchar ArcFileName[NM];
-  ConvertPath(Arc.FileHead.FileName,ArcFileName);
+  ConvertPath(Arc.FileHead.FileName,ArcFileName,ASIZE(ArcFileName));
 
   if (Arc.FileHead.Version)
   {
@@ -468,7 +473,7 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
           memcmp(Arc.FileHead.PswCheck,PswCheck,SIZE_PSWCHECK)!=0 &&
           !Arc.BrokenHeader)
       {
-        if (PasswordAll) // For -p<pwd> or Ctrl+P.
+        if (GlobalPassword) // For -p<pwd> or Ctrl+P to avoid the infinite loop.
         {
           // This message is used by Android GUI to reset cached passwords.
           // Update appropriate code if changed.
@@ -609,10 +614,14 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
       }
 #endif
 
-      if (!TestMode && !Arc.BrokenHeader &&
-          (Arc.FileHead.PackSize<<11)>Arc.FileHead.UnpSize &&
+      uint64 Preallocated=0;
+      if (!TestMode && !Arc.BrokenHeader && Arc.FileHead.UnpSize>1000000 &&
+          Arc.FileHead.PackSize*1024>Arc.FileHead.UnpSize &&
           (Arc.FileHead.UnpSize<100000000 || Arc.FileLength()>Arc.FileHead.PackSize))
+      {
         CurFile.Prealloc(Arc.FileHead.UnpSize);
+        Preallocated=Arc.FileHead.UnpSize;
+      }
 
       CurFile.SetAllowDelete(!Cmd->KeepBroken);
 
@@ -729,8 +738,9 @@ bool CmdExtract::ExtractCurrentFile(Archive &Arc,size_t HeaderSize,bool &Repeat)
           (!LinkEntry || Arc.FileHead.RedirType==FSREDIR_FILECOPY && LinkSuccess) && 
           (!BrokenFile || Cmd->KeepBroken))
       {
-        // We could preallocate more space that really written to broken file.
-        if (BrokenFile)
+        // We could preallocate more space that really written to broken file
+        // or file with crafted header.
+        if (Preallocated>0 && (BrokenFile || DataIO.CurUnpWrite!=Preallocated))
           CurFile.Truncate();
 
 #if defined(_WIN_ALL) || defined(_EMX)
@@ -846,9 +856,12 @@ void CmdExtract::ExtrPrepareName(Archive &Arc,const wchar *ArcFileName,wchar *De
   }
 
 #ifndef SFX_MODULE
-  if (Cmd->AppendArcNameToPath)
+  if (Cmd->AppendArcNameToPath!=APPENDARCNAME_NONE)
   {
-    wcsncatz(DestName,PointToName(Arc.FirstVolumeName),DestSize);
+    if (Cmd->AppendArcNameToPath==APPENDARCNAME_DESTPATH)
+      wcsncatz(DestName,PointToName(Arc.FirstVolumeName),DestSize);
+    else
+      wcsncpyz(DestName,Arc.FirstVolumeName,DestSize); // To archive own dir.
     SetExt(DestName,NULL,DestSize);
     AddEndSlash(DestName,DestSize);
   }
@@ -961,14 +974,18 @@ bool CmdExtract::ExtrGetPassword(Archive &Arc,const wchar *ArcFileName)
     if (!uiGetPassword(UIPASSWORD_FILE,ArcFileName,&Cmd->Password)/* || !Cmd->Password.IsSet()*/)
     {
       // Suppress "test is ok" message if user cancelled the password prompt.
-      uiMsg(UIERROR_INCERRCOUNT);
+// 2019.03.23: If some archives are tested ok and prompt is cancelled for others,
+// do we really need to suppress "test is ok"? Also if we set an empty password
+// and "Use for all archives" in WinRAR Ctrl+P and skip some encrypted archives.
+// We commented out this UIERROR_INCERRCOUNT for now.
+//      uiMsg(UIERROR_INCERRCOUNT);
       return false;
     }
     Cmd->ManualPassword=true;
   }
 #if !defined(SILENT)
   else
-    if (!PasswordAll && !Arc.FileHead.Solid)
+    if (!GlobalPassword && !Arc.FileHead.Solid)
     {
       eprintf(St(MUseCurPsw),ArcFileName);
       switch(Cmd->AllYes ? 1 : Ask(St(MYesNoAll)))
@@ -980,7 +997,7 @@ bool CmdExtract::ExtrGetPassword(Archive &Arc,const wchar *ArcFileName)
             return false;
           break;
         case 3:
-          PasswordAll=true;
+          GlobalPassword=true;
           break;
       }
     }
@@ -1077,7 +1094,7 @@ void CmdExtract::ExtrCreateDir(Archive &Arc,const wchar *ArcFileName)
   {
 #if defined(_WIN_ALL) && !defined(SFX_MODULE)
     if (Cmd->SetCompressedAttr &&
-        (Arc.FileHead.FileAttr & FILE_ATTRIBUTE_COMPRESSED)!=0 && WinNT())
+        (Arc.FileHead.FileAttr & FILE_ATTRIBUTE_COMPRESSED)!=0 && WinNT()!=WNT_NONE)
       SetFileCompression(DestFileName,true);
 #endif
     SetFileHeaderExtra(Cmd,Arc,DestFileName);
