@@ -374,14 +374,12 @@ static NSUInteger observerCallCount;
     
     XCTAssertEqual(extractFileProgress.fractionCompleted, 1.00, @"Progress never reported as completed");
     
-    NSUInteger expectedProgressUpdates = 4;
     NSArray<NSNumber *> *expectedProgresses = @[@0,
-                                                @0.6990074,
-                                                @0.6990504,
+                                                @0.6983681,
                                                 @1.0];
     
-    XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgressUpdates, @"Incorrect number of progress updates");
-    for (NSInteger i = 0; i < expectedProgressUpdates; i++) {
+    XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgresses.count, @"Incorrect number of progress updates");
+    for (NSInteger i = 0; i < expectedProgresses.count; i++) {
         float expectedProgress = expectedProgresses[i].floatValue;
         float actualProgress = self.fractionsCompletedReported[i].floatValue;
         
@@ -418,14 +416,12 @@ static NSUInteger observerCallCount;
     
     XCTAssertEqual(extractFileProgress.fractionCompleted, 1.00, @"Progress never reported as completed");
     
-    NSUInteger expectedProgressUpdates = 4;
     NSArray<NSNumber *> *expectedProgresses = @[@0,
-                                                @0.6990074,
-                                                @0.6990504,
+                                                @0.6983681,
                                                 @1.0];
     
-    XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgressUpdates, @"Incorrect number of progress updates");
-    for (NSInteger i = 0; i < expectedProgressUpdates; i++) {
+    XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgresses.count, @"Incorrect number of progress updates");
+    for (NSInteger i = 0; i < expectedProgresses.count; i++) {
         float expectedProgress = expectedProgresses[i].floatValue;
         float actualProgress = self.fractionsCompletedReported[i].floatValue;
         
