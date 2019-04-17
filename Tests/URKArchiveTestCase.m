@@ -356,7 +356,9 @@ static NSURL *originalLargeArchiveURL;
     NSString *commandOutputString = nil;
     [self archiveWithFiles:@[textFile]
                       name:baseName
-                 arguments:@[@"-v20k", @"-vn"]
+                 arguments:@[@"-v20k", // Volume size
+                             @"-vn",   // Legacy naming
+                             @"-ma4"]  // v4 archive format
              commandOutput:&commandOutputString];
     
     NSArray<NSString*> *volumePaths = [commandOutputString regexMatches:@"Creating archive (.+)"];
