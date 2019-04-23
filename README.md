@@ -1,5 +1,6 @@
+[![Cocoapods](https://img.shields.io/cocoapods/v/UnrarKit.svg)](https://cocoapods.org/pods/UnrarKit)
+[![Cocoapods platforms](https://img.shields.io/cocoapods/p/UnrarKit.svg)]()
 [![Build Status](https://travis-ci.org/abbeycode/UnrarKit.svg?branch=master)](https://travis-ci.org/abbeycode/UnrarKit)
-[![Documentation Coverage](https://img.shields.io/cocoapods/metrics/doc-percent/UnrarKit.svg)](http://cocoadocs.org/docsets/UnrarKit)
 
 # About
 
