@@ -4,7 +4,7 @@
 
 # About
 
-UnrarKit is here to enable Mac and iOS apps to easily work with RAR files for read-only operations. It is currently based on version 5.2.1 of the [UnRAR library](http://www.rarlab.com/rar/unrarsrc-5.2.1.tar.gz).
+UnrarKit is here to enable Mac and iOS apps to easily work with RAR files for read-only operations. It is currently based on version 5.8.1 of the [UnRAR library](http://www.rarlab.com/rar/unrarsrc-5.8.1.tar.gz).
 
 There is a main project, with unit tests, and a basic iOS example project, which demonstrates how to use the library. To see all of these, open the main workspace file.
 
