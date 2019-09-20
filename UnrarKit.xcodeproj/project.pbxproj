@@ -10,6 +10,9 @@
 		7A22B1F81F60A2D3004B8050 /* UnrarKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1FA1F60A2D3004B8050 /* UnrarKit.strings */; };
 		7A22B1FB1F60A39E004B8050 /* UnrarKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */; };
 		7A267F6E1F713B970004EAA6 /* ProgressReportingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */; };
+		7A61604A2334227600B26887 /* ListFileInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A6160492334227600B26887 /* ListFileInfoTests.m */; };
+		7A61604C2334263F00B26887 /* ExtractDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A61604B2334263F00B26887 /* ExtractDataTests.m */; };
+		7A61604E2334807E00B26887 /* PerformOnFilesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A61604D2334807E00B26887 /* PerformOnFilesTests.m */; };
 		7A66082B20B4BE2000FE68D6 /* IterateFileInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A66082A20B4BE2000FE68D6 /* IterateFileInfoTests.m */; };
 		7AC29A611F83C0D600DA4DE6 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4A18DB722E00B5651B /* rar.cpp */; };
 		7AC29A621F83C0DD00DA4DE6 /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6D18DB722E00B5651B /* strlist.cpp */; };
@@ -172,6 +175,9 @@
 		7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnrarKitResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A22B1F91F60A2D3004B8050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UnrarKit.strings; sourceTree = "<group>"; };
 		7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressReportingTests.m; sourceTree = "<group>"; };
+		7A6160492334227600B26887 /* ListFileInfoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListFileInfoTests.m; sourceTree = "<group>"; };
+		7A61604B2334263F00B26887 /* ExtractDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtractDataTests.m; sourceTree = "<group>"; };
+		7A61604D2334807E00B26887 /* PerformOnFilesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PerformOnFilesTests.m; sourceTree = "<group>"; };
 		7A66082A20B4BE2000FE68D6 /* IterateFileInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IterateFileInfoTests.m; sourceTree = "<group>"; };
 		7AC29A5D1F83C08200DA4DE6 /* libunrar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libunrar.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7ADC7A081F8831BC00023C2E /* CheckDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckDataTests.m; sourceTree = "<group>"; };
@@ -456,12 +462,15 @@
 				964C8AC818D28EE000AD7321 /* URKArchiveTests.m */,
 				7ADC7A081F8831BC00023C2E /* CheckDataTests.m */,
 				96F4507A1B385BCD00679597 /* ExtractFilesTests.m */,
+				7A61604B2334263F00B26887 /* ExtractDataTests.m */,
 				96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */,
 				96A043DF1E4D232F00BD7013 /* HasMultipleVolumesTests.m */,
 				96F450761B38552200679597 /* IsPasswordProtectedTests.m */,
 				7A66082A20B4BE2000FE68D6 /* IterateFileInfoTests.m */,
+				7A6160492334227600B26887 /* ListFileInfoTests.m */,
 				96F450781B385AF800679597 /* ListFilenamesTests.m */,
 				967872731E460FA70048A54C /* ListVolumesTests.m */,
+				7A61604D2334807E00B26887 /* PerformOnFilesTests.m */,
 				7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */,
 				96F450741B38527100679597 /* ValidatePasswordTests.m */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
@@ -951,7 +960,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A61604E2334807E00B26887 /* PerformOnFilesTests.m in Sources */,
 				96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */,
+				7A61604A2334227600B26887 /* ListFileInfoTests.m in Sources */,
 				9699FA891B3D9B5700B6D373 /* URKArchiveTests.m in Sources */,
 				9699FA8C1B3D9B6F00B6D373 /* IsPasswordProtectedTests.m in Sources */,
 				9699FA8E1B3D9B6F00B6D373 /* ValidatePasswordTests.m in Sources */,
@@ -959,6 +970,7 @@
 				9699FA8B1B3D9B6F00B6D373 /* ExtractFilesTests.m in Sources */,
 				7A267F6E1F713B970004EAA6 /* ProgressReportingTests.m in Sources */,
 				9699FA8A1B3D9B6F00B6D373 /* URKArchiveTestCase.m in Sources */,
+				7A61604C2334263F00B26887 /* ExtractDataTests.m in Sources */,
 				96A043E01E4D232F00BD7013 /* HasMultipleVolumesTests.m in Sources */,
 				9699FA8D1B3D9B6F00B6D373 /* ListFilenamesTests.m in Sources */,
 				7A66082B20B4BE2000FE68D6 /* IterateFileInfoTests.m in Sources */,
