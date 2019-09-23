@@ -91,4 +91,70 @@
     XCTAssertFalse(success, @"Data integrity check passed for archive with modified CRC");
 }
 
+- (void)testCheckDataIntegrityIgnoringCRCMismatches {
+    NSArray *testArchives = @[@"Test Archive.rar",
+                              @"Test Archive (Password).rar",
+                              @"Test Archive (Header Password).rar"];
+    
+    for (NSString *testArchiveName in testArchives) {
+        NSLog(@"Testing data integrity of file in archive %@", testArchiveName);
+        NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+        NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
+                              ? @"password"
+                              : nil);
+        URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
+        
+        __block BOOL blockInvoked = NO;
+        BOOL success = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
+            blockInvoked = YES;
+            return NO;
+        }];
+        
+        XCTAssertTrue(success, @"Data integrity check failed for %@", testArchiveName);
+        XCTAssertFalse(blockInvoked, @"Block prompting whether to ignore CRC mismatches should not have been called");
+    }
+}
+
+- (void)testCheckDataIntegrityIgnoringCRCMismatches_NotAnArchive {
+    NSURL *testArchiveURL = self.testFileURLs[@"Test File B.jpg"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    __block BOOL blockInvoked = NO;
+    BOOL success = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
+        blockInvoked = YES;
+        return NO;
+    }];
+    
+    XCTAssertFalse(success, @"Data integrity check passed for non-archive");
+    XCTAssertFalse(blockInvoked, @"Block prompting whether to ignore CRC mismatches should not have been called");
+}
+
+- (void)testCheckDataIntegrityIgnoringCRCMismatches_ModifiedCRC_Ignore {
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    __block BOOL blockInvoked = NO;
+    BOOL success = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
+        blockInvoked = YES;
+        return YES;
+    }];
+    
+    XCTAssertTrue(success, @"Data integrity check failed for archive with modified CRC, when instructed to ignore");
+    XCTAssertTrue(blockInvoked, @"Block prompting whether to ignore CRC mismatches should have been called");
+}
+
+- (void)testCheckDataIntegrityIgnoringCRCMismatches_ModifiedCRC_DontIgnore {
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    __block BOOL blockInvoked = NO;
+    BOOL success = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
+        blockInvoked = YES;
+        return NO;
+    }];
+    
+    XCTAssertFalse(success, @"Data integrity check passed for archive with modified CRC");
+    XCTAssertTrue(blockInvoked, @"Block prompting whether to ignore CRC mismatches should have been called");
+}
+
 @end

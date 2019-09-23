@@ -19,7 +19,7 @@
                               @"Test Archive (Header Password).rar"];
     
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -60,7 +60,7 @@
 - (void)testExtractData_Unicode
 {
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -119,6 +119,37 @@
     XCTAssertNotNil(error, @"Extract data for invalid archive succeeded");
     XCTAssertNil(data, @"Data returned for invalid archive");
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
+}
+
+- (void)testExtractData_ModifiedCRC
+{
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Modified CRC Archive.rar"] error:nil];
+    
+    NSError *error = nil;
+    NSData *data = [archive extractDataFromFile:@"README.md" error:&error];
+    
+    XCTAssertNotNil(error, @"Extract data for invalid archive succeeded");
+    XCTAssertNil(data, @"Data returned for invalid archive");
+    XCTAssertEqual(error.code, URKErrorCodeBadData, @"Unexpected error code returned");
+}
+
+- (void)testExtractData_ModifiedCRC_IgnoringMismatches
+{
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Modified CRC Archive.rar"] error:nil];
+    
+    BOOL checkIntegritySuccess = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
+        return YES;
+    }];
+    
+    XCTAssertTrue(checkIntegritySuccess, @"Data integrity check failed for archive with modified CRC, when instructed to ignore");
+    
+    NSError *error = nil;
+    NSData *data = [archive extractDataFromFile:@"README.md" error:&error];
+    NSData *expectedData = [NSData dataWithContentsOfURL:self.testFileURLs[@"README.md"]];
+    
+    XCTAssertNil(error, @"Extract data for invalid archive succeeded");
+    XCTAssertNotNil(data, @"Data returned for invalid archive");
+    XCTAssertEqualObjects(data, expectedData);
 }
 
 @end

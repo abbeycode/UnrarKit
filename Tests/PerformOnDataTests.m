@@ -19,7 +19,7 @@
                               @"Test Archive (Header Password).rar"];
     
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -53,7 +53,7 @@
 - (void)testPerformOnData_Unicode
 {
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -77,6 +77,50 @@
     
     XCTAssertNil(error, @"Error iterating through files");
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
+}
+
+- (void)testPerformOnData_ModifiedCRC
+{
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    __block BOOL blockCalled = NO;
+    NSError *error = nil;
+    
+    [archive performOnDataInArchive:
+     ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+         blockCalled = YES;
+     } error:&error];
+    
+    XCTAssertNotNil(error, @"Error iterating through files");
+    XCTAssertFalse(blockCalled);
+}
+
+- (void)testPerformOnData_ModifiedCRC_IgnoringMismatches
+{
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    BOOL checkIntegritySuccess = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
+        return YES;
+    }];
+    
+    XCTAssertTrue(checkIntegritySuccess, @"Data integrity check failed for archive with modified CRC, when instructed to ignore");
+    
+    __block NSUInteger fileIndex = 0;
+    NSError *error = nil;
+    
+    [archive performOnDataInArchive:
+     ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+         XCTAssertEqual(fileIndex++, 0, @"performOnDataInArchive called too many times");
+         XCTAssertEqualObjects(fileInfo.filename, @"README.md");
+         NSData *expectedFileData = [NSData dataWithContentsOfURL:self.testFileURLs[@"README.md"]];
+         
+         XCTAssertNotNil(fileData, @"No data extracted");
+         XCTAssertTrue([expectedFileData isEqualToData:fileData], @"File data doesn't match original file");
+     } error:&error];
+    
+    XCTAssertNil(error, @"Error iterating through files");
 }
 
 #if !TARGET_OS_IPHONE

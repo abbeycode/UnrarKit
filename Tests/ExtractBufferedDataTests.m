@@ -52,6 +52,63 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
                   @"File extracted in buffer not returned correctly");
 }
 
+- (void)testExtractBufferedData_ModifiedCRC
+{
+    NSURL *archiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    NSString *extractedFile = @"README.md";
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
+    
+    NSError *error = nil;
+    NSMutableData *reconstructedFile = [NSMutableData data];
+    BOOL success = [archive extractBufferedDataFromFile:extractedFile
+                                                  error:&error
+                                                 action:
+                    ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                        NSLog(@"Decompressed: %f%%", percentDecompressed);
+                        [reconstructedFile appendBytes:dataChunk.bytes
+                                                length:dataChunk.length];
+                    }];
+    
+    XCTAssertFalse(success, @"Failed to read buffered data");
+    XCTAssertNotNil(error, @"Error reading buffered data");
+    
+    NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[extractedFile]];
+    XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
+                  @"File extracted in buffer not returned correctly");
+}
+
+- (void)testExtractBufferedData_ModifiedCRC_IgnoringMismatches
+{
+    NSURL *archiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    NSString *extractedFile = @"README.md";
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
+    
+    BOOL checkIntegritySuccess = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
+        return YES;
+    }];
+    
+    XCTAssertTrue(checkIntegritySuccess, @"Data integrity check failed for archive with modified CRC, when instructed to ignore");
+    
+    NSError *error = nil;
+    NSMutableData *reconstructedFile = [NSMutableData data];
+    BOOL success = [archive extractBufferedDataFromFile:extractedFile
+                                                  error:&error
+                                                 action:
+                    ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                        NSLog(@"Decompressed: %f%%", percentDecompressed);
+                        [reconstructedFile appendBytes:dataChunk.bytes
+                                                length:dataChunk.length];
+                    }];
+    
+    XCTAssertTrue(success, @"Failed to read buffered data");
+    XCTAssertNil(error, @"Error reading buffered data");
+    XCTAssertGreaterThan(reconstructedFile.length, 0, @"No data returned");
+    
+    NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[extractedFile]];
+    XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
+                  @"File extracted in buffer not returned correctly");
+}
+
 #if !TARGET_OS_IPHONE && __MAC_OS_X_VERSION_MIN_REQUIRED >= 101200
 - (void)testExtractBufferedData_VeryLarge
 {

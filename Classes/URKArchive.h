@@ -477,10 +477,29 @@ extern NSString *URKErrorDomain;
 /**
  Extract each file in the archive, checking whether the data matches the CRC checksum
  stored at the time it was written
-
+ 
  @return YES if the data is all correct, false if any check failed
  */
 - (BOOL)checkDataIntegrity;
+
+/**
+ Extract each file in the archive, checking whether the data matches the CRC checksum
+ stored at the time it was written. If any file doesn't match, run the given block
+ to allow the API consumer to decide whether to ignore mismatches. NOTE: This may be a
+ security risk. The block is intended to prompt the user, which is why it's forced onto
+ the main thread, rather than making a design-time decision
+ 
+ @param ignoreCRCMismatches This block, called on the main thread, allows a consuming API to
+                            prompt the user whether or not he'd like to ignore CRC mismatches.
+                            This block is called the first time a CRC mismatch is detected, if
+                            at all. It won't be called if all CRCs match. If this returns YES,
+                            then all further CRC mismatches will be ignored for the
+                            archive instance
+ 
+ @return YES if the data is all correct and/or the block returns YES; returns false if
+         any check failed and the given block also returns NO
+ */
+- (BOOL)checkDataIntegrityIgnoringCRCMismatches:(BOOL(^)(void))ignoreCRCMismatches;
 
 /**
  Extract a particular file, to determine if its data matches the CRC

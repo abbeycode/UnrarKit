@@ -45,6 +45,48 @@
     }
 }
 
+- (void)testPerformOnFiles_ModifiedCRC
+{
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    NSString *password = nil;
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
+    
+    __block BOOL blockCalled = NO;
+    NSError *error = nil;
+    
+    [archive performOnFilesInArchive:
+     ^(URKFileInfo *fileInfo, BOOL *stop) {
+         blockCalled = YES;
+     } error:&error];
+    
+    XCTAssertNotNil(error, @"Error iterating through files");
+    XCTAssertFalse(blockCalled);
+}
+
+- (void)testPerformOnFiles_ModifiedCRC_MismatchesIgnored
+{
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    NSString *password = nil;
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
+    
+    BOOL checkIntegritySuccess = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
+        return YES;
+    }];
+    
+    XCTAssertTrue(checkIntegritySuccess, @"Data integrity check failed for archive with modified CRC, when instructed to ignore");
+    
+    __block NSUInteger fileIndex = 0;
+    NSError *error = nil;
+    
+    [archive performOnFilesInArchive:
+     ^(URKFileInfo *fileInfo, BOOL *stop) {
+         XCTAssertEqual(fileIndex++, 0, @"performOnFilesInArchive called too many times");
+         XCTAssertEqualObjects(fileInfo.filename, @"README.md");
+     } error:&error];
+    
+    XCTAssertNil(error, @"Error iterating through files");
+}
+
 - (void)testPerformOnFiles_Unicode
 {
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
