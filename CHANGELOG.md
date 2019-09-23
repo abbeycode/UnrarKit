@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.10
+
+* Added method (`checkDataIntegrityIgnoringCRCMismatches:`) to prompt user for a decision on whether or not to ignore CRC mismatches (Issue #82)
+
+
 ## 2.9
 
 * Added support for `NSProgress` and `NSProgressReporting` in all extraction and iteration methods (Issue #34)
