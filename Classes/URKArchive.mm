@@ -1115,7 +1115,20 @@ NS_DESIGNATED_INITIALIZER
     }
     
     if (rhCode == ERAR_BAD_DATA) {
-        self.ignoreCRCMismatches = ignoreCRCMismatches();
+        NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+        
+        __block BOOL blockResult;
+        
+        if ([NSOperationQueue currentQueue] == mainQueue) {
+            blockResult = ignoreCRCMismatches();
+        } else {
+            [mainQueue addOperations:@[[NSBlockOperation blockOperationWithBlock:^{
+                blockResult = ignoreCRCMismatches();
+            }]]
+                   waitUntilFinished:YES];
+        }
+
+        self.ignoreCRCMismatches = blockResult;
         return self.ignoreCRCMismatches;
     }
     

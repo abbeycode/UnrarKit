@@ -115,6 +115,30 @@
     }
 }
 
+- (void)testCheckDataIntegrityIgnoringCRCMismatches_InBackground {
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    __block BOOL blockInvoked = NO;
+    __block NSThread *blockThread = nil;
+    
+    XCTestExpectation *exp = [self expectationWithDescription:@"data check block invoked"];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        BOOL success = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
+            blockInvoked = YES;
+            blockThread = [NSThread currentThread];
+            return YES;
+        }];
+        
+        XCTAssertTrue(success, @"Data integrity check failed for archive with modified CRC, when instructed to ignore");
+        [exp fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:10 handler:nil];
+    XCTAssertTrue(blockInvoked, @"Block prompting whether to ignore CRC mismatches should have been called");
+    XCTAssertEqualObjects(blockThread, [NSThread mainThread]);
+}
+
 - (void)testCheckDataIntegrityIgnoringCRCMismatches_NotAnArchive {
     NSURL *testArchiveURL = self.testFileURLs[@"Test File B.jpg"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
