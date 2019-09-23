@@ -15,6 +15,7 @@
 		7A61604E2334807E00B26887 /* PerformOnFilesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A61604D2334807E00B26887 /* PerformOnFilesTests.m */; };
 		7A66082B20B4BE2000FE68D6 /* IterateFileInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A66082A20B4BE2000FE68D6 /* IterateFileInfoTests.m */; };
 		7A7820DA2338F09500E106F8 /* PerformOnDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7820D92338F09500E106F8 /* PerformOnDataTests.m */; };
+		7A7820DC2338F38E00E106F8 /* ExtractBufferedDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7820DB2338F38E00E106F8 /* ExtractBufferedDataTests.m */; };
 		7AC29A611F83C0D600DA4DE6 /* rar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F4A18DB722E00B5651B /* rar.cpp */; };
 		7AC29A621F83C0DD00DA4DE6 /* strlist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6D18DB722E00B5651B /* strlist.cpp */; };
 		7AC29A631F83C0E200DA4DE6 /* strfn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F6B18DB722E00B5651B /* strfn.cpp */; };
@@ -181,6 +182,7 @@
 		7A61604D2334807E00B26887 /* PerformOnFilesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PerformOnFilesTests.m; sourceTree = "<group>"; };
 		7A66082A20B4BE2000FE68D6 /* IterateFileInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IterateFileInfoTests.m; sourceTree = "<group>"; };
 		7A7820D92338F09500E106F8 /* PerformOnDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PerformOnDataTests.m; sourceTree = "<group>"; };
+		7A7820DB2338F38E00E106F8 /* ExtractBufferedDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtractBufferedDataTests.m; sourceTree = "<group>"; };
 		7AC29A5D1F83C08200DA4DE6 /* libunrar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libunrar.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7ADC7A081F8831BC00023C2E /* CheckDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckDataTests.m; sourceTree = "<group>"; };
 		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 				964547D11B384F7D00202B28 /* URKArchiveTestCase.m */,
 				964C8AC818D28EE000AD7321 /* URKArchiveTests.m */,
 				7ADC7A081F8831BC00023C2E /* CheckDataTests.m */,
+				7A7820DB2338F38E00E106F8 /* ExtractBufferedDataTests.m */,
 				96F4507A1B385BCD00679597 /* ExtractFilesTests.m */,
 				7A61604B2334263F00B26887 /* ExtractDataTests.m */,
 				96A043DD1E4CC8D500BD7013 /* FirstVolumeTests.m */,
@@ -967,6 +970,7 @@
 				96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */,
 				7A61604A2334227600B26887 /* ListFileInfoTests.m in Sources */,
 				9699FA891B3D9B5700B6D373 /* URKArchiveTests.m in Sources */,
+				7A7820DC2338F38E00E106F8 /* ExtractBufferedDataTests.m in Sources */,
 				9699FA8C1B3D9B6F00B6D373 /* IsPasswordProtectedTests.m in Sources */,
 				9699FA8E1B3D9B6F00B6D373 /* ValidatePasswordTests.m in Sources */,
 				967872741E460FA70048A54C /* ListVolumesTests.m in Sources */,
