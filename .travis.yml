@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode10.2
+osx_image: xcode10.3
 
 before_script:
     # Make log level less verbose. Temporarily undo if more info is needed
