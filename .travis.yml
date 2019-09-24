@@ -32,5 +32,4 @@ matrix:
 
     - stage: Release
       if: tag IS present
-      before_install: brew upgrade python # Needs Python 3
       script: ./Scripts/push-output.sh
