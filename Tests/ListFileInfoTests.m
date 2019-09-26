@@ -199,13 +199,8 @@
 - (void)testListFileInfo_ModifiedCRC_IgnoringMismatches
 {
     URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Modified CRC Archive.rar"] error:nil];
-    
-    BOOL checkIntegritySuccess = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
-        return YES;
-    }];
-    
-    XCTAssertTrue(checkIntegritySuccess, @"Data integrity check failed for archive with modified CRC, when instructed to ignore");
-    
+    archive.ignoreCRCMismatches = YES;
+
     NSError *error = nil;
     NSArray<URKFileInfo*> *files = [archive listFileInfo:&error];
     

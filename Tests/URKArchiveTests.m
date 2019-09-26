@@ -34,7 +34,8 @@
                                  : self.testFileURLs[testArchiveName]);
         
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-        
+        XCTAssertFalse(archive.ignoreCRCMismatches);
+
         NSURL *resolvedURL = archive.fileURL.URLByResolvingSymlinksInPath;
         XCTAssertNotNil(resolvedURL, @"Nil URL returned for valid archive");
         XCTAssertTrue([testArchiveURL isEqual:resolvedURL], @"Resolved URL doesn't match original");
@@ -56,7 +57,8 @@
                                  : self.testFileURLs[testArchiveName]);
         
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-        
+        XCTAssertFalse(archive.ignoreCRCMismatches);
+
         NSString *resolvedFilename = archive.filename;
         XCTAssertNotNil(resolvedFilename, @"Nil filename returned for valid archive");
         

@@ -82,12 +82,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     NSURL *archiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
     NSString *extractedFile = @"README.md";
     URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
-    
-    BOOL checkIntegritySuccess = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
-        return YES;
-    }];
-    
-    XCTAssertTrue(checkIntegritySuccess, @"Data integrity check failed for archive with modified CRC, when instructed to ignore");
+    archive.ignoreCRCMismatches = YES;
     
     NSError *error = nil;
     NSMutableData *reconstructedFile = [NSMutableData data];

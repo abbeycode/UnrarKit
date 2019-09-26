@@ -53,7 +53,6 @@ NS_DESIGNATED_INITIALIZER
 
 @property (assign) NSString *lastArchivePath;
 @property (assign) NSString *lastFilepath;
-@property (assign) BOOL ignoreCRCMismatches;
 
 @end
 

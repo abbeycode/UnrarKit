@@ -25,7 +25,7 @@ DllHppIgnore
 typedef NS_ENUM(NSInteger, URKErrorCode) {
 
     /**
-     *  The archive's header is empty
+     *  The last file of the archive has been read
      */
     URKErrorCodeEndOfArchive = ERAR_END_ARCHIVE,
     
@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, URKErrorCode) {
     URKErrorCodeNoMemory = ERAR_NO_MEMORY,
     
     /**
-     *  The header is broken
+     *  The header's CRC doesn't match the decompressed data's CRC
      */
     URKErrorCodeBadData = ERAR_BAD_DATA,
     
@@ -172,6 +172,17 @@ extern NSString *URKErrorDomain;
  *  for nil before assigning it to avoid concurrency conflicts.
  */
 @property(nullable, strong) NSProgress *progress;
+
+/**
+ *  When performing operations on a RAR archive, the contents of compressed files are checked
+ *  against the record of what they were when the archive was created. If there's a mismatch,
+ *  either the metadata (header) or archive contents have become corrupted. You can defeat this check by
+ *  setting this property to YES, though there may be security implications to turning the
+ *  warnings off, as it may indicate a maliciously crafted archive intended to exploit a vulnerability.
+ *
+ *  It's recommended to leave the decision of how to treat archives with mismatched CRCs to the user
+ */
+@property (assign) BOOL ignoreCRCMismatches;
 
 
 /**
@@ -475,16 +486,16 @@ extern NSString *URKErrorDomain;
 - (BOOL)validatePassword;
 
 /**
- Extract each file in the archive, checking whether the data matches the CRC checksum
- stored at the time it was written
+ Iterate through the archive, checking for any errors, including CRC mismatches between
+ the archived file and its header
  
- @return YES if the data is all correct, false if any check failed
+ @return YES if the data is all correct, false if any check failed (_even if ignoreCRCMismatches is YES_)
  */
 - (BOOL)checkDataIntegrity;
 
 /**
- Extract each file in the archive, checking whether the data matches the CRC checksum
- stored at the time it was written. If any file doesn't match, run the given block
+ Iterate through the archive, checking for any errors, including CRC mismatches between
+ the archived file and its header. If any file's CRC doesn't match, run the given block
  to allow the API consumer to decide whether to ignore mismatches. NOTE: This may be a
  security risk. The block is intended to prompt the user, which is why it's forced onto
  the main thread, rather than making a design-time decision
@@ -502,7 +513,7 @@ extern NSString *URKErrorDomain;
 - (BOOL)checkDataIntegrityIgnoringCRCMismatches:(BOOL(^)(void))ignoreCRCMismatches;
 
 /**
- Extract a particular file, to determine if its data matches the CRC
+ Check a particular file, to determine if its data matches the CRC
  checksum stored at the time it written
 
  @param filePath The file in the archive to check

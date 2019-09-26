@@ -265,13 +265,8 @@
     NSFileManager *fm = [NSFileManager defaultManager];
     
     URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Modified CRC Archive.rar"] error:nil];
-    
-    BOOL fileHasIntegrity = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
-        return YES;
-    }];
-    
-    XCTAssertTrue(fileHasIntegrity);
-    
+    archive.ignoreCRCMismatches = YES;
+
     NSString *extractDirectory = [self randomDirectoryWithPrefix:@"ExtractInvalidArchive"];
     NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
     
@@ -295,13 +290,6 @@
     NSFileManager *fm = [NSFileManager defaultManager];
     
     URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Modified CRC Archive.rar"] error:nil];
-    
-    BOOL fileHasIntegrity = [archive checkDataIntegrityIgnoringCRCMismatches:^BOOL{
-        return NO;
-    }];
-    
-    XCTAssertFalse(fileHasIntegrity);
-    
     NSString *extractDirectory = [self randomDirectoryWithPrefix:@"ExtractInvalidArchive"];
     NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
     

@@ -47,6 +47,16 @@
     XCTAssertFalse(success, @"Data integrity check passed for archive with a modified CRC");
 }
 
+- (void)testCheckDataIntegrity_ModifiedCRC_IgnoringMismatches {
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    archive.ignoreCRCMismatches = YES;
+    
+    // Still expect failure, so a consumer can still tell that data is mismatched
+    BOOL success = [archive checkDataIntegrity];
+    XCTAssertFalse(success, @"Data integrity check passed for archive with a modified CRC");
+}
+
 #pragma mark - checkDataIntegrityOfFile
 
 - (void)testCheckDataIntegrityForFile {
@@ -91,6 +101,16 @@
     XCTAssertFalse(success, @"Data integrity check passed for archive with modified CRC");
 }
 
+- (void)testCheckDataIntegrityForFile_ModifiedCRC_IgnoringMismatches {
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    archive.ignoreCRCMismatches = YES;
+    
+    // Still expect failure, so a consumer can still tell that data is mismatched
+    BOOL success = [archive checkDataIntegrityOfFile:@"README.md"];
+    XCTAssertFalse(success, @"Data integrity check passed for archive with modified CRC");
+}
+
 - (void)testCheckDataIntegrityIgnoringCRCMismatches {
     NSArray *testArchives = @[@"Test Archive.rar",
                               @"Test Archive (Password).rar",
@@ -112,6 +132,7 @@
         
         XCTAssertTrue(success, @"Data integrity check failed for %@", testArchiveName);
         XCTAssertFalse(blockInvoked, @"Block prompting whether to ignore CRC mismatches should not have been called");
+        XCTAssertFalse(archive.ignoreCRCMismatches);
     }
 }
 
@@ -137,6 +158,7 @@
     [self waitForExpectationsWithTimeout:10 handler:nil];
     XCTAssertTrue(blockInvoked, @"Block prompting whether to ignore CRC mismatches should have been called");
     XCTAssertEqualObjects(blockThread, [NSThread mainThread]);
+    XCTAssertTrue(archive.ignoreCRCMismatches);
 }
 
 - (void)testCheckDataIntegrityIgnoringCRCMismatches_NotAnArchive {
@@ -151,6 +173,7 @@
     
     XCTAssertFalse(success, @"Data integrity check passed for non-archive");
     XCTAssertFalse(blockInvoked, @"Block prompting whether to ignore CRC mismatches should not have been called");
+    XCTAssertFalse(archive.ignoreCRCMismatches);
 }
 
 - (void)testCheckDataIntegrityIgnoringCRCMismatches_ModifiedCRC_Ignore {
@@ -165,6 +188,7 @@
     
     XCTAssertTrue(success, @"Data integrity check failed for archive with modified CRC, when instructed to ignore");
     XCTAssertTrue(blockInvoked, @"Block prompting whether to ignore CRC mismatches should have been called");
+    XCTAssertTrue(archive.ignoreCRCMismatches);
 }
 
 - (void)testCheckDataIntegrityIgnoringCRCMismatches_ModifiedCRC_DontIgnore {
@@ -179,6 +203,7 @@
     
     XCTAssertFalse(success, @"Data integrity check passed for archive with modified CRC");
     XCTAssertTrue(blockInvoked, @"Block prompting whether to ignore CRC mismatches should have been called");
+    XCTAssertFalse(archive.ignoreCRCMismatches);
 }
 
 @end
