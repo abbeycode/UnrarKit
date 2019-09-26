@@ -20,7 +20,7 @@
     NSArray *testArchives = @[@"Test Archive.rar", @"Test Archive (Password).rar"];
     
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -57,7 +57,7 @@
 - (void)testIterateFileInfo_Unicode
 {
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -118,7 +118,7 @@
     NSArray *testArchives = @[@"Test Archive (Header Password).rar"];
     
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -208,6 +208,40 @@
     XCTAssertFalse(success, @"Iteration for invalid archive succeeded");
     XCTAssertFalse(called, @"Iteration for invalid archive called action block");
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
+}
+
+- (void)testIterateFileInfo_ModifiedCRC
+{
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Modified CRC Archive.rar"] error:nil];
+    
+    NSError *error = nil;
+    __block BOOL called = NO;
+    BOOL success = [archive iterateFileInfo:^(URKFileInfo * _Nonnull fileInfo, BOOL * _Nonnull stop) {
+        called = YES;
+    }
+                                      error:&error];
+    
+    XCTAssertNotNil(error, @"Iteration of invalid archive succeeded");
+    XCTAssertFalse(success, @"Iteration for invalid archive succeeded");
+    XCTAssertTrue(called, @"Iteration for invalid archive called action block");
+    XCTAssertEqual(error.code, URKErrorCodeBadData, @"Unexpected error code returned");
+}
+
+- (void)testIterateFileInfo_ModifiedCRC_IgnoringMismatches
+{
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Modified CRC Archive.rar"] error:nil];
+    archive.ignoreCRCMismatches = YES;
+
+    NSError *error = nil;
+    __block int calledCount = 0;
+    BOOL iterateSuccess = [archive iterateFileInfo:^(URKFileInfo * _Nonnull fileInfo, BOOL * _Nonnull stop) {
+        calledCount = 1;
+    }
+                                      error:&error];
+    
+    XCTAssertNil(error, @"Modified CRC not ignored");
+    XCTAssertTrue(iterateSuccess, @"Iteration for invalid archive succeeded");
+    XCTAssertEqual(1, calledCount, @"Iterated too many times for archive with modified CRC");
 }
 
 

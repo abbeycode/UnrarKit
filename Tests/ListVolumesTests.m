@@ -29,6 +29,34 @@
                           @"Wrong URL returned");
 }
 
+- (void)testSingleVolume_ModifiedCRC {
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    NSError *listVolumesError = nil;
+    NSArray<NSURL*> *volumeURLs = [archive listVolumeURLs:&listVolumesError];
+    
+    XCTAssertNotNil(listVolumesError, @"Error listing volume URLs");
+    XCTAssertNil(volumeURLs, @"No URLs returned");
+    
+}
+
+- (void)testSingleVolume_ModifiedCRC_IgnoringMismatch {
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    archive.ignoreCRCMismatches = YES;
+
+    NSError *listVolumesError = nil;
+    NSArray<NSURL*> *volumeURLs = [archive listVolumeURLs:&listVolumesError];
+    
+    XCTAssertNil(listVolumesError, @"Error listing volume URLs");
+    XCTAssertNotNil(volumeURLs, @"No URLs returned");
+    XCTAssertEqual(volumeURLs.count, 1, @"Wrong number of volume URLs listed");
+    
+    XCTAssertEqualObjects(volumeURLs[0].lastPathComponent, testArchiveURL.path.lastPathComponent,
+                          @"Wrong URL returned");
+}
+
 #if !TARGET_OS_IPHONE
 - (void)testMultipleVolume_UseFirstVolume {
     NSArray<NSURL*> *generatedVolumeURLs = [self multiPartArchiveWithName:@"ListVolumesTests-testMultipleVolume_UseFirstVolume.rar"];

@@ -80,6 +80,8 @@ Pod::Spec.new do |s|
                       # These files are built implicitly as dependencies
     ss.preserve_paths = "Libraries/unrar/arccmt.cpp",
                         "Libraries/unrar/blake2sp.cpp",
+                        "Libraries/unrar/cmdfilter.cpp",
+                        "Libraries/unrar/cmdmix.cpp",
                         "Libraries/unrar/coder.cpp",
                         "Libraries/unrar/crypt1.cpp",
                         "Libraries/unrar/crypt2.cpp",

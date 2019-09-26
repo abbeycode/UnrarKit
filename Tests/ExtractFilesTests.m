@@ -21,7 +21,7 @@
                               @"Test Archive (Header Password).rar"];
     
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -142,7 +142,7 @@
 - (void)testExtractFiles_Unicode
 {
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -237,6 +237,71 @@
     
     XCTAssertFalse(success, @"Extract invalid archive succeeded");
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
+    XCTAssertFalse(dirExists, @"Directory successfully created for invalid archive");
+}
+
+- (void)testExtractFiles_ModifiedCRC
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Modified CRC Archive.rar"] error:nil];
+    
+    NSString *extractDirectory = [self randomDirectoryWithPrefix:@"ExtractInvalidArchive"];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+    
+    NSError *error = nil;
+    BOOL success = [archive extractFilesTo:extractURL.path
+                                 overwrite:NO
+                                     error:&error];
+    BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
+    
+    XCTAssertFalse(success, @"Extract invalid archive succeeded");
+    XCTAssertEqual(error.code, URKErrorCodeBadData, @"Unexpected error code returned");
+    XCTAssertFalse(dirExists, @"Directory successfully created for invalid archive");
+}
+
+- (void)testExtractFiles_ModifiedCRC_IgnoreCRCMismatches
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Modified CRC Archive.rar"] error:nil];
+    archive.ignoreCRCMismatches = YES;
+
+    NSString *extractDirectory = [self randomDirectoryWithPrefix:@"ExtractInvalidArchive"];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+    
+    NSError *error = nil;
+    BOOL success = [archive extractFilesTo:extractURL.path
+                                 overwrite:NO
+                                     error:&error];
+    
+    XCTAssertTrue(success, @"CRC mismatch not ignored");
+    XCTAssertNil(error, @"Unexpected error code returned");
+    
+    BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
+    XCTAssertTrue(dirExists, @"Directory successfully created for invalid archive");
+    
+    NSURL *extractedFileURL = [extractURL URLByAppendingPathComponent:@"README.md"];
+    XCTAssertTrue([extractedFileURL checkResourceIsReachableAndReturnError:NULL]);
+}
+
+- (void)testExtractFiles_ModifiedCRC_DontIgnoreCRCMismatches
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Modified CRC Archive.rar"] error:nil];
+    NSString *extractDirectory = [self randomDirectoryWithPrefix:@"ExtractInvalidArchive"];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+    
+    NSError *error = nil;
+    BOOL success = [archive extractFilesTo:extractURL.path
+                                 overwrite:NO
+                                     error:&error];
+    
+    XCTAssertFalse(success, @"CRC mismatch not ignored");
+    XCTAssertNotNil(error, @"Unexpected error code returned");
+    
+    BOOL dirExists = [fm fileExistsAtPath:extractURL.path];
     XCTAssertFalse(dirExists, @"Directory successfully created for invalid archive");
 }
 

@@ -20,7 +20,7 @@
     NSArray *testArchives = @[@"Test Archive.rar", @"Test Archive (Password).rar"];
     
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -53,7 +53,7 @@
 - (void)testListFilenames_Unicode
 {
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -106,7 +106,7 @@
     NSArray *testArchives = @[@"Test Archive (Header Password).rar"];
     
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
-        return ![key hasSuffix:@"rar"];
+        return ![key hasSuffix:@"rar"] && ![key hasSuffix:@"md"];
     }];
     
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -177,6 +177,36 @@
     XCTAssertNotNil(error, @"List files of invalid archive succeeded");
     XCTAssertNil(files, @"List returned for invalid archive");
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
+}
+
+- (void)testListFilenames_ModifiedCRC
+{
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    
+    NSError *error = nil;
+    NSArray *filesInArchive = [archive listFilenames:&error];
+    
+    XCTAssertNotNil(error, @"Error returned by listFilenames");
+    XCTAssertNil(filesInArchive, @"No list of files returned");
+    XCTAssertEqual(error.code, URKErrorCodeBadData, @"Unexpected error code returned");
+}
+
+- (void)testListFilenames_ModifiedCRC_IgnoringMismatch
+{
+    NSURL *testArchiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
+    archive.ignoreCRCMismatches = YES;
+
+    NSError *error = nil;
+    NSArray *filesInArchive = [archive listFilenames:&error];
+    
+    XCTAssertNil(error, @"Error returned by listFilenames");
+    XCTAssertNotNil(filesInArchive, @"No list of files returned");
+    XCTAssertEqual(filesInArchive.count, 1,
+                   @"Incorrect number of files listed in archive");
+    
+    XCTAssertEqualObjects(filesInArchive[0], @"README.md", @"Incorrect filename listed");
 }
 
 

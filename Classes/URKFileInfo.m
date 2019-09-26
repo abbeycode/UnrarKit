@@ -40,7 +40,7 @@
         _isEncryptedWithPassword = fileHeader->Flags & (1 << 2);
         //_fileHasComment = fileHeader->Flags  & (1 << 3)
         
-        _isDirectory = fileHeader->Flags & RHDF_DIRECTORY;
+        _isDirectory = (fileHeader->Flags & RHDF_DIRECTORY) ? YES : NO;
     }
 
     return self;
