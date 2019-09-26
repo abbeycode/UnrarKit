@@ -1,1 +1,1 @@
-* Added new method `-iterateFileInfo:error:` that takes a block, allowing for lazy iteration of file info, without building up an in-memory array (Issue #73 - Thanks to [@yanex](https://github.com/yanex) for the suggestion!)
+Made `ignoreCRCMismatches` property public
