@@ -106,6 +106,25 @@
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
 
+- (void)testPerformOnFiles_Nested_ExtractData
+{
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test Archive.rar"]
+                                                 password:@""
+                                                    error:nil];
+    
+    NSError *archiveError = nil;
+    
+    [archive performOnFilesInArchive:^(URKFileInfo *fileInfo, BOOL *stop) {
+        NSError *extractError = nil;
+        NSData *data = [archive extractData:fileInfo error:&extractError];
+        
+        if (data == nil) {
+            *stop = YES;
+            XCTFail();
+        }
+    } error:&archiveError];
+}
+
 #if !TARGET_OS_IPHONE
 - (void)testPerformOnFiles_Ordering
 {
