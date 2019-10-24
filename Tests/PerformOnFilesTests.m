@@ -125,6 +125,40 @@
     } error:&archiveError];
 }
 
+- (void)testPerformOnFiles_Nested_ExtractFiles
+{
+    URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test Archive.rar"]
+                                                 password:@""
+                                                    error:nil];
+    
+    NSError *archiveError = nil;
+    
+    [archive performOnFilesInArchive:^(URKFileInfo *fileInfo, BOOL *stop) {
+#if !TARGET_OS_IPHONE
+        NSURL *extractRootDirectory = self.tempDirectory;
+#else
+        NSFileManager *fm = [NSFileManager defaultManager];
+        NSURL *extractRootDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
+                                                                              inDomains:NSUserDomainMask] firstObject];
+        extractRootDirectory = [extractRootDirectory URLByAppendingPathComponent:@"testPerformOnFiles_Nested_ExtractFiles"];
+        NSLog(@"Documents directory: %@", extractRootDirectory.path);
+        
+        if ([fm fileExistsAtPath:extractRootDirectory.path]) {
+            NSError *clearDirError = nil;
+            XCTAssertTrue([fm removeItemAtURL:extractRootDirectory error:&clearDirError], @"Failed to clear out documents directory");
+            XCTAssertNil(clearDirError, @"Error while clearing out documents directory");
+        }
+        
+#endif
+        NSError *extractError = nil;
+        BOOL success = [archive extractFilesTo:extractRootDirectory.path
+                                     overwrite:NO
+                                         error:&extractError];
+        XCTAssertTrue(success);
+        
+    } error:&archiveError];
+}
+
 #if !TARGET_OS_IPHONE
 - (void)testPerformOnFiles_Ordering
 {

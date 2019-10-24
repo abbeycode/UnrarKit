@@ -1356,6 +1356,9 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
         return NO;
     }
 
+    self.lastFilepath = nil;
+    self.lastArchivePath = nil;
+
     if (aPassword != nil) {
         URKLogDebug("Setting password...");
         
