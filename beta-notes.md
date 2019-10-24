@@ -1,1 +1,1 @@
-Made `ignoreCRCMismatches` property public
+Fixed crash when running certain operations, due to a change for ignoring CRC mismatches
