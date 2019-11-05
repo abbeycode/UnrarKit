@@ -348,6 +348,9 @@ NS_DESIGNATED_INITIALIZER
 
         URKLogDebug("File is not a RAR. Unknown contents in 7th and 8th bytes (%02X %02X)", dataBytes[6], dataBytes[7]);
     }
+    @catch (NSException *e) {
+        URKLogError("Error checking if %{public}@ is a RAR archive: %{public}@", filePath, e);
+    }
     @finally {
         [handle closeFile];
     }
