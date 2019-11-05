@@ -1,1 +1,1 @@
-Fixed crash when running certain operations, due to a change for ignoring CRC mismatches
+Fixed crash in +pathIsARAR: when a file is unreadable (Issue #85)
