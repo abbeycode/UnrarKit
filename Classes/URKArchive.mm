@@ -51,8 +51,8 @@ NS_DESIGNATED_INITIALIZER
 
 @property (strong) NSObject *threadLock;
 
-@property (assign) NSString *lastArchivePath;
-@property (assign) NSString *lastFilepath;
+@property (copy) NSString *lastArchivePath;
+@property (copy) NSString *lastFilepath;
 
 @end
 
