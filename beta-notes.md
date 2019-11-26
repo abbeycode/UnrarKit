@@ -1,1 +1,1 @@
-Fixed crash in +pathIsARAR: when a file is unreadable (Issue #85)
+Merged PR to fix the memory management settings for two properties (PR #86)
