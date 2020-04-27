@@ -41,6 +41,8 @@
         //_fileHasComment = fileHeader->Flags  & (1 << 3)
         
         _isDirectory = fileHeader->Flags & RHDF_DIRECTORY;
+
+        _relativeOffsetToHeader = fileHeader->RelativeOffsetToHeader;
     }
 
     return self;

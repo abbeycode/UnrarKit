@@ -108,6 +108,7 @@ struct RARHeaderDataEx
   unsigned int CtimeHigh;
   unsigned int AtimeLow;
   unsigned int AtimeHigh;
+  int64_t RelativeOffsetToHeader;
   unsigned int Reserved[988];
 };
 
@@ -168,6 +169,7 @@ HANDLE PASCAL RAROpenArchiveEx(struct RAROpenArchiveDataEx *ArchiveData);
 int    PASCAL RARCloseArchive(HANDLE hArcData);
 int    PASCAL RARReadHeader(HANDLE hArcData,struct RARHeaderData *HeaderData);
 int    PASCAL RARReadHeaderEx(HANDLE hArcData,struct RARHeaderDataEx *HeaderData);
+void    PASCAL RARSeekTo(HANDLE hArcData,int64_t offset);
 int    PASCAL RARProcessFile(HANDLE hArcData,int Operation,char *DestPath,char *DestName);
 int    PASCAL RARProcessFileW(HANDLE hArcData,int Operation,wchar_t *DestPath,wchar_t *DestName);
 void   PASCAL RARSetCallback(HANDLE hArcData,UNRARCALLBACK Callback,LPARAM UserData);

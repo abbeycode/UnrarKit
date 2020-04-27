@@ -147,6 +147,11 @@ typedef NS_ENUM(NSUInteger, URKHostOS) {
 @property (readonly, assign) URKHostOS hostOS;
 
 /**
+ *  Relative offset to file record's header
+ */
+@property (readonly, assign) int64_t relativeOffsetToHeader;
+
+/**
  *  Returns a URKFileInfo instance for the given extended header data
  *
  *  @param fileHeader The header data for a RAR file

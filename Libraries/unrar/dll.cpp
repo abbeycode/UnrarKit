@@ -194,6 +194,8 @@ int PASCAL RARReadHeader(HANDLE hArcData,struct RARHeaderData *D)
 int PASCAL RARReadHeaderEx(HANDLE hArcData,struct RARHeaderDataEx *D)
 {
   DataSet *Data=(DataSet *)hArcData;
+  // Save the Current block position as an relative offset to entry's header
+  D->RelativeOffsetToHeader=Data->Arc.CurBlockPos;
   try
   {
     if ((Data->HeaderSize=(int)Data->Arc.SearchBlock(HEAD_FILE))<=0)
@@ -309,6 +311,11 @@ int PASCAL RARReadHeaderEx(HANDLE hArcData,struct RARHeaderDataEx *D)
   return ERAR_SUCCESS;
 }
 
+void PASCAL RARSeekTo(HANDLE hArcData,int64_t offset)
+{
+   DataSet *Data=(DataSet *)hArcData;
+   Data->Arc.Seek(offset, SEEK_SET);
+}
 
 int PASCAL ProcessFile(HANDLE hArcData,int Operation,char *DestPath,char *DestName,wchar *DestPathW,wchar *DestNameW)
 {

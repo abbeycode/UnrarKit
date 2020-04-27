@@ -4,7 +4,9 @@ EXPORTS
   RARCloseArchive
   RARReadHeader
   RARReadHeaderEx
+  RARSeekTo
   RARProcessFile
+  RARProcessFileW
   RARSetCallback
   RARSetChangeVolProc
   RARSetProcessDataProc

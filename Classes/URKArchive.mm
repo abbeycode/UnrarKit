@@ -988,6 +988,95 @@ NS_DESIGNATED_INITIALIZER
     return success && !actionError;
 }
 
+- (BOOL)extractBufferedDataByOffsetOf:(URKFileInfo *)fileInfo
+                              error:(NSError * __autoreleasing *)error
+                             action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
+{
+    URKCreateActivity("Extracting Buffered Data");
+
+    NSError *actionError = nil;
+
+    NSProgress *progress = [self beginProgressOperation:0];
+
+    __weak URKArchive *welf = self;
+
+    BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
+        URKCreateActivity("Performing action");
+
+        // Ask unrar seek to the relative offset of entry's header
+        RARSeekTo(welf.rarFile, fileInfo.relativeOffsetToHeader);
+
+        int RHCode = 0, PFCode = 0;
+        // Read the entry header, setting some internal states which I don't understand...
+        RHCode = RARReadHeaderEx(welf.rarFile, welf.header);
+
+        long long totalBytes = fileInfo.uncompressedSize;
+        progress.totalUnitCount = totalBytes;
+
+        if (RHCode != ERAR_SUCCESS) {
+            NSString *errorName = nil;
+            [self assignError:innerError code:RHCode errorName:&errorName];
+            URKLogError("Header read yielded error: %{public}@ (%d)", errorName, RHCode);
+            return;
+        }
+
+        // Empty file, or a directory
+        if (totalBytes == 0) {
+            URKLogInfo("File is empty or a directory");
+            return;
+        }
+
+        __block long long bytesRead = 0;
+
+        // Repeating the argument instead of using positional specifiers, because they don't work with the {} formatters
+        URKLogDebug("Uncompressed size: %{iec-bytes}lld (%lld bytes) in file", totalBytes, totalBytes);
+
+        BOOL (^bufferedReadBlock)(NSData*) = ^BOOL(NSData *dataChunk) {
+            if (progress.isCancelled) {
+                URKLogInfo("Buffered data read cancelled");
+                return NO;
+            }
+
+            bytesRead += dataChunk.length;
+            progress.completedUnitCount += dataChunk.length;
+
+            double progressPercent = bytesRead / static_cast<double>(totalBytes);
+            URKLogDebug("Read data chunk of size %lu (%.3f%% complete). Calling handler...", (unsigned long)dataChunk.length, progressPercent * 100);
+            action(dataChunk, progressPercent);
+            return YES;
+        };
+        RARSetCallback(welf.rarFile, BufferedReadCallbackProc, (long)bufferedReadBlock);
+
+        URKLogDebug("Processing file...");
+        PFCode = RARProcessFile(welf.rarFile, RAR_TEST, NULL, NULL);
+
+        RARSetCallback(welf.rarFile, NULL, NULL);
+
+        if (progress.isCancelled) {
+            NSString *errorName = nil;
+            [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
+            URKLogError("Buffered data extraction has been cancelled: %{public}@", errorName);
+            return;
+        }
+
+        if (PFCode != 0) {
+            NSString *errorName = nil;
+            [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
+            URKLogError("Error processing file: %{public}@ (%d)", errorName, PFCode);
+        }
+    } inMode:RAR_OM_EXTRACT error:&actionError];
+
+    if (error) {
+        *error = actionError;
+
+        if (actionError) {
+            URKLogError("Error reading buffered data from file\nfilePath: %{public}@\nerror: %{public}@", fileInfo.filename, actionError);
+        }
+    }
+
+    return success && !actionError;
+}
+
 - (BOOL)isPasswordProtected
 {
     URKCreateActivity("Checking Password Protection");
