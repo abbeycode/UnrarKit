@@ -39,6 +39,15 @@ static NSURL *originalLargeArchiveURL;
                            @"Test File A.txt",
                            @"Test File B.jpg",
                            @"Test File C.m4a",
+                           @"small files/Test Text.rar",
+                           @"small files/100.rar",
+                           @"small files/200.rar",
+                           @"small files/1k.rar",
+                           @"small files/2k.rar",
+                           @"small files/2k.Splitted.part01.rar",
+                           @"small files/2k.Splitted.part02.rar",
+                           @"small files/2k.Splitted.part03.rar",
+                           @"small files/2k.Splitted.part04.rar",
                            @"bin/rar"];
     
     NSArray *unicodeFiles = @[@"Ⓣest Ⓐrchive.rar",

@@ -141,6 +141,7 @@
 		96EA537E1B3CB2C700F79DC6 /* URKFileInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FCD46A1A3262E5003612BF /* URKFileInfo.m */; };
 		96EA53961B3CB2C700F79DC6 /* NSString+UnrarKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 96DBF7F81A3F72800033B759 /* NSString+UnrarKit.mm */; };
 		96EA53AC1B3CB2C700F79DC6 /* URKArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 489CFA0F128B5169005DCC2A /* URKArchive.mm */; };
+		97A5FCE72456CEEB003B847D /* ExtractionPerformanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A5FCE52456CC37003B847D /* ExtractionPerformanceTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -343,6 +344,7 @@
 		96F450761B38552200679597 /* IsPasswordProtectedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IsPasswordProtectedTests.m; sourceTree = "<group>"; };
 		96F450781B385AF800679597 /* ListFilenamesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListFilenamesTests.m; sourceTree = "<group>"; };
 		96F4507A1B385BCD00679597 /* ExtractFilesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtractFilesTests.m; sourceTree = "<group>"; };
+		97A5FCE52456CC37003B847D /* ExtractionPerformanceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtractionPerformanceTests.m; sourceTree = "<group>"; };
 		F3FCD4691A3262E5003612BF /* URKFileInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URKFileInfo.h; sourceTree = "<group>"; };
 		F3FCD46A1A3262E5003612BF /* URKFileInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URKFileInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -464,6 +466,7 @@
 				967872731E460FA70048A54C /* ListVolumesTests.m */,
 				7A267F6D1F713B970004EAA6 /* ProgressReportingTests.m */,
 				96F450741B38527100679597 /* ValidatePasswordTests.m */,
+				97A5FCE52456CC37003B847D /* ExtractionPerformanceTests.m */,
 				964C8AC318D28EE000AD7321 /* Supporting Files */,
 			);
 			path = Tests;
@@ -951,6 +954,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				97A5FCE72456CEEB003B847D /* ExtractionPerformanceTests.m in Sources */,
 				96A043DE1E4CC8D500BD7013 /* FirstVolumeTests.m in Sources */,
 				9699FA891B3D9B5700B6D373 /* URKArchiveTests.m in Sources */,
 				9699FA8C1B3D9B6F00B6D373 /* IsPasswordProtectedTests.m in Sources */,

@@ -40,18 +40,18 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 #if !TARGET_OS_IPHONE
 - (void)testFileURL {
     NSArray *testArchives = @[@"Large",
-                              @"Test Archive.rar",
-                              @"Test Archive (Password).rar",
-                              @"Test Archive (Header Password).rar"];
-    
+            @"Test Archive.rar",
+            @"Test Archive (Password).rar",
+            @"Test Archive (Header Password).rar"];
+
     for (NSString *testArchiveName in testArchives) {
         NSLog(@"Testing fileURL of archive %@", testArchiveName);
         NSURL *testArchiveURL = ([testArchiveName isEqualToString:@"Large"]
-                                 ? [self largeArchiveURL]
-                                 : self.testFileURLs[testArchiveName]);
-        
+                ? [self largeArchiveURL]
+                : self.testFileURLs[testArchiveName]);
+
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-        
+
         NSURL *resolvedURL = archive.fileURL.URLByResolvingSymlinksInPath;
         XCTAssertNotNil(resolvedURL, @"Nil URL returned for valid archive");
         XCTAssertTrue([testArchiveURL isEqual:resolvedURL], @"Resolved URL doesn't match original");
@@ -62,54 +62,54 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 #if !TARGET_OS_IPHONE
 - (void)testFilename {
     NSArray *testArchives = @[@"Large",
-                              @"Test Archive.rar",
-                              @"Test Archive (Password).rar",
-                              @"Test Archive (Header Password).rar"];
-    
+            @"Test Archive.rar",
+            @"Test Archive (Password).rar",
+            @"Test Archive (Header Password).rar"];
+
     for (NSString *testArchiveName in testArchives) {
         NSLog(@"Testing filename of archive %@", testArchiveName);
         NSURL *testArchiveURL = ([testArchiveName isEqualToString:@"Large"]
-                                 ? [self largeArchiveURL]
-                                 : self.testFileURLs[testArchiveName]);
-        
+                ? [self largeArchiveURL]
+                : self.testFileURLs[testArchiveName]);
+
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-        
+
         NSString *resolvedFilename = archive.filename;
         XCTAssertNotNil(resolvedFilename, @"Nil filename returned for valid archive");
-        
+
         // Testing by suffix, since the original points to /private/var, but the resolved one
         // points straight to /var. They're equivalent, but not character-for-character equal
         XCTAssertTrue([resolvedFilename hasSuffix:testArchiveURL.path],
-                      @"Resolved filename doesn't match original");
+                @"Resolved filename doesn't match original");
     }
 }
 #endif
 
 - (void)testUncompressedSize {
     NSURL *testArchiveURL = self.testFileURLs[@"Test Archive.rar"];
-    
+
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     NSNumber *size = archive.uncompressedSize;
-    
+
     XCTAssertNotNil(size, @"Nil size returned");
     XCTAssertEqual(size.integerValue, 104714, @"Wrong uncompressed size returned");
 }
 
 - (void)testUncompressedSize_InvalidArchive {
     NSURL *testArchiveURL = self.testFileURLs[@"Test File A.txt"];
-    
+
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     NSNumber *size = archive.uncompressedSize;
-    
+
     XCTAssertNil(size, @"Uncompressed size of invalid archive should be nil");
 }
 
 - (void)testCompressedSize {
     NSURL *testArchiveURL = self.testFileURLs[@"Test Archive.rar"];
-    
+
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
     NSNumber *size = archive.compressedSize;
-    
+
     XCTAssertNotNil(size, @"Nil size returned");
     XCTAssertEqual(size.integerValue, 89069, @"Wrong uncompressed size returned");
 }
@@ -117,11 +117,11 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testCompressedSize_ArchiveMissing {
     NSURL *testArchiveURL = self.testFileURLs[@"Test Archive.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-    
+
     [[NSFileManager defaultManager] removeItemAtURL:testArchiveURL error:nil];
-    
+
     NSNumber *size = archive.compressedSize;
-    
+
     XCTAssertNil(size, @"Compressed size of an archive with no path should be nil");
 }
 
@@ -167,23 +167,23 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 {
     NSURL *smallFileURL = [self randomTextFileOfLength:1];
     NSURL *jpgURL = self.testFileURLs[@"Test File B.jpg"];
-    
+
     NSInteger initialFileCount = [self numberOfOpenFileHandles];
-    
+
     for (NSInteger i = 0; i < 10000; i++) {
         BOOL smallFileIsZip = [URKArchive pathIsARAR:smallFileURL.path];
         XCTAssertFalse(smallFileIsZip, @"Small non-RAR file is reported as a RAR");
-        
+
         BOOL jpgIsZip = [URKArchive pathIsARAR:jpgURL.path];
         XCTAssertFalse(jpgIsZip, @"JPG file is reported as a RAR");
-        
+
         NSURL *zipURL = self.testFileURLs[@"Test Archive.rar"];
         BOOL zipFileIsZip = [URKArchive pathIsARAR:zipURL.path];
         XCTAssertTrue(zipFileIsZip, @"RAR file is not reported as a RAR");
     }
-    
+
     NSInteger finalFileCount = [self numberOfOpenFileHandles];
-    
+
     XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
 }
 #endif
@@ -223,23 +223,23 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 {
     NSURL *smallFileURL = [self randomTextFileOfLength:1];
     NSURL *jpgURL = self.testFileURLs[@"Test File B.jpg"];
-    
+
     NSInteger initialFileCount = [self numberOfOpenFileHandles];
-    
+
     for (NSInteger i = 0; i < 10000; i++) {
         BOOL smallFileIsZip = [URKArchive urlIsARAR:smallFileURL];
         XCTAssertFalse(smallFileIsZip, @"Small non-RAR file is reported as a RAR");
-        
+
         BOOL jpgIsZip = [URKArchive urlIsARAR:jpgURL];
         XCTAssertFalse(jpgIsZip, @"JPG file is reported as a RAR");
-        
+
         NSURL *zipURL = self.testFileURLs[@"Test Archive.rar"];
         BOOL zipFileIsZip = [URKArchive urlIsARAR:zipURL];
         XCTAssertTrue(zipFileIsZip, @"RAR file is not reported as a RAR");
     }
-    
+
     NSInteger finalFileCount = [self numberOfOpenFileHandles];
-    
+
     XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
 }
 #endif
@@ -251,11 +251,11 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 
 - (void)testListFileInfo {
     URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test Archive.rar"] error:nil];
-    
+
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
         return ![key hasSuffix:@"rar"];
     }];
-    
+
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
 
     static NSDateFormatter *testFileInfoDateFormatter;
@@ -265,35 +265,35 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         testFileInfoDateFormatter.dateFormat = @"M/dd/yyyy h:mm a";
         testFileInfoDateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
     });
-    
+
     NSDictionary *expectedTimestamps = @{@"Test File A.txt": [testFileInfoDateFormatter dateFromString:@"3/13/2014 8:02 PM"],
-                                         @"Test File B.jpg": [testFileInfoDateFormatter dateFromString:@"3/13/2014 8:04 PM"],
-                                         @"Test File C.m4a": [testFileInfoDateFormatter dateFromString:@"3/13/2014 8:05 PM"],};
-    
+            @"Test File B.jpg": [testFileInfoDateFormatter dateFromString:@"3/13/2014 8:04 PM"],
+            @"Test File C.m4a": [testFileInfoDateFormatter dateFromString:@"3/13/2014 8:05 PM"],};
+
     NSError *error = nil;
     NSArray *filesInArchive = [archive listFileInfo:&error];
-        
+
     XCTAssertNil(error, @"Error returned by listFileInfo");
     XCTAssertNotNil(filesInArchive, @"No list of files returned");
     XCTAssertEqual(filesInArchive.count, expectedFileSet.count, @"Incorrect number of files listed in archive");
-    
+
     NSFileManager *fm = [NSFileManager defaultManager];
 
     for (NSInteger i = 0; i < filesInArchive.count; i++) {
         URKFileInfo *fileInfo = filesInArchive[i];
-       
+
         // Test Archive Name
         NSString *expectedArchiveName = archive.filename;
         XCTAssertEqualObjects(fileInfo.archiveName, expectedArchiveName, @"Incorrect archive name");
-        
+
         // Test Filename
         NSString *expectedFilename = expectedFiles[i];
         XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Incorrect filename");
-        
+
         // Test CRC
         NSUInteger expectedFileCRC = [self crcOfTestFile:expectedFilename];
         XCTAssertEqual(fileInfo.CRC, expectedFileCRC, @"Incorrect CRC checksum");
-        
+
         // Test Last Modify Date
         NSTimeInterval archiveFileTimeInterval = [fileInfo.timestamp timeIntervalSinceReferenceDate];
         NSTimeInterval expectedFileTimeInterval = [expectedTimestamps[fileInfo.filename] timeIntervalSinceReferenceDate];
@@ -305,13 +305,13 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         NSDictionary *expectedFileAttributes = [fm attributesOfItemAtPath:expectedFilePath
                                                                     error:&attributesError];
         XCTAssertNil(attributesError, @"Error getting file attributes of %@", expectedFilename);
-       
+
         long long expectedFileSize = expectedFileAttributes.fileSize;
         XCTAssertEqual(fileInfo.uncompressedSize, expectedFileSize, @"Incorrect uncompressed file size");
-        
+
         // Test Compression method
         XCTAssertEqual(fileInfo.compressionMethod, URKCompressionMethodNormal, @"Incorrect compression method");
-        
+
         // Test Host OS
         XCTAssertEqual(fileInfo.hostOS, URKHostOSUnix, @"Incorrect host OS");
     }
@@ -322,23 +322,23 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
         return ![key hasSuffix:@"rar"];
     }];
-    
+
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
+
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-    
+
     NSError *error = nil;
     NSArray *filesInArchive = [archive listFileInfo:&error];
-    
+
     XCTAssertNil(error, @"Error returned by listFileInfo");
     XCTAssertNotNil(filesInArchive, @"No list of files returned");
     XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
-                   @"Incorrect number of files listed in archive");
-    
+            @"Incorrect number of files listed in archive");
+
     for (NSInteger i = 0; i < filesInArchive.count; i++) {
         URKFileInfo *fileInfo = (URKFileInfo *)filesInArchive[i];
-        
+
         XCTAssertEqualObjects(fileInfo.filename, expectedFiles[i], @"Incorrect filename listed");
         XCTAssertEqualObjects(fileInfo.archiveName, archive.filename, @"Incorrect archiveName listed");
     }
@@ -348,10 +348,10 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testListFileInfo_MultivolumeArchive {
     NSArray<NSURL*> *generatedVolumeURLs = [self multiPartArchiveWithName:@"ListFileInfoTests_MultivolumeArchive.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:generatedVolumeURLs.firstObject error:nil];
-    
+
     NSError *error = nil;
     NSArray *files = [archive listFileInfo:&error];
-    
+
     XCTAssertNil(error, @"Error returned when listing file info for multivolume archive");
     XCTAssertEqual(files.count, 1, @"Incorrect number of file info items returned for multivolume archive");
 }
@@ -360,39 +360,39 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testListFileInfo_HeaderPassword
 {
     NSArray *testArchives = @[@"Test Archive (Header Password).rar"];
-    
+
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
         return ![key hasSuffix:@"rar"];
     }];
-    
+
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
+
     for (NSString *testArchiveName in testArchives) {
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
-        
+
         URKArchive *archiveNoPassword = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-        
+
         NSError *error = nil;
         NSArray *filesInArchive = [archiveNoPassword listFileInfo:&error];
-        
+
         XCTAssertNotNil(error, @"No error returned by listFileInfo (no password given)");
         XCTAssertNil(filesInArchive, @"List of files returned (no password given)");
-        
+
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:@"password" error:nil];
-        
+
         filesInArchive = nil;
         error = nil;
         filesInArchive = [archive listFileInfo:&error];
-        
+
         XCTAssertNil(error, @"Error returned by listFileInfo");
         XCTAssertEqual(filesInArchive.count, expectedFileSet.count,
-                       @"Incorrect number of files listed in archive");
-        
+                @"Incorrect number of files listed in archive");
+
         for (NSInteger i = 0; i < filesInArchive.count; i++) {
             URKFileInfo *archiveFileInfo = filesInArchive[i];
             NSString *archiveFilename = archiveFileInfo.filename;
             NSString *expectedFilename = expectedFiles[i];
-            
+
             XCTAssertEqualObjects(archiveFilename, expectedFilename, @"Incorrect filename listed");
         }
     }
@@ -400,10 +400,10 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 
 - (void)testListFileInfo_NoHeaderPasswordGiven {
     URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test Archive (Header Password).rar"] error:nil];
-    
+
     NSError *error = nil;
     NSArray *files = [archive listFileInfo:&error];
-    
+
     XCTAssertNotNil(error, @"List without password succeeded");
     XCTAssertNil(files, @"List returned without password");
     XCTAssertEqual(error.code, URKErrorCodeMissingPassword, @"Unexpected error code returned");
@@ -412,10 +412,10 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testListFileInfo_InvalidArchive
 {
     URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test File A.txt"] error:nil];
-    
+
     NSError *error = nil;
     NSArray *files = [archive listFileInfo:&error];
-    
+
     XCTAssertNotNil(error, @"List files of invalid archive succeeded");
     XCTAssertNil(files, @"List returned for invalid archive");
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
@@ -428,40 +428,40 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testExtractData
 {
     NSArray *testArchives = @[@"Test Archive.rar",
-                              @"Test Archive (Password).rar",
-                              @"Test Archive (Header Password).rar"];
-    
+            @"Test Archive (Password).rar",
+            @"Test Archive (Header Password).rar"];
+
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
         return ![key hasSuffix:@"rar"];
     }];
-    
+
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
+
     for (NSString *testArchiveName in testArchives) {
 
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
-                              ? @"password"
-                              : nil);
+                ? @"password"
+                : nil);
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
-        
+
         NSError *error = nil;
         NSArray *fileInfos = [archive listFileInfo:&error];
         XCTAssertNil(error, @"Error reading file info");
 
         for (NSInteger i = 0; i < expectedFiles.count; i++) {
             NSString *expectedFilename = expectedFiles[i];
-            
+
             NSError *error = nil;
             NSData *extractedData = [archive extractDataFromFile:expectedFilename error:&error];
-            
+
             XCTAssertNil(error, @"Error in extractData:error:");
-            
+
             NSData *expectedFileData = [NSData dataWithContentsOfURL:self.testFileURLs[expectedFilename]];
-            
+
             XCTAssertNotNil(extractedData, @"No data extracted");
             XCTAssertTrue([expectedFileData isEqualToData:extractedData], @"Extracted data doesn't match original file");
-            
+
             error = nil;
             NSData *dataFromFileInfo = [archive extractData:fileInfos[i] error:&error];
             XCTAssertNil(error, @"Error extracting data by file info");
@@ -475,29 +475,29 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
         return ![key hasSuffix:@"rar"];
     }];
-    
+
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
+
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-    
+
     NSError *error = nil;
     NSArray *fileInfos = [archive listFileInfo:&error];
     XCTAssertNil(error, @"Error reading file info");
-    
+
     for (NSInteger i = 0; i < expectedFiles.count; i++) {
         NSString *expectedFilename = expectedFiles[i];
-        
+
         NSError *error = nil;
         NSData *extractedData = [archive extractDataFromFile:expectedFilename error:&error];
-        
+
         XCTAssertNil(error, @"Error in extractData:error:");
-        
+
         NSData *expectedFileData = [NSData dataWithContentsOfURL:self.unicodeFileURLs[expectedFilename]];
-        
+
         XCTAssertNotNil(extractedData, @"No data extracted");
         XCTAssertTrue([expectedFileData isEqualToData:extractedData], @"Extracted data doesn't match original file");
-        
+
         error = nil;
         NSData *dataFromFileInfo = [archive extractData:fileInfos[i] error:&error];
         XCTAssertNil(error, @"Error extracting data by file info");
@@ -508,14 +508,14 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testExtractData_NoPassword
 {
     NSArray *testArchives = @[@"Test Archive (Password).rar",
-                              @"Test Archive (Header Password).rar"];
-    
+            @"Test Archive (Header Password).rar"];
+
     for (NSString *testArchiveName in testArchives) {
         URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[testArchiveName] error:nil];
-        
+
         NSError *error = nil;
         NSData *data = [archive extractDataFromFile:@"Test File A.txt" error:&error];
-        
+
         XCTAssertNotNil(error, @"Extract data without password succeeded");
         XCTAssertNil(data, @"Data returned without password");
         XCTAssertEqual(error.code, URKErrorCodeMissingPassword, @"Unexpected error code returned");
@@ -525,10 +525,10 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testExtractData_InvalidArchive
 {
     URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test File A.txt"] error:nil];
-    
+
     NSError *error = nil;
     NSData *data = [archive extractDataFromFile:@"Any file.txt" error:&error];
-    
+
     XCTAssertNotNil(error, @"Extract data for invalid archive succeeded");
     XCTAssertNil(data, @"Data returned for invalid archive");
     XCTAssertEqual(error.code, URKErrorCodeBadArchive, @"Unexpected error code returned");
@@ -541,31 +541,31 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testPerformOnFiles
 {
     NSArray *testArchives = @[@"Test Archive.rar",
-                              @"Test Archive (Password).rar",
-                              @"Test Archive (Header Password).rar"];
-    
+            @"Test Archive (Password).rar",
+            @"Test Archive (Header Password).rar"];
+
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
         return ![key hasSuffix:@"rar"];
     }];
-    
+
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
+
     for (NSString *testArchiveName in testArchives) {
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
-                              ? @"password"
-                              : nil);
+                ? @"password"
+                : nil);
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
-        
+
         __block NSUInteger fileIndex = 0;
         NSError *error = nil;
-        
+
         [archive performOnFilesInArchive:
-         ^(URKFileInfo *fileInfo, BOOL *stop) {
-             NSString *expectedFilename = expectedFiles[fileIndex++];
-             XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
-         } error:&error];
-        
+                ^(URKFileInfo *fileInfo, BOOL *stop) {
+                    NSString *expectedFilename = expectedFiles[fileIndex++];
+                    XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
+                } error:&error];
+
         XCTAssertNil(error, @"Error iterating through files");
         XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
     }
@@ -576,21 +576,21 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
         return ![key hasSuffix:@"rar"];
     }];
-    
+
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
+
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-    
+
     __block NSUInteger fileIndex = 0;
     NSError *error = nil;
-    
+
     [archive performOnFilesInArchive:
-     ^(URKFileInfo *fileInfo, BOOL *stop) {
-         NSString *expectedFilename = expectedFiles[fileIndex++];
-         XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
-     } error:&error];
-    
+            ^(URKFileInfo *fileInfo, BOOL *stop) {
+                NSString *expectedFilename = expectedFiles[fileIndex++];
+                XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
+            } error:&error];
+
     XCTAssertNil(error, @"Error iterating through files");
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
@@ -599,9 +599,9 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testPerformOnFiles_Ordering
 {
     NSArray *testFilenames = @[@"AAA.txt",
-                               @"BBB.txt",
-                               @"CCC.txt"];
-    
+            @"BBB.txt",
+            @"CCC.txt"];
+
     NSFileManager *fm = [NSFileManager defaultManager];
 
     NSMutableArray *testFileURLs = [NSMutableArray array];
@@ -612,7 +612,7 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
         XCTAssertTrue([fm createFileAtPath:outputURL.path contents:nil attributes:nil], @"Failed to create test file: %@", filename);
         [testFileURLs addObject:outputURL];
     }];
-    
+
     // Create RAR archive with test files, reversed
     NSURL *reversedArchiveURL = [self archiveWithFiles:testFileURLs.reverseObjectEnumerator.allObjects];
 
@@ -634,36 +634,36 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testPerformOnData
 {
     NSArray *testArchives = @[@"Test Archive.rar",
-                              @"Test Archive (Password).rar",
-                              @"Test Archive (Header Password).rar"];
-    
+            @"Test Archive (Password).rar",
+            @"Test Archive (Header Password).rar"];
+
     NSSet *expectedFileSet = [self.testFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
         return ![key hasSuffix:@"rar"];
     }];
-    
+
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
+
     for (NSString *testArchiveName in testArchives) {
         NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
         NSString *password = ([testArchiveName rangeOfString:@"Password"].location != NSNotFound
-                              ? @"password"
-                              : nil);
+                ? @"password"
+                : nil);
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password:password error:nil];
-        
+
         __block NSUInteger fileIndex = 0;
         NSError *error = nil;
-        
+
         [archive performOnDataInArchive:
-         ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
-             NSString *expectedFilename = expectedFiles[fileIndex++];
-             XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
-             
-             NSData *expectedFileData = [NSData dataWithContentsOfURL:self.testFileURLs[expectedFilename]];
-             
-             XCTAssertNotNil(fileData, @"No data extracted");
-             XCTAssertTrue([expectedFileData isEqualToData:fileData], @"File data doesn't match original file");
-         } error:&error];
-        
+                ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+                    NSString *expectedFilename = expectedFiles[fileIndex++];
+                    XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
+
+                    NSData *expectedFileData = [NSData dataWithContentsOfURL:self.testFileURLs[expectedFilename]];
+
+                    XCTAssertNotNil(fileData, @"No data extracted");
+                    XCTAssertTrue([expectedFileData isEqualToData:fileData], @"File data doesn't match original file");
+                } error:&error];
+
         XCTAssertNil(error, @"Error iterating through files");
         XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
     }
@@ -674,26 +674,26 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     NSSet *expectedFileSet = [self.unicodeFileURLs keysOfEntriesPassingTest:^BOOL(NSString *key, id obj, BOOL *stop) {
         return ![key hasSuffix:@"rar"];
     }];
-    
+
     NSArray *expectedFiles = [[expectedFileSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
-    
+
     NSURL *testArchiveURL = self.unicodeFileURLs[@"Ⓣest Ⓐrchive.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-    
+
     __block NSUInteger fileIndex = 0;
     NSError *error = nil;
-    
+
     [archive performOnDataInArchive:
-     ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
-         NSString *expectedFilename = expectedFiles[fileIndex++];
-         XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
-         
-         NSData *expectedFileData = [NSData dataWithContentsOfURL:self.unicodeFileURLs[expectedFilename]];
-         
-         XCTAssertNotNil(fileData, @"No data extracted");
-         XCTAssertTrue([expectedFileData isEqualToData:fileData], @"File data doesn't match original file");
-     } error:&error];
-    
+            ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+                NSString *expectedFilename = expectedFiles[fileIndex++];
+                XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
+
+                NSData *expectedFileData = [NSData dataWithContentsOfURL:self.unicodeFileURLs[expectedFilename]];
+
+                XCTAssertNotNil(fileData, @"No data extracted");
+                XCTAssertTrue([expectedFileData isEqualToData:fileData], @"File data doesn't match original file");
+            } error:&error];
+
     XCTAssertNil(error, @"Error iterating through files");
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
@@ -704,36 +704,36 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     NSURL *largeArchiveURL = [self largeArchiveURL];
 
     URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
-    
+
     NSError *error = nil;
     NSArray *archiveFiles = [archive listFilenames:&error];
-    
+
     XCTAssertNotNil(archiveFiles, @"No filenames listed from test archive");
     XCTAssertNil(error, @"Error listing files in test archive: %@", error);
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [NSThread sleepForTimeInterval:1];
-        
+
         NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"FileMoved"];
-        
+
         NSError *renameError = nil;
         NSFileManager *fm = [NSFileManager defaultManager];
         [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
         XCTAssertNil(renameError, @"Error renaming file: %@", renameError);
     });
-    
+
     __block NSUInteger fileCount = 0;
-    
+
     error = nil;
     BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
         XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
-        
+
         if (!fileInfo.isDirectory) {
             fileCount++;
             XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
         }
     } error:&error];
-    
+
     XCTAssertEqual(fileCount, 20, @"Not all files read");
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
@@ -744,36 +744,36 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testPerformOnData_FileDeleted
 {
     NSURL *largeArchiveURL = [self largeArchiveURL];
-    
+
     URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
-    
+
     NSError *error = nil;
     NSArray *archiveFiles = [archive listFilenames:&error];
-    
+
     XCTAssertNotNil(archiveFiles, @"No filenames listed from test archive");
     XCTAssertNil(error, @"Error listing files in test archive: %@", error);
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [NSThread sleepForTimeInterval:1];
-        
+
         NSError *removeError = nil;
         NSFileManager *fm = [NSFileManager defaultManager];
         [fm removeItemAtURL:largeArchiveURL error:&removeError];
         XCTAssertNil(removeError, @"Error removing file: %@", removeError);
     });
-    
+
     __block NSUInteger fileCount = 0;
-    
+
     error = nil;
     BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
         XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
-        
+
         if (!fileInfo.isDirectory) {
             fileCount++;
             XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
         }
     } error:&error];
-    
+
     XCTAssertEqual(fileCount, 20, @"Not all files read");
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
@@ -784,34 +784,34 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testPerformOnData_FileMovedBeforeBegin
 {
     NSURL *largeArchiveURL = [self largeArchiveURL];
-    
+
     URKArchive *archive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
-    
+
     NSError *error = nil;
     NSArray *archiveFiles = [archive listFilenames:&error];
-    
+
     XCTAssertNotNil(archiveFiles, @"No filenames listed from test archive");
     XCTAssertNil(error, @"Error listing files in test archive: %@", error);
-    
+
     NSURL *movedURL = [largeArchiveURL URLByAppendingPathExtension:@"FileMovedBeforeBegin"];
-    
+
     NSError *renameError = nil;
     NSFileManager *fm = [NSFileManager defaultManager];
     [fm moveItemAtURL:largeArchiveURL toURL:movedURL error:&renameError];
     XCTAssertNil(renameError, @"Error renaming file: %@", renameError);
-    
+
     __block NSUInteger fileCount = 0;
-    
+
     error = nil;
     BOOL success = [archive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
         XCTAssertNotNil(fileData, @"Extracted file is nil: %@", fileInfo.filename);
-        
+
         if (!fileInfo.isDirectory) {
             fileCount++;
             XCTAssertGreaterThan(fileData.length, 0, @"Extracted file is empty: %@", fileInfo.filename);
         }
     } error:&error];
-    
+
     XCTAssertEqual(fileCount, 20, @"Not all files read");
     XCTAssertTrue(success, @"Failed to read files");
     XCTAssertNil(error, @"Error reading files: %@", error);
@@ -822,18 +822,18 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 {
     NSURL *testArchiveURL = self.testFileURLs[@"Folder Archive.rar"];
     URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL error:nil];
-    
+
     NSArray *expectedFiles = @[@"G070-Cliff", @"G070-Cliff/image.jpg"];
-    
+
     __block NSUInteger fileIndex = 0;
     NSError *error = nil;
-    
+
     [archive performOnDataInArchive:
-     ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
-         NSString *expectedFilename = expectedFiles[fileIndex++];
-         XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
-     } error:&error];
-    
+            ^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
+                NSString *expectedFilename = expectedFiles[fileIndex++];
+                XCTAssertEqualObjects(fileInfo.filename, expectedFilename, @"Unexpected filename encountered");
+            } error:&error];
+
     XCTAssertNil(error, @"Error iterating through files");
     XCTAssertEqual(fileIndex, expectedFiles.count, @"Incorrect number of files encountered");
 }
@@ -847,25 +847,25 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     NSURL *archiveURL = self.testFileURLs[@"Test Archive.rar"];
     NSString *extractedFile = @"Test File B.jpg";
     URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
-    
+
     NSError *error = nil;
     NSMutableData *reconstructedFile = [NSMutableData data];
     BOOL success = [archive extractBufferedDataFromFile:extractedFile
                                                   error:&error
                                                  action:
-                    ^(NSData *dataChunk, CGFloat percentDecompressed) {
-                        NSLog(@"Decompressed: %f%%", percentDecompressed);
-                        [reconstructedFile appendBytes:dataChunk.bytes
-                                                length:dataChunk.length];
-                    }];
-    
+                                                         ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                                                             NSLog(@"Decompressed: %f%%", percentDecompressed);
+                                                             [reconstructedFile appendBytes:dataChunk.bytes
+                                                                                     length:dataChunk.length];
+                                                         }];
+
     XCTAssertTrue(success, @"Failed to read buffered data");
     XCTAssertNil(error, @"Error reading buffered data");
     XCTAssertGreaterThan(reconstructedFile.length, 0, @"No data returned");
-    
+
     NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[extractedFile]];
     XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
-                  @"File extracted in buffer not returned correctly");
+            @"File extracted in buffer not returned correctly");
 }
 
 #if !TARGET_OS_IPHONE && __MAC_OS_X_VERSION_MIN_REQUIRED >= 101200
@@ -900,26 +900,103 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     BOOL success = [archive extractBufferedDataFromFile:largeTextFile.lastPathComponent
                                                   error:&error
                                                  action:
-                    ^(NSData *dataChunk, CGFloat percentDecompressed) {
-                        NSLog(@"Decompressed: %f%%", percentDecompressed);
-                        [deflated writeData:dataChunk];
-                    }];
-    
+                                                         ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                                                             NSLog(@"Decompressed: %f%%", percentDecompressed);
+                                                             [deflated writeData:dataChunk];
+                                                         }];
+
     kdebug_signpost_end(SignPostCodeExtractData, 0, 0, 0, SignPostColorPurple);
-    
+
     XCTAssertTrue(success, @"Failed to read buffered data");
     XCTAssertNil(error, @"Error reading buffered data");
-    
+
     [deflated closeFile];
 
     NSData *deflatedData = [NSData dataWithContentsOfURL:deflatedFileURL];
     NSData *fileData = [NSData dataWithContentsOfURL:largeTextFile];
-    
+
     XCTAssertTrue([fileData isEqualToData:deflatedData], @"Data didn't restore correctly");
 }
 #endif
 
+#pragma mark Extract Buffered Data By Offset
 
+- (void)testExtractBufferedDataByOffset
+{
+    NSURL *archiveURL = self.testFileURLs[@"Test Archive.rar"];
+    NSString *extractedFile = @"Test File B.jpg";
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
+
+    NSArray<URKFileInfo*> *fileInfos = [archive listFileInfo:NULL];
+    URKFileInfo *fileInfo = [fileInfos objectAtIndex:0];
+    // Sorry it's really hard for me to understand how Object-C filter stuffs :P
+    for (int i = 0 ; i < fileInfos.count; i++) {
+        if ([[fileInfos objectAtIndex:i].filename isEqualToString:extractedFile]) {
+            fileInfo = [fileInfos objectAtIndex:i];
+        }
+    }
+    
+    NSError *error = nil;
+    NSMutableData *reconstructedFile = [NSMutableData data];
+    BOOL success = [archive extractBufferedDataByOffsetOf:fileInfo
+                                                ignoreCRC:NO
+                                                    error:&error
+                                                   action:
+                                                       ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                                                           NSLog(@"Decompressed: %f%%", percentDecompressed);
+                                                           [reconstructedFile appendBytes:dataChunk.bytes
+                                                                                   length:dataChunk.length];
+                                                       }];
+
+    XCTAssertTrue(success, @"Failed to read buffered data");
+    XCTAssertNil(error, @"Error reading buffered data");
+    XCTAssertGreaterThan(reconstructedFile.length, 0, @"No data returned");
+
+    NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[extractedFile]];
+    XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
+            @"File extracted in buffer not returned correctly");
+}
+
+
+#pragma mark Extract Buffered Data By Offset - Multi Volumes
+
+- (void)testExtractBufferedDataByOffsetInMultiVolumes
+{
+    NSURL *archiveURL = self.testFileURLs[@"small files/2k.Splitted.part01.rar"];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
+
+    NSArray<URKFileInfo*> *fileInfos = [archive listFileInfo:NULL];
+    
+    for (int i = 0 ; i < fileInfos.count; i++) {
+        URKFileInfo *fileInfo = [fileInfos objectAtIndex:i];
+
+        if (fileInfo.isDirectory || ![fileInfo.filename hasSuffix:@".txt"]) {
+            continue;
+        }
+        
+        NSError *error = nil;
+        NSMutableData *reconstructedFile = [NSMutableData data];
+        BOOL success = [archive extractBufferedDataByOffsetOf:fileInfo
+                                                    ignoreCRC:NO
+                                                        error:&error
+                                                       action:
+                                                           ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                                                               NSLog(@"Decompressed: %f%%", percentDecompressed);
+                                                               [reconstructedFile appendBytes:dataChunk.bytes
+                                                                                       length:dataChunk.length];
+                                                           }];
+
+        XCTAssertTrue(success, @"Failed to read buffered data");
+        XCTAssertNil(error, @"Error reading buffered data");
+        XCTAssertGreaterThan(reconstructedFile.length, 0, @"No data returned");
+
+        // All small text files is just a copy of "Test Text.rar"
+        // I have to use ".rar" suffix here otherwise other unit tests in project will fail
+        NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[@"small files/Test Text.rar"]];
+        XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
+                @"File extracted in buffer not returned correctly");
+    }
+}
 
 #pragma mark Various
 
@@ -928,41 +1005,41 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testFileDescriptorUsage
 {
     NSInteger initialFileCount = [self numberOfOpenFileHandles];
-    
+
     NSString *testArchiveName = @"Test Archive.rar";
     NSURL *testArchiveOriginalURL = self.testFileURLs[testArchiveName];
     NSFileManager *fm = [NSFileManager defaultManager];
-    
+
     for (NSInteger i = 0; i < 1000; i++) {
         NSString *tempDir = [self randomDirectoryName];
         NSURL *tempDirURL = [self.tempDirectory URLByAppendingPathComponent:tempDir];
         NSURL *testArchiveCopyURL = [tempDirURL URLByAppendingPathComponent:testArchiveName];
-        
+
         NSError *error = nil;
         [fm createDirectoryAtURL:tempDirURL
      withIntermediateDirectories:YES
                       attributes:nil
                            error:&error];
-        
+
         XCTAssertNil(error, @"Error creating temp directory: %@", tempDirURL);
-        
+
         [fm copyItemAtURL:testArchiveOriginalURL toURL:testArchiveCopyURL error:&error];
         XCTAssertNil(error, @"Error copying test archive \n from: %@ \n\n   to: %@", testArchiveOriginalURL, testArchiveCopyURL);
-        
+
         URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveCopyURL error:nil];
-        
+
         NSArray *fileList = [archive listFilenames:&error];
         XCTAssertNotNil(fileList);
-        
+
         for (NSString *fileName in fileList) {
             NSData *fileData = [archive extractDataFromFile:fileName error:&error];
             XCTAssertNotNil(fileData);
             XCTAssertNil(error);
         }
     }
-    
+
     NSInteger finalFileCount = [self numberOfOpenFileHandles];
-    
+
     XCTAssertEqualWithAccuracy(initialFileCount, finalFileCount, 5, @"File descriptors were left open");
 }
 #endif
@@ -972,65 +1049,65 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     NSURL *largeArchiveURL_A = [self largeArchiveURL];
     NSURL *largeArchiveURL_B = [largeArchiveURL_A.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive 2.rar"];
     NSURL *largeArchiveURL_C = [largeArchiveURL_A.URLByDeletingLastPathComponent URLByAppendingPathComponent:@"Large Archive 3.rar"];
-    
+
     NSFileManager *fm = [NSFileManager defaultManager];
-    
+
     NSError *archiveBCopyError = nil;
     XCTAssertTrue([fm copyItemAtURL:largeArchiveURL_A toURL:largeArchiveURL_B error:&archiveBCopyError], @"Failed to copy archive B");
     XCTAssertNil(archiveBCopyError, @"Error copying archive B");
-    
+
     NSError *archiveCCopyError = nil;
     XCTAssertTrue([fm copyItemAtURL:largeArchiveURL_A toURL:largeArchiveURL_C error:&archiveCCopyError], @"Failed to copy archive C");
     XCTAssertNil(archiveCCopyError, @"Error copying archive C");
-    
+
     URKArchive *largeArchiveA = [[URKArchive alloc] initWithURL:largeArchiveURL_A error:nil];
     URKArchive *largeArchiveB = [[URKArchive alloc] initWithURL:largeArchiveURL_B error:nil];
     URKArchive *largeArchiveC = [[URKArchive alloc] initWithURL:largeArchiveURL_C error:nil];
-    
+
     XCTestExpectation *expectationA = [self expectationWithDescription:@"A finished"];
     XCTestExpectation *expectationB = [self expectationWithDescription:@"B finished"];
     XCTestExpectation *expectationC = [self expectationWithDescription:@"C finished"];
-    
+
     NSBlockOperation *enumerateA = [NSBlockOperation blockOperationWithBlock:^{
         NSError *error = nil;
         [largeArchiveA performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
             NSLog(@"File name: %@", fileInfo.filename);
         } error:&error];
-        
+
         XCTAssertNil(error);
         [expectationA fulfill];
     }];
-    
+
     NSBlockOperation *enumerateB = [NSBlockOperation blockOperationWithBlock:^{
         NSError *error = nil;
         [largeArchiveB performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
             NSLog(@"File name: %@", fileInfo.filename);
         } error:&error];
-        
+
         XCTAssertNil(error);
         [expectationB fulfill];
     }];
-    
+
     NSBlockOperation *enumerateC = [NSBlockOperation blockOperationWithBlock:^{
         NSError *error = nil;
         [largeArchiveC performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
             NSLog(@"File name: %@", fileInfo.filename);
         } error:&error];
-        
+
         XCTAssertNil(error);
         [expectationC fulfill];
     }];
-    
+
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     queue.maxConcurrentOperationCount = 3;
     queue.suspended = YES;
-    
+
     [queue addOperation:enumerateA];
     [queue addOperation:enumerateB];
     [queue addOperation:enumerateC];
-    
+
     queue.suspended = NO;
-    
+
     [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
         if (error) {
             NSLog(@"Error while waiting for expectations: %@", error);
@@ -1042,55 +1119,55 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 #if !TARGET_OS_IPHONE
 - (void)testMultiThreading_SingleFile {
     NSURL *largeArchiveURL = [self largeArchiveURL];
-    
+
     URKArchive *largeArchiveA = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     URKArchive *largeArchiveB = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
     URKArchive *largeArchiveC = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
-    
+
     XCTestExpectation *expectationA = [self expectationWithDescription:@"A finished"];
     XCTestExpectation *expectationB = [self expectationWithDescription:@"B finished"];
     XCTestExpectation *expectationC = [self expectationWithDescription:@"C finished"];
-    
+
     NSBlockOperation *enumerateA = [NSBlockOperation blockOperationWithBlock:^{
         NSError *error = nil;
         [largeArchiveA performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
             NSLog(@"File name: %@", fileInfo.filename);
         } error:&error];
-        
+
         XCTAssertNil(error);
         [expectationA fulfill];
     }];
-    
+
     NSBlockOperation *enumerateB = [NSBlockOperation blockOperationWithBlock:^{
         NSError *error = nil;
         [largeArchiveB performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
             NSLog(@"File name: %@", fileInfo.filename);
         } error:&error];
-        
+
         XCTAssertNil(error);
         [expectationB fulfill];
     }];
-    
+
     NSBlockOperation *enumerateC = [NSBlockOperation blockOperationWithBlock:^{
         NSError *error = nil;
         [largeArchiveC performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
             NSLog(@"File name: %@", fileInfo.filename);
         } error:&error];
-        
+
         XCTAssertNil(error);
         [expectationC fulfill];
     }];
-    
+
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     queue.maxConcurrentOperationCount = 3;
     queue.suspended = YES;
-    
+
     [queue addOperation:enumerateA];
     [queue addOperation:enumerateB];
     [queue addOperation:enumerateC];
-    
+
     queue.suspended = NO;
-    
+
     [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
         if (error) {
             NSLog(@"Error while waiting for expectations: %@", error);
@@ -1102,53 +1179,53 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 #if !TARGET_OS_IPHONE
 - (void)testMultiThreading_SingleArchiveObject {
     NSURL *largeArchiveURL = [self largeArchiveURL];
-    
+
     URKArchive *largeArchive = [[URKArchive alloc] initWithURL:largeArchiveURL error:nil];
-    
+
     XCTestExpectation *expectationA = [self expectationWithDescription:@"A finished"];
     XCTestExpectation *expectationB = [self expectationWithDescription:@"B finished"];
     XCTestExpectation *expectationC = [self expectationWithDescription:@"C finished"];
-    
+
     NSBlockOperation *enumerateA = [NSBlockOperation blockOperationWithBlock:^{
         NSError *error = nil;
         [largeArchive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
             NSLog(@"File name: %@", fileInfo.filename);
         } error:&error];
-        
+
         XCTAssertNil(error);
         [expectationA fulfill];
     }];
-    
+
     NSBlockOperation *enumerateB = [NSBlockOperation blockOperationWithBlock:^{
         NSError *error = nil;
         [largeArchive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
             NSLog(@"File name: %@", fileInfo.filename);
         } error:&error];
-        
+
         XCTAssertNil(error);
         [expectationB fulfill];
     }];
-    
+
     NSBlockOperation *enumerateC = [NSBlockOperation blockOperationWithBlock:^{
         NSError *error = nil;
         [largeArchive performOnDataInArchive:^(URKFileInfo *fileInfo, NSData *fileData, BOOL *stop) {
             NSLog(@"File name: %@", fileInfo.filename);
         } error:&error];
-        
+
         XCTAssertNil(error);
         [expectationC fulfill];
     }];
-    
+
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     queue.maxConcurrentOperationCount = 3;
     queue.suspended = YES;
-    
+
     [queue addOperation:enumerateA];
     [queue addOperation:enumerateB];
     [queue addOperation:enumerateC];
-    
+
     queue.suspended = NO;
-    
+
     [self waitForExpectationsWithTimeout:30 handler:^(NSError *error) {
         if (error) {
             NSLog(@"Error while waiting for expectations: %@", error);
@@ -1169,21 +1246,21 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 - (void)testUnicodeArchiveName
 {
     NSURL *originalArchiveURL = self.testFileURLs[@"Test Archive.rar"];
-    
+
     NSString *newArchiveName = @" ♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟.rar";
-    
+
     NSURL *newArchiveURL = [[originalArchiveURL URLByDeletingLastPathComponent]
-                            URLByAppendingPathComponent:newArchiveName];
-    
+            URLByAppendingPathComponent:newArchiveName];
+
     NSError *error = nil;
     BOOL moveSuccess = [[NSFileManager defaultManager] moveItemAtURL:originalArchiveURL
                                                                toURL:newArchiveURL
                                                                error:&error];
     XCTAssertTrue(moveSuccess, @"Failed to rename Test Archive to unicode name");
     XCTAssertNil(error, @"Error renaming Test Archive to unicode name: %@", error);
-    
+
     NSString *extractDirectory = [self randomDirectoryWithPrefix:
-                                  [@"Unicode contents" stringByDeletingPathExtension]];
+            [@"Unicode contents" stringByDeletingPathExtension]];
     NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
 
     NSError *extractFilesError = nil;
