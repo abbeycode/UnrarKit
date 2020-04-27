@@ -208,7 +208,6 @@ int PASCAL RARReadHeaderEx(HANDLE hArcData,struct RARHeaderDataEx *D)
         if (MergeArchive(Data->Arc,NULL,false,'L'))
         {
           Data->Arc.Seek(Data->Arc.CurBlockPos,SEEK_SET);
-          // Don't need to set offset to header this time
           return RARReadHeaderEx(hArcData,D);
         }
         else

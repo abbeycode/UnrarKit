@@ -1062,6 +1062,7 @@ NS_DESIGNATED_INITIALIZER
         }
 
         if (PFCode != 0) {
+            // A little trick to skip crc validation, some of my test archive's header is corrupt
             if (PFCode == URKErrorCodeBadData && ignoreCRC) {
                 return;
             }
