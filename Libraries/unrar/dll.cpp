@@ -194,8 +194,11 @@ int PASCAL RARReadHeader(HANDLE hArcData,struct RARHeaderData *D)
 int PASCAL RARReadHeaderEx(HANDLE hArcData,struct RARHeaderDataEx *D)
 {
   DataSet *Data=(DataSet *)hArcData;
+  // Save the Current vol number for entry, so we can seek correctly later
+  D->VolNumber=Data->Arc.VolNumber;
   // Save the Current block position as an relative offset to entry's header
-  D->RelativeOffsetToHeader=Data->Arc.CurBlockPos;
+  D->RelativeOffsetToHeader=Data->Arc.Tell();
+
   try
   {
     if ((Data->HeaderSize=(int)Data->Arc.SearchBlock(HEAD_FILE))<=0)
@@ -205,6 +208,7 @@ int PASCAL RARReadHeaderEx(HANDLE hArcData,struct RARHeaderDataEx *D)
         if (MergeArchive(Data->Arc,NULL,false,'L'))
         {
           Data->Arc.Seek(Data->Arc.CurBlockPos,SEEK_SET);
+          // Don't need to set offset to header this time
           return RARReadHeaderEx(hArcData,D);
         }
         else
@@ -311,9 +315,29 @@ int PASCAL RARReadHeaderEx(HANDLE hArcData,struct RARHeaderDataEx *D)
   return ERAR_SUCCESS;
 }
 
-void PASCAL RARSeekTo(HANDLE hArcData,int64_t offset)
+void PASCAL RARSeekTo(HANDLE hArcData,int64_t offset,uint volume)
 {
    DataSet *Data=(DataSet *)hArcData;
+
+   uint currentVolume=Data->Arc.VolNumber;
+   uint startVolume=0;
+
+   if (currentVolume<volume){
+       // If current volume is before target volume, we can start from current volume
+       startVolume=currentVolume;
+   }
+
+   for (uint i=startVolume;i<volume;i++){
+       // Keep merge with next volume till we reach the target volume
+       if (MergeArchive(Data->Arc,NULL,false,'L'))
+       {
+           Data->Arc.Seek(Data->Arc.CurBlockPos,SEEK_SET);
+       }
+       else
+           break;
+   }
+
+   // Now we are on correct volume, just seek to the relative offset
    Data->Arc.Seek(offset, SEEK_SET);
 }
 

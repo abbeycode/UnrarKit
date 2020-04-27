@@ -43,6 +43,7 @@
         _isDirectory = fileHeader->Flags & RHDF_DIRECTORY;
 
         _relativeOffsetToHeader = fileHeader->RelativeOffsetToHeader;
+        _volNumber = fileHeader->VolNumber;
     }
 
     return self;

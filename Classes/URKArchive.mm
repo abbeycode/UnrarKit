@@ -989,6 +989,7 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (BOOL)extractBufferedDataByOffsetOf:(URKFileInfo *)fileInfo
+                            ignoreCRC:(BOOL)ignoreCRC
                               error:(NSError * __autoreleasing *)error
                              action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
 {
@@ -1004,12 +1005,13 @@ NS_DESIGNATED_INITIALIZER
         URKCreateActivity("Performing action");
 
         // Ask unrar seek to the relative offset of entry's header
-        RARSeekTo(welf.rarFile, fileInfo.relativeOffsetToHeader);
+        RARSeekTo(welf.rarFile, fileInfo.relativeOffsetToHeader, fileInfo.volNumber);
 
         int RHCode = 0, PFCode = 0;
         // Read the entry header, setting some internal states which I don't understand...
         RHCode = RARReadHeaderEx(welf.rarFile, welf.header);
 
+        // The remain parts is exactly same as extractBufferedDataFromFile method
         long long totalBytes = fileInfo.uncompressedSize;
         progress.totalUnitCount = totalBytes;
 
@@ -1060,6 +1062,9 @@ NS_DESIGNATED_INITIALIZER
         }
 
         if (PFCode != 0) {
+            if (PFCode == URKErrorCodeBadData && ignoreCRC) {
+                return;
+            }
             NSString *errorName = nil;
             [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
             URKLogError("Error processing file: %{public}@ (%d)", errorName, PFCode);
@@ -1427,7 +1432,7 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
         int RHCode = 0, PFCode = 0;
         
         URKLogDebug("Reading through RAR header looking for files...");
-        
+
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == 0) {
             URKLogDebug("Calling iterateAllFileInfo handler");
             BOOL shouldStop = NO;

@@ -477,6 +477,7 @@ extern NSString *URKErrorDomain;
  *  @return YES if all data was read successfully, NO if an error was encountered
  */
 - (BOOL)extractBufferedDataByOffsetOf:(URKFileInfo *)fileInfo
+                            ignoreCRC:(BOOL)ignoreCRC
                               error:(NSError **)error
                              action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action;
 
