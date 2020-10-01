@@ -15,5 +15,5 @@ FOUNDATION_EXPORT double UnrarKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char UnrarKitVersionString[];
 
 
-#import "URKArchive.h"
-#import "URKFileInfo.h"
+#import <UnrarKit/URKArchive.h>
+#import <UnrarKit/URKFileInfo.h>

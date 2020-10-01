@@ -6,14 +6,14 @@
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
-#import "UnrarKitMacros.h"
+#import <UnrarKit/UnrarKitMacros.h>
 
 RarosHppIgnore
-#import "raros.hpp"
+#import <UnrarKit/raros.hpp>
 #pragma clang diagnostic pop
 
 DllHppIgnore
-#import "dll.hpp"
+#import <UnrarKit/dll.hpp>
 #pragma clang diagnostic pop
 
 @class URKFileInfo;
