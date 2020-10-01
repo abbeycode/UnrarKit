@@ -19,10 +19,11 @@ enum blake2s_constant
 // 'new' operator.
 struct blake2s_state
 {
-  enum { BLAKE_ALIGNMENT = 64 };
-
-  // buffer and uint32 h[8], t[2], f[2];
-  enum { BLAKE_DATA_SIZE = 48 + 2 * BLAKE2S_BLOCKBYTES };
+  enum {
+    BLAKE_ALIGNMENT = 64,
+    // buffer and uint32 h[8], t[2], f[2];
+    BLAKE_DATA_SIZE = 48 + 2 * BLAKE2S_BLOCKBYTES
+  };
 
   byte ubuf[BLAKE_DATA_SIZE + BLAKE_ALIGNMENT];
 
