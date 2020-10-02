@@ -1,5 +1,7 @@
 #!/bin/bash
 
+carthage --version
+
 REPO="github \"$TRAVIS_REPO_SLUG\""
 COMMIT=$TRAVIS_COMMIT
 
