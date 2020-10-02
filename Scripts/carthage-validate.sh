@@ -5,6 +5,9 @@ carthage --version
 REPO="github \"$TRAVIS_REPO_SLUG\""
 COMMIT=$TRAVIS_COMMIT
 
+# Only necessary for workaround below
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+
 if [ -z ${TRAVIS+x} ]; then
     REPO="git \"`pwd`\""
     COMMIT=`git log -1 --oneline | cut -f1 -d' '`
@@ -31,7 +34,9 @@ rm -rf Carthage
 
 echo "$REPO \"$COMMIT\"" > Cartfile
 
-carthage bootstrap --configuration Debug --verbose
+
+# Employing a workaround until Xcode 12 builds are fixed
+source "${SCRIPTPATH}"/carthage.sh bootstrap --configuration Debug --verbose
 EXIT_CODE=$?
 
 echo "Checking for build products..."
