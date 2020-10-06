@@ -1,1 +1,1 @@
-Merged PR to fix the memory management settings for two properties (PR #86)
+Added Carthage compatibility with Xcode 12, updated UnRAR library version
