@@ -6,20 +6,8 @@
 
 #import "URKArchiveTestCase.h"
 
-#import <sys/kdebug_signpost.h>
-enum SignPostCode: uint {   // Use to reference in Instruments (http://stackoverflow.com/a/39416673/105717)
-    SignPostCodeCreateTextFile = 0,
-    SignPostCodeArchiveData = 1,
-    SignPostCodeExtractData = 2,
-};
-
-enum SignPostColor: uint {  // standard color scheme for signposts in Instruments
-    SignPostColorBlue = 0,
-    SignPostColorGreen = 1,
-    SignPostColorPurple = 2,
-    SignPostColorOrange = 3,
-    SignPostColorRed = 4,
-};
+@import os.log;
+@import os.signpost;
 
 
 @interface ExtractBufferedDataTests : URKArchiveTestCase @end
@@ -107,16 +95,20 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
 #if !TARGET_OS_IPHONE && __MAC_OS_X_VERSION_MIN_REQUIRED >= 101200
 - (void)testExtractBufferedData_VeryLarge
 {
-    kdebug_signpost_start(SignPostCodeCreateTextFile, 0, 0, 0, SignPostColorBlue);
+    os_log_t log = os_log_create("UnrarKit-testExtractBufferedData_VeryLarge", OS_LOG_CATEGORY_POINTS_OF_INTEREST);
+
+    os_signpost_id_t createTextFileID = os_signpost_id_generate(log);
+    os_signpost_interval_begin(log, createTextFileID, "Create Text File");
     NSURL *largeTextFile = [self randomTextFileOfLength:1000000]; // Increase for a more dramatic test
     XCTAssertNotNil(largeTextFile, @"No large text file URL returned");
-    kdebug_signpost_end(SignPostCodeCreateTextFile, 0, 0, 0, SignPostColorBlue);
-    
-    kdebug_signpost_start(SignPostCodeArchiveData, 0, 0, 0, SignPostColorGreen);
+    os_signpost_interval_end(log, createTextFileID, "Create Text File");
+
+    os_signpost_id_t archiveDataID = os_signpost_id_generate(log);
+    os_signpost_interval_begin(log, archiveDataID, "Archive Data");
     NSURL *archiveURL = [self archiveWithFiles:@[largeTextFile]];
     XCTAssertNotNil(archiveURL, @"No archived large text file URL returned");
-    kdebug_signpost_end(SignPostCodeArchiveData, 0, 0, 0, SignPostColorGreen);
-    
+    os_signpost_interval_end(log, archiveDataID, "Archive Data");
+
     NSURL *deflatedFileURL = [self.tempDirectory URLByAppendingPathComponent:@"DeflatedTextFile.txt"];
     BOOL createSuccess = [[NSFileManager defaultManager] createFileAtPath:deflatedFileURL.path
                                                                  contents:nil
@@ -130,8 +122,9 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
     
     URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
     
-    kdebug_signpost_start(SignPostCodeExtractData, 0, 0, 0, SignPostColorPurple);
-    
+    os_signpost_id_t extractDataID = os_signpost_id_generate(log);
+    os_signpost_interval_begin(log, extractDataID, "Extract Data");
+
     NSError *error = nil;
     BOOL success = [archive extractBufferedDataFromFile:largeTextFile.lastPathComponent
                                                   error:&error
@@ -141,8 +134,8 @@ enum SignPostColor: uint {  // standard color scheme for signposts in Instrument
                         [deflated writeData:dataChunk];
                     }];
     
-    kdebug_signpost_end(SignPostCodeExtractData, 0, 0, 0, SignPostColorPurple);
-    
+    os_signpost_interval_end(log, extractDataID, "Extract Data");
+
     XCTAssertTrue(success, @"Failed to read buffered data");
     XCTAssertNil(error, @"Error reading buffered data");
     

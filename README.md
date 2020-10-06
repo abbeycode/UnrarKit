@@ -1,6 +1,7 @@
-[![Cocoapods](https://img.shields.io/cocoapods/v/UnrarKit.svg)](https://cocoapods.org/pods/UnrarKit)
-[![Cocoapods platforms](https://img.shields.io/cocoapods/p/UnrarKit.svg)]()
 [![Build Status](https://travis-ci.org/abbeycode/UnrarKit.svg?branch=master)](https://travis-ci.org/abbeycode/UnrarKit)
+[![Cocoapods](https://img.shields.io/cocoapods/v/UnrarKit.svg)](https://cocoapods.org/pods/UnrarKit)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Cocoapods platforms](https://img.shields.io/cocoapods/p/UnrarKit.svg)]()
 
 # About
 

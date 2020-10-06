@@ -130,10 +130,9 @@ static NSURL *originalLargeArchiveURL;
     [super tearDown];
 }
 
-- (void) recordFailureWithDescription:(NSString *) description inFile:(NSString *) filename atLine:(NSUInteger) lineNumber expected:(BOOL) expected;
-{
+- (void)recordIssue:(XCTIssue *)issue {
     self.testFailed = YES;
-    [super recordFailureWithDescription:description inFile:filename atLine:lineNumber expected:expected];
+    [super recordIssue:issue];
 }
 
 
@@ -274,8 +273,9 @@ static NSURL *originalLargeArchiveURL;
         archiveFileName = [uniqueString stringByAppendingPathExtension:@"rar"];
     }
     
-    NSURL *rarExec = [[self.tempDirectory URLByAppendingPathComponent:@"bin"]
-                      URLByAppendingPathComponent:@"rar"];
+    NSURL *rarExec = [[NSBundle bundleForClass:[self class]] URLForResource:@"rar"
+                                                              withExtension:nil
+                                                               subdirectory:@"Test Data/bin"];
     NSURL *archiveURL = [self.tempDirectory URLByAppendingPathComponent:archiveFileName];
     
     NSMutableArray *rarArguments = [NSMutableArray arrayWithArray:@[@"a", @"-ep", archiveURL.path]];
@@ -288,11 +288,14 @@ static NSURL *originalLargeArchiveURL;
     NSFileHandle *file = pipe.fileHandleForReading;
 
     NSTask *task = [[NSTask alloc] init];
-    task.launchPath = rarExec.path;
+    task.executableURL = rarExec;
     task.arguments = rarArguments;
     task.standardOutput = pipe;
     
-    [task launch];
+    NSError *launchError = nil;
+    [task launchAndReturnError:&launchError];
+    XCTAssertNil(launchError);
+    
     [task waitUntilExit];
 
     NSData *data = [file readDataToEndOfFile];
