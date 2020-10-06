@@ -4,6 +4,8 @@
 
 * Added method (`checkDataIntegrityIgnoringCRCMismatches:`) to prompt user for a decision on whether or not to ignore CRC mismatches (Issue #82)
 * Fixed crash in ``+pathIsARAR:` when a file is unreadable (Issue #85)
+* Updated to v5.9.4 of UnRAR library
+* Xcode 12 compatibility in Carthage
 
 
 ## 2.9
