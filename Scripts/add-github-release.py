@@ -26,16 +26,17 @@ def add_release(token, repo, tag, archive_path, notes):
 
     is_beta = tag_is_beta(tag)
 
-    url = 'https://api.github.com/repos/{}/releases?access_token={}'.format(repo, token)
+    url = 'https://api.github.com/repos/{}/releases'.format(repo)
     values = {
         'tag_name': tag,
         'name': 'v{}'.format(tag),
         'body': notes,
         'prerelease': True if is_beta else False
     }
+    headers = { 'Authorization' : 'token ' + token }
     
     data = json.dumps(values)
-    request = urllib2.Request(url, data)
+    request = urllib2.Request(url, data, headers = headers)
     response = urllib2.urlopen(request)
     the_page = response.read()
     

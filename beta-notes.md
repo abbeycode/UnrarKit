@@ -1,1 +1,1 @@
-Added Carthage compatibility with Xcode 12, updated UnRAR library version
+Testing use of authorization header instead of access_token query param when calling GitHub's API
