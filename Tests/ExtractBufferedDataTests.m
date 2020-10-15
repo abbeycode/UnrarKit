@@ -97,17 +97,34 @@
 {
     os_log_t log = os_log_create("UnrarKit-testExtractBufferedData_VeryLarge", OS_LOG_CATEGORY_POINTS_OF_INTEREST);
 
-    os_signpost_id_t createTextFileID = os_signpost_id_generate(log);
-    os_signpost_interval_begin(log, createTextFileID, "Create Text File");
+    os_signpost_id_t createTextFileID;
+    
+    if (@available(macOS 10.14, *)) {
+        createTextFileID = os_signpost_id_generate(log);
+        os_signpost_interval_begin(log, createTextFileID, "Create Text File");
+    }
+    
     NSURL *largeTextFile = [self randomTextFileOfLength:1000000]; // Increase for a more dramatic test
-    XCTAssertNotNil(largeTextFile, @"No large text file URL returned");
-    os_signpost_interval_end(log, createTextFileID, "Create Text File");
 
-    os_signpost_id_t archiveDataID = os_signpost_id_generate(log);
-    os_signpost_interval_begin(log, archiveDataID, "Archive Data");
+    if (@available(macOS 10.14, *)) {
+        XCTAssertNotNil(largeTextFile, @"No large text file URL returned");
+        os_signpost_interval_end(log, createTextFileID, "Create Text File");
+    }
+
+    os_signpost_id_t archiveDataID;
+
+    if (@available(macOS 10.14, *)) {
+        archiveDataID = os_signpost_id_generate(log);
+        os_signpost_interval_begin(log, archiveDataID, "Archive Data");
+    }
+    
     NSURL *archiveURL = [self archiveWithFiles:@[largeTextFile]];
+    
     XCTAssertNotNil(archiveURL, @"No archived large text file URL returned");
-    os_signpost_interval_end(log, archiveDataID, "Archive Data");
+    
+    if (@available(macOS 10.14, *)) {
+        os_signpost_interval_end(log, archiveDataID, "Archive Data");
+    }
 
     NSURL *deflatedFileURL = [self.tempDirectory URLByAppendingPathComponent:@"DeflatedTextFile.txt"];
     BOOL createSuccess = [[NSFileManager defaultManager] createFileAtPath:deflatedFileURL.path
@@ -122,8 +139,12 @@
     
     URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
     
-    os_signpost_id_t extractDataID = os_signpost_id_generate(log);
-    os_signpost_interval_begin(log, extractDataID, "Extract Data");
+    os_signpost_id_t extractDataID;
+
+    if (@available(macOS 10.14, *)) {
+        extractDataID = os_signpost_id_generate(log);
+        os_signpost_interval_begin(log, extractDataID, "Extract Data");
+    }
 
     NSError *error = nil;
     BOOL success = [archive extractBufferedDataFromFile:largeTextFile.lastPathComponent
@@ -134,8 +155,10 @@
                         [deflated writeData:dataChunk];
                     }];
     
-    os_signpost_interval_end(log, extractDataID, "Extract Data");
-
+    if (@available(macOS 10.14, *)) {
+        os_signpost_interval_end(log, extractDataID, "Extract Data");
+    }
+    
     XCTAssertTrue(success, @"Failed to read buffered data");
     XCTAssertNil(error, @"Error reading buffered data");
     
