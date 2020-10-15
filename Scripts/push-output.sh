@@ -17,7 +17,7 @@ else
 fi
 
 # Skip tests because they're assumed to have passed during the cocoapod-validate script or else
-# this script wouldn't run. Allow warnings, because prior validation doesn't (and it patches)
+# this script wouldn't run. Allow warnings, because prior validation doesn't, and it patches
 # around the one warning in the UnRAR library I can't silence
 echo -e "\nLinting podspec..."
 pod spec lint --fail-fast --skip-tests --allow-warnings
