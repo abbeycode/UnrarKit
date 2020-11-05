@@ -14,6 +14,17 @@
 
 @implementation ExtractBufferedDataTests
 
+- (URKFileInfo *)getFileInfoByPath:(URKArchive *)archive
+                          filePath:(NSString *)filePath
+{
+    NSError *innerError = nil;
+    NSArray *filesInArchive = [archive listFileInfo:&innerError];
+    NSPredicate *bPredicate = [NSPredicate predicateWithFormat:@"SELF.filename ==[c] %@", filePath];
+    URKFileInfo *fileInfo = [filesInArchive filteredArrayUsingPredicate:bPredicate].firstObject;
+
+    return fileInfo;
+}
+
 - (void)testExtractBufferedData
 {
     NSURL *archiveURL = self.testFileURLs[@"Test Archive.rar"];
@@ -90,6 +101,91 @@
     NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[extractedFile]];
     XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
                   @"File extracted in buffer not returned correctly");
+}
+
+- (void)testExtractBufferedDataFromFileInfo
+{
+    NSURL *archiveURL = self.testFileURLs[@"Test Archive.rar"];
+    NSString *extractedFile = @"Test File B.jpg";
+    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
+    URKFileInfo *fileInfo = [self getFileInfoByPath:archive filePath: extractedFile];
+
+    NSError *error = nil;
+    NSMutableData *reconstructedFile = [NSMutableData data];
+    BOOL success = [archive extractBufferedDataFromFileInfo:fileInfo
+                                                  error:&error
+                                                 action:
+                                                         ^(NSData *dataChunk, CGFloat percentDecompressed) {
+                                                             NSLog(@"Decompressed: %f%%", percentDecompressed);
+                                                             [reconstructedFile appendBytes:dataChunk.bytes
+                                                                                     length:dataChunk.length];
+                                                         }];
+
+    XCTAssertTrue(success, @"Failed to read buffered data");
+    XCTAssertNil(error, @"Error reading buffered data");
+    XCTAssertGreaterThan(reconstructedFile.length, 0, @"No data returned");
+
+    NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[extractedFile]];
+    XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
+            @"File extracted in buffer not returned correctly");
+}
+
+/*
+ * Todo: these two unit tests will fail because listFileInfo method will return nil if the CRC is corrupted,
+ * so we can't get fileInfo out from filePath, we will need a workaround
+ */
+- (void)testExtractBufferedDataFromFileInfo_ModifiedCRC
+{
+//    NSURL *archiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+//    NSString *extractedFile = @"README.md";
+//    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
+//    URKFileInfo *fileInfo = [self getFileInfoByPath:archive filePath: extractedFile];
+//
+//    NSError *error = nil;
+//    NSMutableData *reconstructedFile = [NSMutableData data];
+//    BOOL success = [archive extractBufferedDataFromFileInfo:fileInfo
+//                                                  error:&error
+//                                                 action:
+//                                                         ^(NSData *dataChunk, CGFloat percentDecompressed) {
+//                                                             NSLog(@"Decompressed: %f%%", percentDecompressed);
+//                                                             [reconstructedFile appendBytes:dataChunk.bytes
+//                                                                                     length:dataChunk.length];
+//                                                         }];
+//
+//    XCTAssertFalse(success, @"Failed to read buffered data");
+//    XCTAssertNotNil(error, @"Error reading buffered data");
+//
+//    NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[extractedFile]];
+//    XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
+//            @"File extracted in buffer not returned correctly");
+}
+
+- (void)testExtractBufferedDataFromFileInfo_ModifiedCRC_IgnoringMismatches
+{
+//    NSURL *archiveURL = self.testFileURLs[@"Modified CRC Archive.rar"];
+//    NSString *extractedFile = @"README.md";
+//    URKArchive *archive = [[URKArchive alloc] initWithURL:archiveURL error:nil];
+//    URKFileInfo *fileInfo = [self getFileInfoByPath:archive filePath: extractedFile];
+//    archive.ignoreCRCMismatches = YES;
+//
+//    NSError *error = nil;
+//    NSMutableData *reconstructedFile = [NSMutableData data];
+//    BOOL success = [archive extractBufferedDataFromFileInfo:fileInfo
+//                                                  error:&error
+//                                                 action:
+//                                                         ^(NSData *dataChunk, CGFloat percentDecompressed) {
+//                                                             NSLog(@"Decompressed: %f%%", percentDecompressed);
+//                                                             [reconstructedFile appendBytes:dataChunk.bytes
+//                                                                                     length:dataChunk.length];
+//                                                         }];
+//
+//    XCTAssertTrue(success, @"Failed to read buffered data");
+//    XCTAssertNil(error, @"Error reading buffered data");
+//    XCTAssertGreaterThan(reconstructedFile.length, 0, @"No data returned");
+//
+//    NSData *originalFile = [NSData dataWithContentsOfURL:self.testFileURLs[extractedFile]];
+//    XCTAssertTrue([originalFile isEqualToData:reconstructedFile],
+//            @"File extracted in buffer not returned correctly");
 }
 
 #if !TARGET_OS_IPHONE && __MAC_OS_X_VERSION_MIN_REQUIRED >= 101200
