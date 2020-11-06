@@ -24,7 +24,7 @@ struct DataSet
     int OpenMode;
     int HeaderSize;
 
-    DataSet():Arc(&Cmd),Extract(&Cmd) {};
+    DataSet():Arc(&Cmd),Extract(&Cmd) {}
 };
 
 NSString *URKErrorDomain = @"URKErrorDomain";
@@ -996,23 +996,20 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (void)locateFileInfoByFilePath:(NSString *)filePath
-                     fileInfo:(URKFileInfo **)fileInfo
-                            innerError:(NSError **)innerError
+                     fileInfo:(URKFileInfo * __autoreleasing *)fileInfo
+                            innerError:(NSError * __autoreleasing *)innerError
 {
     int RHCode = 0, PFCode = 0;
     __weak URKArchive *welf = self;
 
     URKLogInfo("Looping through files, looking for %{public}@...", filePath);
-    URKFileInfo *targetFile;
-    NSError *error = nil;
-    while ([welf readHeader:&RHCode info:&targetFile] == URKReadHeaderLoopActionContinueReading) {
-        if ([welf headerContainsErrors:&error]) {
+    while ([welf readHeader:&RHCode info:fileInfo] == URKReadHeaderLoopActionContinueReading) {
+        if ([welf headerContainsErrors:innerError]) {
             URKLogDebug("Header contains error");
-            *innerError = error;
             return;
         }
     
-        if ([targetFile.filename isEqualToString:filePath]) {
+        if ([(*fileInfo).filename isEqualToString:filePath]) {
             URKLogDebug("Found desired file");
             break;
         }
@@ -1021,8 +1018,7 @@ NS_DESIGNATED_INITIALIZER
             PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL);
             if (![welf didReturnSuccessfully:PFCode]) {
                 NSString *errorName = nil;
-                [welf assignError:&error code:(NSInteger)PFCode errorName:&errorName];
-                *innerError = error;
+                [welf assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Failed to skip file: %{public}@ (%d)", errorName, PFCode);
                 return;
             }
@@ -1031,24 +1027,20 @@ NS_DESIGNATED_INITIALIZER
 
     if (![welf didReturnSuccessfully:RHCode]) {
         NSString *errorName = nil;
-        [welf assignError:&error code:RHCode errorName:&errorName];
+        [welf assignError:innerError code:RHCode errorName:&errorName];
         URKLogError("Header read yielded error: %{public}@ (%d)", errorName, RHCode);
-        *innerError = error;
         return;
     }
-
-    *fileInfo = targetFile;
 }
 
 - (void)readBufferChunkByChunk:(URKFileInfo *)fileInfo
-                     innerError:(NSError **)innerError
+                     innerError:(NSError * __autoreleasing *)innerError
                          action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
 {
     int PFCode = 0;
     long long totalBytes = fileInfo.uncompressedSize;
     NSProgress *progress = [self beginProgressOperation:0];
     progress.totalUnitCount = totalBytes;
-    NSError *error = nil;
 
     // Empty file, or a directory
     if (totalBytes == 0) {
@@ -1084,16 +1076,14 @@ NS_DESIGNATED_INITIALIZER
 
     if (progress.isCancelled) {
         NSString *errorName = nil;
-        [self assignError:&error code:URKErrorCodeUserCancelled errorName:&errorName];
-        *innerError = error;
+        [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
         URKLogError("Buffered data extraction has been cancelled: %{public}@", errorName);
         return;
     }
 
     if (![self didReturnSuccessfully:PFCode]) {
         NSString *errorName = nil;
-        [self assignError:&error code:(NSInteger)PFCode errorName:&errorName];
-        *innerError = error;
+        [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
         URKLogError("Error processing file: %{public}@ (%d)", errorName, PFCode);
     }
 }
