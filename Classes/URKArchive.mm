@@ -518,7 +518,7 @@ NS_DESIGNATED_INITIALIZER
                                  forKey:URKProgressInfoKeyFileInfoExtracting];
             
             if ([self headerContainsErrors:innerError]) {
-                URKLogError("Header contains an error")
+                URKLogError("Header contains an error");
                 result = NO;
                 return;
             }
@@ -545,7 +545,7 @@ NS_DESIGNATED_INITIALIZER
             
             BOOL (^shouldCancelBlock)() = ^BOOL {
                 URKCreateActivity("shouldCancelBlock");
-                URKLogDebug("Progress.isCancelled: %{public}@", progress.isCancelled ? @"YES" : @"NO")
+                URKLogDebug("Progress.isCancelled: %{public}@", progress.isCancelled ? @"YES" : @"NO");
                 return progress.isCancelled;
             };
             RARSetCallback(welf.rarFile, AllowCancellationCallbackProc, (long)shouldCancelBlock);
@@ -644,7 +644,7 @@ NS_DESIGNATED_INITIALIZER
         URKLogDebug("Reading through RAR header looking for files...");
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:innerError]) {
-                URKLogError("Header contains an error")
+                URKLogError("Header contains an error");
                 return;
             }
 
@@ -823,7 +823,7 @@ NS_DESIGNATED_INITIALIZER
             }
             
             if ([self headerContainsErrors:innerError]) {
-                URKLogError("Header contains an error")
+                URKLogError("Header contains an error");
                 return;
             }
             
@@ -899,7 +899,7 @@ NS_DESIGNATED_INITIALIZER
         
         while ((RHCode = RARReadHeaderEx(welf.rarFile, welf.header)) == ERAR_SUCCESS) {
             if ([self headerContainsErrors:innerError]) {
-                URKLogDebug("Header contains error")
+                URKLogDebug("Header contains error");
                 return;
             }
 
@@ -1572,7 +1572,7 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
     URKLogDebug("Checking if the file is part of a multi-volume archive...");
     
     if (!volumeURL) {
-        URKLogError("+firstVolumeURL: nil volumeURL passed")
+        URKLogError("+firstVolumeURL: nil volumeURL passed");
     }
     
     NSString *volumePath = volumeURL.path;
@@ -1582,7 +1582,7 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
                                                                            options:NSRegularExpressionCaseInsensitive
                                                                              error:&regexError];
     if (!regex) {
-        URKLogError("Error constructing filename regex")
+        URKLogError("Error constructing filename regex");
         return nil;
     }
     
@@ -1615,7 +1615,7 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
                                                             error:&legacyRegexError];
         
         if (!regex) {
-            URKLogError("Error constructing legacy filename regex")
+            URKLogError("Error constructing legacy filename regex");
             return nil;
         }
         

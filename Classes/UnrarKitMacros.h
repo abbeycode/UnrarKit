@@ -72,23 +72,23 @@ extern BOOL unrarkitIsAtLeast10_13SDK; // Declared in URKArchive.m
     unrarkitIsAtLeast10_13SDK = [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:minVersion]; \
     URKLogDebug("Is >= 10.13 (or iOS 11): %@", unrarkitIsAtLeast10_13SDK ? @"YES" : @"NO");
 
-#define URKLog(format, ...)      os_log(unrarkit_log, format, ##__VA_ARGS__);
-#define URKLogInfo(format, ...)  os_log_info(unrarkit_log, format, ##__VA_ARGS__);
-#define URKLogDebug(format, ...) os_log_debug(unrarkit_log, format, ##__VA_ARGS__);
+#define URKLog(format, ...)      os_log(unrarkit_log, format, ##__VA_ARGS__)
+#define URKLogInfo(format, ...)  os_log_info(unrarkit_log, format, ##__VA_ARGS__)
+#define URKLogDebug(format, ...) os_log_debug(unrarkit_log, format, ##__VA_ARGS__)
 
 
 #define URKLogError(format, ...) \
     if (unrarkitIsAtLeast10_13SDK) os_log_error(unrarkit_log, format, ##__VA_ARGS__); \
-    else os_log_with_type(unrarkit_log, OS_LOG_TYPE_ERROR, format, ##__VA_ARGS__);
+    else os_log_with_type(unrarkit_log, OS_LOG_TYPE_ERROR, format, ##__VA_ARGS__)
 
 #define URKLogFault(format, ...) \
     if (unrarkitIsAtLeast10_13SDK) os_log_fault(unrarkit_log, format, ##__VA_ARGS__); \
-    else os_log_with_type(unrarkit_log, OS_LOG_TYPE_FAULT, format, ##__VA_ARGS__);
+    else os_log_with_type(unrarkit_log, OS_LOG_TYPE_FAULT, format, ##__VA_ARGS__)
 
 
 #define URKCreateActivity(name) \
 os_activity_t activity = os_activity_create(name, OS_ACTIVITY_CURRENT, OS_ACTIVITY_FLAG_DEFAULT); \
-os_activity_scope(activity);
+os_activity_scope(activity)
 
 
 #else // Fall back to regular NSLog
