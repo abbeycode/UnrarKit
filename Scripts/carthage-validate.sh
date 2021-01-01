@@ -29,7 +29,7 @@ rm -rf Carthage
 
 echo "$REPO \"$COMMIT\"" > Cartfile
 
-carthage bootstrap --configuration Debug --verbose
+../Scripts/carthage.sh bootstrap --configuration Debug --verbose
 EXIT_CODE=$?
 
 echo "Checking for build products..."
