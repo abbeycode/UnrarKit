@@ -129,10 +129,10 @@ static NSURL *originalLargeArchiveURL;
     [super tearDown];
 }
 
-- (void) recordFailureWithDescription:(NSString *) description inFile:(NSString *) filename atLine:(NSUInteger) lineNumber expected:(BOOL) expected;
+- (void) recordIssue:(XCTIssue *) issue
 {
     self.testFailed = YES;
-    [super recordFailureWithDescription:description inFile:filename atLine:lineNumber expected:expected];
+    [super recordIssue:issue];
 }
 
 
@@ -352,11 +352,11 @@ static NSURL *originalLargeArchiveURL;
 {
     NSURL *textFile = [self randomTextFileOfLength:100000];
     
-    // Generate multi-volume archive, with parts no larger than 20 KB in size
+    // Generate multi-volume RAR 4.0 archive, with parts no larger than 20 KB in size
     NSString *commandOutputString = nil;
     [self archiveWithFiles:@[textFile]
                       name:baseName
-                 arguments:@[@"-v20k", @"-vn"]
+                 arguments:@[@"-v20k", @"-ma4", @"-vn"]
              commandOutput:&commandOutputString];
     
     NSArray<NSString*> *volumePaths = [commandOutputString regexMatches:@"Creating archive (.+)"];
