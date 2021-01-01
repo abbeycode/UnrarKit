@@ -374,10 +374,9 @@ static NSUInteger observerCallCount;
     
     XCTAssertEqual(extractFileProgress.fractionCompleted, 1.00, @"Progress never reported as completed");
     
-    NSUInteger expectedProgressUpdates = 4;
+    NSUInteger expectedProgressUpdates = 3;
     NSArray<NSNumber *> *expectedProgresses = @[@0,
-                                                @0.6990074,
-                                                @0.6990504,
+                                                @(4190210.0/(1809792+4190210)),
                                                 @1.0];
     
     XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgressUpdates, @"Incorrect number of progress updates");
@@ -418,10 +417,9 @@ static NSUInteger observerCallCount;
     
     XCTAssertEqual(extractFileProgress.fractionCompleted, 1.00, @"Progress never reported as completed");
     
-    NSUInteger expectedProgressUpdates = 4;
+    NSUInteger expectedProgressUpdates = 3;
     NSArray<NSNumber *> *expectedProgresses = @[@0,
-                                                @0.6990074,
-                                                @0.6990504,
+                                                @(4190210.0/(1809792+4190210)),
                                                 @1.0];
     
     XCTAssertEqual(self.fractionsCompletedReported.count, expectedProgressUpdates, @"Incorrect number of progress updates");
