@@ -1353,6 +1353,7 @@
 					"-Wno-objc-missing-property-synthesis",
 					"-Wno-variadic-macros",
 					"-Wno-old-style-cast",
+					"-Wno-anon-enum-enum-conversion",
 				);
 			};
 			name = Debug;
@@ -1405,6 +1406,7 @@
 					"-Wno-objc-missing-property-synthesis",
 					"-Wno-variadic-macros",
 					"-Wno-old-style-cast",
+					"-Wno-anon-enum-enum-conversion",
 				);
 			};
 			name = Release;
