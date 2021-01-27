@@ -5,7 +5,8 @@ Pod::Spec.new do |s|
   s.license          = "BSD"
   s.homepage         = "https://github.com/abbeycode/UnrarKit"
   s.author           = { "Dov Frankel" => "dov@abbey-code.com" }
-  s.social_media_url = "https://twitter.com/dovfrankel"
+  # Removed to silence validation warnings until issue is resolved: https://github.com/CocoaPods/CocoaPods/issues/10291
+#   s.social_media_url = "https://twitter.com/dovfrankel"
   s.source           = { :git => "https://github.com/abbeycode/UnrarKit.git", :tag => "#{s.version}" }
   s.ios.deployment_target = "12.0"
   s.osx.deployment_target = "10.13"
