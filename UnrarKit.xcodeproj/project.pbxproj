@@ -54,7 +54,6 @@
 		7AC29A841F83C21700DA4DE6 /* find.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F2C18DB722E00B5651B /* find.cpp */; };
 		7AC29A851F83C21700DA4DE6 /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC419ED8B0400DAF8F1 /* hash.cpp */; };
 		7AC29A861F83C21700DA4DE6 /* headers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC619ED8B1F00DAF8F1 /* headers.cpp */; };
-		7AC29A871F83C21700DA4DE6 /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3618DB722E00B5651B /* list.cpp */; };
 		7AC29A881F83C21700DA4DE6 /* qopen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96370FC919ED8B4E00DAF8F1 /* qopen.cpp */; };
 		7AC29A891F83C21700DA4DE6 /* recvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5918DB722E00B5651B /* recvol.cpp */; };
 		7AC29A8A1F83C21700DA4DE6 /* rs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5F18DB722E00B5651B /* rs.cpp */; };
@@ -89,7 +88,6 @@
 		7AC29AA71F83C36900DA4DE6 /* global.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F3118DB722E00B5651B /* global.hpp */; };
 		7AC29AA81F83C36900DA4DE6 /* headers.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F3218DB722E00B5651B /* headers.hpp */; };
 		7AC29AA91F83C36900DA4DE6 /* isnt.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F3418DB722E00B5651B /* isnt.hpp */; };
-		7AC29AAA1F83C36900DA4DE6 /* list.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F3718DB722E00B5651B /* list.hpp */; };
 		7AC29AAB1F83C36900DA4DE6 /* loclang.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F3818DB722E00B5651B /* loclang.hpp */; };
 		7AC29AAC1F83C36900DA4DE6 /* log.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F3A18DB722E00B5651B /* log.hpp */; };
 		7AC29AAD1F83C36900DA4DE6 /* match.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F4018DB722E00B5651B /* match.hpp */; };
@@ -275,8 +273,6 @@
 		96853F3218DB722E00B5651B /* headers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = headers.hpp; sourceTree = "<group>"; };
 		96853F3318DB722E00B5651B /* isnt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = isnt.cpp; sourceTree = "<group>"; };
 		96853F3418DB722E00B5651B /* isnt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = isnt.hpp; sourceTree = "<group>"; };
-		96853F3618DB722E00B5651B /* list.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = list.cpp; sourceTree = "<group>"; };
-		96853F3718DB722E00B5651B /* list.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = list.hpp; sourceTree = "<group>"; };
 		96853F3818DB722E00B5651B /* loclang.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = loclang.hpp; sourceTree = "<group>"; };
 		96853F3918DB722E00B5651B /* log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
 		96853F3A18DB722E00B5651B /* log.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = log.hpp; sourceTree = "<group>"; };
@@ -562,8 +558,6 @@
 				96370FC819ED8B2B00DAF8F1 /* headers5.hpp */,
 				96853F3318DB722E00B5651B /* isnt.cpp */,
 				96853F3418DB722E00B5651B /* isnt.hpp */,
-				96853F3618DB722E00B5651B /* list.cpp */,
-				96853F3718DB722E00B5651B /* list.hpp */,
 				96853F3818DB722E00B5651B /* loclang.hpp */,
 				96853F3918DB722E00B5651B /* log.cpp */,
 				96853F3A18DB722E00B5651B /* log.hpp */,
@@ -694,7 +688,6 @@
 				7AC29AA71F83C36900DA4DE6 /* global.hpp in Headers */,
 				7AC29AA81F83C36900DA4DE6 /* headers.hpp in Headers */,
 				7AC29AA91F83C36900DA4DE6 /* isnt.hpp in Headers */,
-				7AC29AAA1F83C36900DA4DE6 /* list.hpp in Headers */,
 				7AC29AAB1F83C36900DA4DE6 /* loclang.hpp in Headers */,
 				7AC29AAC1F83C36900DA4DE6 /* log.hpp in Headers */,
 				7AC29AAD1F83C36900DA4DE6 /* match.hpp in Headers */,
@@ -941,7 +934,6 @@
 				7AC29A811F83C21700DA4DE6 /* extinfo.cpp in Sources */,
 				7AC29A821F83C21700DA4DE6 /* extract.cpp in Sources */,
 				7AC29A921F83C21700DA4DE6 /* volume.cpp in Sources */,
-				7AC29A871F83C21700DA4DE6 /* list.cpp in Sources */,
 				7AC29A841F83C21700DA4DE6 /* find.cpp in Sources */,
 				7AC29A911F83C21700DA4DE6 /* unpack.cpp in Sources */,
 				7AC29A861F83C21700DA4DE6 /* headers.cpp in Sources */,
