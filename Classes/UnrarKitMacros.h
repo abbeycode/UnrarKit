@@ -60,7 +60,7 @@ __IPHONE_OS_VERSION_MIN_REQUIRED >= 100000 \
 #import <os/activity.h>
 
 // Called from +[UnrarKit initialize] and +[URKArchiveTestCase setUp]
-extern os_log_t unrarkit_log; // Declared in URKArchive.m
+extern os_log_t unrarkit_log; // Declared in URKArchive.mm
 extern BOOL unrarkitIsAtLeast10_13SDK; // Declared in URKArchive.m
 #define URKLogInit() \
     unrarkit_log = os_log_create("com.abbey-code.UnrarKit", "General"); \
