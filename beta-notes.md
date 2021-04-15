@@ -1,1 +1,1 @@
-Testing use of authorization header instead of access_token query param when calling GitHub's API
+Fixed crash in `-_unrarOpenFile:inMode:withPassword:error:` (PR #97)
