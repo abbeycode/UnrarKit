@@ -1343,9 +1343,7 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
 
     URKLogDebug("Setting archive name...");
     
-    const char *filenameData = (const char *) [rarFile UTF8String];
-    self.flags->ArcName = new char[strlen(filenameData) + 1];
-    strcpy(self.flags->ArcName, filenameData);
+    self.flags->ArcName = strdup(rarFile.UTF8String);
     self.flags->OpenMode = (uint)mode;
     self.flags->OpFlags = self.ignoreCRCMismatches ? ROADOF_KEEPBROKEN : 0;
 
