@@ -15,18 +15,6 @@ RarHppIgnore
 #import "rar.hpp"
 #pragma clang diagnostic pop
 
-// Todo: Find a better way to access this unrar inner struct
-struct DataSet
-{
-    CommandData Cmd;
-    Archive Arc;
-    CmdExtract Extract;
-    int OpenMode;
-    int HeaderSize;
-
-    DataSet():Arc(&Cmd),Extract(&Cmd) {}
-};
-
 NSString *URKErrorDomain = @"URKErrorDomain";
 
 #pragma clang diagnostic push
@@ -57,6 +45,8 @@ NS_DESIGNATED_INITIALIZER
 @property (assign) HANDLE rarFile;
 @property (assign) struct RARHeaderDataEx *header;
 @property (assign) struct RAROpenArchiveDataEx *flags;
+
+@property (nonatomic, readonly) Archive *rarFileArchiveData;
 
 @property (strong) NSData *fileBookmark;
 
@@ -660,10 +650,10 @@ NS_DESIGNATED_INITIALIZER
         URKCreateActivity("Performing Extraction");
 
         int PFCode = 0;
-        DataSet *Data=(DataSet *)welf.rarFile;
-        if (Data->Arc.CurBlockPos != fileInfo.closestOffsetToHeader) {
+        Archive *archive = self.rarFileArchiveData;
+        if (archive->CurBlockPos != fileInfo.closestOffsetToHeader) {
             // Ask unrar seek to the closest offset of entry's header record
-            Data->Arc.Seek(fileInfo.closestOffsetToHeader, SEEK_SET);
+            archive->Seek(fileInfo.closestOffsetToHeader, SEEK_SET);
         }
 
         URKFileInfo *targetFile;
@@ -990,7 +980,7 @@ NS_DESIGNATED_INITIALIZER
     return success;
 }
 
-- (void)locateFileInfoByFilePath:(NSString *)filePath
+- (BOOL)locateFileInfoByFilePath:(NSString *)filePath
                      fileInfo:(URKFileInfo * __autoreleasing *)fileInfo
                             innerError:(NSError * __autoreleasing *)innerError
 {
@@ -1001,7 +991,7 @@ NS_DESIGNATED_INITIALIZER
     while ([welf readHeader:&RHCode info:fileInfo] == URKReadHeaderLoopActionContinueReading) {
         if ([welf headerContainsErrors:innerError]) {
             URKLogDebug("Header contains error");
-            return;
+            return NO;
         }
     
         if ([(*fileInfo).filename isEqualToString:filePath]) {
@@ -1015,7 +1005,7 @@ NS_DESIGNATED_INITIALIZER
                 NSString *errorName = nil;
                 [welf assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
                 URKLogError("Failed to skip file: %{public}@ (%d)", errorName, PFCode);
-                return;
+                return NO;
             }
         }
     }
@@ -1024,11 +1014,13 @@ NS_DESIGNATED_INITIALIZER
         NSString *errorName = nil;
         [welf assignError:innerError code:RHCode errorName:&errorName];
         URKLogError("Header read yielded error: %{public}@ (%d)", errorName, RHCode);
-        return;
+        return NO;
     }
+
+    return YES;
 }
 
-- (void)readBufferChunkByChunk:(URKFileInfo *)fileInfo
+- (BOOL)readBufferChunkByChunk:(URKFileInfo *)fileInfo
                      innerError:(NSError * __autoreleasing *)innerError
                          action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
 {
@@ -1040,7 +1032,7 @@ NS_DESIGNATED_INITIALIZER
     // Empty file, or a directory
     if (totalBytes == 0) {
         URKLogInfo("File is empty or a directory");
-        return;
+        return NO;
     }
 
     __block long long bytesRead = 0;
@@ -1073,14 +1065,17 @@ NS_DESIGNATED_INITIALIZER
         NSString *errorName = nil;
         [self assignError:innerError code:URKErrorCodeUserCancelled errorName:&errorName];
         URKLogError("Buffered data extraction has been cancelled: %{public}@", errorName);
-        return;
+        return NO;
     }
 
     if (![self didReturnSuccessfully:PFCode]) {
         NSString *errorName = nil;
         [self assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
         URKLogError("Error processing file: %{public}@ (%d)", errorName, PFCode);
+        return NO;
     }
+
+    return YES;
 }
 
 - (BOOL)extractBufferedDataFromFile:(NSString *)filePath
@@ -1125,10 +1120,10 @@ NS_DESIGNATED_INITIALIZER
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
 
-        DataSet *Data=(DataSet *)welf.rarFile;
-        if (Data->Arc.CurBlockPos != fileInfo.closestOffsetToHeader) {
+        Archive *archive = welf.rarFileArchiveData;
+        if (archive->CurBlockPos != fileInfo.closestOffsetToHeader) {
             // Ask unrar seek to the closest offset of entry's header record
-            Data->Arc.Seek(fileInfo.closestOffsetToHeader, SEEK_SET);
+            archive->Seek(fileInfo.closestOffsetToHeader, SEEK_SET);
         }
 
         URKFileInfo *targetFile;
@@ -1865,8 +1860,8 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
     NSAssert(info != NULL, @"info argument is required");
 
     URKLogDebug("Reading RAR header");
-    DataSet *Data=(DataSet *)self.rarFile;
-    int64 curBlockPos = Data->Arc.CurBlockPos;
+    Archive *archive = self.rarFileArchiveData;
+    int64 curBlockPos = archive->CurBlockPos;
     *returnCode = RARReadHeaderEx(self.rarFile, self.header);
     URKLogDebug("Reading file info from RAR header");
     *info = [URKFileInfo fileInfo:self.header];
@@ -1927,6 +1922,18 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
 
 - (BOOL)hasBadCRC:(int)returnCode {
     return returnCode == ERAR_BAD_DATA && !self.ignoreCRCMismatches;
+}
+
+- (Archive *)rarFileArchiveData {
+    // Since the unrar `DataSet` struct is private, but
+    // we only need the `Archive` chunk from it, recreate a portion
+    // of the struct and use that to access the address of the archive chunk
+    struct DataSetTemplate {
+        CommandData Cmd;
+        Archive Arc;
+    };
+
+    return (Archive *)&((DataSetTemplate *)self.rarFile)->Arc;
 }
 
 @end
