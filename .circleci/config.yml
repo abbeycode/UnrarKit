@@ -15,12 +15,12 @@ workflows:
       - test-ExampleApp
 
       # Validation
-      - validate-CocoaPods
+      - validate-CocoaPods:
          requires:
            - test-Mac
            - test-iOS
            - test-ExampleApp
-      - validate-Carthage
+      - validate-Carthage:
          requires:
            - test-Mac
            - test-iOS
