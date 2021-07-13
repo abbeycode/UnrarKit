@@ -3,7 +3,7 @@ version: 2.1
 executors:
   xcode:
     macos:
-      xcode: 12.5.1
+      - xcode: 12.5.1
 
 workflows:
   version: 2
