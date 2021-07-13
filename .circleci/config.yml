@@ -1,19 +1,20 @@
 version: 2.1
 
 executors:
-  macos:
-    xcode: 12.5.1
+  xcode:
+    macos:
+      xcode: 12.5.1
 
 workflows:
   version: 2
   Test:
-    e: macos
+    e: xcode
     jobs:
       - test-Mac
       - test-iOS
       - test-ExampleApp
   Validate:
-    e: macos
+    e: xcode
     jobs:
       - validate-CocoaPods:
           requires:
@@ -26,7 +27,7 @@ workflows:
             - test-iOS
             - test-ExampleApp
   Release:
-    e: macos
+    e: xcode
     jobs:
       - release:
           # Only run for tags
