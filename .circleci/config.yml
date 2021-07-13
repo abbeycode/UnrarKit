@@ -26,8 +26,8 @@ workflows:
     jobs:
       - release:
           requires:
-        - validate-CocoaPods
-        - validate-Carthage
+            - validate-CocoaPods
+            - validate-Carthage
 
 jobs:
   - test-Mac:
