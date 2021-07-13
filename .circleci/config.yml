@@ -25,6 +25,12 @@ workflows:
   Release:
     jobs:
       - release:
+          # Only run for tags
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
           requires:
             - validate-CocoaPods
             - validate-Carthage
@@ -61,14 +67,5 @@ jobs:
         - run: ./Scripts/carthage-validate.sh
 
   - release:
-      requires:
-        - validate-CocoaPods
-        - validate-Carthage
-      # Only run for tags
-      filters:
-        branches:
-          ignore: /.*/
-        tags:
-          only: /.*/
       steps:
         - run: ./Scripts/push-output.sh
