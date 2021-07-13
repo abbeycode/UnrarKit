@@ -28,13 +28,17 @@ workflows:
     jobs:
       validate-CocoaPods:
         requires:
-          - Test
+          - test-Mac
+          - test-iOS
+          - test-ExampleApp
         steps:
           - run: ./Scripts/cocoapod-validate.sh
 
       validate-Carthage:
         requires:
-          - Test
+          - test-Mac
+          - test-iOS
+          - test-ExampleApp
         steps:
           - run: ./Scripts/carthage-validate.sh
 
@@ -42,7 +46,8 @@ workflows:
     jobs:
       release:
         requires:
-          - Validate
+          - validate-CocoaPods
+          - validate-Carthage
         # Only run for tags
         filters:
           branches:
