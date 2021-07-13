@@ -1,6 +1,10 @@
 language: objective-c
 osx_image: xcode12
 
+branches:
+  except:
+  - circle-ci
+
 before_script:
     - pod --version
     # Make log level less verbose. Temporarily undo if more info is needed
