@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/abbeycode/UnrarKit.svg?branch=master)](https://travis-ci.org/abbeycode/UnrarKit)
+[![Build Status](https://travis-ci.com/abbeycode/UnrarKit.svg?branch=master)](https://travis-ci.com/abbeycode/UnrarKit)
 [![Cocoapods](https://img.shields.io/cocoapods/v/UnrarKit.svg)](https://cocoapods.org/pods/UnrarKit)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Cocoapods platforms](https://img.shields.io/cocoapods/p/UnrarKit.svg)]()
@@ -108,14 +108,14 @@ You can create your own instance of `NSProgress` and observe its `fractionComple
 
     NSProgress *extractDataProgress = [NSProgress progressWithTotalUnitCount:1];
     [extractDataProgress becomeCurrentWithPendingUnitCount:1];
-    
+
     NSString *observedSelector = NSStringFromSelector(@selector(fractionCompleted));
-    
+
     [extractDataProgress addObserver:self
                           forKeyPath:observedSelector
                              options:NSKeyValueObservingOptionInitial
                              context:ExtractDataContext];
-    
+
     NSError *extractError = nil;
     NSData *data = [archive extractDataFromFile:firstFile error:&extractError];
 
@@ -131,23 +131,23 @@ If you don't have a hierarchy of `NSProgress` instances, or if you want to obser
     static void *ExtractFilesContext = &ExtractFilesContext;
 
     URKArchive *archive = [[URKArchive alloc] initWithURL:aFileURL error:nil];
-    
+
     NSProgress *extractFilesProgress = [NSProgress progressWithTotalUnitCount:1];
     archive.progress = extractFilesProgress;
-    
+
     NSString *observedSelector = NSStringFromSelector(@selector(localizedDescription));
-    
+
     [self.descriptionsReported removeAllObjects];
     [extractFilesProgress addObserver:self
                            forKeyPath:observedSelector
                               options:NSKeyValueObservingOptionInitial
                               context:ExtractFilesContext];
-    
+
     NSError *extractError = nil;
     BOOL success = [archive extractFilesTo:extractURL.path
                                  overwrite:NO
                                      error:&extractError];
-    
+
     [extractFilesProgress removeObserver:self forKeyPath:observedSelector];
 ```
 
@@ -242,16 +242,16 @@ Before pushing a build, you must:
 
 1. Add the release notes to the [CHANGELOG.md](CHANGELOG.md), and commit
 2. Run [set-version](Scripts/set-version.sh), like so:
-     
+
     `./Scripts/set-version.sh <version number>`
-    
+
     This does the following:
-    
+
     1. Updates the [UnrarKit-Info.plist](Resources/UnrarKit-Info.plist) file to indicate the new version number, and commits it
 
     2. Makes an annotated tag whose message contains the release notes entered in Step 1
 
-Once that's done, you can call `git push --follow-tags` [<sup id=a1>1</sup>](#f1), and let [Travis CI](https://travis-ci.org/abbeycode/UnrarKit/builds) take care of the rest. 
+Once that's done, you can call `git push --follow-tags` [<sup id=a1>1</sup>](#f1), and let [Travis CI](https://travis-ci.org/abbeycode/UnrarKit/builds) take care of the rest.
 
 # Credits
 
