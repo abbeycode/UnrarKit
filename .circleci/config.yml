@@ -16,15 +16,15 @@ workflows:
 
       # Validation
       - validate-CocoaPods:
-         requires:
-           - test-Mac
-           - test-iOS
-           - test-ExampleApp
+          requires:
+            - test-Mac
+            - test-iOS
+            - test-ExampleApp
       - validate-Carthage:
-         requires:
-           - test-Mac
-           - test-iOS
-           - test-ExampleApp
+          requires:
+            - test-Mac
+            - test-iOS
+            - test-ExampleApp
 
       # Release
       - release:
@@ -34,9 +34,9 @@ workflows:
               ignore: /.*/
             tags:
               only: /.*/
-         requires:
-           - validate-CocoaPods
-           - validate-Carthage
+          requires:
+            - validate-CocoaPods
+            - validate-Carthage
 
 jobs:
   test-Mac:
