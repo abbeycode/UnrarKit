@@ -1,0 +1,53 @@
+version: 2.1
+
+macos:
+  xcode: 12.5.1
+
+workflows:
+  Test:
+    jobs:
+      test-Mac:
+        steps:
+#          - checkout
+          # The CLANG arguments and find command fail the build on analyzer errors
+          - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release -quiet analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+
+      test-iOS:
+        steps:
+#          - checkout
+          # The CLANG arguments and find command fail the build on analyzer errors
+          - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -destination 'platform=iOS Simulator,name=iPhone 11,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+
+      test-ExampleApp:
+        steps:
+#          - checkout
+          # The CLANG arguments and find command fail the build on analyzer errors
+          - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator -configuration Release analyze CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+
+  Validate:
+    jobs:
+      validate-CocoaPods:
+        requires:
+          - Test
+        steps:
+          - run: ./Scripts/cocoapod-validate.sh
+
+      validate-Carthage:
+        requires:
+          - Test
+        steps:
+          - run: ./Scripts/carthage-validate.sh
+
+  Release:
+    jobs:
+      release:
+        requires:
+          - Validate
+        # Only run for tags
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /.*/
+        steps:
+          - run: ./Scripts/push-output.sh
