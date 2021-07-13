@@ -6,19 +6,19 @@ macos:
 workflows:
   Test:
     jobs:
-      test-Mac:
+      - test-Mac:
         steps:
 #          - checkout
           # The CLANG arguments and find command fail the build on analyzer errors
           - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release -quiet analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 
-      test-iOS:
+      - test-iOS:
         steps:
 #          - checkout
           # The CLANG arguments and find command fail the build on analyzer errors
           - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -destination 'platform=iOS Simulator,name=iPhone 11,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 
-      test-ExampleApp:
+      - test-ExampleApp:
         steps:
 #          - checkout
           # The CLANG arguments and find command fail the build on analyzer errors
@@ -26,7 +26,7 @@ workflows:
 
   Validate:
     jobs:
-      validate-CocoaPods:
+      - validate-CocoaPods:
         requires:
           - test-Mac
           - test-iOS
@@ -34,7 +34,7 @@ workflows:
         steps:
           - run: ./Scripts/cocoapod-validate.sh
 
-      validate-Carthage:
+      - validate-Carthage:
         requires:
           - test-Mac
           - test-iOS
@@ -44,7 +44,7 @@ workflows:
 
   Release:
     jobs:
-      release:
+      - release:
         requires:
           - validate-CocoaPods
           - validate-Carthage
