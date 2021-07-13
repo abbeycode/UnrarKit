@@ -55,10 +55,6 @@ jobs:
       - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator -configuration Release analyze CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 
   validate-CocoaPods:
-    requires:
-      - test-Mac
-      - test-iOS
-      - test-ExampleApp
     steps:
       - run: ./Scripts/cocoapod-validate.sh
 
