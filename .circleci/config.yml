@@ -36,36 +36,36 @@ workflows:
             - validate-Carthage
 
 jobs:
-  - test-Mac:
-      steps:
+  test-Mac:
+    steps:
 #          - checkout
-        # The CLANG arguments and find command fail the build on analyzer errors
-        - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release -quiet analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+      # The CLANG arguments and find command fail the build on analyzer errors
+      - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release -quiet analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 
-  - test-iOS:
-      steps:
+  test-iOS:
+    steps:
 #          - checkout
-        # The CLANG arguments and find command fail the build on analyzer errors
-        - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -destination 'platform=iOS Simulator,name=iPhone 11,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+      # The CLANG arguments and find command fail the build on analyzer errors
+      - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -destination 'platform=iOS Simulator,name=iPhone 11,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 
-  - test-ExampleApp:
-      steps:
+  test-ExampleApp:
+    steps:
 #          - checkout
-        # The CLANG arguments and find command fail the build on analyzer errors
-        - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator -configuration Release analyze CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
+      # The CLANG arguments and find command fail the build on analyzer errors
+      - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator -configuration Release analyze CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 
-  - validate-CocoaPods:
-      requires:
-        - test-Mac
-        - test-iOS
-        - test-ExampleApp
-      steps:
-        - run: ./Scripts/cocoapod-validate.sh
+  validate-CocoaPods:
+    requires:
+      - test-Mac
+      - test-iOS
+      - test-ExampleApp
+    steps:
+      - run: ./Scripts/cocoapod-validate.sh
 
-  - validate-Carthage:
-      steps:
-        - run: ./Scripts/carthage-validate.sh
+  validate-Carthage:
+    steps:
+      - run: ./Scripts/carthage-validate.sh
 
-  - release:
-      steps:
-        - run: ./Scripts/push-output.sh
+  release:
+    steps:
+      - run: ./Scripts/push-output.sh
