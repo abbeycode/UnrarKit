@@ -8,13 +8,11 @@ executors:
 workflows:
   version: 2
   Test:
-    e: my-xcode
     jobs:
       - test-Mac
       - test-iOS
       - test-ExampleApp
   Validate:
-    e: my-xcode
     jobs:
       - validate-CocoaPods:
           requires:
@@ -27,7 +25,6 @@ workflows:
             - test-iOS
             - test-ExampleApp
   Release:
-    e: my-xcode
     jobs:
       - release:
           # Only run for tags
