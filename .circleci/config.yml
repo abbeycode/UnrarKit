@@ -42,55 +42,37 @@ workflows:
 
 jobs:
   test-Mac:
-    parameters:
-      e:
-        type: executor
-    executor: << parameters.e >>
+    executor: my-xcode
     steps:
 #          - checkout
       # The CLANG arguments and find command fail the build on analyzer errors
       - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -sdk macosx -configuration Release -quiet analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 
   test-iOS:
-    parameters:
-      e:
-        type: executor
-    executor: << parameters.e >>
+    executor: my-xcode
     steps:
 #          - checkout
       # The CLANG arguments and find command fail the build on analyzer errors
       - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarKit -destination 'platform=iOS Simulator,name=iPhone 11,OS=latest' -configuration Release analyze test CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 
   test-ExampleApp:
-    parameters:
-      e:
-        type: executor
-    executor: << parameters.e >>
+    executor: my-xcode
     steps:
 #          - checkout
       # The CLANG arguments and find command fail the build on analyzer errors
       - run: xcodebuild -workspace UnrarKit.xcworkspace -scheme UnrarExample -sdk iphonesimulator -configuration Release analyze CLANG_ANALYZER_OUTPUT=html CLANG_ANALYZER_OUTPUT_DIR=analyzer-output && [[ -z `find analyzer-output -name "*.html"` ]]
 
   validate-CocoaPods:
-    parameters:
-      e:
-        type: executor
-    executor: << parameters.e >>
+    executor: my-xcode
     steps:
       - run: ./Scripts/cocoapod-validate.sh
 
   validate-Carthage:
-    parameters:
-      e:
-        type: executor
-    executor: << parameters.e >>
+    executor: my-xcode
     steps:
       - run: ./Scripts/carthage-validate.sh
 
   release:
-    parameters:
-      e:
-        type: executor
-    executor: << parameters.e >>
+    executor: my-xcode
     steps:
       - run: ./Scripts/push-output.sh
