@@ -1,5 +1,10 @@
 # UnrarKit CHANGELOG
 
+## 2.11
+
+* Fixed a header name conflict with Realm (Issue #90)
+
+
 ## 2.10
 
 * Added method (`checkDataIntegrityIgnoringCRCMismatches:`) to prompt user for a decision on whether or not to ignore CRC mismatches (Issue #82)
