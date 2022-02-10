@@ -253,7 +253,7 @@ Before pushing a build, you must:
 
 Once that's done, you can call `git push --follow-tags` [<sup id=a1>1</sup>](#f1), and let [Travis CI](https://travis-ci.org/abbeycode/UnrarKit/builds) take care of the rest.
 
-_Note: if the push to CocoaPods fails in Travis CI, it's almost certainly because the Trunk token has expired. Follow [this Stack Overflow answer]](https://stackoverflow.com/a/31511532/105717)'s instructions to fix it. Next time, try `pod trunk me`_
+_Note: if the push to CocoaPods fails in Travis CI, it's almost certainly because the Trunk token has expired. Follow [this Stack Overflow answer](https://stackoverflow.com/a/31511532/105717)'s instructions to fix it. Next time, try `pod trunk me`_
 
 # Credits
 
