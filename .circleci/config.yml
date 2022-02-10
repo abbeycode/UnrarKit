@@ -27,16 +27,16 @@ workflows:
             - test-ExampleApp
 
       # Release
-      - release:
-          # Only run for tags
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
-          requires:
-            - validate-CocoaPods
-            - validate-Carthage
+#      - release:
+#          # Only run for tags
+#          filters:
+#            branches:
+#              ignore: /.*/
+#            tags:
+#              only: /.*/
+#          requires:
+#            - validate-CocoaPods
+#            - validate-Carthage
 
 jobs:
   test-Mac:
@@ -72,8 +72,8 @@ jobs:
       - checkout
       - run: ./Scripts/carthage-validate.sh
 
-  release:
-    executor: my-xcode
-    steps:
-      - checkout
-      - run: ./Scripts/push-output.sh
+#  release:
+#    executor: my-xcode
+#    steps:
+#      - checkout
+#      - run: ./Scripts/push-output.sh
