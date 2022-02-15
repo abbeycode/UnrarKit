@@ -1362,6 +1362,8 @@
 					"-Wno-variadic-macros",
 					"-Wno-old-style-cast",
 					"-Wno-anon-enum-enum-conversion",
+					"-Wno-suggest-destructor-override",
+					"-Wno-suggest-override",
 				);
 			};
 			name = Debug;
@@ -1415,6 +1417,8 @@
 					"-Wno-variadic-macros",
 					"-Wno-old-style-cast",
 					"-Wno-anon-enum-enum-conversion",
+					"-Wno-suggest-destructor-override",
+					"-Wno-suggest-override",
 				);
 			};
 			name = Release;
