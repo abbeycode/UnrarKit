@@ -653,7 +653,7 @@ NS_DESIGNATED_INITIALIZER
         int PFCode = 0;
         Archive *archive = self.rarFileArchiveData;
         if (archive->CurBlockPos != fileInfo.closestOffsetToHeader) {
-            // Ask unrar seek to the closest offset of entry's header record
+            // Seek to the closest offset of entry's header record
             archive->Seek(fileInfo.closestOffsetToHeader, SEEK_SET);
         }
 
@@ -991,7 +991,7 @@ NS_DESIGNATED_INITIALIZER
     URKLogInfo("Looping through files, looking for %{public}@...", filePath);
     while ([welf readHeader:&RHCode info:fileInfo] == URKReadHeaderLoopActionContinueReading) {
         if ([welf headerContainsErrors:innerError]) {
-            URKLogDebug("Header contains error");
+            URKLogDebug("Header contains an error");
             return NO;
         }
     
