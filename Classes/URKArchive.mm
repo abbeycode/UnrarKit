@@ -15,6 +15,7 @@ RarHppIgnore
 #import "rar.hpp"
 #pragma clang diagnostic pop
 
+
 NSString *URKErrorDomain = @"URKErrorDomain";
 
 #pragma clang diagnostic push
@@ -636,8 +637,8 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (NSData *)extractDataFromFileInfo:(URKFileInfo *)fileInfo
-                       progress:(void (^)(CGFloat percentDecompressed))progressBlock
-                          error:(NSError * __autoreleasing *)error
+                           progress:(void (^)(CGFloat percentDecompressed))progressBlock
+                              error:(NSError * __autoreleasing *)error
 {
     URKCreateActivity("Extracting Data from File");
 
@@ -981,8 +982,8 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (BOOL)locateFileInfoByFilePath:(NSString *)filePath
-                     fileInfo:(URKFileInfo * __autoreleasing *)fileInfo
-                            innerError:(NSError * __autoreleasing *)innerError
+                        fileInfo:(URKFileInfo * __autoreleasing *)fileInfo
+                      innerError:(NSError * __autoreleasing *)innerError
 {
     int RHCode = 0, PFCode = 0;
     __weak URKArchive *welf = self;
@@ -1021,8 +1022,8 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (BOOL)readBufferChunkByChunk:(URKFileInfo *)fileInfo
-                     innerError:(NSError * __autoreleasing *)innerError
-                         action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
+                    innerError:(NSError * __autoreleasing *)innerError
+                        action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
 {
     int PFCode = 0;
     long long totalBytes = fileInfo.uncompressedSize;
@@ -1079,8 +1080,8 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (BOOL)extractBufferedDataFromFile:(NSString *)filePath
-                                  error:(NSError * __autoreleasing *)error
-                                 action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
+                              error:(NSError * __autoreleasing *)error
+                             action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
 {
     URKCreateActivity("Extracting Buffered Data");
 
@@ -1108,8 +1109,8 @@ NS_DESIGNATED_INITIALIZER
 }
 
 - (BOOL)extractBufferedDataFromFileInfo:(URKFileInfo *)fileInfo
-                              error:(NSError * __autoreleasing *)error
-                             action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
+                                  error:(NSError * __autoreleasing *)error
+                                 action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
 {
     URKCreateActivity("Extracting Buffered Data");
 

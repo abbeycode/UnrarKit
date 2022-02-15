@@ -487,8 +487,8 @@ extern NSString *URKErrorDomain;
  *  @return YES if all data was read successfully, NO if an error was encountered
  */
 - (BOOL)extractBufferedDataFromFileInfo:(URKFileInfo *)fileInfo
-                              error:(NSError **)error
-                             action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action;
+                                  error:(NSError **)error
+                                 action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action;
 
 /**
  *  YES if archive protected with a password, NO otherwise
