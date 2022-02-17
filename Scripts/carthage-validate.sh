@@ -5,9 +5,6 @@ carthage --version
 REPO="github \"$TRAVIS_REPO_SLUG\""
 COMMIT=$TRAVIS_COMMIT
 
-# Only necessary for workaround below
-SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-
 if [ -z ${TRAVIS+x} ]; then
     REPO="git \"`pwd`\""
     COMMIT=`git log -1 --oneline | cut -f1 -d' '`

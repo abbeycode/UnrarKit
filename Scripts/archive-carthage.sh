@@ -4,9 +4,9 @@ set -ev
 
 # Archives the Carthage packages, and prints the name of the archive
 
-# Employing a workaround until Xcode 12 builds are fixed
-SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-source "${SCRIPTPATH}"/carthage.sh build --no-skip-current
-source "${SCRIPTPATH}"/carthage.sh archive
+carthage build --use-xcframeworks --no-skip-current
 
-export ARCHIVE_PATH="UnrarKit.framework.zip"
+# This is currently broken, combined with the --use-xcframeworks option above,  as of Carthage 0.38.0 on 2/17/2021
+carthage archive
+
+export ARCHIVE_PATH="UnrarKit.xcframework.zip"
