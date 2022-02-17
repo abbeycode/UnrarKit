@@ -35,18 +35,17 @@ rm -rf Carthage
 echo "$REPO \"$COMMIT\"" > Cartfile
 
 
-# Employing a workaround until Xcode 12 builds are fixed
-source "${SCRIPTPATH}"/carthage.sh bootstrap --configuration Debug --verbose
+carthage bootstrap --use-xcframeworks --configuration Debug --verbose
 EXIT_CODE=$?
 
 echo "Checking for build products..."
 
-if [ ! -d "Carthage/Build/Mac/UnrarKit.framework" ]; then
+if [ ! -d "Carthage/Build/UnrarKit.xcframework/macos-arm64_x86_64" ]; then
     echo "No Mac library built"
     EXIT_CODE=1
 fi
 
-if [ ! -d "Carthage/Build/iOS/UnrarKit.framework" ]; then
+if [ ! -d "Carthage/Build/UnrarKit.xcframework/ios-arm64" ]; then
     echo "No iOS library built"
     EXIT_CODE=1
 fi
