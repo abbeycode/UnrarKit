@@ -517,7 +517,7 @@ NS_DESIGNATED_INITIALIZER
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing File Extraction");
 
-        int RHCode = 0, PFCode = 0, filesExtracted = 0;
+        int RHCode = 0, PFCode = 0;
         URKFileInfo *fileInfo;
         
         URKLogInfo("Extracting to %{public}@", filePath);
@@ -576,12 +576,7 @@ NS_DESIGNATED_INITIALIZER
                 return;
             }
 
-            [progress setUserInfoObject:@(++filesExtracted)
-                                 forKey:NSProgressFileCompletedCountKey];
-            [progress setUserInfoObject:@(fileInfos.count)
-                                 forKey:NSProgressFileTotalCountKey];
             progress.completedUnitCount += fileInfo.uncompressedSize;
-            
             URKLogDebug("Finished extracting %{public}@. Extraction %f complete", fileInfo.filename, progress.fractionCompleted);
             
             if (progressBlock) {
