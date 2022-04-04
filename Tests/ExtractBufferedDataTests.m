@@ -113,8 +113,8 @@
     NSError *error = nil;
     NSMutableData *reconstructedFile = [NSMutableData data];
     BOOL success = [archive extractBufferedDataFromFileInfo:fileInfo
-                                                  error:&error
-                                                 action:
+                                                      error:&error
+                                                     action:
                                                          ^(NSData *dataChunk, CGFloat percentDecompressed) {
                                                              NSLog(@"Decompressed: %f%%", percentDecompressed);
                                                              [reconstructedFile appendBytes:dataChunk.bytes
