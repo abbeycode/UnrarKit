@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
   s.requires_arc = "Classes/**/*"
   s.source_files = "Classes/**/*.{mm,m,h}"
   s.public_header_files = "Classes/*.h"
+  s.private_header_files = "Classes/*-Private.h"
   s.resource_bundles = {
       'UnrarKitResources' => ['Resources/**/*']
   }

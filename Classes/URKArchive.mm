@@ -6,6 +6,7 @@
 
 #import "URKArchive.h"
 #import "URKFileInfo.h"
+#import "URKFileInfo-Private.h"
 #import "UnrarKitMacros.h"
 #import "NSString+UnrarKit.h"
 
@@ -651,18 +652,9 @@ NS_DESIGNATED_INITIALIZER
         URKCreateActivity("Performing Extraction");
 
         int PFCode = 0;
-        Archive *archive = self.rarFileArchiveData;
-        if (archive->CurBlockPos != fileInfo.closestOffsetToHeader) {
-            // Seek to the closest offset of entry's header record
-            archive->Seek(fileInfo.closestOffsetToHeader, SEEK_SET);
-        }
-
-        URKFileInfo *targetFile;
-        // Just call "RARReadHeaderEx" few more times then we should be able to locate the corresponding header.
-        // At most of time only 1 to 3 lookups is required, so it will be fast.
-        [welf locateFileInfoByFilePath:fileInfo.filename fileInfo:&targetFile innerError:innerError];
-
-        NSMutableData *fileData = [NSMutableData dataWithCapacity:(NSUInteger)fileInfo.uncompressedSize];
+        URKFileInfo *targetFile = [welf seekToFile:fileInfo error:innerError];
+        NSMutableData *fileData = [NSMutableData dataWithCapacity:(NSUInteger)targetFile.uncompressedSize];
+        
         CGFloat totalBytes = targetFile.uncompressedSize;
         progress.totalUnitCount = totalBytes;
         __block long long bytesRead = 0;
@@ -983,7 +975,7 @@ NS_DESIGNATED_INITIALIZER
 
 - (BOOL)locateFileInfoByFilePath:(NSString *)filePath
                         fileInfo:(URKFileInfo * __autoreleasing *)fileInfo
-                      innerError:(NSError * __autoreleasing *)innerError
+                           error:(NSError * __autoreleasing *)innerError
 {
     int RHCode = 0, PFCode = 0;
     __weak URKArchive *welf = self;
@@ -1083,7 +1075,7 @@ NS_DESIGNATED_INITIALIZER
                               error:(NSError * __autoreleasing *)error
                              action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
 {
-    URKCreateActivity("Extracting Buffered Data");
+    URKCreateActivity("Extracting Buffered Data (by file path)");
 
     NSError *actionError = nil;
 
@@ -1092,8 +1084,12 @@ NS_DESIGNATED_INITIALIZER
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
         URKFileInfo *fileInfo;
+        NSError *seekError = nil;
+        if (![welf locateFileInfoByFilePath:filePath fileInfo:&fileInfo error:&seekError]) {
+            URKLogError("Error seeking file %{public}@\nerror:%{public}@", filePath, seekError);
+            *innerError = seekError;
+        }
 
-        [welf locateFileInfoByFilePath:filePath fileInfo:&fileInfo innerError:innerError];
         [welf readBufferChunkByChunk:fileInfo innerError:innerError action:action];
     } inMode:RAR_OM_EXTRACT error:&actionError];
 
@@ -1121,17 +1117,8 @@ NS_DESIGNATED_INITIALIZER
     BOOL success = [self performActionWithArchiveOpen:^(NSError **innerError) {
         URKCreateActivity("Performing action");
 
-        Archive *archive = welf.rarFileArchiveData;
-        if (archive->CurBlockPos != fileInfo.closestOffsetToHeader) {
-            // Ask unrar seek to the closest offset of entry's header record
-            archive->Seek(fileInfo.closestOffsetToHeader, SEEK_SET);
-        }
-
-        URKFileInfo *targetFile;
-        // Just call "RARReadHeaderEx" few more times then we should be able to locate the corresponding header.
-        // At most of time only 1 to 3 lookups is required, so it will be fast.
-        [welf locateFileInfoByFilePath:fileInfo.filename fileInfo:&targetFile innerError:innerError];
-        [welf readBufferChunkByChunk:fileInfo innerError:innerError action:action];
+        URKFileInfo *targetFile = [welf seekToFile:fileInfo error:innerError];
+        [welf readBufferChunkByChunk:targetFile innerError:innerError action:action];
     } inMode:RAR_OM_EXTRACT error:&actionError];
 
     if (error) {
@@ -1537,6 +1524,27 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
     return YES;
 }
 
+- (URKFileInfo *) seekToFile:(URKFileInfo*)fileInfo error:(NSError *__autoreleasing *)error {
+    __weak URKArchive *welf = self;
+    Archive *archive = welf.rarFileArchiveData;
+    
+    if (archive->CurBlockPos != fileInfo.headerOffset) {
+        // Ask unrar seek to the closest offset of entry's header record
+        archive->Seek(fileInfo.headerOffset, SEEK_SET);
+        int returnCode = RARReadHeaderEx(self.rarFile, self.header);
+        
+        if (returnCode == ERAR_SUCCESS || returnCode == ERAR_END_ARCHIVE) {
+            return fileInfo;
+        }
+    }
+    
+    // If the shortcut above didn't work, fall back to searching through the header
+    URKFileInfo *targetFile;
+    [welf locateFileInfoByFilePath:fileInfo.filename fileInfo:&targetFile error:error];
+    
+    return targetFile;
+}
+
 - (BOOL) iterateAllFileInfo:(void(^)(URKFileInfo *fileInfo, BOOL *stop))action
                       error:(NSError * __autoreleasing *)error
 {
@@ -1862,12 +1870,10 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
 
     URKLogDebug("Reading RAR header");
     Archive *archive = self.rarFileArchiveData;
-    int64 curBlockPos = archive->CurBlockPos;
     *returnCode = RARReadHeaderEx(self.rarFile, self.header);
     URKLogDebug("Reading file info from RAR header");
-    *info = [URKFileInfo fileInfo:self.header];
-    // Save the Archive's Current block position as the closest offset to entry's header
-    (*info).closestOffsetToHeader = curBlockPos;
+    *info = [URKFileInfo fileInfo:self.header
+                     headerOffset:archive->CurBlockPos];
     URKLogDebug("RARReadHeaderEx returned %d", *returnCode);
 
     URKReadHeaderLoopAction result;

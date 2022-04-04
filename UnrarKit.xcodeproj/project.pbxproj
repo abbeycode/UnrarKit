@@ -125,6 +125,7 @@
 		7AC29ACE1F83DB1000DA4DE6 /* raros.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F4E18DB722E00B5651B /* raros.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AC29AD01F850A6A00DA4DE6 /* UnrarKitMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7ADC7A091F8831BC00023C2E /* CheckDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADC7A081F8831BC00023C2E /* CheckDataTests.m */; };
+		7AE4C9F127FBB7440031B32B /* URKFileInfo-Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE4C9F027FBB6BA0031B32B /* URKFileInfo-Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
 		967872741E460FA70048A54C /* ListVolumesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 967872731E460FA70048A54C /* ListVolumesTests.m */; };
@@ -183,6 +184,7 @@
 		7A7820DB2338F38E00E106F8 /* ExtractBufferedDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtractBufferedDataTests.m; sourceTree = "<group>"; };
 		7AC29A5D1F83C08200DA4DE6 /* libunrar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libunrar.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7ADC7A081F8831BC00023C2E /* CheckDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckDataTests.m; sourceTree = "<group>"; };
+		7AE4C9F027FBB6BA0031B32B /* URKFileInfo-Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "URKFileInfo-Private.h"; sourceTree = "<group>"; };
 		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
 		96370FB419ED8A8200DAF8F1 /* blake2s.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s.cpp; sourceTree = "<group>"; };
 		96370FB519ED8A8200DAF8F1 /* blake2s.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = blake2s.hpp; sourceTree = "<group>"; };
@@ -428,6 +430,7 @@
 				489CFA0E128B5169005DCC2A /* URKArchive.h */,
 				489CFA0F128B5169005DCC2A /* URKArchive.mm */,
 				F3FCD4691A3262E5003612BF /* URKFileInfo.h */,
+				7AE4C9F027FBB6BA0031B32B /* URKFileInfo-Private.h */,
 				F3FCD46A1A3262E5003612BF /* URKFileInfo.m */,
 				96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */,
 				7A0668EC1FBBAA3100437F5F /* Supporting Files */,
@@ -733,6 +736,7 @@
 				7AC29AD01F850A6A00DA4DE6 /* UnrarKitMacros.h in Headers */,
 				7AC29ACD1F83DB0400DA4DE6 /* dll.hpp in Headers */,
 				7AC29ACE1F83DB1000DA4DE6 /* raros.hpp in Headers */,
+				7AE4C9F127FBB7440031B32B /* URKFileInfo-Private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

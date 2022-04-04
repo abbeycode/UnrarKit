@@ -14,12 +14,14 @@
 
 #pragma mark - Initialization
 
-
-+ (instancetype) fileInfo:(struct RARHeaderDataEx *)fileHeader {
-    return [[URKFileInfo alloc] initWithFileHeader:fileHeader];
++ (instancetype) fileInfo:(struct RARHeaderDataEx *)fileHeader
+             headerOffset:(int64_t)headerOffset
+{
+    return [[URKFileInfo alloc] initWithFileHeader:fileHeader headerOffset:headerOffset];
 }
 
 - (instancetype)initWithFileHeader:(struct RARHeaderDataEx *)fileHeader
+                      headerOffset:(int64_t)headerOffset
 {
     URKCreateActivity("Init URKFileInfo");
 
@@ -41,6 +43,7 @@
         //_fileHasComment = fileHeader->Flags  & (1 << 3)
         
         _isDirectory = (fileHeader->Flags & RHDF_DIRECTORY) ? YES : NO;
+        _headerOffset = headerOffset;
     }
 
     return self;
@@ -79,6 +82,13 @@
     components.second = second;
     
     return [[NSCalendar currentCalendar] dateFromComponents:components];
+}
+
+- (int64_t)getHeaderOffset {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdirect-ivar-access"
+    return _headerOffset;
+#pragma clang diagnostic pop
 }
 
 @end

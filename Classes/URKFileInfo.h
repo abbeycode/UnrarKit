@@ -94,7 +94,10 @@ typedef NS_ENUM(NSUInteger, URKHostOS) {
  *  A wrapper around a RAR archive's file header, defining the various fields
  *  it contains
  */
-@interface URKFileInfo : NSObject
+@interface URKFileInfo : NSObject {
+    @private
+    int64_t _headerOffset;
+}
 
 /**
  *  The name of the file's archive
@@ -145,19 +148,5 @@ typedef NS_ENUM(NSUInteger, URKHostOS) {
  *  The OS of the file
  */
 @property (readonly, assign) URKHostOS hostOS;
-
-/**
- *  Closest offset to file record's header
- */
-@property (assign) int64_t closestOffsetToHeader;
-
-/**
- *  Returns a URKFileInfo instance for the given extended header data
- *
- *  @param fileHeader The header data for a RAR file
- *
- *  @return an instance of URKFileInfo
- */
-+ (instancetype) fileInfo:(struct RARHeaderDataEx *)fileHeader;
 
 @end
