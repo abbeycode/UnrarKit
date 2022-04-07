@@ -1087,7 +1087,10 @@ NS_DESIGNATED_INITIALIZER
         NSError *seekError = nil;
         if (![welf locateFileInfoByFilePath:filePath fileInfo:&fileInfo error:&seekError]) {
             URKLogError("Error seeking file %{public}@\nerror:%{public}@", filePath, seekError);
-            *innerError = seekError;
+            
+            if (innerError) {
+                *innerError = seekError;
+            }
         }
 
         [welf readBufferChunkByChunk:fileInfo innerError:innerError action:action];
