@@ -973,46 +973,6 @@ NS_DESIGNATED_INITIALIZER
     return success;
 }
 
-- (BOOL)locateFileInfoByFilePath:(NSString *)filePath
-                        fileInfo:(URKFileInfo * __autoreleasing *)fileInfo
-                           error:(NSError * __autoreleasing *)innerError
-{
-    int RHCode = 0, PFCode = 0;
-    __weak URKArchive *welf = self;
-
-    URKLogInfo("Looping through files, looking for %{public}@...", filePath);
-    while ([welf readHeader:&RHCode info:fileInfo] == URKReadHeaderLoopActionContinueReading) {
-        if ([welf headerContainsErrors:innerError]) {
-            URKLogDebug("Header contains an error");
-            return NO;
-        }
-    
-        if ([(*fileInfo).filename isEqualToString:filePath]) {
-            URKLogDebug("Found desired file");
-            break;
-        }
-        else {
-            URKLogDebug("Skipping file...");
-            PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL);
-            if (![welf didReturnSuccessfully:PFCode]) {
-                NSString *errorName = nil;
-                [welf assignError:innerError code:(NSInteger)PFCode errorName:&errorName];
-                URKLogError("Failed to skip file: %{public}@ (%d)", errorName, PFCode);
-                return NO;
-            }
-        }
-    }
-
-    if (![welf didReturnSuccessfully:RHCode]) {
-        NSString *errorName = nil;
-        [welf assignError:innerError code:RHCode errorName:&errorName];
-        URKLogError("Header read yielded error: %{public}@ (%d)", errorName, RHCode);
-        return NO;
-    }
-
-    return YES;
-}
-
 - (BOOL)readBufferChunkByChunk:(URKFileInfo *)fileInfo
                     innerError:(NSError * __autoreleasing *)innerError
                         action:(void(^)(NSData *dataChunk, CGFloat percentDecompressed))action
@@ -1524,6 +1484,46 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
         delete self.flags->ArcName;
     delete self.flags; self.flags = 0;
     delete self.header; self.header = 0;
+    return YES;
+}
+
+- (BOOL)locateFileInfoByFilePath:(NSString *)filePath
+                        fileInfo:(URKFileInfo * __autoreleasing *)fileInfo
+                           error:(NSError * __autoreleasing *)error
+{
+    int RHCode = 0, PFCode = 0;
+    __weak URKArchive *welf = self;
+
+    URKLogInfo("Looping through files, looking for %{public}@...", filePath);
+    while ([welf readHeader:&RHCode info:fileInfo] == URKReadHeaderLoopActionContinueReading) {
+        if ([welf headerContainsErrors:error]) {
+            URKLogDebug("Header contains an error");
+            return NO;
+        }
+    
+        if ([(*fileInfo).filename isEqualToString:filePath]) {
+            URKLogDebug("Found desired file");
+            break;
+        }
+        else {
+            URKLogDebug("Skipping file...");
+            PFCode = RARProcessFile(welf.rarFile, RAR_SKIP, NULL, NULL);
+            if (![welf didReturnSuccessfully:PFCode]) {
+                NSString *errorName = nil;
+                [welf assignError:error code:(NSInteger)PFCode errorName:&errorName];
+                URKLogError("Failed to skip file: %{public}@ (%d)", errorName, PFCode);
+                return NO;
+            }
+        }
+    }
+
+    if (![welf didReturnSuccessfully:RHCode]) {
+        NSString *errorName = nil;
+        [welf assignError:error code:RHCode errorName:&errorName];
+        URKLogError("Header read yielded error: %{public}@ (%d)", errorName, RHCode);
+        return NO;
+    }
+
     return YES;
 }
 
