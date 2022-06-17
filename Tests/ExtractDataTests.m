@@ -109,6 +109,19 @@
     }
 }
 
+- (void)testExtractData_IncorrectPassword
+{
+    NSString *testArchiveName = @"Test Archive (Bad Password).rar";
+    NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password: @"password2" error: nil]; //the correct password is 'password'
+    
+    NSError *error = nil;
+    NSData *data = [archive extractDataFromFile:@"test.txt" error:&error];
+    
+    XCTAssertNil(data, @"Data returned with bad password");
+    XCTAssertEqual(error.code, URKErrorCodeBadPassword, @"Unexpected error code returned");
+}
+
 - (void)testExtractData_InvalidArchive
 {
     URKArchive *archive = [[URKArchive alloc] initWithURL:self.testFileURLs[@"Test File A.txt"] error:nil];

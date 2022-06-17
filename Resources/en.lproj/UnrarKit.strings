@@ -1,4 +1,4 @@
-﻿/* Error detail string */
+/* Error detail string */
 "An unknown error occurred" = "An unknown error occurred";
 
 /* Error detail string */
@@ -42,4 +42,7 @@
 
 /* Error detail string */
 "User cancelled the operation in progress" = "User cancelled the operation in progress";
+
+/* Error detail string */
+"Provided password is incorrect" = "Provided password is incorrect";
 
