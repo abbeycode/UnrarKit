@@ -113,7 +113,7 @@
 {
     NSString *testArchiveName = @"Test Archive (Bad Password).rar";
     NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
-    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password: @"password2" error: nil]; //the correct password is 'password'
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password: @"wrong password" error: nil];
     
     NSError *error = nil;
     NSData *data = [archive extractDataFromFile:@"test.txt" error:&error];

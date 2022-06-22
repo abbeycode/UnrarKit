@@ -228,11 +228,11 @@
     NSString *extractDirectory = [self randomDirectoryWithPrefix:
                                   [testArchiveName stringByDeletingPathExtension]];
     NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
-    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password: @"password2" error: nil];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password: @"wrong password" error: nil];
     NSError *error = nil;
     [archive extractFilesTo:extractURL.path
-                                 overwrite:NO
-                                     error:&error];
+                  overwrite:NO
+                      error:&error];
     
     XCTAssertEqual(error.code, URKErrorCodeBadPassword, @"Unexpected error code returned");
 }
