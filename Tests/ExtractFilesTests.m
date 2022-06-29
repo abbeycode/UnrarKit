@@ -222,7 +222,7 @@
 
 - (void)testExtractFiles_IncorrectPassword
 {
-    NSString *testArchiveName = @"Test Archive (Bad Password).rar";
+    NSString *testArchiveName = @"Test Archive (RAR5, Password).rar";
     NSLog(@"Testing extraction of archive %@", testArchiveName);
     NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
     NSString *extractDirectory = [self randomDirectoryWithPrefix:

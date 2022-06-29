@@ -31,7 +31,6 @@ static NSURL *originalLargeArchiveURL;
     
     NSArray *testFiles = @[@"Test Archive.rar",
                            @"Test Archive (Password).rar",
-                           @"Test Archive (Bad Password).rar",
                            @"Test Archive (Header Password).rar",
                            @"Test Archive (RAR5, Password).rar",
                            @"Test Archive (RAR5).rar",
