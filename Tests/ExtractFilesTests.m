@@ -192,7 +192,7 @@
     }
 }
 
-- (void)testExtractFiles_NoPasswordGiven
+- (void)testExtractFiles_NoPassword
 {
     NSArray *testArchives = @[@"Test Archive (Password).rar",
                               @"Test Archive (Header Password).rar"];
@@ -218,6 +218,23 @@
         XCTAssertEqual(error.code, URKErrorCodeMissingPassword, @"Unexpected error code returned");
         XCTAssertFalse(dirExists, @"Directory successfully created without password");
     }
+}
+
+- (void)testExtractFiles_IncorrectPassword
+{
+    NSString *testArchiveName = @"Test Archive (RAR5, Password).rar";
+    NSLog(@"Testing extraction of archive %@", testArchiveName);
+    NSURL *testArchiveURL = self.testFileURLs[testArchiveName];
+    NSString *extractDirectory = [self randomDirectoryWithPrefix:
+                                  [testArchiveName stringByDeletingPathExtension]];
+    NSURL *extractURL = [self.tempDirectory URLByAppendingPathComponent:extractDirectory];
+    URKArchive *archive = [[URKArchive alloc] initWithURL:testArchiveURL password: @"wrong password" error: nil];
+    NSError *error = nil;
+    [archive extractFilesTo:extractURL.path
+                  overwrite:NO
+                      error:&error];
+    
+    XCTAssertEqual(error.code, URKErrorCodeBadPassword, @"Unexpected error code returned");
 }
 
 - (void)testExtractFiles_InvalidArchive
