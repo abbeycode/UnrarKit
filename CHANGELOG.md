@@ -3,6 +3,7 @@
 ## 2.11
 
 * Fixed a header name conflict with Realm (Issue #90)
+* Incorrect passwords in RAR5 archives now produce a specific and helpful error message (PR #101 - Thanks to [@gpotari](https://github.com/gpotari) for the idea and implementation!)
 
 
 ## 2.10
