@@ -41,7 +41,6 @@ Pod::Spec.new do |s|
                       "Libraries/unrar/arcread.cpp",
                       "Libraries/unrar/unicode.cpp",
                       "Libraries/unrar/system.cpp",
-                      "Libraries/unrar/isnt.cpp",
                       "Libraries/unrar/crypt.cpp",
                       "Libraries/unrar/crc.cpp",
                       "Libraries/unrar/rawread.cpp",
