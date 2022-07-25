@@ -500,10 +500,6 @@
 		96853F0518DB722E00B5651B /* unrar */ = {
 			isa = PBXGroup;
 			children = (
-				792C3927286DD485003BB308 /* cmdfilter.cpp */,
-				792C3926286DD485003BB308 /* cmdmix.cpp */,
-				792C3928286DD485003BB308 /* list.hpp */,
-				792C3929286DD485003BB308 /* rawint.hpp */,
 				96853F0718DB722E00B5651B /* arccmt.cpp */,
 				96853F0818DB722E00B5651B /* archive.cpp */,
 				96853F0918DB722E00B5651B /* archive.hpp */,
@@ -515,6 +511,8 @@
 				96370FB619ED8A8200DAF8F1 /* blake2sp.cpp */,
 				96853F0D18DB722E00B5651B /* cmddata.cpp */,
 				96853F0E18DB722E00B5651B /* cmddata.hpp */,
+				792C3927286DD485003BB308 /* cmdfilter.cpp */,
+				792C3926286DD485003BB308 /* cmdmix.cpp */,
 				96853F0F18DB722E00B5651B /* coder.cpp */,
 				96853F1018DB722E00B5651B /* coder.hpp */,
 				96853F1118DB722E00B5651B /* compress.hpp */,
@@ -561,6 +559,7 @@
 				96853F3218DB722E00B5651B /* headers.hpp */,
 				96370FC819ED8B2B00DAF8F1 /* headers5.hpp */,
 				96853F3418DB722E00B5651B /* isnt.hpp */,
+				792C3928286DD485003BB308 /* list.hpp */,
 				96853F3818DB722E00B5651B /* loclang.hpp */,
 				96853F3918DB722E00B5651B /* log.cpp */,
 				96853F3A18DB722E00B5651B /* log.hpp */,
@@ -583,6 +582,7 @@
 				96853F4F18DB722E00B5651B /* rarpch.cpp */,
 				96853F5018DB722E00B5651B /* rartypes.hpp */,
 				96853F5118DB722E00B5651B /* rarvm.cpp */,
+				792C3929286DD485003BB308 /* rawint.hpp */,
 				96853F5218DB722E00B5651B /* rarvm.hpp */,
 				96853F5418DB722E00B5651B /* rawread.cpp */,
 				96853F5518DB722E00B5651B /* rawread.hpp */,
