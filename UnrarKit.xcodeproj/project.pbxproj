@@ -181,6 +181,8 @@
 		7A66082A20B4BE2000FE68D6 /* IterateFileInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IterateFileInfoTests.m; sourceTree = "<group>"; };
 		7A7820D92338F09500E106F8 /* PerformOnDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PerformOnDataTests.m; sourceTree = "<group>"; };
 		7A7820DB2338F38E00E106F8 /* ExtractBufferedDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtractBufferedDataTests.m; sourceTree = "<group>"; };
+		7A8F9447288E48F000A83414 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		7A8F9448288E4D9400A83414 /* UnrarKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnrarKit.podspec; sourceTree = "<group>"; };
 		7AC29A5D1F83C08200DA4DE6 /* libunrar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libunrar.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7ADC7A081F8831BC00023C2E /* CheckDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckDataTests.m; sourceTree = "<group>"; };
 		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
@@ -402,6 +404,8 @@
 		0867D691FE84028FC02AAC07 /* UnrarKit */ = {
 			isa = PBXGroup;
 			children = (
+				7A8F9447288E48F000A83414 /* Package.swift */,
+				7A8F9448288E4D9400A83414 /* UnrarKit.podspec */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
 				964C8AC218D28EE000AD7321 /* Tests */,
 				7A22B1EB1F60A05F004B8050 /* UnrarKitResources */,

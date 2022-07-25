@@ -64,7 +64,6 @@ Pod::Spec.new do |s|
                       "Libraries/unrar/extinfo.cpp",
                       "Libraries/unrar/extract.cpp",
                       "Libraries/unrar/volume.cpp",
-                      "Libraries/unrar/list.cpp",
                       "Libraries/unrar/find.cpp",
                       "Libraries/unrar/unpack.cpp",
                       "Libraries/unrar/headers.cpp",
