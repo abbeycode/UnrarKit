@@ -29,7 +29,6 @@
 		7AC29A6B1F83C14200DA4DE6 /* arcread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F0A18DB722E00B5651B /* arcread.cpp */; };
 		7AC29A6C1F83C14D00DA4DE6 /* unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7718DB722E00B5651B /* unicode.cpp */; };
 		7AC29A6D1F83C15400DA4DE6 /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F7118DB722E00B5651B /* system.cpp */; };
-		7AC29A6E1F83C16500DA4DE6 /* isnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F3318DB722E00B5651B /* isnt.cpp */; };
 		7AC29A6F1F83C16D00DA4DE6 /* crypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1618DB722E00B5651B /* crypt.cpp */; };
 		7AC29A701F83C17300DA4DE6 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F1418DB722E00B5651B /* crc.cpp */; };
 		7AC29A711F83C17900DA4DE6 /* rawread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96853F5418DB722E00B5651B /* rawread.cpp */; };
@@ -106,7 +105,6 @@
 		7AC29ABA1F83C36900DA4DE6 /* resource.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F5C18DB722E00B5651B /* resource.hpp */; };
 		7AC29ABB1F83C36900DA4DE6 /* rijndael.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F5E18DB722E00B5651B /* rijndael.hpp */; };
 		7AC29ABC1F83C36900DA4DE6 /* rs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F6018DB722E00B5651B /* rs.hpp */; };
-		7AC29ABD1F83C36900DA4DE6 /* savepos.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F6218DB722E00B5651B /* savepos.hpp */; };
 		7AC29ABE1F83C36900DA4DE6 /* scantree.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F6418DB722E00B5651B /* scantree.hpp */; };
 		7AC29ABF1F83C36900DA4DE6 /* secpassword.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F6618DB722E00B5651B /* secpassword.hpp */; };
 		7AC29AC01F83C36900DA4DE6 /* sha1.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F6818DB722E00B5651B /* sha1.hpp */; };
@@ -172,6 +170,10 @@
 /* Begin PBXFileReference section */
 		489CFA0E128B5169005DCC2A /* URKArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = URKArchive.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		489CFA0F128B5169005DCC2A /* URKArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = URKArchive.mm; sourceTree = "<group>"; };
+		792C3926286DD485003BB308 /* cmdmix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cmdmix.cpp; sourceTree = "<group>"; };
+		792C3927286DD485003BB308 /* cmdfilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cmdfilter.cpp; sourceTree = "<group>"; };
+		792C3928286DD485003BB308 /* list.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = list.hpp; sourceTree = "<group>"; };
+		792C3929286DD485003BB308 /* rawint.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = rawint.hpp; sourceTree = "<group>"; };
 		7A0668ED1FBBAABB00437F5F /* UnrarKitResources-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnrarKitResources-Info.plist"; sourceTree = "<group>"; };
 		7A22B1EA1F60A05F004B8050 /* UnrarKitResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnrarKitResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A22B1F91F60A2D3004B8050 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UnrarKit.strings; sourceTree = "<group>"; };
@@ -273,7 +275,6 @@
 		96853F3018DB722E00B5651B /* global.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = global.cpp; sourceTree = "<group>"; };
 		96853F3118DB722E00B5651B /* global.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = global.hpp; sourceTree = "<group>"; };
 		96853F3218DB722E00B5651B /* headers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = headers.hpp; sourceTree = "<group>"; };
-		96853F3318DB722E00B5651B /* isnt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = isnt.cpp; sourceTree = "<group>"; };
 		96853F3418DB722E00B5651B /* isnt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = isnt.hpp; sourceTree = "<group>"; };
 		96853F3818DB722E00B5651B /* loclang.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = loclang.hpp; sourceTree = "<group>"; };
 		96853F3918DB722E00B5651B /* log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
@@ -308,7 +309,6 @@
 		96853F5E18DB722E00B5651B /* rijndael.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = rijndael.hpp; sourceTree = "<group>"; };
 		96853F5F18DB722E00B5651B /* rs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rs.cpp; sourceTree = "<group>"; };
 		96853F6018DB722E00B5651B /* rs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = rs.hpp; sourceTree = "<group>"; };
-		96853F6218DB722E00B5651B /* savepos.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = savepos.hpp; sourceTree = "<group>"; };
 		96853F6318DB722E00B5651B /* scantree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scantree.cpp; sourceTree = "<group>"; };
 		96853F6418DB722E00B5651B /* scantree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = scantree.hpp; sourceTree = "<group>"; };
 		96853F6518DB722E00B5651B /* secpassword.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = secpassword.cpp; sourceTree = "<group>"; };
@@ -514,6 +514,8 @@
 				96370FB619ED8A8200DAF8F1 /* blake2sp.cpp */,
 				96853F0D18DB722E00B5651B /* cmddata.cpp */,
 				96853F0E18DB722E00B5651B /* cmddata.hpp */,
+				792C3927286DD485003BB308 /* cmdfilter.cpp */,
+				792C3926286DD485003BB308 /* cmdmix.cpp */,
 				96853F0F18DB722E00B5651B /* coder.cpp */,
 				96853F1018DB722E00B5651B /* coder.hpp */,
 				96853F1118DB722E00B5651B /* compress.hpp */,
@@ -559,8 +561,8 @@
 				96370FC619ED8B1F00DAF8F1 /* headers.cpp */,
 				96853F3218DB722E00B5651B /* headers.hpp */,
 				96370FC819ED8B2B00DAF8F1 /* headers5.hpp */,
-				96853F3318DB722E00B5651B /* isnt.cpp */,
 				96853F3418DB722E00B5651B /* isnt.hpp */,
+				792C3928286DD485003BB308 /* list.hpp */,
 				96853F3818DB722E00B5651B /* loclang.hpp */,
 				96853F3918DB722E00B5651B /* log.cpp */,
 				96853F3A18DB722E00B5651B /* log.hpp */,
@@ -583,6 +585,7 @@
 				96853F4F18DB722E00B5651B /* rarpch.cpp */,
 				96853F5018DB722E00B5651B /* rartypes.hpp */,
 				96853F5118DB722E00B5651B /* rarvm.cpp */,
+				792C3929286DD485003BB308 /* rawint.hpp */,
 				96853F5218DB722E00B5651B /* rarvm.hpp */,
 				96853F5418DB722E00B5651B /* rawread.cpp */,
 				96853F5518DB722E00B5651B /* rawread.hpp */,
@@ -600,7 +603,6 @@
 				96853F6018DB722E00B5651B /* rs.hpp */,
 				96370FCD19ED8B9700DAF8F1 /* rs16.cpp */,
 				96370FCE19ED8B9700DAF8F1 /* rs16.hpp */,
-				96853F6218DB722E00B5651B /* savepos.hpp */,
 				96853F6318DB722E00B5651B /* scantree.cpp */,
 				96853F6418DB722E00B5651B /* scantree.hpp */,
 				96853F6518DB722E00B5651B /* secpassword.cpp */,
@@ -709,7 +711,6 @@
 				7AC29ABA1F83C36900DA4DE6 /* resource.hpp in Headers */,
 				7AC29ABB1F83C36900DA4DE6 /* rijndael.hpp in Headers */,
 				7AC29ABC1F83C36900DA4DE6 /* rs.hpp in Headers */,
-				7AC29ABD1F83C36900DA4DE6 /* savepos.hpp in Headers */,
 				7AC29ABE1F83C36900DA4DE6 /* scantree.hpp in Headers */,
 				7AC29ABF1F83C36900DA4DE6 /* secpassword.hpp in Headers */,
 				7AC29AC01F83C36900DA4DE6 /* sha1.hpp in Headers */,
@@ -825,7 +826,7 @@
 				TargetAttributes = {
 					7A22B1E91F60A05F004B8050 = {
 						CreatedOnToolsVersion = 8.3.3;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					7AC29A5C1F83C08200DA4DE6 = {
 						CreatedOnToolsVersion = 9.0;
@@ -915,7 +916,6 @@
 				7AC29A6B1F83C14200DA4DE6 /* arcread.cpp in Sources */,
 				7AC29A6C1F83C14D00DA4DE6 /* unicode.cpp in Sources */,
 				7AC29A6D1F83C15400DA4DE6 /* system.cpp in Sources */,
-				7AC29A6E1F83C16500DA4DE6 /* isnt.cpp in Sources */,
 				7AC29A6F1F83C16D00DA4DE6 /* crypt.cpp in Sources */,
 				7AC29A701F83C17300DA4DE6 /* crc.cpp in Sources */,
 				7AC29A711F83C17900DA4DE6 /* rawread.cpp in Sources */,
@@ -1126,9 +1126,11 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1142,6 +1144,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.UnrarKitResources";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
 			};
@@ -1159,9 +1162,11 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1171,6 +1176,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.UnrarKitResources";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
 			};

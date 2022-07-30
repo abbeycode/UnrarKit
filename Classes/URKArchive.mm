@@ -1706,6 +1706,11 @@ int CALLBACK AllowCancellationCallbackProc(UINT msg, long UserData, long P1, lon
             errorName = @"ERAR_UTF8_PATH_CONVERSION";
             detail = NSLocalizedStringFromTableInBundle(@"Error converting a string to UTF-8", @"UnrarKit", _resources, @"Error detail string");
             break;
+        case URKErrorCodeBadPassword:
+            URKLogError("If you're seeing this, you should be calling -[URKArchive validatePassword] before attempting to extract from a password-protected archive");
+            errorName = @"ERAR_BAD_PASSWORD";
+            detail = NSLocalizedStringFromTableInBundle(@"Provided password is incorrect", @"UnrarKit", _resources, @"Error detail string");
+            break;
 
         default:
             errorName = [NSString stringWithFormat:@"Unknown (%ld)", (long)errorCode];
