@@ -122,6 +122,7 @@
 		7AC29ACD1F83DB0400DA4DE6 /* dll.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F1A18DB722E00B5651B /* dll.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AC29ACE1F83DB1000DA4DE6 /* raros.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 96853F4E18DB722E00B5651B /* raros.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AC29AD01F850A6A00DA4DE6 /* UnrarKitMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 96BF58BA1F3A487100BC24E1 /* UnrarKitMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7AD4ED212898463D00A664B7 /* URKArchiveTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD4ED202898463D00A664B7 /* URKArchiveTestCase.swift */; };
 		7ADC7A091F8831BC00023C2E /* CheckDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADC7A081F8831BC00023C2E /* CheckDataTests.m */; };
 		964C8AC718D28EE000AD7321 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 964C8AC518D28EE000AD7321 /* InfoPlist.strings */; };
 		9660D7AF1A3F4FF90059AC1E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9660D7AE1A3F4FF90059AC1E /* libz.dylib */; };
@@ -184,6 +185,8 @@
 		7A7820D92338F09500E106F8 /* PerformOnDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PerformOnDataTests.m; sourceTree = "<group>"; };
 		7A7820DB2338F38E00E106F8 /* ExtractBufferedDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtractBufferedDataTests.m; sourceTree = "<group>"; };
 		7AC29A5D1F83C08200DA4DE6 /* libunrar.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libunrar.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AD4ED1F2898463C00A664B7 /* UnrarKit Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnrarKit Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		7AD4ED202898463D00A664B7 /* URKArchiveTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URKArchiveTestCase.swift; sourceTree = "<group>"; };
 		7ADC7A081F8831BC00023C2E /* CheckDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckDataTests.m; sourceTree = "<group>"; };
 		96370FB319ED8A8200DAF8F1 /* blake2s_sse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s_sse.cpp; sourceTree = "<group>"; };
 		96370FB419ED8A8200DAF8F1 /* blake2s.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2s.cpp; sourceTree = "<group>"; };
@@ -459,6 +462,7 @@
 				964C8AD018D28F1600AD7321 /* Test Data */,
 				964547D01B384F7D00202B28 /* URKArchiveTestCase.h */,
 				964547D11B384F7D00202B28 /* URKArchiveTestCase.m */,
+				7AD4ED202898463D00A664B7 /* URKArchiveTestCase.swift */,
 				964C8AC818D28EE000AD7321 /* URKArchiveTests.m */,
 				7ADC7A081F8831BC00023C2E /* CheckDataTests.m */,
 				7A7820DB2338F38E00E106F8 /* ExtractBufferedDataTests.m */,
@@ -483,6 +487,7 @@
 		964C8AC318D28EE000AD7321 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7AD4ED1F2898463C00A664B7 /* UnrarKit Tests-Bridging-Header.h */,
 				964C8AC418D28EE000AD7321 /* UnrarKit Tests-Info.plist */,
 				964C8AC518D28EE000AD7321 /* InfoPlist.strings */,
 			);
@@ -829,7 +834,7 @@
 						ProvisioningStyle = Automatic;
 					};
 					964C8ABA18D28EE000AD7321 = {
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1340;
 						TestTargetID = 96853EDA18DB71CD00B5651B;
 					};
 					96EA535A1B3CB04300F79DC6 = {
@@ -967,6 +972,7 @@
 				7A267F6E1F713B970004EAA6 /* ProgressReportingTests.m in Sources */,
 				9699FA8A1B3D9B6F00B6D373 /* URKArchiveTestCase.m in Sources */,
 				7A61604C2334263F00B26887 /* ExtractDataTests.m in Sources */,
+				7AD4ED212898463D00A664B7 /* URKArchiveTestCase.swift in Sources */,
 				96A043E01E4D232F00BD7013 /* HasMultipleVolumesTests.m in Sources */,
 				9699FA8D1B3D9B6F00B6D373 /* ListFilenamesTests.m in Sources */,
 				7A66082B20B4BE2000FE68D6 /* IterateFileInfoTests.m in Sources */,
@@ -1281,6 +1287,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/UnrarKit Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -1310,6 +1319,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.abbey-code.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/UnrarKit Tests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
