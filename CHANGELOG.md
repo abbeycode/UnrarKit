@@ -5,6 +5,7 @@
 * Fixed a header name conflict with Realm (Issue #90)
 * Incorrect passwords in RAR5 archives now produce a specific and helpful error message (PR #101 - Thanks to [@gpotari](https://github.com/gpotari) for the idea and implementation!)
 * Updated to v6.1.7 of UnRAR library (PR #103 - Thanks to [@gpotari](https://github.com/gpotari) )
+* Fixed compile with Xcode 14 for Example project. Added missing CFBundleShortVersionString key to Info.plist
 
 
 ## 2.10
