@@ -1381,6 +1381,7 @@
 					"-Wno-anon-enum-enum-conversion",
 					"-Wno-suggest-destructor-override",
 					"-Wno-suggest-override",
+					"-Wno-declaration-after-statement",
 				);
 			};
 			name = Debug;
@@ -1436,6 +1437,7 @@
 					"-Wno-anon-enum-enum-conversion",
 					"-Wno-suggest-destructor-override",
 					"-Wno-suggest-override",
+					"-Wno-declaration-after-statement",
 				);
 			};
 			name = Release;
