@@ -3,7 +3,7 @@ version: 2.1
 executors:
   my-xcode:
     macos:
-      xcode: 13.2.1
+      xcode: 15.0.0
 
 workflows:
   version: 2
